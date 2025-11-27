@@ -1,1 +1,0 @@
-# Labolatorium-Genetika-Virtual
