@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEN-X: Mutation Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        medical: {
+                            dark: '#0f172a',
+                            panel: '#1e293b',
+                            cyan: '#06b6d4', // Normal
+                            pink: '#ec4899', // Carrier/Female
+                            danger: '#ef4444', // Affected
+                            gold: '#f59e0b'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Orbitron', 'sans-serif']
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'glitch': 'glitch 0.5s infinite',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 10px rgba(6, 182, 212, 0.2)' },
+                            '50%': { boxShadow: '0 0 20px rgba(6, 182, 212, 0.6)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' }
+                        },
+                        glitch: {
+                            '0%': { transform: 'translate(0)' },
+                            '20%': { transform: 'translate(-2px, 2px)' },
+                            '40%': { transform: 'translate(-2px, -2px)' },
+                            '60%': { transform: 'translate(2px, 2px)' },
+                            '80%': { transform: 'translate(2px, -2px)' },
+                            '100%': { transform: 'translate(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;700;900&family=Orbitron:wght@500;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background-color: #050b14;
+            background-image:
+                linear-gradient(to right, #0f172a 1px, transparent 1px),
+                linear-gradient(to bottom, #0f172a 1px, transparent 1px);
+            background-size: 40px 40px;
+            color: #cbd5e1;
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .chromo-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chromo-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .chromo-btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .chromo-btn.active {
+            border-color: #06b6d4;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+            background: rgba(6, 182, 212, 0.1);
+        }
+
+        /* Ring Chart */
+        .ring-chart {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--color) var(--percent), #1e293b 0);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .ring-chart::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: #0f172a;
+            border-radius: 50%;
+        }
+
+        .ring-content {
+            position: relative;
+            z-index: 10;
+            font-family: 'Orbitron';
+        }
+
+        /* Baby Card */
+        .baby-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+        }
+
+        .baby-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--card-color);
+            box-shadow: 0 10px 30px -10px var(--card-color-glow);
+        }
+
+        .sup {
+            font-size: 0.6em;
+            vertical-align: super;
+        }
+
+        /* CITATION TOOLTIP STYLE */
+        .citation {
+            border-bottom: 1px dashed #06b6d4;
+            cursor: help;
+            color: #67e8f9;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+
+        .citation:hover::after {
+            content: attr(data-ref);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            color: #fff;
+            padding: 10px 14px;
+            font-size: 0.75rem;
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+            z-index: 50;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+            border: 1px solid #334155;
+            margin-bottom: 8px;
+            pointer-events: none;
+            line-height: 1.4;
+            white-space: normal;
+        }
+
+        /* --- MUTATING DNA ANIMATION --- */
+        .dna-container {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            height: 80px;
+            perspective: 1000px;
+        }
+
+        .dna-strand {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: dna-mutate 2s infinite ease-in-out;
+        }
+
+        /* Warna Awal (Cyan) berubah jadi Merah (Mutasi) di tengah animasi */
+        @keyframes dna-mutate {
+            0% {
+                transform: translateY(-20px) scale(0.6);
+                background-color: #06b6d4;
+                box-shadow: 0 0 5px #06b6d4;
+            }
+
+            50% {
+                transform: translateY(20px) scale(1.2);
+                background-color: #ef4444;
+                box-shadow: 0 0 15px #ef4444;
+            }
+
+            /* RED ALERT */
+            100% {
+                transform: translateY(-20px) scale(0.6);
+                background-color: #06b6d4;
+                box-shadow: 0 0 5px #06b6d4;
+            }
+        }
+
+        /* Staggered Delay */
+        .dna-pair:nth-child(1) .dna-strand {
+            animation-delay: -1.4s;
+        }
+
+        .dna-pair:nth-child(2) .dna-strand {
+            animation-delay: -1.2s;
+        }
+
+        .dna-pair:nth-child(3) .dna-strand {
+            animation-delay: -1.0s;
+        }
+
+        .dna-pair:nth-child(4) .dna-strand {
+            animation-delay: -0.8s;
+        }
+
+        .dna-pair:nth-child(5) .dna-strand {
+            animation-delay: -0.6s;
+        }
+
+        .dna-pair:nth-child(6) .dna-strand {
+            animation-delay: -0.4s;
+        }
+
+        .dna-pair:nth-child(7) .dna-strand {
+            animation-delay: -0.2s;
+        }
+
+        .dna-pair:nth-child(8) .dna-strand {
+            animation-delay: 0s;
+        }
+
+        .dna-pair .strand-b {
+            animation-delay: inherit;
+            animation-direction: reverse;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen p-4 pb-20 font-sans selection:bg-medical-cyan selection:text-black">
+
+    <header class="max-w-6xl mx-auto flex justify-between items-center mb-8 pt-4 border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-4">
+            <div
+                class="w-12 h-12 rounded-lg bg-medical-cyan/10 border border-medical-cyan/30 flex items-center justify-center relative overflow-hidden group">
+                <div class="absolute inset-0 bg-medical-cyan/20 animate-pulse-glow"></div>
+                <span class="font-display font-bold text-2xl text-medical-cyan relative z-10">X</span>
+            </div>
+            <div>
+                <h1 class="text-3xl font-display font-bold tracking-wider text-white">GEN-<span
+                        class="text-medical-cyan">X</span></h1>
+                <p class="text-[10px] text-medical-cyan font-mono tracking-[0.2em] uppercase">Sex-Linked Heredity System
+                </p>
+            </div>
+        </div>
+        <div class="hidden sm:block text-right">
+            <div class="text-xs text-slate-500 font-mono">TARGET: CHROMOSOME 23</div>
+            <div class="flex items-center justify-end gap-2 mt-1">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                <span class="text-[10px] font-bold text-green-500">SYSTEM ACTIVE</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        <div class="lg:col-span-4 space-y-6">
+
+            <div class="glass-panel rounded-2xl p-6 relative overflow-hidden">
+                <div class="absolute -top-10 -left-10 w-32 h-32 bg-medical-cyan/10 rounded-full blur-3xl"></div>
+
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-3">
+                        <label class="text-xs font-bold text-medical-pink tracking-widest flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2C9.243 2 7 4.243 7 7C7 9.757 9.243 12 12 12C14.757 12 17 9.757 17 7C17 4.243 14.757 2 12 2ZM12 14C9.556 14 7.426 12.87 6.083 11.13C4.195 12.596 3 14.908 3 17.5V20H21V17.5C21 14.908 19.805 12.596 17.917 11.13C16.574 12.87 14.444 14 12 14ZM11 22V24H13V22H11Z" />
+                            </svg>
+                            MOTHER (XX)
+                        </label>
+                        <span id="mom-status"
+                            class="text-[10px] bg-slate-800 px-2 py-1 rounded text-slate-400 font-mono">NORMAL</span>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="setMother('XX')"
+                            class="chromo-btn active w-full py-3 rounded-lg border border-slate-700 bg-slate-800/50 flex flex-col items-center gap-1"
+                            id="btn-m-norm">
+                            <span class="text-lg font-display text-white">X<span
+                                    class="sup text-medical-cyan">B</span>X<span
+                                    class="sup text-medical-cyan">B</span></span>
+                            <span class="text-[9px] text-slate-400 uppercase">Normal</span>
+                        </button>
+                        <button onclick="setMother('Carrier')"
+                            class="chromo-btn w-full py-3 rounded-lg border border-slate-700 bg-slate-800/50 flex flex-col items-center gap-1"
+                            id="btn-m-car">
+                            <span class="text-lg font-display text-white">X<span
+                                    class="sup text-medical-cyan">B</span>X<span
+                                    class="sup text-medical-danger">b</span></span>
+                            <span class="text-[9px] text-medical-gold uppercase">Carrier</span>
+                        </button>
+                        <button onclick="setMother('Sick')"
+                            class="chromo-btn w-full py-3 rounded-lg border border-slate-700 bg-slate-800/50 flex flex-col items-center gap-1"
+                            id="btn-m-sick">
+                            <span class="text-lg font-display text-white">X<span
+                                    class="sup text-medical-danger">b</span>X<span
+                                    class="sup text-medical-danger">b</span></span>
+                            <span class="text-[9px] text-medical-danger uppercase">Sakit</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <label class="text-xs font-bold text-medical-cyan tracking-widest flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2C9.243 2 7 4.243 7 7C7 9.757 9.243 12 12 12C14.757 12 17 9.757 17 7C17 4.243 14.757 2 12 2ZM12 14C9.556 14 7.426 12.87 6.083 11.13C4.195 12.596 3 14.908 3 17.5V20H21V17.5C21 14.908 19.805 12.596 17.917 11.13C16.574 12.87 14.444 14 12 14ZM16.5 22L18 20.5L16.5 19L15 20.5L13.5 19L12 20.5L13.5 22L12 23.5L13.5 25L15 23.5L16.5 25L18 23.5L16.5 22Z" />
+                            </svg>
+                            FATHER (XY)
+                        </label>
+                        <span id="dad-status"
+                            class="text-[10px] bg-slate-800 px-2 py-1 rounded text-slate-400 font-mono">NORMAL</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="setFather('XY')"
+                            class="chromo-btn active w-full py-3 rounded-lg border border-slate-700 bg-slate-800/50 flex flex-col items-center gap-1"
+                            id="btn-f-norm">
+                            <span class="text-lg font-display text-white">X<span
+                                    class="sup text-medical-cyan">B</span>Y</span>
+                            <span class="text-[9px] text-slate-400 uppercase">Normal</span>
+                        </button>
+                        <button onclick="setFather('Sick')"
+                            class="chromo-btn w-full py-3 rounded-lg border border-slate-700 bg-slate-800/50 flex flex-col items-center gap-1"
+                            id="btn-f-sick">
+                            <span class="text-lg font-display text-white">X<span
+                                    class="sup text-medical-danger">b</span>Y</span>
+                            <span class="text-[9px] text-medical-danger uppercase">Sakit</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button onclick="analyze()"
+                    class="mt-8 w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-cyan-900/40 transition-all hover:scale-[1.02] active:scale-95 group relative overflow-hidden">
+                    <div
+                        class="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500">
+                    </div>
+                    <span class="flex items-center justify-center gap-2 font-display tracking-widest">
+                        INITIATE ANALYSIS <svg class="w-5 h-5 animate-bounce-slow" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                        </svg>
+                    </span>
+                </button>
+            </div>
+
+            <div id="risk-panel" class="glass-panel rounded-2xl p-6 hidden animate-float">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Total Risk Assessment</h3>
+                <div class="flex items-center justify-center gap-6">
+                    <div class="text-center">
+                        <div class="ring-chart" id="ring-risk" style="--color: #ef4444; --percent: 0%;">
+                            <span class="ring-content text-xl font-bold text-white" id="risk-percent">0%</span>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-2 font-mono">RISIKO SAKIT</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="ring-chart" id="ring-carrier" style="--color: #f59e0b; --percent: 0%;">
+                            <span class="ring-content text-xl font-bold text-white" id="carrier-percent">0%</span>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-2 font-mono">RISIKO CARRIER</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="lg:col-span-8 space-y-6">
+
+            <div id="loader"
+                class="glass-panel p-12 rounded-2xl hidden flex-col items-center justify-center h-full min-h-[400px]">
+                <div class="dna-container mb-6">
+                    <div class="dna-pair flex flex-col gap-4">
+                        <div class="dna-strand strand-a"></div>
+                        <div class="dna-strand strand-b"></div>
+                    </div>
+                    <div class="dna-pair flex flex-col gap-4">
+                        <div class="dna-strand strand-a"></div>
+                        <div class="dna-strand strand-b"></div>
+                    </div>
+                    <div class="dna-pair flex flex-col gap-4">
+                        <div class="dna-strand strand-a"></div>
+                        <div class="dna-strand strand-b"></div>
+                    </div>
+                    <div class="dna-pair flex flex-col gap-4">
+                        <div class="dna-strand strand-a"></div>
+                        <div class="dna-strand strand-b"></div>
+                    </div>
+                    <div class="dna-pair flex flex-col gap-4">
+                        <div class="dna-strand strand-a"></div>
+                        <div class="dna-strand strand-b"></div>
+                    </div>
+                    <div class="dna-pair flex flex-col gap-4">
+                        <div class="dna-strand strand-a"></div>
+                        <div class="dna-strand strand-b"></div>
+                    </div>
+                    <div class="dna-pair flex flex-col gap-4">
+                        <div class="dna-strand strand-a"></div>
+                        <div class="dna-strand strand-b"></div>
+                    </div>
+                    <div class="dna-pair flex flex-col gap-4">
+                        <div class="dna-strand strand-a"></div>
+                        <div class="dna-strand strand-b"></div>
+                    </div>
+                </div>
+                <h3 class="text-medical-danger font-display animate-pulse tracking-widest text-lg">SCANNING FOR
+                    MUTATIONS...</h3>
+                <p class="text-slate-500 text-xs font-mono mt-2">Checking Chromosome X Alleles</p>
+            </div>
+
+            <div id="result-container" class="hidden space-y-6">
+                <div class="glass-panel p-8 rounded-2xl border-t-4 border-medical-cyan">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-display font-bold text-xl text-white">OFFSPRING SIMULATION (F1)</h3>
+                        <div class="flex gap-3 text-[10px] uppercase font-mono">
+                            <span class="flex items-center gap-1"><span
+                                    class="w-2 h-2 rounded-full bg-medical-cyan"></span> Normal</span>
+                            <span class="flex items-center gap-1"><span
+                                    class="w-2 h-2 rounded-full bg-medical-gold"></span> Carrier</span>
+                            <span class="flex items-center gap-1"><span
+                                    class="w-2 h-2 rounded-full bg-medical-danger"></span> Sakit</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4" id="children-grid">
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl">
+                    <h3 class="font-bold text-lg text-medical-cyan mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                        MEDICAL GENETIC REPORT
+                    </h3>
+                    <div id="report-text"
+                        class="prose prose-invert max-w-none text-slate-300 text-sm leading-7 text-justify font-sans">
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-700 text-[10px] text-slate-500 font-mono">
+                        REFERENCES: CAMPBELL BIOLOGY (12TH ED), GENETICS IN MEDICINE (THOMPSON & THOMPSON).
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // --- STATE ---
+        let state = {
+            mother: 'XX', // XX, Carrier, Sick
+            father: 'XY'  // XY, Sick
+        };
+
+        // --- UI CONTROLLERS ---
+        function setMother(type) {
+            state.mother = type;
+            ['btn-m-norm', 'btn-m-car', 'btn-m-sick'].forEach(id => document.getElementById(id).classList.remove('active'));
+            if (type === 'XX') document.getElementById('btn-m-norm').classList.add('active');
+            if (type === 'Carrier') document.getElementById('btn-m-car').classList.add('active');
+            if (type === 'Sick') document.getElementById('btn-m-sick').classList.add('active');
+
+            document.getElementById('mom-status').innerText = type.toUpperCase();
+            document.getElementById('mom-status').className = `text-[10px] px-2 py-1 rounded font-mono text-slate-900 font-bold ${type === 'XX' ? 'bg-medical-cyan' : type === 'Carrier' ? 'bg-medical-gold' : 'bg-medical-danger'}`;
+        }
+
+        function setFather(type) {
+            state.father = type;
+            ['btn-f-norm', 'btn-f-sick'].forEach(id => document.getElementById(id).classList.remove('active'));
+            if (type === 'XY') document.getElementById('btn-f-norm').classList.add('active');
+            if (type === 'Sick') document.getElementById('btn-f-sick').classList.add('active');
+
+            document.getElementById('dad-status').innerText = type === 'XY' ? 'NORMAL' : 'SAKIT';
+            document.getElementById('dad-status').className = `text-[10px] px-2 py-1 rounded font-mono text-slate-900 font-bold ${type === 'XY' ? 'bg-medical-cyan' : 'bg-medical-danger'}`;
+        }
+
+        // --- ICONS (SVG) ---
+        const iconMale = `<svg class="w-12 h-12 mb-2 opacity-80" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a5 5 0 1 1-5 5 5 5 0 0 1 5-5m0-2a7 7 0 1 0 7 7 7 7 0 0 0-7-7zM20 22h-2v-4a2 2 0 0 0-2-2h-2v-3h2a3 3 0 0 0 3-3v-2h-2v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2h-2v2a3 3 0 0 0 3 3h2v3h-2a2 2 0 0 0-2 2v4H6v-5a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v5z"/></svg>`;
+        const iconFemale = `<svg class="w-12 h-12 mb-2 opacity-80" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a5 5 0 1 1-5 5 5 5 0 0 1 5-5m0-2a7 7 0 1 0 7 7 7 7 0 0 0-7-7zM16 22v-3a4 4 0 0 0-3-3.8V12h3v-2h-3V9h-2v1H8V9H6v1h3v2h3v3.2a4 4 0 0 0-3 3.8v3h2v-3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v3h2z"/></svg>`;
+
+        // --- LOGIC ENGINE ---
+        function analyze() {
+            const container = document.getElementById('result-container');
+            const riskPanel = document.getElementById('risk-panel');
+            const loader = document.getElementById('loader');
+
+            // 1. Hide old results, show loader
+            container.classList.add('hidden');
+            riskPanel.classList.add('hidden');
+            loader.classList.remove('hidden');
+            loader.classList.add('flex'); // Enable flexbox
+
+            // Scroll to loader
+            loader.scrollIntoView({ behavior: 'smooth' });
+
+            // 2. Wait for animation (2.5 seconds)
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                loader.classList.remove('flex');
+
+                // Show new results
+                container.classList.remove('hidden');
+                riskPanel.classList.remove('hidden');
+
+                // Process Data
+                processData();
+
+                // Scroll to result
+                container.scrollIntoView({ behavior: 'smooth' });
+            }, 2500);
+        }
+
+        function processData() {
+            // Determine Gametes
+            let m1 = 'B', m2 = 'B';
+            if (state.mother === 'Carrier') { m2 = 'b'; }
+            else if (state.mother === 'Sick') { m1 = 'b'; m2 = 'b'; }
+
+            let f1 = state.father === 'XY' ? 'B' : 'b';
+
+            // Punnett Square Logic
+            const children = [
+                { sex: 'F', g1: m1, g2: f1 }, // Female 1
+                { sex: 'F', g1: m2, g2: f1 }, // Female 2
+                { sex: 'M', g1: m1, g2: 'Y' }, // Male 1
+                { sex: 'M', g1: m2, g2: 'Y' }  // Male 2
+            ];
+
+            const grid = document.getElementById('children-grid');
+            grid.innerHTML = '';
+
+            let stats = { sick: 0, carrier: 0, normal: 0 };
+
+            children.forEach((child, idx) => {
+                let genotype = '', phenotype = '', status = '', colorVar = '', icon = '';
+
+                if (child.sex === 'F') {
+                    genotype = `X<span class="sup">${child.g1}</span>X<span class="sup">${child.g2}</span>`;
+                    icon = iconFemale;
+                    let bCount = (child.g1 === 'b' ? 1 : 0) + (child.g2 === 'b' ? 1 : 0);
+
+                    if (bCount === 2) {
+                        status = 'SAKIT'; colorVar = '--card-color: #ef4444; --card-color-glow: rgba(239, 68, 68, 0.5);';
+                        phenotype = 'text-medical-danger'; stats.sick++;
+                    } else if (bCount === 1) {
+                        status = 'CARRIER'; colorVar = '--card-color: #f59e0b; --card-color-glow: rgba(245, 158, 11, 0.5);';
+                        phenotype = 'text-medical-gold'; stats.carrier++;
+                    } else {
+                        status = 'NORMAL'; colorVar = '--card-color: #06b6d4; --card-color-glow: rgba(6, 182, 212, 0.5);';
+                        phenotype = 'text-medical-cyan'; stats.normal++;
+                    }
+                } else {
+                    genotype = `X<span class="sup">${child.g1}</span>Y`;
+                    icon = iconMale;
+                    if (child.g1 === 'b') {
+                        status = 'SAKIT'; colorVar = '--card-color: #ef4444; --card-color-glow: rgba(239, 68, 68, 0.5);';
+                        phenotype = 'text-medical-danger'; stats.sick++;
+                    } else {
+                        status = 'NORMAL'; colorVar = '--card-color: #06b6d4; --card-color-glow: rgba(6, 182, 212, 0.5);';
+                        phenotype = 'text-medical-cyan'; stats.normal++;
+                    }
+                }
+
+                grid.innerHTML += `
+                <div class="baby-card rounded-xl p-4 flex flex-col items-center text-center group" style="${colorVar}">
+                    <div class="${phenotype} transition-transform duration-500 group-hover:scale-110">${icon}</div>
+                    <div class="text-xs text-slate-400 font-mono mb-1">ANAK ${idx + 1} (${child.sex === 'F' ? '♀' : '♂'})</div>
+                    <div class="text-xl font-display font-bold text-white mb-2">${genotype}</div>
+                    <div class="text-[10px] px-2 py-1 rounded bg-slate-900 font-bold tracking-widest ${phenotype.replace('text-', 'bg-').replace('medical-', 'medical-').replace('text-', 'text-slate-900 ')} bg-opacity-20 border border-current">${status}</div>
+                </div>
+                `;
+            });
+
+            // Update Risk Meters
+            const sickPercent = (stats.sick / 4) * 100;
+            const carrierPercent = (stats.carrier / 4) * 100;
+
+            document.getElementById('ring-risk').style.setProperty('--percent', sickPercent + '%');
+            document.getElementById('risk-percent').innerText = sickPercent + '%';
+
+            document.getElementById('ring-carrier').style.setProperty('--percent', carrierPercent + '%');
+            document.getElementById('carrier-percent').innerText = carrierPercent + '%';
+
+            generateReport(stats);
+        }
+
+        function generateReport(stats) {
+            let text = `<p class="mb-4">Analisis genetik dilakukan pada persilangan terpaut kromosom X (Sex-Linked). Sifat penyakit diasumsikan resesif (b) dan sifat normal dominan (B).</p>`;
+
+            if (stats.sick > 0) {
+                text += `<p class="mb-4"><strong class="text-medical-danger">PERINGATAN RISIKO TINGGI:</strong> Hasil menunjukkan probabilitas <strong>${(stats.sick / 4) * 100}%</strong> anak akan menderita penyakit genetik (Hemofilia/Buta Warna). Laki-laki jauh lebih rentan terkena karena bersifat <span class="citation" data-ref="Hemizigot: Kondisi di mana hanya terdapat satu salinan gen (pada kromosom X) sehingga sifat resesif langsung terekspresikan (Thompson & Thompson Genetics).">Hemizigot</span>.</p>`;
+                if (stats.carrier > 0) {
+                    text += `<p class="mb-4">Selain itu, <strong>${(stats.carrier / 4) * 100}%</strong> anak (khususnya perempuan) berpotensi menjadi <strong>Carrier</strong>. Mereka akan tampak sehat secara fenotipe tetapi membawa gen penyakit yang dapat diturunkan ke cucu Anda.</p>`;
+                }
+            } else if (stats.carrier > 0) {
+                text += `<p class="mb-4"><strong class="text-medical-gold">RISIKO CARRIER TERDETEKSI:</strong> Meskipun 100% anak akan lahir dengan fenotipe NORMAL (tidak sakit), terdapat peluang <strong>${(stats.carrier / 4) * 100}%</strong> anak perempuan menjadi Carrier. </p>
+                <p>Hal ini terjadi karena Ayah atau Ibu menyumbangkan satu alel resesif, namun tertutupi oleh alel dominan normal (Hukum Dominasi). Waspadai pola pewarisan <span class="citation" data-ref="Criss-Cross Inheritance: Pola pewarisan dari ibu carrier ke anak laki-laki, melewati anak perempuan yang menjadi carrier (Campbell Biology).">Criss-Cross Inheritance</span> pada generasi berikutnya.</p>`;
+            } else {
+                text += `<p class="mb-4"><strong class="text-medical-cyan">HASIL NORMAL (AMAN):</strong> Analisis menunjukkan 0% risiko penyakit dan 0% risiko carrier. Seluruh alel yang diwariskan adalah Dominan Normal (B).</p>`;
+            }
+
+            text += `<p class="mt-4">Perlu dicatat bahwa pada wanita (XX), salah satu kromosom X akan dinonaktifkan secara acak melalui proses <span class="citation" data-ref="Lyonization (X-inactivation): Proses inaktivasi salah satu kromosom X pada sel wanita untuk menyeimbangkan dosis gen (Murray Barr, 1949).">Lyonisasi</span>, yang dapat mempengaruhi tingkat ekspresi gen pada individu carrier.</p>`;
+
+            document.getElementById('report-text').innerHTML = text;
+        }
+    </script>
+</body>
+
+</html>
