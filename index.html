@@ -140,7 +140,7 @@
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
             overflow: hidden;
-            cursor: pointer;
+            /* Remove cursor pointer for the card container since only button is clickable */
         }
 
         .glass-card:hover {
@@ -181,6 +181,9 @@
             transition: 0.3s;
             position: relative;
             overflow: hidden;
+            display: inline-block; /* Ensure anchor acts like button */
+            text-align: center;
+            cursor: pointer;
         }
 
         .btn-launch:hover {
@@ -267,67 +270,81 @@
         <main class="flex-grow p-6 md:p-10 max-w-7xl mx-auto w-full relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-                <a href="Generator%20Genotipe%20Alel%20%28terbaru%29/Generator%20Genotipe%20Alel.html" class="glass-card rounded-xl p-6 relative group"
+                <!-- 1. GEN-LAB -->
+                <div class="glass-card rounded-xl p-6 relative group flex flex-col justify-between"
                     style="--theme-color: #a78bfa; --theme-glow: rgba(167, 139, 250, 0.4)">
                     <span class="card-number">01</span>
-                    <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🧬</div>
-                    <h3 class="text-xl font-bold text-white font-display mb-1">GEN-LAB</h3>
-                    <p class="text-xs text-purple-400 font-mono mb-4">MONOHYBRID SIMULATION</p>
-                    <p class="text-sm text-gray-400 mb-6 line-clamp-2">Simulasi persilangan satu sifat beda. Visualisasi
-                        alel dominan & resesif.</p>
-                    <button class="btn-launch">INITIALIZE</button>
-                </a>
+                    <div>
+                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🧬</div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">GEN-LAB</h3>
+                        <p class="text-xs text-purple-400 font-mono mb-4">MONOHYBRID SIMULATION</p>
+                        <p class="text-sm text-gray-400 mb-6 line-clamp-2">Simulasi persilangan satu sifat beda. Visualisasi
+                            alel dominan & resesif.</p>
+                    </div>
+                    <a href="Generator%20Genotipe%20Alel%20%28terbaru%29/Generator%20Genotipe%20Alel.html" class="btn-launch">INITIALIZE</a>
+                </div>
 
-                <a href="Generator%20Rasio%20Dihibrid%20%28terbaru%29/Generator%20Rasio%20Dihibrid.html" class="glass-card rounded-xl p-6 relative group"
+                <!-- 2. BIO-SEQUENCER -->
+                <div class="glass-card rounded-xl p-6 relative group flex flex-col justify-between"
                     style="--theme-color: #34d399; --theme-glow: rgba(52, 211, 153, 0.4)">
                     <span class="card-number">02</span>
-                    <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🌿</div>
-                    <h3 class="text-xl font-bold text-white font-display mb-1">BIO-SEQUENCER</h3>
-                    <p class="text-xs text-emerald-400 font-mono mb-4">DIHYBRID CROSS ENGINE</p>
-                    <p class="text-sm text-gray-400 mb-6 line-clamp-2">Simulasi dua sifat beda (9:3:3:1) dengan
-                        visualisasi biji 3D & DNA.</p>
-                    <button class="btn-launch">INITIALIZE</button>
-                </a>
+                    <div>
+                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🌿</div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">BIO-SEQUENCER</h3>
+                        <p class="text-xs text-emerald-400 font-mono mb-4">DIHYBRID CROSS ENGINE</p>
+                        <p class="text-sm text-gray-400 mb-6 line-clamp-2">Simulasi dua sifat beda (9:3:3:1) dengan
+                            visualisasi biji 3D & DNA.</p>
+                    </div>
+                    <a href="Generator%20Rasio%20Dihibrid%20%28terbaru%29/Generator%20Rasio%20Dihibrid.html" class="btn-launch">INITIALIZE</a>
+                </div>
 
-                <a href="Generator%20Risiko%20Pewarisan%20Sifat%20Seks%20%28terbaru%29/Generator%20Risiko%20Pewarisan%20Sifat%20Seks.html" class="glass-card rounded-xl p-6 relative group"
+                <!-- 3. GEN-X -->
+                <div class="glass-card rounded-xl p-6 relative group flex flex-col justify-between"
                     style="--theme-color: #fb7185; --theme-glow: rgba(251, 113, 133, 0.4)">
                     <span class="card-number">03</span>
-                    <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🩸</div>
-                    <h3 class="text-xl font-bold text-white font-display mb-1">GEN-X</h3>
-                    <p class="text-xs text-rose-400 font-mono mb-4">SEX-LINKED ANALYZER</p>
-                    <p class="text-sm text-gray-400 mb-6 line-clamp-2">Kalkulator risiko penyakit terpaut X (Hemofilia)
-                        dengan kartu bayi digital.</p>
-                    <button class="btn-launch">INITIALIZE</button>
-                </a>
+                    <div>
+                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🩸</div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">GEN-X</h3>
+                        <p class="text-xs text-rose-400 font-mono mb-4">SEX-LINKED ANALYZER</p>
+                        <p class="text-sm text-gray-400 mb-6 line-clamp-2">Kalkulator risiko penyakit terpaut X (Hemofilia)
+                            dengan kartu bayi digital.</p>
+                    </div>
+                    <a href="Generator%20Risiko%20Pewarisan%20Sifat%20Seks%20%28terbaru%29/Generator%20Risiko%20Pewarisan%20Sifat%20Seks.html" class="btn-launch">INITIALIZE</a>
+                </div>
 
-                <a href="Simulasi%20Deteksi%20Kromosom/Simulasi%20Deteksi%20Kromosom.html" class="glass-card rounded-xl p-6 relative group"
+                <!-- 4. GEN-K -->
+                <div class="glass-card rounded-xl p-6 relative group flex flex-col justify-between"
                     style="--theme-color: #22d3ee; --theme-glow: rgba(34, 211, 238, 0.4)">
                     <span class="card-number">04</span>
-                    <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🔬</div>
-                    <h3 class="text-xl font-bold text-white font-display mb-1">GEN-K</h3>
-                    <p class="text-xs text-cyan-400 font-mono mb-4">KARYOTYPE SCANNER</p>
-                    <p class="text-sm text-gray-400 mb-6 line-clamp-2">Mikroskop digital pendeteksi mutasi kromosom
-                        (Down, Turner) & efek lethal.</p>
-                    <button class="btn-launch">INITIALIZE</button>
-                </a>
+                    <div>
+                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🔬</div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">GEN-K</h3>
+                        <p class="text-xs text-cyan-400 font-mono mb-4">KARYOTYPE SCANNER</p>
+                        <p class="text-sm text-gray-400 mb-6 line-clamp-2">Mikroskop digital pendeteksi mutasi kromosom
+                            (Down, Turner) & efek lethal.</p>
+                    </div>
+                    <a href="Simulasi%20Deteksi%20Kromosom/Simulasi%20Deteksi%20Kromosom.html" class="btn-launch">INITIALIZE</a>
+                </div>
 
-                <a href="Generator%20Aplikasi%20Bioteknologi%20%28terbaru%29/Generator%20Bioteknologi%20Profesional.html"
-                    class="glass-card rounded-xl p-6 relative group md:col-span-2"
+                <!-- 5. BIO-ARCHIVE -->
+                <!-- Updated Structure for Alignment and Button Placement -->
+                <div class="glass-card rounded-xl p-6 relative group md:col-span-2 flex flex-col justify-between"
                     style="--theme-color: #fbbf24; --theme-glow: rgba(251, 191, 36, 0.4)">
                     <span class="card-number">05</span>
-                    <div class="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-                        <div class="text-5xl grayscale group-hover:grayscale-0 transition duration-500">📂</div>
-                        <div class="flex-1">
+                    <div class="flex flex-col md:flex-row items-center gap-6 text-left mb-6"> <!-- Removed text-center on mobile, forced left alignment via flex structure -->
+                        <div class="text-5xl grayscale group-hover:grayscale-0 transition duration-500 shrink-0">📂</div>
+                        <div class="flex-1 w-full"> <!-- Added w-full to ensure text takes available space -->
                             <h3 class="text-xl font-bold text-white font-display mb-1">BIO-ARCHIVE</h3>
                             <p class="text-xs text-amber-400 font-mono mb-2">CLASSIFIED DATABASE</p>
                             <p class="text-sm text-gray-400 leading-relaxed">Ensiklopedia digital interaktif. Mencakup
                                 data lengkap Bioteknologi Konvensional dan Modern.</p>
                         </div>
                     </div>
-                    <div class="mt-6">
-                        <button class="btn-launch">ACCESS DATABASE</button>
+                    <!-- Button wrapper to push it to bottom if needed, though flex-col justify-between on parent handles it -->
+                    <div class="mt-auto">
+                        <a href="Generator%20Aplikasi%20Bioteknologi%20%28terbaru%29/Generator%20Bioteknologi%20Profesional.html" class="btn-launch">ACCESS DATABASE</a>
                     </div>
-                </a>
+                </div>
 
             </div>
         </main>
