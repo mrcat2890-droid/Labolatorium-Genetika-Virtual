@@ -331,7 +331,7 @@
                 <div class="glass-card rounded-xl p-6 relative group md:col-span-2 flex flex-col justify-between"
                     style="--theme-color: #fbbf24; --theme-glow: rgba(251, 191, 36, 0.4)">
                     <span class="card-number">05</span>
-                    <div class="flex flex-col md:flex-row items-center gap-6 text-left mb-6"> <!-- Removed text-center on mobile, forced left alignment via flex structure -->
+                    <div class="flex flex-col md:flex-row items-start md:items-center gap-6 text-left mb-6"> <!-- Fixed: items-start for mobile (left), md:items-center for desktop (center vertical) -->
                         <div class="text-5xl grayscale group-hover:grayscale-0 transition duration-500 shrink-0">📂</div>
                         <div class="flex-1 w-full"> <!-- Added w-full to ensure text takes available space -->
                             <h3 class="text-xl font-bold text-white font-display mb-1">BIO-ARCHIVE</h3>
