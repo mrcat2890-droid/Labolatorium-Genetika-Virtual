@@ -70,7 +70,7 @@
             z-index: 100;
             background: #000;
             display: flex;
-            flex-col;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             perspective: 1000px;
@@ -80,6 +80,7 @@
         .dna-axis-horizontal {
             position: relative;
             width: 600px;
+            max-width: 90vw;
             height: 100px;
             transform-style: preserve-3d;
             display: flex;
@@ -231,9 +232,9 @@
             </div>
         </div>
         <div class="text-center z-10">
-            <h2 class="text-4xl font-display font-bold text-white tracking-[0.5em] mb-3 animate-pulse-glow">SYSTEM BOOT
+            <h2 class="text-2xl md:text-4xl font-display font-bold text-white tracking-[0.2em] md:tracking-[0.5em] mb-3 animate-pulse-glow">SYSTEM BOOT
             </h2>
-            <div class="flex items-center justify-center gap-2 font-mono text-gen-cyan text-sm">
+            <div class="flex items-center justify-center gap-2 font-mono text-gen-cyan text-xs md:text-sm">
                 <span>> DECODING GENOME...</span>
                 <span id="loading-percent">0%</span>
             </div>
@@ -314,7 +315,7 @@
                     class="glass-card rounded-xl p-6 relative group md:col-span-2"
                     style="--theme-color: #fbbf24; --theme-glow: rgba(251, 191, 36, 0.4)">
                     <span class="card-number">05</span>
-                    <div class="flex items-center gap-6">
+                    <div class="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
                         <div class="text-5xl grayscale group-hover:grayscale-0 transition duration-500">📂</div>
                         <div class="flex-1">
                             <h3 class="text-xl font-bold text-white font-display mb-1">BIO-ARCHIVE</h3>
@@ -343,8 +344,13 @@
         function createHorizontalDNA() {
             const container = document.getElementById('dna-container');
             const pairCount = 20;
-            const width = 600;
+
+            // Perbaikan: Gunakan lebar container aktual untuk responsivitas
+            const width = container.getBoundingClientRect().width || 600;
             const spacing = width / pairCount;
+
+            // Bersihkan container jika ada isi sebelumnya (untuk resize event jika diperlukan)
+            container.innerHTML = '';
 
             for (let i = 0; i < pairCount; i++) {
                 const pair = document.createElement('div');
