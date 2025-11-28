@@ -228,24 +228,40 @@
 <body class="flex flex-col h-screen overflow-hidden selection:bg-blue-500 selection:text-white">
 
     <header
-        class="h-16 border-b border-slate-800 bg-arch-bg/90 backdrop-blur flex items-center justify-between px-6 shrink-0 z-50">
+        class="h-16 border-b border-slate-800 bg-arch-bg/90 backdrop-blur flex items-center justify-between px-6 shrink-0 z-50 relative">
         <div class="flex items-center gap-3">
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="lg:hidden text-slate-400 hover:text-white p-1 mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+
             <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-white text-sm">BA
             </div>
             <h1 class="text-xl font-display tracking-widest text-white">BIO-<span class="text-blue-500">ARCHIVE</span>
                 <span class="text-xs text-slate-500 font-mono ml-2">v.PRO.24</span>
             </h1>
         </div>
-        <div class="text-[10px] font-mono text-blue-400">
+        <div class="text-[10px] font-mono text-blue-400 hidden sm:block">
             SECURE CONNECTION ESTABLISHED
         </div>
     </header>
 
-    <div class="flex flex-1 overflow-hidden">
+    <div class="flex flex-1 overflow-hidden relative">
 
-        <aside class="w-64 bg-arch-panel border-r border-slate-800 flex flex-col shrink-0 overflow-y-auto">
+        <!-- Sidebar: Fixed/Absolute on Mobile, Static on Desktop -->
+        <aside id="sidebar" class="absolute inset-y-0 left-0 z-40 w-64 bg-arch-panel border-r border-slate-800 transform -translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0 flex flex-col shrink-0 overflow-y-auto h-full">
             <div class="p-4">
-                <h2 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 font-mono">DATABASE INDEX
+                <div class="flex justify-between items-center lg:hidden mb-4">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest font-mono">DATABASE INDEX</span>
+                    <button id="close-sidebar-btn" class="text-slate-400 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <h2 class="hidden lg:block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 font-mono">DATABASE INDEX
                 </h2>
                 <div class="space-y-1" id="menu-container">
                 </div>
@@ -259,7 +275,10 @@
             </div>
         </aside>
 
-        <main class="flex-1 bg-arch-bg relative overflow-hidden flex flex-col">
+        <!-- Overlay for Mobile Sidebar -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden backdrop-blur-sm transition-opacity"></div>
+
+        <main class="flex-1 bg-arch-bg relative overflow-hidden flex flex-col w-full">
 
             <div id="content-viewer" class="flex-1 overflow-y-auto p-8 animate-fade-in">
 
@@ -458,12 +477,47 @@
                 btn.className = `nav-btn ${index === 0 ? 'active' : ''}`;
                 btn.id = `btn-${index}`;
                 btn.innerHTML = `<span class="font-bold mr-2">${item.id}.</span> ${item.title}`;
-                btn.onclick = () => loadContent(index);
+                btn.onclick = () => {
+                    loadContent(index);
+                    // Mobile: close sidebar on click
+                    if (window.innerWidth < 1024) {
+                        toggleSidebar();
+                    }
+                };
                 menu.appendChild(btn);
             });
 
             // Load first item
             loadContent(0);
+
+            // Setup Mobile Menu Logic
+            setupMobileMenu();
+        }
+
+        function setupMobileMenu() {
+            const btn = document.getElementById('mobile-menu-btn');
+            const closeBtn = document.getElementById('close-sidebar-btn');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            btn.addEventListener('click', toggleSidebar);
+            closeBtn.addEventListener('click', toggleSidebar);
+            overlay.addEventListener('click', toggleSidebar);
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const isClosed = sidebar.classList.contains('-translate-x-full');
+
+            if (isClosed) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10); // fade in
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300); // fade out
+            }
         }
 
         function loadContent(index) {
