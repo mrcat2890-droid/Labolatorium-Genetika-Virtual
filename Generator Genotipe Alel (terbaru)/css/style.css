@@ -1,0 +1,93 @@
+/* =========================================
+   GEN-LAB: MONOHYBRID STYLES
+   ========================================= */
+
+/* --- CORE AESTHETICS --- */
+body {
+    background-color: #020617;
+    background-image:
+        radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+    font-family: 'Outfit', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Glassmorphism Panel */
+.glass-card {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Input Styling */
+.input-allele {
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    font-family: 'Fira Code', monospace;
+    text-align: center;
+    font-size: 2rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-allele:focus {
+    outline: none;
+    border-color: #06b6d4; /* Neon Cyan */
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+    transform: scale(1.05);
+}
+
+/* Chromosome Visuals */
+.chromosome-bar {
+    height: 8px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+    box-shadow: 0 0 5px currentColor;
+}
+
+/* Citation Tooltip */
+.citation-link {
+    border-bottom: 1px dashed #8b5cf6;
+    cursor: help;
+    position: relative;
+    color: #a78bfa;
+}
+
+.citation-link:hover::after {
+    content: attr(data-ref);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: black;
+    color: white;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 50;
+    border: 1px solid #333;
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    .glass-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        background: white;
+        color: black;
+    }
+}

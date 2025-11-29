@@ -1,0 +1,176 @@
+/* =========================================
+   GEN-X: SEX-LINKED INHERITANCE STYLES
+   ========================================= */
+
+body {
+    background-color: #050b14;
+    background-image:
+        linear-gradient(to right, #0f172a 1px, transparent 1px),
+        linear-gradient(to bottom, #0f172a 1px, transparent 1px);
+    background-size: 40px 40px;
+    color: #cbd5e1;
+}
+
+.glass-panel {
+    background: rgba(30, 41, 59, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.chromo-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.chromo-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: translateX(-100%);
+    transition: 0.5s;
+}
+
+.chromo-btn:hover::before {
+    transform: translateX(100%);
+}
+
+.chromo-btn.active {
+    border-color: #06b6d4;
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+    background: rgba(6, 182, 212, 0.1);
+}
+
+/* Ring Chart */
+.ring-chart {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(var(--color) var(--percent), #1e293b 0);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.ring-chart::after {
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: #0f172a;
+    border-radius: 50%;
+}
+
+.ring-content {
+    position: relative;
+    z-index: 10;
+    font-family: 'Orbitron';
+}
+
+/* Baby Card */
+.baby-card {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.4s ease;
+}
+
+.baby-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: var(--card-color);
+    box-shadow: 0 10px 30px -10px var(--card-color-glow);
+}
+
+.sup {
+    font-size: 0.6em;
+    vertical-align: super;
+}
+
+/* CITATION TOOLTIP STYLE */
+.citation {
+    border-bottom: 1px dashed #06b6d4;
+    cursor: help;
+    color: #67e8f9;
+    font-weight: 600;
+    position: relative;
+    display: inline-block;
+}
+
+.citation:hover::after {
+    content: attr(data-ref);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #fff;
+    padding: 10px 14px;
+    font-size: 0.75rem;
+    border-radius: 8px;
+    width: 300px;
+    text-align: center;
+    z-index: 50;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+    border: 1px solid #334155;
+    margin-bottom: 8px;
+    pointer-events: none;
+    line-height: 1.4;
+    white-space: normal;
+}
+
+/* --- MUTATING DNA ANIMATION --- */
+.dna-container {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    perspective: 1000px;
+}
+
+.dna-strand {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: dna-mutate 2s infinite ease-in-out;
+}
+
+/* Color transition from Cyan to Red (Mutation) */
+@keyframes dna-mutate {
+    0% {
+        transform: translateY(-20px) scale(0.6);
+        background-color: #06b6d4;
+        box-shadow: 0 0 5px #06b6d4;
+    }
+    50% {
+        transform: translateY(20px) scale(1.2);
+        background-color: #ef4444;
+        box-shadow: 0 0 15px #ef4444;
+    }
+    100% {
+        transform: translateY(-20px) scale(0.6);
+        background-color: #06b6d4;
+        box-shadow: 0 0 5px #06b6d4;
+    }
+}
+
+/* Staggered Delay */
+.dna-pair:nth-child(1) .dna-strand { animation-delay: -1.4s; }
+.dna-pair:nth-child(2) .dna-strand { animation-delay: -1.2s; }
+.dna-pair:nth-child(3) .dna-strand { animation-delay: -1.0s; }
+.dna-pair:nth-child(4) .dna-strand { animation-delay: -0.8s; }
+.dna-pair:nth-child(5) .dna-strand { animation-delay: -0.6s; }
+.dna-pair:nth-child(6) .dna-strand { animation-delay: -0.4s; }
+.dna-pair:nth-child(7) .dna-strand { animation-delay: -0.2s; }
+.dna-pair:nth-child(8) .dna-strand { animation-delay: 0s; }
+
+.dna-pair .strand-b {
+    animation-delay: inherit;
+    animation-direction: reverse;
+}
