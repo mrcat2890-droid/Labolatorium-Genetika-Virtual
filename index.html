@@ -5,247 +5,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GEN-OS: Biological System</title>
+
+    <!-- Tailwind CDN (Prototyping/Dev Build Only) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        gen: { bg: '#000000', panel: 'rgba(10, 15, 20, 0.7)', cyan: '#00f3ff', green: '#00ff41' }
-                    },
-                    fontFamily: {
-                        mono: ['Courier Prime', 'monospace'],
-                        display: ['Orbitron', 'sans-serif'],
-                        sans: ['Rajdhani', 'sans-serif']
-                    },
-                    animation: {
-                        'pulse-glow': 'pulseGlow 2s infinite',
-                        'scan-screen': 'scanScreen 4s linear infinite',
-                    },
-                    keyframes: {
-                        pulseGlow: {
-                            '0%, 100%': { textShadow: '0 0 10px #00f3ff, 0 0 20px #00f3ff' },
-                            '50%': { textShadow: '0 0 20px #00f3ff, 0 0 40px #00f3ff, 0 0 60px #00f3ff' }
-                        },
-                        scanScreen: {
-                            '0%': { transform: 'translateY(-100vh)' },
-                            '100%': { transform: 'translateY(100vh)' }
-                        }
-                    },
-                    cursor: {
-                        'crosshair': 'crosshair',
-                    }
-                }
-            }
-        }
-    </script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap"
-        rel="stylesheet">
-    <style>
-        body {
-            background-color: #000;
-            color: #e2e8f0;
-            overflow: hidden;
-            margin: 0;
-            cursor: default;
-        }
 
-        /* --- PERBAIKAN UTAMA: DEFINISI ANIMASI --- */
-        @keyframes spinX {
-            0% {
-                transform: rotateX(0deg);
-            }
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
-            100% {
-                transform: rotateX(360deg);
-            }
-        }
-
-        /* --- CODE DNA LOADER STYLES --- */
-        #loader-screen {
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            background: #000;
-            display: flex;
-            flex-col;
-            justify-content: center;
-            align-items: center;
-            perspective: 1000px;
-            /* Penting untuk efek 3D */
-        }
-
-        .dna-axis-horizontal {
-            position: relative;
-            width: 600px;
-            height: 100px;
-            transform-style: preserve-3d;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .base-pair-h {
-            position: absolute;
-            top: 0;
-            height: 100%;
-            width: 2px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            /* Animasi dipanggil di sini */
-            animation: spinX 3s linear infinite;
-        }
-
-        .nucleotide {
-            font-family: 'Courier Prime', monospace;
-            font-weight: bold;
-            font-size: 1rem;
-            color: #00f3ff;
-            text-shadow: 0 0 5px #00f3ff;
-            backface-visibility: visible;
-            /* Agar terlihat saat berputar */
-        }
-
-        .nucleotide.pair-b {
-            color: #00ff41;
-            text-shadow: 0 0 5px #00ff41;
-        }
-
-        .dna-link {
-            width: 1px;
-            flex-grow: 1;
-            background: linear-gradient(to bottom, rgba(0, 243, 255, 0.5), rgba(0, 255, 65, 0.5));
-            box-shadow: 0 0 5px rgba(0, 243, 255, 0.3);
-        }
-
-        /* --- DASHBOARD STYLES --- */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .glass-card {
-            background: var(--gen-panel);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 243, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .glass-card:hover {
-            border-color: var(--theme-color);
-            box-shadow: 0 0 20px var(--theme-glow), inset 0 0 20px rgba(0, 0, 0, 0.5);
-            transform: translateY(-5px) scale(1.02);
-            background: rgba(15, 20, 30, 0.95);
-            z-index: 10;
-        }
-
-        .card-number {
-            font-family: 'Orbitron';
-            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
-            color: transparent;
-            font-size: 4rem;
-            position: absolute;
-            top: -10px;
-            right: 10px;
-            opacity: 0.3;
-            transition: 0.3s;
-        }
-
-        .glass-card:hover .card-number {
-            opacity: 1;
-            color: var(--theme-color);
-            -webkit-text-stroke: 0;
-        }
-
-        .btn-launch {
-            border: 1px solid var(--theme-color);
-            color: var(--theme-color);
-            background: transparent;
-            font-family: 'Orbitron';
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            padding: 10px 0;
-            width: 100%;
-            transition: 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-launch:hover {
-            background: var(--theme-color);
-            color: #000;
-            box-shadow: 0 0 20px var(--theme-glow);
-        }
-
-        .scan-overlay {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 50;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 2px, 3px 100%;
-        }
-
-        .scan-bar {
-            position: fixed;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: rgba(0, 243, 255, 0.1);
-            animation: scanScreen 6s linear infinite;
-            pointer-events: none;
-            z-index: 51;
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-        }
-
-        #main-interface {
-            opacity: 0;
-            transition: opacity 1.5s ease-out;
-        }
-
-        .logo-glow {
-            filter: drop-shadow(0 0 10px #00f3ff) drop-shadow(0 0 20px rgba(0, 243, 255, 0.5));
-        }
-    </style>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body class="flex flex-col min-h-screen">
 
-    <div class="scan-overlay"></div>
-    <div class="scan-bar"></div>
+    <div id="intro-wrapper">
 
-    <div id="loader-screen">
-        <div class="relative z-10 mb-12">
-            <div class="dna-axis-horizontal" id="dna-container">
+        <div id="layer-dna" class="stage-layer anim-active">
+            <div class="relative z-10 mb-16 scale-125">
+                <div class="dna-axis-horizontal" id="dna-container"></div>
+            </div>
+            <div class="text-center z-10 absolute bottom-20">
+                <h2 class="text-4xl font-display font-bold text-white tracking-[0.5em] mb-3 animate-pulse">SEQUENCING</h2>
+                <div class="flex items-center justify-center gap-3 font-mono text-gen-cyan text-sm">
+                    <span id="loading-text">> READING GENOME...</span>
+                    <span id="loading-percent" class="font-bold">0%</span>
+                </div>
             </div>
         </div>
-        <div class="text-center z-10">
-            <h2 class="text-4xl font-display font-bold text-white tracking-[0.5em] mb-3 animate-pulse-glow">SYSTEM BOOT
-            </h2>
-            <div class="flex items-center justify-center gap-2 font-mono text-gen-cyan text-sm">
-                <span>> DECODING GENOME...</span>
-                <span id="loading-percent">0%</span>
-            </div>
+
+        <div id="layer-chromosome" class="stage-layer">
+            <svg class="chromo-x" viewBox="0 0 100 100" fill="none">
+                <path d="M30 20 Q50 50 30 80" stroke="#bd00ff" stroke-width="14" stroke-linecap="round" />
+                <path d="M70 20 Q50 50 70 80" stroke="#bd00ff" stroke-width="14" stroke-linecap="round" />
+                <circle cx="50" cy="50" r="8" fill="white" class="animate-pulse" />
+            </svg>
+            <h2 class="text-xl font-display text-gen-purple mt-8 tracking-widest absolute bottom-20">CHROMOSOME DETECTED</h2>
         </div>
+
+        <div id="layer-neuron" class="stage-layer">
+            <svg class="neuron-svg" viewBox="0 0 200 200" fill="none">
+                <circle cx="100" cy="100" r="10" fill="#bd00ff" class="animate-pulse" />
+                <circle cx="100" cy="100" r="30" stroke="#00f3ff" stroke-width="2" fill="rgba(0, 243, 255, 0.1)" />
+                <path class="dendrite" d="M100 70 L100 20 M100 20 L80 10 M100 20 L120 10" stroke="#00f3ff"
+                    stroke-width="3" stroke-linecap="round" />
+                <path class="dendrite" d="M130 100 L180 100 M180 100 L190 80 M180 100 L190 120" stroke="#00f3ff"
+                    stroke-width="3" stroke-linecap="round" />
+                <path class="dendrite" d="M100 130 L100 180 M100 180 L80 190 M100 180 L120 190" stroke="#00f3ff"
+                    stroke-width="3" stroke-linecap="round" />
+                <path class="dendrite" d="M70 100 L20 100 M20 100 L10 80 M20 100 L10 120" stroke="#00f3ff"
+                    stroke-width="3" stroke-linecap="round" />
+            </svg>
+            <h2 class="text-xl font-display text-gen-cyan mt-8 tracking-widest absolute bottom-20">NEURAL LINK ESTABLISHED</h2>
+        </div>
+
     </div>
 
-    <div id="main-interface" class="hidden min-h-screen flex flex-col">
-
+    <div id="main-interface">
         <canvas id="bg-canvas"></canvas>
 
-        <header
-            class="p-8 flex justify-between items-center border-b border-gray-800 bg-black/60 backdrop-blur-md sticky top-0 z-50">
+        <header class="p-8 flex justify-between items-center border-b border-gray-800 bg-black/60 backdrop-blur-md sticky top-0 z-50">
             <div class="flex items-center gap-6">
                 <div class="logo-glow transform hover:scale-110 transition-transform duration-500">
                     <span class="text-5xl">🧬</span>
@@ -254,7 +72,7 @@
                     <h1 class="text-3xl md:text-4xl font-display font-bold text-white tracking-widest">
                         GEN-<span class="text-gen-cyan">OS</span>
                     </h1>
-                    <p class="text-[10px] font-mono text-gray-500 tracking-[0.4em] mt-1">BIOLOGICAL INTERFACE v8.2</p>
+                    <p class="text-[10px] font-mono text-gray-500 tracking-[0.4em] mt-1">BIOLOGICAL INTERFACE v14.0</p>
                 </div>
             </div>
             <div class="hidden md:block text-right">
@@ -266,229 +84,86 @@
         <main class="flex-grow p-6 md:p-10 max-w-7xl mx-auto w-full relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-                <a href="Generator Genotipe Alel (terbaru)/Generator Genotipe Alel.html" class="glass-card rounded-xl p-6 relative group"
+                <a href="Generator Genotipe Alel (terbaru)/Generator Genotipe Alel.html" class="glass-card rounded-xl p-8 group flex flex-col"
                     style="--theme-color: #a78bfa; --theme-glow: rgba(167, 139, 250, 0.4)">
                     <span class="card-number">01</span>
-                    <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🧬</div>
+                    <div class="holo-icon-container">
+                        <div class="holo-icon">🧬</div>
+                    </div>
                     <h3 class="text-xl font-bold text-white font-display mb-1">GEN-LAB</h3>
-                    <p class="text-xs text-purple-400 font-mono mb-4">MONOHYBRID SIMULATION</p>
-                    <p class="text-sm text-gray-400 mb-6 line-clamp-2">Simulasi persilangan satu sifat beda. Visualisasi
-                        alel dominan & resesif.</p>
-                    <button class="btn-launch">INITIALIZE</button>
+                    <p class="text-xs text-purple-400 font-mono mb-4 tracking-wider">MONOHYBRID SIMULATION</p>
+                    <p class="text-sm text-gray-400 mb-6 leading-relaxed">Simulasi persilangan satu sifat beda.
+                        Visualisasi alel dominan & resesif.</p>
+                    <div class="mt-auto"><button class="btn-launch">INITIALIZE</button></div>
                 </a>
 
-                <a href="Generator Rasio Dihibrid (terbaru)/Generator Rasio Dihibrid.html" class="glass-card rounded-xl p-6 relative group"
+                <a href="Generator Rasio Dihibrid (terbaru)/Generator Rasio Dihibrid.html" class="glass-card rounded-xl p-8 group flex flex-col"
                     style="--theme-color: #34d399; --theme-glow: rgba(52, 211, 153, 0.4)">
                     <span class="card-number">02</span>
-                    <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🌿</div>
+                    <div class="holo-icon-container">
+                        <div class="holo-icon">🌿</div>
+                    </div>
                     <h3 class="text-xl font-bold text-white font-display mb-1">BIO-SEQUENCER</h3>
-                    <p class="text-xs text-emerald-400 font-mono mb-4">DIHYBRID CROSS ENGINE</p>
-                    <p class="text-sm text-gray-400 mb-6 line-clamp-2">Simulasi dua sifat beda (9:3:3:1) dengan
-                        visualisasi biji 3D & DNA.</p>
-                    <button class="btn-launch">INITIALIZE</button>
+                    <p class="text-xs text-emerald-400 font-mono mb-4 tracking-wider">DIHYBRID ENGINE</p>
+                    <p class="text-sm text-gray-400 mb-6 leading-relaxed">Simulasi dua sifat beda (9:3:3:1) dengan
+                        visualisasi biji 3D dan DNA.</p>
+                    <div class="mt-auto"><button class="btn-launch">INITIALIZE</button></div>
                 </a>
 
-                <a href="Generator Risiko Pewarisan Sifat Seks (terbaru)/Generator Risiko Pewarisan Sifat Seks.html" class="glass-card rounded-xl p-6 relative group"
+                <a href="Generator Risiko Pewarisan Sifat Seks (terbaru)/Generator Risiko Pewarisan Sifat Seks.html"
+                    class="glass-card rounded-xl p-8 group flex flex-col"
                     style="--theme-color: #fb7185; --theme-glow: rgba(251, 113, 133, 0.4)">
                     <span class="card-number">03</span>
-                    <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🩸</div>
+                    <div class="holo-icon-container">
+                        <div class="holo-icon">🩸</div>
+                    </div>
                     <h3 class="text-xl font-bold text-white font-display mb-1">GEN-X</h3>
-                    <p class="text-xs text-rose-400 font-mono mb-4">SEX-LINKED ANALYZER</p>
-                    <p class="text-sm text-gray-400 mb-6 line-clamp-2">Kalkulator risiko penyakit terpaut X (Hemofilia)
-                        dengan kartu bayi digital.</p>
-                    <button class="btn-launch">INITIALIZE</button>
+                    <p class="text-xs text-rose-400 font-mono mb-4 tracking-wider">SEX-LINKED ANALYZER</p>
+                    <p class="text-sm text-gray-400 mb-6 leading-relaxed">Kalkulator risiko penyakit terpaut kromosom X
+                        (Hemofilia) dengan kartu bayi digital.</p>
+                    <div class="mt-auto"><button class="btn-launch">INITIALIZE</button></div>
                 </a>
 
-                <a href="Simulasi Deteksi Kromosom/Simulasi Deteksi Kromosom.html" class="glass-card rounded-xl p-6 relative group"
+                <a href="Simulasi Deteksi Kromosom/Simulasi Deteksi Kromosom.html" class="glass-card rounded-xl p-8 group flex flex-col"
                     style="--theme-color: #22d3ee; --theme-glow: rgba(34, 211, 238, 0.4)">
                     <span class="card-number">04</span>
-                    <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🔬</div>
+                    <div class="holo-icon-container">
+                        <div class="holo-icon">🔬</div>
+                    </div>
                     <h3 class="text-xl font-bold text-white font-display mb-1">GEN-K</h3>
-                    <p class="text-xs text-cyan-400 font-mono mb-4">KARYOTYPE SCANNER</p>
-                    <p class="text-sm text-gray-400 mb-6 line-clamp-2">Mikroskop digital pendeteksi mutasi kromosom
+                    <p class="text-xs text-cyan-400 font-mono mb-4 tracking-wider">KARYOTYPE SCANNER</p>
+                    <p class="text-sm text-gray-400 mb-6 leading-relaxed">Mikroskop digital pendeteksi mutasi kromosom
                         (Down, Turner) & efek lethal.</p>
-                    <button class="btn-launch">INITIALIZE</button>
+                    <div class="mt-auto"><button class="btn-launch">INITIALIZE</button></div>
                 </a>
 
                 <a href="Generator Aplikasi Bioteknologi (terbaru)/Generator Bioteknologi Profesional.html"
-                    class="glass-card rounded-xl p-6 relative group md:col-span-2"
+                    class="glass-card rounded-xl p-8 group md:col-span-2 flex flex-col md:flex-row items-center gap-8"
                     style="--theme-color: #fbbf24; --theme-glow: rgba(251, 191, 36, 0.4)">
                     <span class="card-number">05</span>
-                    <div class="flex items-center gap-6">
-                        <div class="text-5xl grayscale group-hover:grayscale-0 transition duration-500">📂</div>
-                        <div class="flex-1">
-                            <h3 class="text-xl font-bold text-white font-display mb-1">BIO-ARCHIVE</h3>
-                            <p class="text-xs text-amber-400 font-mono mb-2">CLASSIFIED DATABASE</p>
-                            <p class="text-sm text-gray-400 leading-relaxed">Ensiklopedia digital interaktif. Mencakup
-                                data lengkap Bioteknologi Konvensional dan Modern.</p>
-                        </div>
+                    <div class="holo-icon-container w-full md:w-1/3">
+                        <div class="holo-icon text-6xl">📂</div>
                     </div>
-                    <div class="mt-6">
-                        <button class="btn-launch">ACCESS DATABASE</button>
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="text-2xl font-display font-bold text-white mb-2">BIO-ARCHIVE</h3>
+                        <p class="text-xs text-amber-400 font-mono mb-4 tracking-wider">CLASSIFIED DATABASE</p>
+                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Ensiklopedia digital interaktif. Mencakup
+                            data lengkap Bioteknologi Konvensional dan Modern dengan analisis dampak lingkungan &
+                            ekonomi.</p>
+                        <button class="btn-launch w-auto px-8">ACCESS DATABASE</button>
                     </div>
                 </a>
-
             </div>
         </main>
 
         <footer class="p-6 text-center border-t border-gray-900 bg-black/80 z-40">
-            <p class="text-[10px] font-mono text-gray-600 tracking-widest">GENETIC LABORATORY PROJECT • Developed by
-                Muhammad Ikhwannor
+            <p class="text-[10px] font-mono text-gray-600 tracking-widest">GENETIC LABORATORY VIRTUAL • DEVELOPED BY MUHAMMAD IKHWANNOR
             </p>
         </footer>
     </div>
 
-    <script>
-        // --- 1. HORIZONTAL DNA LOADER LOGIC ---
-        function createHorizontalDNA() {
-            const container = document.getElementById('dna-container');
-            const pairCount = 20;
-            const width = 600;
-            const spacing = width / pairCount;
-
-            for (let i = 0; i < pairCount; i++) {
-                const pair = document.createElement('div');
-                pair.className = 'base-pair-h';
-                pair.style.left = (i * spacing) + 'px';
-
-                // Rotasi Horizontal (Rotate X) dengan Staggered Delay
-                // Stagger negatif membuat efek gelombang mengalir
-                pair.style.animationDelay = `-${i * 0.2}s`;
-
-                const codes = ['A', 'T', 'G', 'C', '0', '1'];
-                const topCode = codes[Math.floor(Math.random() * codes.length)];
-                const botCode = codes[Math.floor(Math.random() * codes.length)];
-
-                const top = document.createElement('span');
-                top.className = 'nucleotide pair-a';
-                top.innerText = topCode;
-
-                const bot = document.createElement('span');
-                bot.className = 'nucleotide pair-b';
-                bot.innerText = botCode;
-
-                const link = document.createElement('div');
-                link.className = 'dna-link';
-
-                pair.appendChild(top);
-                pair.appendChild(link);
-                pair.appendChild(bot);
-                container.appendChild(pair);
-            }
-        }
-
-        // --- 2. CONSTELLATION BACKGROUND ---
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
-
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.3;
-                this.vy = (Math.random() - 0.5) * 0.3;
-                this.size = Math.random() * 2;
-                this.color = Math.random() > 0.5 ? '#00f3ff' : '#00ff41';
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = 0.6;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < 70; i++) particles.push(new Particle());
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, width, height);
-
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-
-                for (let j = i; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < 100) {
-                        ctx.beginPath();
-                        const grad = ctx.createLinearGradient(particles[i].x, particles[i].y, particles[j].x, particles[j].y);
-                        grad.addColorStop(0, particles[i].color);
-                        grad.addColorStop(1, particles[j].color);
-                        ctx.strokeStyle = grad;
-                        ctx.globalAlpha = 1 - (dist / 100);
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animateParticles);
-        }
-
-        // --- 3. SYSTEM INIT ---
-        window.onload = () => {
-            createHorizontalDNA();
-            resize();
-            initParticles();
-
-            const loader = document.getElementById('loader-screen');
-            const main = document.getElementById('main-interface');
-            const percent = document.getElementById('loading-percent');
-            let progress = 0;
-
-            // Loading Simulation
-            const interval = setInterval(() => {
-                progress += Math.floor(Math.random() * 4) + 1;
-                if (progress > 100) progress = 100;
-                percent.innerText = progress + '%';
-
-                if (progress === 100) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        loader.style.opacity = '0';
-                        loader.style.transition = 'opacity 1s ease';
-
-                        setTimeout(() => {
-                            loader.style.display = 'none';
-                            main.classList.remove('hidden');
-                            animateParticles();
-
-                            void main.offsetWidth; // Trigger reflow
-                            main.style.opacity = '1';
-                            document.body.style.overflow = 'auto';
-                        }, 1000);
-                    }, 500);
-                }
-            }, 30);
-        };
-
-        // Clock
-        setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-        }, 1000);
-    </script>
+    <!-- Main Logic -->
+    <script src="js/main.js"></script>
 </body>
 
 </html>
