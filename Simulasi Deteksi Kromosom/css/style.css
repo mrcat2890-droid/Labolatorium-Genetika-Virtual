@@ -1,0 +1,154 @@
+/* =========================================
+   GEN-K: KARYOTYPE SCANNER STYLES
+   ========================================= */
+
+body {
+    background-color: #050505;
+    background-image:
+        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    color: #e2e8f0;
+}
+
+/* Glassmorphism High Tech */
+.glass-panel {
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+}
+
+/* Chromosome SVG Styles */
+.chromo-svg {
+    filter: drop-shadow(0 0 5px currentColor);
+}
+
+/* Interactive Buttons */
+.tech-btn {
+    background: #0f0f0f;
+    border: 1px solid #333;
+    color: #666;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.tech-btn:hover,
+.tech-btn.active {
+    border-color: var(--color);
+    color: var(--color);
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 15px var(--glow);
+    text-shadow: 0 0 8px var(--color);
+}
+
+.tech-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: 0.5s;
+}
+
+.tech-btn:hover::after {
+    left: 100%;
+}
+
+/* Citation Tooltip */
+.citation {
+    border-bottom: 1px dotted #00f0ff;
+    cursor: help;
+    color: #00f0ff;
+}
+
+.citation:hover::after {
+    content: attr(data-ref);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #fff;
+    padding: 12px;
+    font-size: 0.7rem;
+    border: 1px solid #333;
+    width: 300px;
+    z-index: 100;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 1);
+    margin-bottom: 10px;
+}
+
+/* Microscope Overlay */
+.microscope-lens {
+    background: radial-gradient(circle at center, transparent 50%, #000 120%);
+    pointer-events: none;
+}
+
+.scan-line {
+    height: 2px;
+    width: 100%;
+    background: #00f0ff;
+    box-shadow: 0 0 20px #00f0ff;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    animation: scan 3s linear infinite;
+}
+
+@keyframes scan {
+    0% {
+        top: 0%
+    }
+    100% {
+        top: 100%
+    }
+}
+
+/* Loading Cell Division */
+.cell-division {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #00f0ff;
+    box-shadow: 0 0 20px #00f0ff;
+    position: relative;
+    animation: cell-split 2s infinite ease-in-out alternate;
+}
+
+.cell-nucleus {
+    width: 20px;
+    height: 20px;
+    background: #00f0ff;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px #00f0ff;
+}
+
+@keyframes cell-split {
+    0% {
+        width: 60px;
+        border-radius: 50%;
+    }
+    50% {
+        width: 100px;
+        border-radius: 40px;
+    }
+    100% {
+        width: 120px;
+        border-radius: 30px;
+        opacity: 0.5;
+    }
+}
+
+@media print {
+    .no-print {
+        display: none;
+    }
+}

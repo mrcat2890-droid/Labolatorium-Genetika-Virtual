@@ -1,0 +1,157 @@
+/* =========================================
+   GEN-LAB: DIHYBRID STYLES
+   ========================================= */
+
+/* --- CORE AESTHETICS --- */
+body {
+    background-color: #020617;
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(251, 191, 36, 0.1) 0%, transparent 40%);
+    color: #e2e8f0;
+}
+
+.glass-panel {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.input-gen {
+    background: rgba(2, 6, 23, 0.6);
+    border: 2px solid #334155;
+    color: #fbbf24;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.5rem;
+    text-align: center;
+    transition: all 0.3s;
+    letter-spacing: 2px;
+}
+
+.input-gen:focus {
+    outline: none;
+    border-color: #fbbf24;
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.15);
+}
+
+.grid-16 {
+    display: grid;
+    grid-template-columns: auto repeat(4, 1fr);
+    gap: 4px;
+}
+
+/* CITATION TOOLTIP */
+.citation {
+    border-bottom: 1px dashed #fbbf24;
+    cursor: help;
+    color: #fcd34d;
+    position: relative;
+    display: inline-block;
+}
+
+.citation:hover::after {
+    content: attr(data-ref);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    border-radius: 6px;
+    width: 280px;
+    text-align: center;
+    z-index: 50;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    border: 1px solid #333;
+    margin-bottom: 8px;
+    pointer-events: none;
+}
+
+/* --- DNA ANIMATION CSS --- */
+.dna-container {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    perspective: 1000px;
+}
+
+/* DNA Dots */
+.dna-strand {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: dna-move 1.5s infinite ease-in-out;
+}
+
+/* Strand Colors */
+.dna-pair .strand-a {
+    background-color: #fbbf24; /* Gold */
+    box-shadow: 0 0 5px #fbbf24;
+}
+
+.dna-pair .strand-b {
+    background-color: #10b981; /* Emerald */
+    box-shadow: 0 0 5px #10b981;
+    animation-delay: -0.75s;
+}
+
+/* Staggered delay for wave effect */
+.dna-pair:nth-child(1) .dna-strand { animation-delay: -1.4s; }
+.dna-pair:nth-child(1) .strand-b { animation-delay: -2.15s; }
+
+.dna-pair:nth-child(2) .dna-strand { animation-delay: -1.2s; }
+.dna-pair:nth-child(2) .strand-b { animation-delay: -1.95s; }
+
+.dna-pair:nth-child(3) .dna-strand { animation-delay: -1.0s; }
+.dna-pair:nth-child(3) .strand-b { animation-delay: -1.75s; }
+
+.dna-pair:nth-child(4) .dna-strand { animation-delay: -0.8s; }
+.dna-pair:nth-child(4) .strand-b { animation-delay: -1.55s; }
+
+.dna-pair:nth-child(5) .dna-strand { animation-delay: -0.6s; }
+.dna-pair:nth-child(5) .strand-b { animation-delay: -1.35s; }
+
+.dna-pair:nth-child(6) .dna-strand { animation-delay: -0.4s; }
+.dna-pair:nth-child(6) .strand-b { animation-delay: -1.15s; }
+
+.dna-pair:nth-child(7) .dna-strand { animation-delay: -0.2s; }
+.dna-pair:nth-child(7) .strand-b { animation-delay: -0.95s; }
+
+.dna-pair:nth-child(8) .dna-strand { animation-delay: 0s; }
+.dna-pair:nth-child(8) .strand-b { animation-delay: -0.75s; }
+
+@keyframes dna-move {
+    0%, 100% {
+        transform: translateY(-20px) scale(0.6);
+        opacity: 0.4;
+        z-index: 0;
+    }
+    50% {
+        transform: translateY(20px) scale(1.2);
+        opacity: 1;
+        z-index: 10;
+    }
+}
+
+@media print {
+    .no-print {
+        display: none;
+    }
+
+    body {
+        background: white;
+        color: black;
+    }
+
+    .glass-panel {
+        border: 1px solid #ccc;
+        background: white;
+        color: black;
+        box-shadow: none;
+    }
+}
