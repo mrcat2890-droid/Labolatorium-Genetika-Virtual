@@ -4,6 +4,28 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ---
 
+## [1.3.0] - 2026-08-28
+
+### 📌 Penyempurnaan Ahli Media & Integrasi Fitur Baru
+
+Rilis versi 1.3.0 ini berfokus pada rekonstruksi arsitektur file agar dapat disematkan (*embedded*) dengan sempurna secara *offline* maupun *online* ke dalam piranti lunak (*software*) E-Module Flipbook, serta penambahan fitur analisis genetik tingkat lanjut.
+
+#### ✨ Fitur Baru (New Features)
+- **Simulasi Penyimpangan Semu Hukum Mendel:** Menambahkan fitur dropdown "Mode Pewarisan" pada modul Dihibrid (BIO-SEQUENCER). Siswa kini dapat melakukan simulasi interaksi genetik penyimpangan semu:
+  - Normal Mendel (9:3:3:1)
+  - Kriptomeri (9:3:4) - Visualisasi warna bunga.
+  - Epistasis Dominan (12:3:1) - Visualisasi warna labu.
+  - Polimeri (15:1) - Visualisasi warna gandum.
+- **Laporan Klinis/Akademik Dinamis:** Teks deskripsi hasil analisis Punnett Square kini berubah menyesuaikan teori penyimpangan semu yang sedang disimulasikan.
+
+#### 🔧 Perbaikan Teknis & Arsitektur (Technical & Architectural Revisions)
+- **Konsolidasi Source Code (*Stand-alone HTML*):** Menghapus ketergantungan pada file eksternal (`css/style.css` dan `js/main.js`). Seluruh baris kode (HTML, CSS, JavaScript) kini telah dilebur (*embedded*) menjadi satu kesatuan di dalam setiap file modul `.html`. Ini mempermudah proses penyematan (*copy-paste*) ke dalam kotak *decode HTML* pada perangkat lunak pembuat *flipbook*.
+- **Penyempurnaan Responsivitas Layar (Responsive UI):** Memperbaiki masalah tumpang-tindih (*overlapping*) pada tampilan *mobile* dan *tablet*:
+  - Memperbaiki komponen *dropdown* agar merespons tumpukan *flexbox* dengan benar di layar sempit.
+  - Memastikan *grid* Punnett 4x4 dapat digeser secara horizontal (*overflow-x-auto*) di perangkat seluler agar tidak memecah struktur halaman *flipbook*.
+
+---
+
 ## [1.2.0] - 2026-08-28
 
 ### 📌 Revisi Validasi Dosen Ahli Materi & Dosen Ahli Media
