@@ -11,6 +11,10 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 Rilis versi 1.3.0 ini berfokus pada rekonstruksi arsitektur file agar dapat disematkan (*embedded*) dengan sempurna secara *offline* maupun *online* ke dalam piranti lunak (*software*) E-Module Flipbook, serta penambahan fitur analisis genetik tingkat lanjut.
 
 #### ✨ Fitur Baru (New Features)
+- **Kalkulasi & Visualisasi Rasio Genotipe (Revisi Ahli Materi):** Mengimplementasikan perhitungan Rasio Genotipe pada ketiga modul persilangan.
+  - **Dihibrid:** Menampilkan urutan frekuensi kombinasi gen (misal `AABB`, `AaBb`) dalam bentuk *badge* khusus.
+  - **Monohibrid:** Menampilkan statistik kombinasi alel (misal `AA`, `Aa`, `aa`) di bawah rasio fenotipe.
+  - **Seks/Gen-X:** Menyisipkan tulisan genotipe alelik ($X^B X^b$, $X^b Y$, dll) pada teks laporan otomatis.
 - **Simulasi Penyimpangan Semu Hukum Mendel:** Menambahkan fitur dropdown "Mode Pewarisan" pada modul Dihibrid (BIO-SEQUENCER). Siswa kini dapat melakukan simulasi interaksi genetik penyimpangan semu:
   - Normal Mendel (9:3:3:1)
   - Kriptomeri (9:3:4) - Visualisasi warna bunga.

@@ -491,6 +491,7 @@
 
             let mode = document.getElementById('mode-select').value;
             let phenoCounts = {};
+            let genoCounts = {};
             if (mode === "mendel") phenoCounts = { "Bulat Kuning": 0, "Bulat Hijau": 0, "Kisut Kuning": 0, "Kisut Hijau": 0 };
             else if (mode === "kriptomeri") phenoCounts = { "Bunga Ungu": 0, "Bunga Merah": 0, "Bunga Putih": 0 };
             else if (mode === "epistasis_dominan") phenoCounts = { "Labu Putih": 0, "Labu Kuning": 0, "Labu Hijau": 0 };
@@ -529,6 +530,9 @@
                     if (phenoCounts[pLabel] === undefined) phenoCounts[pLabel] = 0;
                     phenoCounts[pLabel]++;
 
+                    if (genoCounts[fullGen] === undefined) genoCounts[fullGen] = 0;
+                    genoCounts[fullGen]++;
+
                     grid.innerHTML += `
                         <div class="bg-slate-800/40 border border-slate-700/50 rounded p-1 flex flex-col items-center group relative hover:bg-slate-700 transition">
                             ${getSeedSVG(pLabel)}
@@ -538,10 +542,10 @@
                     `;
                 }
             }
-            updateStatsAndReport(phenoCounts, p1, p2);
+            updateStatsAndReport(phenoCounts, genoCounts, p1, p2);
         }
 
-        function updateStatsAndReport(counts, p1, p2) {
+        function updateStatsAndReport(counts, genoCounts, p1, p2) {
             const statsDiv = document.getElementById('stats-bars');
             statsDiv.innerHTML = '';
             let total = 16;
@@ -570,13 +574,27 @@
                 }
             }
 
+            statsDiv.innerHTML += `<h4 class="font-bold text-sm text-slate-400 mt-6 mb-3 uppercase tracking-widest border-b border-slate-700 pb-2">Distribusi Genotipe</h4>`;
+            let genoHTML = `<div class="flex flex-wrap gap-2 w-full">`;
+            let genoVals = [];
+            // Sort by counts descending
+            let sortedGenos = Object.entries(genoCounts).sort((a, b) => b[1] - a[1]);
+            for (let [gKey, gVal] of sortedGenos) {
+                genoVals.push(gVal);
+                genoHTML += `<span class="bg-slate-800 text-xs px-2 py-1 rounded border border-slate-700 text-slate-300 font-mono">${gKey}: <strong class="text-white">${gVal}/16</strong></span>`;
+            }
+            genoHTML += `</div>`;
+            statsDiv.innerHTML += genoHTML;
+
             let mode = document.getElementById('mode-select').value;
             let modeName = document.getElementById('mode-select').options[document.getElementById('mode-select').selectedIndex].text;
             let report = "";
             let vals = Object.values(counts).sort((a, b) => b - a).filter(x => x > 0);
             let ratio = vals.join(':');
+            let genoRatio = genoVals.join(':');
 
             report += `<p class="mb-3"><strong class="text-amber-400">ANALISIS SEKUENSIAL [${modeName.toUpperCase()}]:</strong> Sistem telah memetakan persilangan P1 (${p1}) × P2 (${p2}). Berikut adalah interpretasi data:</p>`;
+            report += `<p class="mb-3 text-cyan-400">Rasio Genotipe Keturunan: <strong>${genoRatio}</strong></p>`;
 
             if (mode === "mendel") {
                 if (ratio === "9:3:3:1") {

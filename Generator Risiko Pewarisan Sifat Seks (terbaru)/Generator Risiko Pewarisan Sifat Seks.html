@@ -595,6 +595,10 @@
                         phenotype = 'text-medical-cyan'; stats.normal++;
                     }
                 }
+                let rawGenotype = child.sex === 'F' ? `X<span class="sup">` + child.g1 + `</span>X<span class="sup">` + child.g2 + `</span>` : `X<span class="sup">` + child.g1 + `</span>Y`;
+                if (!stats.genos) stats.genos = {};
+                if (!stats.genos[rawGenotype]) stats.genos[rawGenotype] = 0;
+                stats.genos[rawGenotype]++;
 
                 grid.innerHTML += `
                 <div class="baby-card rounded-xl p-4 flex flex-col items-center text-center group" style="${colorVar}">
@@ -621,6 +625,12 @@
 
         function generateReport(stats) {
             let text = `<p class="mb-4">Analisis genetik dilakukan pada persilangan terpaut kromosom X (Sex-Linked). Sifat penyakit diasumsikan resesif (b) dan sifat normal dominan (B).</p>`;
+            
+            let genoVals = [];
+            for (let [gKey, gVal] of Object.entries(stats.genos || {})) {
+                genoVals.push(`${gKey} (${gVal}/4)`);
+            }
+            text += `<p class="mb-4 text-medical-cyan">Distribusi Rasio Genotipe F1: <strong>${genoVals.join(' : ')}</strong></p>`;
 
             if (stats.sick > 0) {
                 text += `<p class="mb-4"><strong class="text-medical-danger">PERINGATAN RISIKO TINGGI:</strong> Hasil menunjukkan probabilitas <strong>${(stats.sick / 4) * 100}%</strong> anak akan menderita penyakit genetik (Hemofilia/Buta Warna). Laki-laki jauh lebih rentan terkena karena bersifat <span class="citation" data-ref="Hemizigot: Kondisi di mana hanya terdapat satu salinan gen (pada kromosom X) sehingga sifat resesif langsung terekspresikan (Thompson & Thompson Genetics).">Hemizigot</span>.</p>`;

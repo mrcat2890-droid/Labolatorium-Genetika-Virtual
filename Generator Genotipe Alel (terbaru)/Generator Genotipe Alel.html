@@ -302,7 +302,12 @@
                     <div class="mt-8 p-4 bg-white/5 border border-white/10 rounded-xl text-center backdrop-blur-sm">
                         <div class="text-xs text-slate-400 uppercase tracking-widest mb-1">Rasio Fenotipe Mendelian
                         </div>
-                        <div class="text-4xl font-mono font-bold text-white" id="ratio-text">? : ?</div>
+                        <div class="text-4xl font-mono font-bold text-white mb-4" id="ratio-text">? : ?</div>
+                        
+                        <div class="text-[10px] text-cyan-400 uppercase tracking-widest mb-2 border-t border-slate-700 pt-4">Rasio Genotipe</div>
+                        <div class="flex flex-wrap justify-center gap-2" id="geno-ratio-container">
+                            <span class="text-sm font-mono text-slate-500">-</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -471,11 +476,34 @@
             else ratio = "0 : 4";
             document.getElementById('ratio-text').innerText = ratio;
 
+            // Rasio Genotipe
+            let genoCounts = {};
+            offsprings.forEach(g => {
+                if (!genoCounts[g]) genoCounts[g] = 0;
+                genoCounts[g]++;
+            });
+            let genoContainer = document.getElementById('geno-ratio-container');
+            genoContainer.innerHTML = '';
+            
+            // Sort by typical mendelian order (e.g. AA, Aa, aa)
+            let sortedGeno = Object.entries(genoCounts).sort((a, b) => {
+                let aCap = (a[0].match(/[A-Z]/g) || []).length;
+                let bCap = (b[0].match(/[A-Z]/g) || []).length;
+                return bCap - aCap; 
+            });
+
+            let genoRatioVals = [];
+            sortedGeno.forEach(([gKey, gVal]) => {
+                genoRatioVals.push(gVal);
+                genoContainer.innerHTML += `<span class="bg-slate-800 px-2 py-1 rounded text-xs font-mono text-slate-300 border border-slate-700">${gKey}: <strong class="text-white">${gVal}</strong></span>`;
+            });
+            let genoRatioStr = genoRatioVals.join(':');
+
             // Generate AI Report
-            generateReport(domPct, offsprings, p1, p2);
+            generateReport(domPct, offsprings, p1, p2, genoRatioStr);
         }
 
-        function generateReport(domPct, offsprings, p1, p2) {
+        function generateReport(domPct, offsprings, p1, p2, genoRatioStr) {
             const p1Gen = p1.join('');
             const p2Gen = p2.join('');
             const uniqueGenotypes = [...new Set(offsprings)].join(', ');
@@ -486,7 +514,7 @@
             analysis += `<p><strong class="text-cyan-400">STATUS EKSPERIMEN:</strong> Persilangan genetik dilakukan antara P1 (<strong>${p1Gen}</strong>) dan P2 (<strong>${p2Gen}</strong>). Sistem mendeteksi pemisahan alel yang mengikuti <span class="citation-link" data-ref="Hukum I Mendel: Alel memisah secara bebas saat pembentukan gamet">Hukum Segregasi Mendel</span>.</p>`;
 
             // Paragraf 2: Analisis Inti
-            analysis += `<p>Berdasarkan simulasi Punnett Square, probabilitas fenotipe dominan adalah <strong>${domPct}%</strong>. `;
+            analysis += `<p>Berdasarkan simulasi Punnett Square, probabilitas fenotipe dominan adalah <strong>${domPct}%</strong>. Distribusi rasio genotipe keturunan yang terbentuk adalah <strong>${genoRatioStr}</strong>.</p><p>`;
 
             if (domPct === 75) {
                 analysis += `Rasio 3:1 ini mengindikasikan persilangan <strong>Monohibrid Heterozigot</strong>. Kedua induk membawa sifat resesif tersembunyi (Carrier), yang muncul kembali pada 25% keturunan (homozigot resesif). Ini adalah bukti klasik pewarisan sifat diskrit <span class="citation-link" data-ref="Campbell Biology, Bab 14">(Urry et al., 2020)</span>.`;
