@@ -254,8 +254,21 @@
                 class="absolute -top-10 -right-10 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl group-hover:bg-emerald-500/10 transition duration-1000">
             </div>
 
-            <div class="relative z-10 flex flex-col md:flex-row justify-center items-center gap-6 md:gap-16">
-                <div class="text-center group">
+            <div class="relative z-10 flex flex-col items-center">
+                
+                <div class="mb-8 md:mb-12 bg-slate-800/80 p-2 px-4 rounded-full border border-slate-700 flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                    <label class="text-[10px] font-bold text-slate-400 tracking-widest uppercase text-center">MODE PEWARISAN:</label>
+                    <select id="mode-select" class="bg-slate-900 text-emerald-400 font-mono text-[10px] sm:text-xs border border-slate-700 rounded p-2 outline-none focus:border-emerald-500 cursor-pointer w-full sm:w-auto text-center">
+                        <option value="mendel">Normal Mendel (9:3:3:1)</option>
+                        <option value="kriptomeri">Kriptomeri (9:3:4)</option>
+                        <option value="epistasis_dominan">Epistasis Dominan (12:3:1)</option>
+                        <option value="polimeri">Polimeri (15:1)</option>
+                    </select>
+                </div>
+
+                <div class="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-16 w-full">
+
+                <div class="text-center group mt-8 md:mt-0">
                     <label
                         class="text-xs font-bold text-amber-500 tracking-widest mb-2 block group-hover:text-amber-400 transition">PARENTAL
                         1 (♂)</label>
@@ -274,8 +287,9 @@
                     <input type="text" id="p2" maxlength="4" placeholder="bbkk" class="input-gen w-48 h-16 rounded-xl">
                 </div>
             </div>
+            </div>
 
-            <div class="mt-10 flex justify-center">
+            <div class="mt-10 flex justify-center w-full">
                 <button onclick="startAnalysis()"
                     class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-4 px-10 rounded-xl shadow-lg shadow-emerald-900/40 transition-all hover:scale-105 active:scale-95 flex items-center gap-2 group">
                     <span class="group-hover:animate-pulse">MULAI PERSILANGAN</span>
@@ -344,10 +358,7 @@
                         </h3>
                         <div class="flex gap-4 text-[10px] text-slate-400">
                             <span class="flex items-center gap-1">
-                                <div class="w-2 h-2 rounded-full bg-amber-400"></div> Dominan
-                            </span>
-                            <span class="flex items-center gap-1">
-                                <div class="w-2 h-2 rounded-full bg-emerald-600"></div> Resesif
+                                <div class="w-2 h-2 rounded-full bg-slate-500"></div> Hasil Persilangan
                             </span>
                         </div>
                     </div>
@@ -405,12 +416,22 @@
             return sortPair(pair1) + sortPair(pair2);
         }
 
-        // --- SVG SEED ---
+        // --- SVG SEED / PHENOTYPE ---
         function getSeedSVG(phenotype) {
-            const isRound = phenotype.includes("Bulat");
-            const isYellow = phenotype.includes("Kuning");
-            const fill = isYellow ? "#fbbf24" : "#10b981";
-            const stroke = isYellow ? "#d97706" : "#059669";
+            let fill = "#10b981"; // default green
+            let stroke = "#059669";
+            let isRound = true; // default round
+            
+            if (phenotype.includes("Kuning")) { fill = "#fbbf24"; stroke = "#d97706"; }
+            if (phenotype.includes("Kisut")) { isRound = false; }
+            if (phenotype.includes("Ungu")) { fill = "#bd00ff"; stroke = "#7e00ab"; isRound = true; }
+            if (phenotype.includes("Merah")) { fill = "#ef4444"; stroke = "#b91c1c"; isRound = true; }
+            if (phenotype.includes("Putih") && !phenotype.includes("Labu")) { fill = "#f8fafc"; stroke = "#94a3b8"; isRound = true; }
+            if (phenotype.includes("Putih") && phenotype.includes("Labu")) { fill = "#f8fafc"; stroke = "#94a3b8"; isRound = false; } // Labu putih bentuk beda
+            if (phenotype.includes("Labu Kuning")) { fill = "#fbbf24"; stroke = "#d97706"; isRound = false; }
+            if (phenotype.includes("Labu Hijau")) { fill = "#10b981"; stroke = "#059669"; isRound = false; }
+            if (phenotype.includes("Hijau") && !phenotype.includes("Labu")) { fill = "#10b981"; stroke = "#059669"; }
+
             const roundPath = "M50 5 C25 5 5 25 5 50 C5 75 25 95 50 95 C75 95 95 75 95 50 C95 25 75 5 50 5 Z";
             const wrinkledPath = "M50 10 C30 10 15 25 15 40 Q10 50 20 60 Q15 75 30 85 Q50 95 70 85 Q85 75 80 60 Q90 50 85 40 Q85 25 70 10 Z";
             return `<svg viewBox="0 0 100 100" class="w-8 h-8 md:w-10 md:h-10 mx-auto drop-shadow-md transition-transform hover:scale-125 duration-300"><path d="${isRound ? roundPath : wrinkledPath}" fill="${fill}" stroke="${stroke}" stroke-width="3"/><circle cx="30" cy="30" r="5" fill="white" opacity="0.3"/></svg>`;
@@ -468,7 +489,12 @@
             // Header Top (Visual Gamete)
             g2.forEach(g => grid.innerHTML += `<div class="bg-slate-800/80 text-emerald-400 font-mono font-bold py-2 rounded border border-slate-700 flex flex-col items-center justify-center"><div class="w-2 h-2 rounded-full bg-emerald-500 mb-1"></div>${g}</div>`);
 
-            let phenoCounts = { "Bulat Kuning": 0, "Bulat Hijau": 0, "Kisut Kuning": 0, "Kisut Hijau": 0 };
+            let mode = document.getElementById('mode-select').value;
+            let phenoCounts = {};
+            if (mode === "mendel") phenoCounts = { "Bulat Kuning": 0, "Bulat Hijau": 0, "Kisut Kuning": 0, "Kisut Hijau": 0 };
+            else if (mode === "kriptomeri") phenoCounts = { "Bunga Ungu": 0, "Bunga Merah": 0, "Bunga Putih": 0 };
+            else if (mode === "epistasis_dominan") phenoCounts = { "Labu Putih": 0, "Labu Kuning": 0, "Labu Hijau": 0 };
+            else if (mode === "polimeri") phenoCounts = { "Gandum Merah": 0, "Gandum Putih": 0 };
 
             for (let i = 0; i < 4; i++) {
                 // Header Left
@@ -479,9 +505,28 @@
                     let char2 = [g1[i][1], g2[j][1]].sort((a, b) => (a === a.toLowerCase() && b === b.toUpperCase()) ? 1 : -1).join('');
                     let fullGen = char1 + char2;
 
-                    let isRound = fullGen[0] === fullGen[0].toUpperCase();
-                    let isYellow = fullGen[2] === fullGen[2].toUpperCase();
-                    let pLabel = (isRound ? "Bulat" : "Kisut") + " " + (isYellow ? "Kuning" : "Hijau");
+                    let isDom1 = fullGen[0] === fullGen[0].toUpperCase();
+                    let isDom2 = fullGen[2] === fullGen[2].toUpperCase();
+                    let pLabel = "";
+
+                    if (mode === "mendel") {
+                        let isRound = isDom1;
+                        let isYellow = isDom2;
+                        pLabel = (isRound ? "Bulat" : "Kisut") + " " + (isYellow ? "Kuning" : "Hijau");
+                    } else if (mode === "kriptomeri") {
+                        if (isDom1 && isDom2) pLabel = "Bunga Ungu";
+                        else if (isDom1 && !isDom2) pLabel = "Bunga Merah";
+                        else pLabel = "Bunga Putih";
+                    } else if (mode === "epistasis_dominan") {
+                        if (isDom1) pLabel = "Labu Putih";
+                        else if (!isDom1 && isDom2) pLabel = "Labu Kuning";
+                        else pLabel = "Labu Hijau";
+                    } else if (mode === "polimeri") {
+                        if (isDom1 || isDom2) pLabel = "Gandum Merah";
+                        else pLabel = "Gandum Putih";
+                    }
+
+                    if (phenoCounts[pLabel] === undefined) phenoCounts[pLabel] = 0;
                     phenoCounts[pLabel]++;
 
                     grid.innerHTML += `
@@ -502,14 +547,20 @@
             let total = 16;
 
             for (let [key, val] of Object.entries(counts)) {
-                if (val > 0) {
+                if (val > 0 || true) { // Always show bars even if 0 to show possible phenotypes
                     let pct = (val / total) * 100;
-                    let color = key.includes("Kuning") ? "bg-amber-400" : "bg-emerald-500";
+                    let color = "bg-slate-500";
+                    if (key.includes("Kuning")) color = "bg-amber-400";
+                    if (key.includes("Hijau")) color = "bg-emerald-500";
+                    if (key.includes("Ungu")) color = "bg-purple-500";
+                    if (key.includes("Merah")) color = "bg-red-500";
+                    if (key.includes("Putih")) color = "bg-slate-200";
+
                     statsDiv.innerHTML += `
                         <div class="mb-2">
                             <div class="flex justify-between text-xs text-slate-300 mb-1">
                                 <span>${key}</span>
-                                <span class="font-mono">${val}/16 (${pct}%)</span>
+                                <span class="font-mono">${val}/16 (${pct.toFixed(1)}%)</span>
                             </div>
                             <div class="w-full bg-slate-700 rounded-full h-2">
                                 <div class="${color} h-2 rounded-full transition-all duration-1000" style="width: ${pct}%"></div>
@@ -519,20 +570,42 @@
                 }
             }
 
+            let mode = document.getElementById('mode-select').value;
+            let modeName = document.getElementById('mode-select').options[document.getElementById('mode-select').selectedIndex].text;
             let report = "";
             let vals = Object.values(counts).sort((a, b) => b - a).filter(x => x > 0);
             let ratio = vals.join(':');
 
-            report += `<p class="mb-3"><strong class="text-amber-400">ANALISIS SEKUENSIAL:</strong> Sistem telah memetakan persilangan P1 (${p1}) × P2 (${p2}). Berikut adalah interpretasi data:</p>`;
+            report += `<p class="mb-3"><strong class="text-amber-400">ANALISIS SEKUENSIAL [${modeName.toUpperCase()}]:</strong> Sistem telah memetakan persilangan P1 (${p1}) × P2 (${p2}). Berikut adalah interpretasi data:</p>`;
 
-            if (ratio === "9:3:3:1") {
-                report += `<p class="mb-3">Terdeteksi rasio klasik <strong>9:3:3:1</strong>. Fenomena ini mengkonfirmasi <span class="citation" data-ref="Prinsip Asortasi Bebas: Pasangan alel memisah secara independen satu sama lain (Campbell Biology, 12th Ed).">Hukum II Mendel</span>. Kedua induk bersifat Heterozigot untuk kedua sifat, memungkinkan munculnya kombinasi rekombinan (3+3) yang berbeda dari fenotipe parental.</p>`;
-            } else if (ratio === "4:4:4:4" || ratio === "1:1:1:1") {
-                report += `<p class="mb-3">Terdeteksi rasio <strong>1:1:1:1</strong>. Ini adalah tanda tangan genetik dari <span class="citation" data-ref="Metode persilangan dengan individu homozigot resesif untuk mengungkap genotipe (Pierce, 2020).">Test Cross Dihibrid</span>. Salah satu induk adalah pembawa sifat heterozigot ganda (AaBb) sedangkan pasangannya adalah galur murni resesif (aabb).</p>`;
-            } else if (vals[0] === 16) {
-                report += `<p class="mb-3">Terdeteksi <strong>Uniformitas Genetik (100%)</strong>. Alel dominan dari salah satu induk menutupi seluruh ekspresi alel resesif pada generasi F2, sesuai dengan <span class="citation" data-ref="Hukum Dominasi Mendel (1866).">Prinsip Dominasi Penuh</span>.</p>`;
-            } else {
-                report += `<p class="mb-3">Terdeteksi variasi rasio non-standar. Pola ini muncul dari interaksi spesifik genotipe kedua induk yang parsial heterozigot/homozigot.</p>`;
+            if (mode === "mendel") {
+                if (ratio === "9:3:3:1") {
+                    report += `<p class="mb-3">Terdeteksi rasio klasik <strong>9:3:3:1</strong>. Fenomena ini mengkonfirmasi <span class="citation" data-ref="Prinsip Asortasi Bebas: Pasangan alel memisah secara independen satu sama lain (Campbell Biology, 12th Ed).">Hukum II Mendel</span>. Kedua induk bersifat Heterozigot untuk kedua sifat.</p>`;
+                } else if (ratio === "4:4:4:4" || ratio === "1:1:1:1") {
+                    report += `<p class="mb-3">Terdeteksi rasio <strong>1:1:1:1</strong>. Ini adalah tanda tangan genetik dari <span class="citation" data-ref="Metode persilangan dengan individu homozigot resesif untuk mengungkap genotipe (Pierce, 2020).">Test Cross Dihibrid</span>.</p>`;
+                } else if (vals[0] === 16) {
+                    report += `<p class="mb-3">Terdeteksi <strong>Uniformitas Genetik (100%)</strong>. Alel dominan menutupi seluruh ekspresi alel resesif, sesuai dengan Prinsip Dominasi Penuh.</p>`;
+                } else {
+                    report += `<p class="mb-3">Terdeteksi variasi rasio non-standar akibat interaksi persilangan spesifik.</p>`;
+                }
+            } else if (mode === "kriptomeri") {
+                if (ratio === "9:4:3" || ratio === "9:3:4") {
+                    report += `<p class="mb-3">Terdeteksi rasio <strong>9:3:4</strong>. Fenomena ini adalah <strong>Kriptomeri</strong>, suatu bentuk <span class="citation" data-ref="Penyimpangan semu dimana gen dominan (kriptos) seolah tersembunyi jika berdiri sendiri, dan baru berekspresi jika bertemu gen dominan lain.">penyimpangan semu Hukum Mendel</span> dimana gen dominan (contoh A) yang awalnya tersembunyi akan memunculkan fenotipe baru (Ungu) hanya jika bertemu dengan alel dominan dari gen lain (contoh B).</p>`;
+                } else {
+                    report += `<p class="mb-3">Rasio fenotipe yang terbentuk bergantung pada genotipe parental. Pola ini adalah variasi dari mekanisme interaksi gen <strong>Kriptomeri</strong>.</p>`;
+                }
+            } else if (mode === "epistasis_dominan") {
+                if (ratio === "12:3:1") {
+                    report += `<p class="mb-3">Terdeteksi rasio <strong>12:3:1</strong>. Ini adalah fenomena <strong>Epistasis Dominan</strong>. <span class="citation" data-ref="Gen dominan pada satu lokus menutupi ekspresi gen pada lokus lain yang bukan alelnya.">Gen epistatis dominan</span> pada lokus pertama menutupi atau menghalangi ekspresi gen dominan dan resesif pada lokus kedua (gen hipostatis).</p>`;
+                } else {
+                    report += `<p class="mb-3">Rasio fenotipe yang terbentuk bergantung pada genotipe parental. Pola ini adalah variasi dari mekanisme interaksi <strong>Epistasis Dominan</strong>.</p>`;
+                }
+            } else if (mode === "polimeri") {
+                if (ratio === "15:1") {
+                    report += `<p class="mb-3">Terdeteksi rasio <strong>15:1</strong>. Fenomena ini disebut <strong>Polimeri</strong>. Terjadi ketika dua gen berbeda menghasilkan efek fenotipe yang sama dan <span class="citation" data-ref="Banyak gen yang mempengaruhi satu sifat secara aditif (Polygenic inheritance).">bersifat kumulatif</span>. Kehadiran minimal satu alel dominan akan langsung memunculkan sifat tersebut secara dominan, sementara fenotipe resesif murni hanya muncul jika seluruh alel adalah resesif homozigot.</p>`;
+                } else {
+                    report += `<p class="mb-3">Rasio fenotipe yang terbentuk bergantung pada genotipe parental. Pola ini adalah variasi dari mekanisme interaksi gen aditif (<strong>Polimeri</strong>).</p>`;
+                }
             }
             document.getElementById('academic-text').innerHTML = report;
         }
