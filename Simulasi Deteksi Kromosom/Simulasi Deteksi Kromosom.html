@@ -222,8 +222,7 @@
                     01</div>
 
                 <div class="mb-8">
-                    <label class="text-[10px] text-gray-400 font-mono mb-3 block uppercase">Target Autosome /
-                        Gonosome</label>
+                    <label class="text-[10px] text-gray-400 font-mono mb-3 block uppercase">Target Autosom / Gonosom</label>
                     <div class="grid grid-cols-3 gap-2">
                         <button onclick="setChromo('1')" id="btn-c-1" class="tech-btn py-3 font-bold font-display"
                             style="--color: #ff2a6d; --glow: rgba(255, 42, 109, 0.3)">CHR 1</button>
@@ -243,8 +242,7 @@
                 </div>
 
                 <div class="mb-8">
-                    <label class="text-[10px] text-gray-400 font-mono mb-3 block uppercase">Allele Count
-                        (Ploidy)</label>
+                    <label class="text-[10px] text-gray-400 font-mono mb-3 block uppercase">Jumlah Alel (Ploidi)</label>
                     <div class="flex gap-1 bg-gray-900 p-1 border border-gray-800">
                         <button onclick="setCopy(1)" id="btn-n-1"
                             class="tech-btn flex-1 py-2 text-sm font-bold font-mono"
@@ -260,7 +258,7 @@
 
                 <button onclick="runSimulation()"
                     class="w-full py-4 bg-bio-cyan text-black font-bold font-display text-lg hover:bg-white transition shadow-[0_0_30px_rgba(0,240,255,0.4)] tracking-widest clip-path-slant">
-                    INITIATE SCAN
+                    MULAI PINDAIAN
                 </button>
             </div>
 
@@ -295,8 +293,8 @@
                     <div class="cell-division mb-6">
                         <div class="cell-nucleus"></div>
                     </div>
-                    <div class="text-bio-cyan font-display tracking-widest animate-pulse">MITOSIS IN PROGRESS</div>
-                    <div class="text-xs text-gray-600 font-mono mt-2">Separating Sister Chromatids...</div>
+                    <div class="text-bio-cyan font-display tracking-widest animate-pulse">MITOSIS BERLANGSUNG</div>
+                    <div class="text-xs text-gray-600 font-mono mt-2">Memisahkan Kromatid Saudari...</div>
                 </div>
 
                 <div id="microscope"
@@ -322,7 +320,7 @@
             <div id="report-card" class="glass-panel p-8 hidden border-t-2 border-bio-cyan">
                 <div class="flex items-start justify-between mb-6">
                     <div>
-                        <h2 class="text-3xl font-display font-bold text-white mb-1" id="syn-name">ANALYSIS READY</h2>
+                        <h2 class="text-3xl font-display font-bold text-white mb-1" id="syn-name">ANALISIS SELESAI</h2>
                         <p class="text-xs font-mono text-bio-purple" id="syn-karyotype">46, XX</p>
                     </div>
                     <div class="text-right">
