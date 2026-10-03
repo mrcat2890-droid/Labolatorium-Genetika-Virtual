@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GEN-OS // Simulasi 3D Gametogenesis & Fertilisasi</title>
+<style>
+:root{--bg:#05080d;--pn:rgba(6,14,24,.95);--cy:#00f0ff;--gr:#39ff14;--tx:#cfe8ee;color-scheme:dark}
+*{box-sizing:border-box}html,body{height:100%;margin:0;overscroll-behavior:none}
+body{height:100dvh;background:radial-gradient(circle at 50% 30%,#0b1a2a,var(--bg));color:var(--tx);font:clamp(11px,1.4vw + 8px,13px)/1.5 ui-monospace,Consolas,monospace;overflow:hidden;display:grid;grid-template-rows:minmax(0,1fr) auto;padding:0 env(safe-area-inset-right,0px) 0 env(safe-area-inset-left,0px)}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,240,255,.04) 0 1px,transparent 1px 3px)}
+#st{position:relative;min-width:0;min-height:0;overflow:hidden}
+canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}canvas:active{cursor:grabbing}
+header{position:absolute;top:env(safe-area-inset-top,0px);left:0;right:60px;padding:8px 12px;pointer-events:none}
+h1{margin:0;font-size:clamp(12px,3vw,16px);color:var(--cy);letter-spacing:1.5px;text-shadow:0 0 8px var(--cy)}
+h1 small{display:block;color:#7fd;font-size:.85em;letter-spacing:0;text-shadow:none;font-weight:400}
+#z{position:absolute;right:10px;bottom:10px;display:flex;flex-direction:column;gap:6px}
+#z button{width:40px;height:40px;padding:0;font-size:18px}
+#p{background:var(--pn);border-top:1px solid var(--cy);padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));max-height:42vh;overflow:auto}
+#i{min-height:4.4em;color:var(--gr);margin-bottom:8px}#i b{color:var(--cy)}
+.r{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
+button{background:#000;color:var(--cy);border:1px solid var(--cy);padding:6px 10px;min-height:34px;font:inherit;cursor:pointer;border-radius:0}
+button:hover,button.on{background:var(--cy);color:#000}button:focus-visible{outline:2px solid var(--gr)}
+input[type=range]{flex:1;min-width:120px;accent-color:var(--cy);height:28px}
+.lg i{display:inline-block;width:9px;height:9px;margin:0 4px 0 10px}
+@media (orientation:landscape) and (max-height:520px){body{grid-template-rows:minmax(0,1fr);grid-template-columns:minmax(0,1fr) minmax(250px,38vw)}#p{max-height:100%;border-top:0;border-left:1px solid var(--cy);padding-bottom:10px}}
+</style></head><body>
+<main id="st"><canvas id="c"></canvas>
+<header><h1>GEN-OS // PEMINDAHAN GENOTIP<small>Seret: putar · Cubit/scroll: zoom · Dua jari/Shift+seret: geser</small></h1></header>
+<div id="z"><button id="zi" aria-label="Zoom in">+</button><button id="zo" aria-label="Zoom out">−</button><button id="zr" aria-label="Reset tampilan">⟲</button></div></main>
+<aside id="p"><div id="i"></div>
+<div class="r"><button id="b0">1 Induk 2n</button><button id="b1">2 Meiosis</button><button id="b2">3 Fertilisasi</button><button id="pl">▶ Putar</button><button id="sp">Kecepatan 1×</button></div>
+<div class="r"><input id="s" type="range" min="0" max="100" step=".1" value="0" aria-label="Linimasa"></div>
+<div class="r"><button id="m" class="on">Meiosis: ON</button><button id="rs">Acak sperma pembuahi</button><span class="lg"><i style="background:#3aa0ff"></i>Kromosom ayah<i style="background:#ff4fa3"></i>Kromosom ibu<i style="background:#ff3b3b"></i>4n (salah)</span></div></aside>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const T=THREE,$=id=>document.getElementById(id),cv=$('c'),st=$('st');
+const R=new T.WebGLRenderer({canvas:cv,antialias:true,alpha:true}),S=new T.Scene(),cam=new T.PerspectiveCamera(45,1,.1,300),W=new T.Group();S.add(W);W.position.y=-.3;
+S.add(new T.AmbientLight(0xffffff,.75));const dl=new T.DirectionalLight(0xffffff,.8);dl.position.set(6,10,16);S.add(dl);
+let rx=-.12,ry=0,rxT=-.12,ryT=0,vel=0,zt=1,zc=1,tx=0,ty=0,cx=0,cy=0,fitD=35,P=0,PT=0,play=false,spd=1,sd=0,noM=false,sel=0,drag=false,G,T0=0,last=performance.now(),ck='';
+const AL=['A','A','a','a'],E=t=>t<=0?0:t>=1?1:t*t*(3-2*t),sg=(p,a,b)=>E((p-a)/(b-a)),L=(a,b,t)=>a+(b-a)*t,cl=z=>Math.max(.5,Math.min(5,z));
+const M=(c,o=1,e=.3)=>new T.MeshStandardMaterial({color:c,transparent:true,opacity:o,emissive:c,emissiveIntensity:e,roughness:.4});
+function lab(t,c,s=.8){const k=document.createElement('canvas');k.width=512;k.height=128;const x=k.getContext('2d');x.font='bold '+(t.length>2?52:100)+'px monospace';x.textAlign='center';x.textBaseline='middle';x.fillStyle=c;x.shadowColor=c;x.shadowBlur=14;x.fillText(t,256,68);const p=new T.Sprite(new T.SpriteMaterial({map:new T.CanvasTexture(k),transparent:true,depthTest:false}));p.scale.set(s*4,s,1);return p}
+function fade(g,a){g.visible=a>.01;g.traverse(o=>{if(o.material){if(o.userData.b==null)o.userData.b=o.material.opacity;o.material.opacity=o.userData.b*a}})}
+function cell(r,c){const g=new T.Group();g.add(new T.Mesh(new T.SphereGeometry(r,40,28),M(c,.2,.1)),new T.Mesh(new T.SphereGeometry(r*1.02,18,12),new T.MeshBasicMaterial({color:c,wireframe:true,transparent:true,opacity:.15})));return g}
+function chr(c,al,dup){const g=new T.Group(),n=dup?2:1;for(let i=0;i<n;i++){const o=dup?(i-.5)*.5:0;const b=new T.Mesh(new T.CylinderGeometry(.14,.14,1.5,14),M(c,1,.4));b.position.x=o;g.add(b);[.75,-.75].forEach(y=>{const s=new T.Mesh(new T.SphereGeometry(.14,12,8),M(c,1,.4));s.position.set(o,y,0);g.add(s)});const l=lab(al,'#fff',.6);l.position.set(o*2.4,-1.4,.3);g.add(l)}return g}
+function sperm(al){const g=new T.Group(),h=new T.Mesh(new T.SphereGeometry(.4,20,14),M(0x9fc4ff,1,.4));h.scale.x=1.3;g.add(h);let p=g;const tl=[];
+ for(let j=0;j<10;j++){const s=new T.Group();s.position.x=j?-.2:-.4;const m=new T.Mesh(new T.CylinderGeometry(.05-.003*j,.05-.003*j,.22,6),M(0x5aa0ff,1,.4));m.rotation.z=Math.PI/2;m.position.x=-.1;s.add(m);p.add(s);p=s;tl.push(s)}
+ g.userData.tl=tl;g.add(lab(al,'#fff',.55));return g}
+function build(){if(G)W.remove(G.r);const r=new T.Group();W.add(r);G={r};const mk=(g,x,y)=>{g.position.set(x,y,0);r.add(g);return g};
+ const par=(y,c,a1,a2,cc,tx,col)=>{const g=mk(new T.Group(),-10,y);g.add(cell(2.3,c));const k1=chr(cc,a1,1),k2=chr(cc,a2,1);k1.position.x=-.8;k2.position.x=.8;g.add(k1,k2);const t=lab(tx,col,.5);t.position.y=-3.2;g.add(t);return[g,k1,k2]};
+ [G.mp,G.c1,G.c2]=par(3.5,0xffb347,'A','a',0x3aa0ff,'AYAH (2n) Aa','#7cf');
+ [G.fp,G.c3,G.c4]=par(-3.5,0xff7aa8,'B','b',0xff4fa3,'IBU (2n) Bb','#f9c');
+ const al=noM?['Aa']:AL;G.sp=al.map(a=>{const g=sperm(a);r.add(g);return g});G.slot=al.map((a,i)=>[.6,3.5+(al.length>1?[1.8,.6,-.6,-1.8][i]:0)]);
+ const ov=G.ov=new T.Group();ov.add(new T.Mesh(new T.SphereGeometry(noM?1.4:1.15,28,20),M(0xff8f7a,.85,.2)),new T.Mesh(new T.SphereGeometry(.6,16,12),M(0xff6a55,1,.4)),lab(noM?'Bb':'B','#fff',.8));r.add(ov);
+ G.po=(noM?[]:[['b',1.7,-1.7],['b',2.4,-2.9],['B',2.2,-4.2]]).map(([a,x,y])=>{const g=new T.Group();g.add(new T.Mesh(new T.SphereGeometry(.38,14,10),M(0xffb09f,.9,.2)),lab(a,'#fff',.45));g.userData={x,y};r.add(g);return g});
+ const z=G.z=mk(new T.Group(),10,0);z.add(cell(2.4,noM?0xff2b2b:0xffa070));
+ (noM?[['A',-1.3],['a',-.45],['B',.45],['b',1.3]].map(([a,x])=>[a,0xff3b3b,x]):[[AL[sel],0x3aa0ff,-.7],['B',0xff4fa3,.7]]).forEach(([a,c,x])=>{const k=chr(c,a,0);k.position.x=x;z.add(k)});
+ const zt=lab(noM?'4n  NON-VIABEL':'EMBRIO 2n  '+AL[sel]+'B',noM?'#f55':'#fda',.5);zt.position.y=-3.4;z.add(zt)}
+const grid=new T.GridHelper(44,22,0x00f0ff,0x0a3a44);grid.position.y=-8;grid.material.transparent=true;grid.material.opacity=.35;W.add(grid);
+[['INDUK 2n',-10],['GAMET n',.5],['ZIGOT',10]].forEach(([t,x])=>{const l=lab(t,'#0ff',.55);l.position.set(x,7,0);W.add(l)});
+function upd(){const m=sg(P,10,45),a=sg(P,55,75),b=sg(P,75,100),F=G,pf=1-sg(m,.3,.55),sp=noM?0:sg(m,0,.4),gm=sg(m,.35,.6),mv=sg(m,.4,1),pn=Math.sin(Math.PI*sg(m,.1,.55)),ar=Math.sin(Math.PI*a);
+ fade(F.mp,pf);fade(F.fp,pf);[F.mp,F.fp].forEach(g=>g.scale.set(1+.15*pn,1-.1*pn,1+.15*pn));
+ F.c1.position.x=F.c3.position.x=L(-.8,-1.7,sp);F.c2.position.x=F.c4.position.x=L(.8,1.7,sp);F.c1.rotation.z=F.c3.rotation.z=.35*sp;F.c2.rotation.z=F.c4.rotation.z=-.35*sp;
+ F.sp.forEach((g,i)=>{const s=F.slot[i],ch=i==sel||noM;let x=L(-10,s[0],mv),y=L(F.mp.position.y,s[1],mv),k=.3+.7*gm,o=gm,z=(i%2?.9:-.9)*mv+Math.sin(T0*1.3+i)*.15*gm;
+  if(ch){x=L(x,-1.4,a);y=L(y,-3.5,a)+ar*.8;z=z*(1-a)+ar*1.4;x=L(x,10,b);y=L(y,0,b);k*=1-b}else{o*=1-a;z*=1-a}
+  g.position.set(x,y,z);g.scale.setScalar(Math.max(.001,k));g.userData.tl.forEach((t,j)=>t.rotation.z=Math.sin(T0*10-j*.7+i)*.2*(.4+j*.12));fade(g,o)});
+ let ox=L(-10,0,mv),oy=L(-3.5,-3.5,mv);ox=L(ox,10,b);oy=L(oy,0,b);F.ov.position.set(ox,oy,0);F.ov.scale.setScalar(Math.max(.001,(.4+.6*gm)*(1-b*.9)*(1+.03*Math.sin(T0*3))));fade(F.ov,gm);
+ F.po.forEach(g=>{g.position.set(L(-10,g.userData.x,mv),L(-3.5,g.userData.y+Math.sin(T0*1.5+g.userData.x)*.12*gm,mv),0);g.scale.setScalar(Math.max(.001,.3+.7*gm));fade(g,gm*(1-b))});
+ fade(F.z,b);F.z.scale.setScalar(Math.max(.001,b));F.z.rotation.y=Math.sin(T0*.8)*.6;
+ let s;if(P<10)s=['1 · INDUK DIPLOID (2n)','Ayah bergenotip Aa, ibu Bb. Tiap sel somatik membawa sepasang alel (dua kopi gen).'];
+ else if(P<55)s=noM?['2 · TANPA MEIOSIS','Kromosom tidak direduksi. Gamet tetap diploid (2n): sperma Aa dan ovum Bb.']:['2 · MEIOSIS (GAMETOGENESIS)','Segregasi: pasangan alel dipisah. Ayah menghasilkan 4 sperma haploid (A, A, a, a). Ibu menghasilkan 1 ovum (B) dan polar body kecil (b, b, B). Tiap gamet hanya punya satu alel (n).'];
+ else if(P<75)s=['3 · FERTILISASI','Satu sperma ('+(noM?'Aa':AL[sel])+') menembus ovum. Sperma lain tidak ikut membuahi.'];
+ else s=noM?['HASIL · 2n + 2n = 4n','Embrio tetraploid (4n) tidak viable. Itulah sebabnya reduksi kromosom lewat meiosis esensial.']:['HASIL · EMBRIO 2n','Penyatuan gamet (n + n) memulihkan diploid: alel dari ayah ('+AL[sel]+') dan dari ibu (B) menjadi pasangan alel utuh.'];
+ if(s[0]!=ck){ck=s[0];$('i').innerHTML='<b>'+s[0]+'</b><br>'+s[1]}}
+function stop(){play=false;$('pl').textContent='▶ Putar'}
+function loop(n){const dt=Math.min((n-last)/1000,.1);last=n;T0+=dt;
+ if(play){P=Math.min(100,P+dt*7*spd);PT=P;if(P>=100)stop()}else P+=(PT-P)*(1-Math.exp(-dt*5));
+ if(!sd)$('s').value=P;
+ if(!drag){ryT+=vel*dt*60;vel*=Math.pow(.04,dt);if(Math.abs(vel)<.0008)ryT+=Math.sin(T0*.4)*.0012}
+ const k=1-Math.exp(-dt*10);ry+=(ryT-ry)*k;rx+=(rxT-rx)*k;zc+=(zt-zc)*k;cx+=(tx-cx)*k;cy+=(ty-cy)*k;
+ cam.position.set(cx,cy,fitD/zc);W.rotation.set(rx,ry,0);upd();R.render(S,cam);requestAnimationFrame(loop)}
+function rz(){const w=st.clientWidth,h=st.clientHeight;if(!w||!h)return;R.setPixelRatio(Math.min(devicePixelRatio||1,2));R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();fitD=Math.max(16/2/.4142,29/2/(.4142*cam.aspect))}
+function pan(dx,dy){const u=2*cam.position.z*.4142/st.clientHeight;tx=Math.max(-25,Math.min(25,tx-dx*u));ty=Math.max(-18,Math.min(18,ty+dy*u))}
+function go(v){PT=v;stop()}
+const pt=new Map(),dist=()=>{const a=[...pt.values()];return Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1])||1};let pd=1;
+cv.onpointerdown=e=>{cv.setPointerCapture(e.pointerId);pt.set(e.pointerId,[e.clientX,e.clientY]);drag=true;vel=0;if(pt.size==2)pd=dist()};
+cv.onpointermove=e=>{const o=pt.get(e.pointerId);if(!o)return;const dx=e.clientX-o[0],dy=e.clientY-o[1];pt.set(e.pointerId,[e.clientX,e.clientY]);
+ if(pt.size>=2){const d=dist();zt=cl(zt*d/pd);pd=d;pan(dx/2,dy/2)}
+ else if(e.buttons>1||e.shiftKey)pan(dx,dy);
+ else{vel=dx*.008;ryT+=vel;rxT=Math.max(-1.2,Math.min(1.2,rxT+dy*.008))}};
+cv.onpointerup=cv.onpointercancel=e=>{pt.delete(e.pointerId);if(!pt.size)drag=false};
+cv.oncontextmenu=e=>e.preventDefault();
+cv.addEventListener('wheel',e=>{e.preventDefault();zt=cl(zt*Math.exp(-e.deltaY*.0015))},{passive:false});
+$('zi').onclick=()=>zt=cl(zt*1.3);$('zo').onclick=()=>zt=cl(zt/1.3);$('zr').onclick=()=>{zt=1;tx=ty=0;rxT=-.12;ryT=0;vel=0};
+const sl=$('s');sl.onpointerdown=()=>sd=1;sl.onpointerup=sl.onpointercancel=()=>sd=0;sl.oninput=e=>go(+e.target.value);
+$('b0').onclick=()=>go(0);$('b1').onclick=()=>go(45);$('b2').onclick=()=>go(100);
+$('pl').onclick=()=>{if(play)return stop();if(P>=99.5)P=PT=0;play=true;$('pl').textContent='❚❚ Jeda'};
+$('sp').onclick=e=>{spd=spd==1?.5:spd==.5?2:1;e.target.textContent='Kecepatan '+spd+'×'};
+$('m').onclick=e=>{noM=!noM;e.target.classList.toggle('on',!noM);e.target.textContent='Meiosis: '+(noM?'OFF':'ON');ck='';build()};
+$('rs').onclick=()=>{sel=Math.floor(Math.random()*4);build();P=PT=46;play=true;$('pl').textContent='❚❚ Jeda'};
+new ResizeObserver(rz).observe(st);rz();build();requestAnimationFrame(loop);
+</script></body></html>

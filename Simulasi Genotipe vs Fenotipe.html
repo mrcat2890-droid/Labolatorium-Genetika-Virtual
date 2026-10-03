@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulasi Genotipe vs Fenotipe</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;600&display=swap">
+<style>
+:root{--bg:#f6f8f4;--card:#fff;--ink:#14231b;--mute:#5d6b63;--line:#dfe6df;--acc:#0f766e;--gt:#4338ca;--gtb:#e0e7ff;--ft:#b45309;--ftb:#fef3c7;--ok:#15803d;--bad:#b91c1c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1511;--card:#16211b;--ink:#e8f1ea;--mute:#9db0a4;--line:#27362d;--acc:#2dd4bf;--gt:#a5b4fc;--gtb:#25295a;--ft:#fbbf24;--ftb:#3a2c0b;--ok:#4ade80;--bad:#f87171}}
+:root[data-theme="dark"]{--bg:#0d1511;--card:#16211b;--ink:#e8f1ea;--mute:#9db0a4;--line:#27362d;--acc:#2dd4bf;--gt:#a5b4fc;--gtb:#25295a;--ft:#fbbf24;--ftb:#3a2c0b;--ok:#4ade80;--bad:#f87171}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Figtree,system-ui,sans-serif;line-height:1.55}
+.wrap{max-width:980px;margin:0 auto;padding:22px 16px 56px}
+h1,h3,h4{font-family:'Bricolage Grotesque',system-ui,sans-serif;margin:0}
+h1{font-size:clamp(1.7rem,4.5vw,2.4rem);font-weight:800;letter-spacing:-.02em}
+h3{font-size:1.1rem}h4{font-size:.95rem;margin:14px 0 6px}
+.sub{color:var(--mute);margin:4px 0 16px;max-width:60ch}
+.tabs,.seg,.pills{display:flex;flex-wrap:wrap;gap:8px}.tabs{margin-bottom:16px}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:10px}
+button:hover{border-color:var(--acc)}button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+:root:not([data-theme="light"]) button.on{color:#052e2a}
+.go{padding:11px 22px;font-weight:600;background:var(--acc);border-color:var(--acc);color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.two .card{margin:0}.two{margin-bottom:14px}
+@media(max-width:640px){.two{grid-template-columns:1fr}}
+.def{border-left:5px solid;padding:6px 12px;border-radius:4px}
+.def.g{border-color:var(--gt);background:var(--gtb)}.def.f{border-color:var(--ft);background:var(--ftb)}
+.def b{display:block}.def.g b{color:var(--gt)}.def.f b{color:var(--ft)}
+.rule{margin:10px 0 0;color:var(--mute)}
+.pv{display:flex;align-items:center;gap:16px;margin-top:12px}
+dl{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:0}dt{color:var(--mute);font-size:.88rem}dd{margin:0;font-weight:600}
+.gtx{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--gt);font-size:1.25rem}
+.ftx{color:var(--ft)}
+sup{font-size:.6em}
+.pn{border-collapse:separate;border-spacing:6px;margin:6px 0}
+.pn th{font-weight:600;color:var(--gt);font-family:ui-monospace,Menlo,monospace;padding:4px 10px}
+.pn td{background:var(--bg);border:1px solid var(--line);border-radius:8px;text-align:center;padding:8px 14px;min-width:84px}
+.pn .g2{font-family:ui-monospace,Menlo,monospace;color:var(--gt);font-size:1.1rem}
+.pn small{color:var(--ft);font-weight:600}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;border:1px solid #94a3b8;margin-right:5px}
+.rt{margin:4px 0}.rt span{font-weight:600}
+.row{display:grid;grid-template-columns:90px 1fr;gap:2px 10px;align-items:center;margin:6px 0}
+.row small{grid-column:2;color:var(--mute)}
+.tr{position:relative;height:16px;background:var(--bg);border:1px solid var(--line);border-radius:4px}
+.tr i{position:absolute;left:0;top:0;bottom:0;background:var(--acc);border-radius:3px;opacity:.85}
+.tr b{position:absolute;top:-4px;bottom:-4px;width:3px;background:var(--ink)}
+.kids{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.kid{display:flex;flex-direction:column;align-items:center;width:62px;padding:6px 2px;border:1px solid var(--line);border-radius:8px;font-size:.75rem}
+.kid .gt{display:none;font-family:ui-monospace,monospace;color:var(--gt);font-weight:600}.sg .kid .gt{display:block}
+.chk{display:inline-flex;gap:6px;align-items:center;margin-top:10px;cursor:pointer}
+.ctl{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:10px}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+button.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--card))}
+button.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,var(--card))}
+.qt{font-size:1.15rem;font-weight:600;margin:6px 0 10px}.stat{color:var(--mute);font-size:.9rem}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}@media(max-width:560px){.opts{grid-template-columns:1fr}}
+.opts button{text-align:left;padding:12px}.fb{margin-top:12px;padding:10px 12px;border-radius:8px;background:var(--bg);border:1px solid var(--line)}
+.qv{text-align:center;min-height:6px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<div class="wrap">
+<h1>Genotipe dan fenotipe</h1>
+<p class="sub">Silangkan dua induk, lihat papan Punnett, lalu uji pemahamanmu lewat kuis.</p>
+<div class="tabs"><button id="t1" class="on" onclick="tab(1)">Simulator</button><button id="t2" onclick="tab(2)">Kuis</button></div>
+<section id="simbox"></section><section id="quiz" hidden></section>
+</div>
+<script>
+const COL={Ungu:'#8b5cf6',Putih:'#f8fafc',A:'#f43f5e',B:'#3b82f6',AB:'#8b5cf6',O:'#14b8a6'};
+const SYS={
+mono:{name:'Monohibrid: warna bunga ercis',order:'Pp',gts:['PP','Pp','pp'],phs:['Ungu','Putih'],def:['Pp','Pp'],
+ ph:g=>g.includes('P')?'Ungu':'Putih',
+ rule:'Alel <b>P</b> (ungu) dominan penuh terhadap <b>p</b> (putih). Bunga ungu muncul jika ada minimal satu alel P; putih hanya pada genotipe pp.',
+ lab:f=>'Bunga '+f.toLowerCase(),phr:f=>'berbunga '+f.toLowerCase(),noun:'Tanaman ercis'},
+abo:{name:'Alel ganda: golongan darah ABO',order:'ABi',gts:['AA','Ai','BB','Bi','AB','ii'],phs:['A','B','AB','O'],def:['Ai','Bi'],
+ ph:g=>g.includes('A')&&g.includes('B')?'AB':g.includes('A')?'A':g.includes('B')?'B':'O',
+ rule:'Ada tiga alel: I<sup>A</sup>, I<sup>B</sup>, dan i. I<sup>A</sup> dan I<sup>B</sup> kodominan (keduanya tampil pada I<sup>A</sup>I<sup>B</sup> = golongan AB) dan keduanya dominan terhadap i.',
+ lab:f=>'Golongan darah '+f,phr:f=>'bergolongan darah '+f,noun:'Seseorang'}};
+const gl=(k,g)=>[...g].map(a=>k=='abo'&&a!='i'?`I<sup>${a}</sup>`:a).join('');
+const cn=(k,s)=>[...s].sort((x,y)=>SYS[k].order.indexOf(x)-SYS[k].order.indexOf(y)).join('');
+const zy=(k,g)=>g[0]==g[1]?'Homozigot'+(k=='mono'?(g[0]=='P'?' dominan':' resesif'):''):'Heterozigot';
+const cross=(k,a,b)=>{const g={},p={};for(const x of a)for(const y of b){const q=cn(k,x+y),f=SYS[k].ph(q);g[q]=(g[q]||0)+1;p[f]=(p[f]||0)+1}return{g,p}};
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const rt=(o,ord,L)=>{const e=ord.filter(x=>o[x]),g=e.reduce((t,x)=>gcd(t,o[x]),0);return e.map(L).join(' : ')+' = '+e.map(x=>o[x]/g).join(' : ')};
+const R=n=>Math.floor(Math.random()*n),P=a=>a[R(a.length)],sh=a=>a.map(x=>[Math.random(),x]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+const flower=(c,s)=>`<svg viewBox="0 0 100 120" width="${s}" height="${s*1.2}" aria-hidden="true"><path d="M50 56V116" stroke="#16a34a" stroke-width="4" fill="none"/><ellipse cx="66" cy="92" rx="14" ry="6" transform="rotate(-30 66 92)" fill="#4ade80"/>${[0,72,144,216,288].map(r=>`<ellipse cx="50" cy="28" rx="12" ry="19" transform="rotate(${r} 50 46)" fill="${c}" stroke="#94a3b8"/>`).join('')}<circle cx="50" cy="46" r="8" fill="#facc15"/></svg>`;
+const drop=(c,t,s)=>`<svg viewBox="0 0 100 120" width="${s}" height="${s*1.2}" aria-hidden="true"><path d="M50 8C50 8 14 52 14 78a36 36 0 0 0 72 0C86 52 50 8 50 8Z" fill="${c}"/><text x="50" y="88" text-anchor="middle" font-size="${t.length>1?30:36}" font-weight="800" fill="#fff" font-family="sans-serif">${t}</text></svg>`;
+const vis=(k,f,s)=>k=='mono'?flower(COL[f],s):drop(COL[f],f,s);
+
+/* ===== Simulator ===== */
+const S={sys:'mono',p1:'Pp',p2:'Pp',n:100,res:null,show:false};
+function tab(n){t1.className=n==1?'on':'';t2.className=n==2?'on':'';sim_.hidden=n!=1;quiz.hidden=n!=2;if(n==2)qz()}
+const sim_=document.getElementById("simbox");
+function setSys(k){S.sys=k;[S.p1,S.p2]=SYS[k].def;S.res=null;sim()}
+function setP(i,g){S['p'+i]=g;S.res=null;sim()}
+function setN(n){S.n=n;sim()}
+function tgl(){S.show=!S.show;sim()}
+function run(){const k=S.sys,a=S.p1,b=S.p2,gc={},pc={},kids=[];
+ for(let i=0;i<S.n;i++){const q=cn(k,P([...a])+P([...b])),f=SYS[k].ph(q);gc[q]=(gc[q]||0)+1;pc[f]=(pc[f]||0)+1;if(i<24)kids.push(q)}
+ S.res={gc,pc,kids,n:S.n};sim()}
+const bars=(t,cats,obs,exp,n,L)=>`<h4>${t}</h4>`+cats.filter(c=>exp[c]).map(c=>{const o=obs[c]||0,op=o/n*100,ep=exp[c]*25;return `<div class="row"><span>${L(c)}</span><div class="tr"><i style="width:${op}%"></i><b style="left:${ep}%"></b></div><small>${o} individu (${op.toFixed(1)}%), harapan teori ${ep}%</small></div>`}).join('');
+function chi(cats,obs,exp,n){const k=cats.filter(c=>exp[c]),df=k.length-1;if(df<1)return'<p class="rt">Hanya ada satu fenotipe, uji χ² tidak diperlukan.</p>';
+ const x=k.reduce((t,c)=>{const e=n*exp[c]/4;return t+((obs[c]||0)-e)**2/e},0),cr={1:3.841,2:5.991,3:7.815}[df],w=n*Math.min(...k.map(c=>exp[c]))/4<5;
+ return `<p class="rt">Uji χ² fenotipe: <b>${x.toFixed(2)}</b> (db ${df}, nilai kritis 5% = ${cr}) → <b class="${x<cr?'ok':'bad'}">${x<cr?'sesuai dengan harapan teori':'menyimpang nyata dari harapan'}</b>.${w?' <i>Catatan: ada frekuensi harapan &lt; 5, uji ini kurang andal untuk sampel sekecil ini.</i>':''}</p>`}
+function sim(){
+ const k=S.sys,s=SYS[k],c=cross(k,S.p1,S.p2),L=x=>gl(k,x),a=[...S.p1],b=[...S.p2];
+ const par=i=>{const g=S['p'+i],f=s.ph(g);return `<div class="card"><h3>Induk ${i}</h3><div class="pills">${s.gts.map(x=>`<button class="${x==g?'on':''}" onclick="setP(${i},'${x}')">${L(x)}</button>`).join('')}</div>
+ <div class="pv">${vis(k,f,84)}<dl><dt>Genotipe</dt><dd class="gtx">${L(g)}</dd><dt>Zigositas</dt><dd>${zy(k,g)}</dd><dt>Fenotipe</dt><dd class="ftx">${s.lab(f)}</dd></dl></div></div>`};
+ let h=`<div class="two"><div class="def g"><b>Genotipe</b>Susunan alel yang dimiliki individu (ditulis dengan huruf, mis. Pp). Tidak terlihat langsung.</div><div class="def f"><b>Fenotipe</b>Sifat yang tampak, hasil ekspresi genotipe dan pengaruh lingkungan (mis. bunga ungu).</div></div>
+ <div class="card"><div class="seg">${Object.keys(SYS).map(x=>`<button class="${x==k?'on':''}" onclick="setSys('${x}')">${SYS[x].name}</button>`).join('')}</div><p class="rule">${s.rule}</p></div>
+ <div class="two">${par(1)}${par(2)}</div>
+ <div class="card"><h3>Papan Punnett</h3><p class="rule">Gamet induk 1 (baris) × gamet induk 2 (kolom). Setiap sel berpeluang 1/4.</p>
+ <div style="overflow-x:auto"><table class="pn"><tr><th></th>${b.map(y=>`<th>${L(y)}</th>`).join('')}</tr>${a.map(x=>`<tr><th>${L(x)}</th>${b.map(y=>{const q=cn(k,x+y),f=s.ph(q);return `<td><div class="g2">${L(q)}</div><small><i class="dot" style="background:${COL[f]}"></i>${f}</small></td>`}).join('')}</tr>`).join('')}</table></div>
+ <p class="rt"><span class="gtx">Rasio genotipe</span> ${rt(c.g,s.gts,L)}</p><p class="rt"><span class="ftx">Rasio fenotipe</span> ${rt(c.p,s.phs,x=>x)}</p></div>
+ <div class="card"><h3>Simulasi keturunan acak</h3><p class="rule">Tiap keturunan menerima satu gamet acak dari tiap induk. Semakin banyak keturunan, hasil makin mendekati rasio teori (hukum bilangan besar).</p>
+ <div class="ctl"><div class="pills">${[4,20,100,1000].map(n=>`<button class="${S.n==n?'on':''}" onclick="setN(${n})">${n} keturunan</button>`).join('')}</div><button class="go" onclick="run()">Silangkan</button></div>`;
+ if(S.res){const r=S.res;h+=bars('Genotipe: teramati vs teori',s.gts,r.gc,c.g,r.n,L)+bars('Fenotipe: teramati vs teori',s.phs,r.pc,c.p,r.n,x=>x)+`<p class="rule">Garis hitam = proporsi harapan teori.</p>`+chi(s.phs,r.pc,c.p,r.n)+
+ `<h4>${r.kids.length} keturunan pertama</h4><label class="chk"><input type="checkbox" ${S.show?'checked':''} onchange="tgl()"> Ungkap genotipe (di alam, hanya fenotipe yang terlihat)</label><div class="kids ${S.show?'sg':''}">${r.kids.map(q=>{const f=s.ph(q);return `<div class="kid">${vis(k,f,40)}<span>${f}</span><span class="gt">${L(q)}</span></div>`}).join('')}</div>`}
+ sim_.innerHTML=h+'</div>'}
+
+/* ===== Kuis ===== */
+const Q={sc:0,tot:0,st:0,cur:null,pick:null};
+function mk(){
+ const k=P(['mono','abo']),s=SYS[k],L=x=>gl(k,x),t=R(4);let q,o,ex,vs='',pre=true;
+ if(t==0){const isG=Math.random()<.5,g=P(s.gts),f=s.ph(g),tm=isG?L(g):s.lab(f);
+  q=`Istilah <b>${tm}</b> termasuk…`;o=[{t:'Genotipe',ok:isG},{t:'Fenotipe',ok:!isG}];
+  ex=isG?'Genotipe adalah susunan alel (huruf). '+L(g)+' menyatakan alel yang dimiliki, bukan sifat yang tampak.':'Fenotipe adalah sifat yang tampak/teramati. '+tm+' adalah ciri yang dapat dilihat atau diuji.'}
+ else if(t==1){const g=P(s.gts),f=s.ph(g);q=`${s.noun} bergenotipe <b>${L(g)}</b>. Apa fenotipenya?`;o=sh(s.phs.map(x=>({t:x,ok:x==f})));vs=vis(k,f,80);pre=false;
+  ex=`${s.rule} Genotipe ${L(g)} bersifat ${zy(k,g).toLowerCase()}, sehingga fenotipenya <b>${f}</b>.`}
+ else if(t==2){const f=P(s.phs),set=x=>s.gts.filter(g=>s.ph(g)==x).map(L).join(' atau '),cor=set(f),pool=[...new Set([...s.phs.map(set),...s.gts.map(L)])].filter(x=>x!=cor);
+  q=`${s.noun} ${s.phr(f)}. Genotipe mana yang <b>mungkin</b> dimiliki?`;o=sh([{t:cor,ok:true},...sh(pool).slice(0,3).map(x=>({t:x,ok:false}))]);vs=vis(k,f,80);
+  ex=`Fenotipe ${f} dapat dihasilkan oleh: <b>${cor}</b>.`+(cor.includes('atau')?' Dari fenotipe saja kita belum bisa memastikan genotipenya (perlu uji silang).':'')}
+ else{const p1=P(s.gts),p2=P(s.gts),c=cross(k,p1,p2),f=Math.random()<.7?P(Object.keys(c.p)):P(s.phs),v=(c.p[f]||0)*25;
+  q=`Persilangan ${L(p1)} × ${L(p2)}. Berapa peluang keturunan ${s.phr(f)}?`;
+  o=sh([v,...sh([0,25,50,75,100].filter(x=>x!=v)).slice(0,3)]).map(x=>({t:x+'%',ok:x==v}));
+  ex=`Gamet induk 1: ${[...p1].map(L).join(', ')}; induk 2: ${[...p2].map(L).join(', ')}. Hasil: genotipe ${Object.entries(c.g).map(([a,n])=>L(a)+' '+n*25+'%').join(', ')}; fenotipe ${Object.entries(c.p).map(([a,n])=>a+' '+n*25+'%').join(', ')}.`}
+ Q.cur={q,o,ex,vs,pre};Q.pick=null}
+function ans(i){if(Q.pick!=null)return;Q.pick=i;Q.tot++;if(Q.cur.o[i].ok){Q.sc++;Q.st++}else Q.st=0;qz()}
+function nxt(){Q.cur=null;qz()}
+function qz(){if(!Q.cur)mk();const c=Q.cur,d=Q.pick!=null;
+ document.getElementById('quiz').innerHTML=`<div class="card"><div class="stat">Skor ${Q.sc} dari ${Q.tot}. Jawaban benar beruntun: ${Q.st}</div><p class="qt">${c.q}</p>
+ <div class="qv">${c.vs&&(c.pre||d)?c.vs:''}</div><div class="opts">${c.o.map((x,i)=>`<button ${d?'disabled':''} class="${d?(x.ok?'ok':i==Q.pick?'bad':''):''}" onclick="ans(${i})">${x.t}</button>`).join('')}</div>
+ ${d?`<div class="fb"><b class="${c.o[Q.pick].ok?'ok':'bad'}">${c.o[Q.pick].ok?'Benar.':'Belum tepat.'}</b> ${c.ex}</div><p><button class="go" onclick="nxt()">Soal berikutnya</button></p>`:''}</div>`}
+sim();
+</script></body></html>

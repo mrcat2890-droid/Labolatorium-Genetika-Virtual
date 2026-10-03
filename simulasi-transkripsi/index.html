@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Transkripsi DNA → mRNA | GEN-OS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="glass-panel header">
+            <div class="brand">
+                <span class="badge">GEN-OS Bio-Core</span>
+                <h1>SIMULASI TRANSKRIPSI DNA &rarr; mRNA</h1>
+            </div>
+            <div class="legend">
+                <div class="legend-item"><span class="color-box a-color"></span> A (Adenin)</div>
+                <div class="legend-item"><span class="color-box t-color"></span> T (Timin)</div>
+                <div class="legend-item"><span class="color-box g-color"></span> G (Guanin)</div>
+                <div class="legend-item"><span class="color-box c-color"></span> C (Sitosin)</div>
+                <div class="legend-item"><span class="color-box u-color"></span> U (Urasil)</div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="canvas-container">
+                <canvas id="sim-canvas" width="1200" height="600"></canvas>
+            </div>
+        </main>
+
+        <footer class="glass-panel controls-panel">
+            <div class="info-panel">
+                <h3 id="step-title">1. Inisiasi</h3>
+                <p id="step-desc">RNA Polimerase mengenali dan mengikat daerah promoter pada DNA.</p>
+            </div>
+            
+            <div class="controls">
+                <div class="progress-container">
+                    <span id="step-indicator">Langkah 1 / 5</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button id="btn-prev" class="btn" disabled>&#9664; Prev</button>
+                    <button id="btn-play" class="btn btn-primary">Play</button>
+                    <button id="btn-next" class="btn">Next &#9654;</button>
+                </div>
+
+                <div class="speed-control">
+                    <label for="speed-slider">Kecepatan:</label>
+                    <input type="range" id="speed-slider" min="0.5" max="2" step="0.1" value="1">
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

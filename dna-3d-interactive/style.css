@@ -1,0 +1,935 @@
+/* ==========================================================================
+   GEN-OS BIO-CORE: UNIVERSAL RESPONSIVE MULTI-DEVICE STYLESHEET
+   Adaptif Sempurna untuk Seluruh Rasio Layar:
+   Smartphone (9:16, 19.5:9, 21:9), Tablet (3:4, 4:3), Foldable, Desktop, Ultrawide
+   ========================================================================== */
+
+:root {
+    --bg-dark: #07152b;
+    --panel-bg: rgba(8, 20, 42, 0.88);
+    --panel-border: rgba(56, 189, 248, 0.28);
+    --panel-glow: rgba(56, 189, 248, 0.15);
+    
+    --neon-blue: #0284c7;
+    --neon-cyan: #38bdf8;
+    --neon-purple: #818cf8;
+    --neon-green: #22c55e;
+    
+    /* Warna Basa Nitrogen Tajam, Pekat & Saling Kontras */
+    --color-adenine: #1d63ff;   /* Biru Royal Pekat */
+    --color-thymine: #ffb703;   /* Kuning Emas Amber Cerah */
+    --color-guanine: #00d659;   /* Hijau Zamrud Segar */
+    --color-cytosine: #ff2a4b;  /* Merah Koral Menyala */
+    --color-backbone: #5c6ae4;  /* Lilac / Indigo Mutiara */
+    --color-hbond: #ffffff;
+
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+
+    /* Safe Area Inset untuk HP Berponi / Notch (iPhone X - 16, Samsung Punch Hole) */
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+    --sal: env(safe-area-inset-left, 0px);
+    --sar: env(safe-area-inset-right, 0px);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: fixed; /* Mencegah pull-to-refresh & bounce di mobile browser */
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: radial-gradient(circle at 65% 40%, #0f3562 0%, #082142 45%, #041024 100%);
+    color: var(--text-primary);
+}
+
+/* 3D Canvas */
+#canvas-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    touch-action: none; /* Mencegah konflik gesture cubit / scroll default browser */
+    cursor: grab;
+}
+
+#canvas-container:active {
+    cursor: grabbing;
+}
+
+/* ==========================================================================
+   HEADER ADAPTIF (DESKTOP & MOBILE)
+   ========================================================================== */
+#app-header {
+    position: absolute;
+    top: calc(14px + var(--sat));
+    left: calc(16px + var(--sal));
+    right: calc(16px + var(--sar));
+    z-index: 20;
+    pointer-events: none;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.header-content {
+    background: rgba(6, 18, 38, 0.88);
+    border: 1px solid rgba(56, 189, 248, 0.32);
+    border-radius: 14px;
+    padding: 10px 18px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.15);
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 100%;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 20px;
+    padding: 2px 9px;
+    margin-bottom: 4px;
+    width: fit-content;
+}
+
+.pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--neon-cyan);
+    box-shadow: 0 0 10px var(--neon-cyan);
+    animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.badge-text {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: var(--neon-cyan);
+}
+
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(56, 189, 248, 0.45);
+    line-height: 1.2;
+}
+
+.subtitle {
+    font-size: 0.76rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+/* Tombol Toggle di Header (Tampil pada Layar Sentuh / Tablet / HP) */
+.header-actions {
+    display: none;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-btn {
+    background: rgba(15, 28, 54, 0.85);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 9px;
+    padding: 6px 12px;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.header-btn:hover, .header-btn:active {
+    background: rgba(56, 189, 248, 0.25);
+    border-color: var(--neon-cyan);
+}
+
+/* ==========================================================================
+   GLASS PANELS & RESPONSIVE DRAWERS
+   ========================================================================== */
+.glass-panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    backdrop-filter: blur(18px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 25px var(--panel-glow);
+    z-index: 25;
+    pointer-events: auto;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.mobile-drawer-handle {
+    display: none;
+}
+
+.panel-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+#btn-close-controls {
+    display: none;
+}
+
+/* Panel Kontrol Desktop */
+#controls-panel {
+    position: absolute;
+    top: calc(95px + var(--sat));
+    left: calc(20px + var(--sal));
+    width: 320px;
+    max-height: calc(100vh - 160px - var(--sat) - var(--sab));
+    overflow-y: auto;
+    padding: 18px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--neon-cyan) transparent;
+}
+
+#controls-panel::-webkit-scrollbar, #inspector-panel::-webkit-scrollbar {
+    width: 4px;
+}
+#controls-panel::-webkit-scrollbar-thumb, #inspector-panel::-webkit-scrollbar-thumb {
+    background: var(--neon-cyan);
+    border-radius: 4px;
+}
+
+.panel-section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--neon-cyan);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.section-hint {
+    font-size: 0.74rem;
+    color: var(--text-secondary);
+    margin: 6px 0 10px 0;
+    line-height: 1.4;
+}
+
+.divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.3), transparent);
+    margin: 14px 0;
+}
+
+/* Tombol Aksi */
+.btn-group-primary {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.action-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.22s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+}
+
+.action-btn:active {
+    transform: translateY(0);
+}
+
+.btn-icon {
+    font-size: 1.1rem;
+}
+
+.btn-neon-blue {
+    background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+    color: #031525;
+    font-weight: 700;
+    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.35);
+}
+.btn-neon-purple {
+    background: linear-gradient(135deg, #4f46e5 0%, #818cf8 100%);
+    box-shadow: 0 4px 16px rgba(129, 140, 248, 0.35);
+}
+.btn-neon-green {
+    background: linear-gradient(135deg, #059669 0%, #22c55e 100%);
+    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.35);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Filter Chips (Scroll Horizontal Mulus untuk Mobile) */
+.filter-chips-scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+}
+.filter-chips-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.chip {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text-secondary);
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.74rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.chip:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #fff;
+}
+
+.chip.active {
+    background: rgba(56, 189, 248, 0.25);
+    border-color: var(--neon-cyan);
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.chip-backbone.active { border-color: var(--color-backbone); background: rgba(92, 106, 228, 0.35); }
+.chip-adenine.active { border-color: var(--color-adenine); background: rgba(29, 99, 255, 0.35); }
+.chip-thymine.active { border-color: var(--color-thymine); background: rgba(255, 183, 3, 0.35); }
+.chip-guanine.active { border-color: var(--color-guanine); background: rgba(0, 214, 89, 0.35); }
+.chip-cytosine.active { border-color: var(--color-cytosine); background: rgba(255, 42, 75, 0.35); }
+.chip-hbond.active { border-color: #fff; background: rgba(255, 255, 255, 0.35); }
+
+/* Tombol Kontrol */
+.ctrl-btn {
+    width: 100%;
+    background: rgba(15, 28, 54, 0.7);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text-primary);
+    font-size: 0.78rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s;
+    margin-bottom: 6px;
+}
+
+.ctrl-btn:hover {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: var(--neon-cyan);
+}
+
+.ctrl-btn.active {
+    border-color: var(--neon-cyan);
+    background: rgba(56, 189, 248, 0.2);
+    color: var(--neon-cyan);
+}
+
+/* Legenda Warna */
+.legend-box {
+    margin-top: 14px;
+    background: rgba(5, 12, 28, 0.75);
+    border: 1px solid rgba(56, 189, 248, 0.15);
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.legend-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.legend-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    font-size: 0.72rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-secondary);
+}
+
+.color-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.dot-a { background-color: var(--color-adenine); box-shadow: 0 0 8px var(--color-adenine); }
+.dot-t { background-color: var(--color-thymine); box-shadow: 0 0 8px var(--color-thymine); }
+.dot-g { background-color: var(--color-guanine); box-shadow: 0 0 8px var(--color-guanine); }
+.dot-c { background-color: var(--color-cytosine); box-shadow: 0 0 8px var(--color-cytosine); }
+.dot-backbone { background-color: var(--color-backbone); box-shadow: 0 0 8px var(--color-backbone); }
+.dot-hbond { background-color: #fff; box-shadow: 0 0 8px #fff; }
+
+/* Panel Inspektur Kanan Desktop */
+#inspector-panel {
+    position: absolute;
+    top: calc(95px + var(--sat));
+    right: calc(20px + var(--sar));
+    width: 360px;
+    max-height: calc(100vh - 160px - var(--sat) - var(--sab));
+    overflow-y: auto;
+    padding: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--neon-cyan) transparent;
+}
+
+.panel-header-inspector {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.inspector-badge {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    color: var(--neon-cyan);
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+.btn-icon-close {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: all 0.2s;
+}
+
+.btn-icon-close:hover {
+    color: #fff;
+    background: rgba(239, 68, 68, 0.3);
+    border-color: #ef4444;
+}
+
+.inspector-empty {
+    text-align: center;
+    padding: 24px 12px;
+}
+
+.microscope-icon {
+    font-size: 2.6rem;
+    margin-bottom: 10px;
+    opacity: 0.85;
+}
+
+.inspector-empty h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.inspector-empty p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* Detail Komponen */
+.component-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.component-color-indicator {
+    width: 16px;
+    height: 36px;
+    border-radius: 6px;
+    background-color: var(--neon-cyan);
+    box-shadow: 0 0 12px var(--neon-cyan);
+}
+
+#detail-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.meta-tag {
+    font-size: 0.7rem;
+    color: var(--neon-cyan);
+    background: rgba(56, 189, 248, 0.15);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 2px;
+}
+
+.detail-card {
+    background: rgba(6, 18, 40, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.78rem;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row .label {
+    color: var(--text-secondary);
+}
+
+.detail-row .value {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.detail-row .code-font {
+    font-family: monospace;
+    color: var(--neon-cyan);
+}
+
+.highlight-text {
+    color: #38bdf8 !important;
+}
+
+.detail-section {
+    margin-bottom: 12px;
+}
+
+.detail-section h4 {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.detail-section p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+}
+
+/* ==========================================================================
+   ANOTASI ILMIAH 3D
+   ========================================================================== */
+#annotations-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+}
+
+#annotations-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.annotation-callout {
+    position: absolute;
+    color: #e0f2fe;
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
+    transition: transform 0.1s linear, opacity 0.3s;
+    white-space: nowrap;
+}
+
+.bracket-bracket {
+    width: 16px;
+    height: 64px;
+    border-left: 2px solid rgba(56, 189, 248, 0.85);
+    border-top: 2px solid rgba(56, 189, 248, 0.85);
+    border-bottom: 2px solid rgba(56, 189, 248, 0.85);
+    position: relative;
+}
+.bracket-bracket::after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 2px;
+    background: rgba(56, 189, 248, 0.85);
+}
+
+.callout-pointer {
+    width: 30px;
+    height: 1px;
+    background: rgba(56, 189, 248, 0.85);
+    position: relative;
+}
+.callout-pointer::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -2px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #38bdf8;
+    box-shadow: 0 0 6px #38bdf8;
+}
+
+.callout-text {
+    font-weight: 500;
+    line-height: 1.25;
+}
+.callout-text b {
+    color: #38bdf8;
+}
+
+/* ==========================================================================
+   DESKTOP INTERACTION HINT & MOBILE DOCK
+   ========================================================================== */
+#interaction-hint {
+    position: absolute;
+    bottom: calc(16px + var(--sab));
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 15;
+    pointer-events: none;
+}
+
+.hint-pill {
+    background: rgba(6, 18, 38, 0.88);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 30px;
+    padding: 7px 20px;
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    pointer-events: auto;
+}
+
+.hint-icon {
+    font-size: 1rem;
+}
+
+.hint-divider {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+/* Mobile Quick Action Dock (Default Hidden on Desktop) */
+#mobile-dock {
+    display: none;
+}
+
+/* Modal Backdrop untuk Mobile Drawer */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(2, 6, 18, 0.55);
+    backdrop-filter: blur(4px);
+    z-index: 22;
+    transition: opacity 0.3s ease;
+}
+
+/* ==========================================================================
+   RESPONSIVITAS UNIVERSAL: TABLET & LAPTOP KECIL (768px - 1024px)
+   ========================================================================== */
+@media (max-width: 1024px) {
+    #controls-panel {
+        width: 280px;
+        left: 14px;
+        padding: 14px;
+    }
+    #inspector-panel {
+        width: 310px;
+        right: 14px;
+        padding: 16px;
+    }
+    .header-content {
+        padding: 8px 14px;
+    }
+    h1 {
+        font-size: 1rem;
+    }
+    .subtitle {
+        font-size: 0.7rem;
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVITAS UNIVERSAL: SMARTPHONE & SEMUA RASIO LAYAR RAMBAT (< 768px)
+   iPhone (SE, 11-16 Pro Max), Samsung S/A/Z Fold, Xiaomi, Vivo, Oppo, dll.
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* 1. Header Ringkas */
+    #app-header {
+        top: calc(8px + var(--sat));
+        left: calc(10px + var(--sal));
+        right: calc(10px + var(--sar));
+    }
+    .header-content {
+        width: 100%;
+        padding: 8px 12px;
+        border-radius: 12px;
+    }
+    .logo-badge {
+        padding: 1px 7px;
+        margin-bottom: 2px;
+    }
+    .badge-text {
+        font-size: 0.58rem;
+    }
+    h1 {
+        font-size: 0.88rem;
+        letter-spacing: 0.4px;
+    }
+    .subtitle {
+        display: none; /* Sembunyikan subtitle di layar sempit agar hemat ruang */
+    }
+    .header-actions {
+        display: flex; /* Tampilkan tombol Menu & Detail di header */
+    }
+
+    /* 2. Sembunyikan Petunjuk Desktop */
+    #interaction-hint {
+        display: none;
+    }
+
+    /* 3. Panel Berubah Menjadi BOTTOM SHEET Sentuhan Mulus */
+    .responsive-drawer {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        max-height: 72vh !important;
+        border-radius: 22px 22px 0 0 !important;
+        border-bottom: none !important;
+        border-left: none !important;
+        border-right: none !important;
+        padding: 12px 18px calc(24px + var(--sab)) 18px !important;
+        transform: translateY(105%) !important;
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        z-index: 30 !important;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.75), 0 0 25px var(--panel-glow) !important;
+    }
+
+    /* Handle Bar Mobile */
+    .mobile-drawer-handle {
+        display: block;
+        width: 44px;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.35);
+        border-radius: 3px;
+        margin: 0 auto 12px auto;
+    }
+
+    #btn-close-controls {
+        display: flex;
+    }
+
+    /* State Saat Drawer Terbuka */
+    .responsive-drawer.drawer-open {
+        transform: translateY(0%) !important;
+    }
+
+    /* 4. Filter Chips Horizontal Scroll */
+    .filter-chips {
+        flex-wrap: nowrap;
+    }
+
+    /* 5. Mobile Quick Action Dock (Navigasi Bawah Jempol) */
+    #mobile-dock {
+        display: flex;
+        position: fixed;
+        bottom: calc(12px + var(--sab));
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 21;
+        background: rgba(6, 18, 38, 0.88);
+        border: 1px solid rgba(56, 189, 248, 0.35);
+        border-radius: 30px;
+        padding: 6px 12px;
+        backdrop-filter: blur(14px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55), 0 0 20px rgba(56, 189, 248, 0.2);
+        gap: 8px;
+        width: auto;
+        max-width: calc(100vw - 24px);
+    }
+
+    .dock-btn {
+        background: rgba(15, 28, 54, 0.7);
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        border-radius: 20px;
+        padding: 7px 12px;
+        color: #ffffff;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.74rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.2s;
+    }
+
+    .dock-btn:active {
+        transform: scale(0.94);
+        background: rgba(56, 189, 248, 0.3);
+    }
+
+    .dock-btn-primary {
+        background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+        color: #041426;
+        border: none;
+        font-weight: 700;
+        box-shadow: 0 2px 10px rgba(56, 189, 248, 0.4);
+    }
+
+    .dock-icon {
+        font-size: 0.95rem;
+    }
+
+    /* 6. Skala Anotasi Layar Kecil */
+    .annotation-callout {
+        font-size: 0.7rem;
+        transform-origin: left center;
+    }
+    .bracket-bracket {
+        height: 48px;
+        width: 12px;
+    }
+}
+
+/* ==========================================================================
+   ADAPTIF MOBILE ORIENTASI LANDSCAPE (Layar Pendek e.g. Max-Height: 480px)
+   ========================================================================== */
+@media (max-height: 480px) and (orientation: landscape) {
+    #app-header {
+        top: calc(4px + var(--sat));
+    }
+    .header-content {
+        padding: 4px 10px;
+    }
+    h1 {
+        font-size: 0.8rem;
+    }
+    .logo-badge {
+        display: none;
+    }
+    .responsive-drawer {
+        max-height: 88vh !important;
+        padding: 10px 14px calc(14px + var(--sab)) 14px !important;
+    }
+    #mobile-dock {
+        bottom: calc(6px + var(--sab));
+        padding: 4px 10px;
+    }
+    .dock-btn {
+        padding: 5px 10px;
+        font-size: 0.68rem;
+    }
+}

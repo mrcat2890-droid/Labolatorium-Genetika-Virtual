@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Translasi mRNA &rarr; Protein - GEN-OS Bio-Core</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="branding">GEN-OS <span>BIO-CORE</span></div>
+            <h1 class="title">SIMULASI TRANSLASI mRNA &rarr; PROTEIN</h1>
+            <a href="../index.html" class="btn-back">Kembali ke Beranda</a>
+        </header>
+
+        <main class="main-content">
+            <section class="simulation-area">
+                <div class="sim-container" id="sim-container">
+                    <canvas id="sim-canvas"></canvas>
+                </div>
+                <div class="controls-panel">
+                    <div class="step-controls">
+                        <button id="btn-prev" class="btn"><span class="icon">&laquo;</span> Sebelumnya</button>
+                        <button id="btn-play" class="btn btn-primary"><span class="icon">&#9658;</span> Mulai</button>
+                        <button id="btn-next" class="btn">Selanjutnya <span class="icon">&raquo;</span></button>
+                    </div>
+                    <div class="speed-control">
+                        <label for="speed-slider">Kecepatan:</label>
+                        <input type="range" id="speed-slider" min="0.5" max="2" step="0.1" value="1">
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <span id="step-counter" class="step-counter">Langkah 0 / 11</span>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="side-panel">
+                <div class="info-card">
+                    <h2 class="card-title">Keterangan Langkah</h2>
+                    <div class="info-content">
+                        <h3 id="step-title" class="step-title">Persiapan Translasi</h3>
+                        <p id="step-description" class="step-desc">Ribosom akan menempel pada mRNA dan memulai proses translasi dari kodon awal (AUG).</p>
+                        
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <span class="data-label">Kodon Saat Ini</span>
+                                <span id="current-codon" class="data-value">-</span>
+                            </div>
+                            <div class="data-item">
+                                <span class="data-label">Antikodon tRNA</span>
+                                <span id="current-anticodon" class="data-value">-</span>
+                            </div>
+                            <div class="data-item">
+                                <span class="data-label">Asam Amino</span>
+                                <span id="current-aa" class="data-value">-</span>
+                            </div>
+                        </div>
+                        
+                        <div class="chain-info">
+                            <span class="data-label">Rantai Polipeptida:</span>
+                            <div id="polypeptide-chain" class="chain-display">Belum ada asam amino</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="codon-card">
+                    <h2 class="card-title">Referensi Kodon (Tabel Genetik)</h2>
+                    <div class="codon-table-wrapper">
+                        <table class="codon-table">
+                            <thead>
+                                <tr>
+                                    <th>1st</th>
+                                    <th colspan="4">2nd Base</th>
+                                    <th>3rd</th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th>U</th>
+                                    <th>C</th>
+                                    <th>A</th>
+                                    <th>G</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Tabel Ringkas -->
+                                <tr>
+                                    <td rowspan="4">U</td>
+                                    <td>Phe, Leu</td>
+                                    <td>Ser</td>
+                                    <td>Tyr, STOP</td>
+                                    <td>Cys, STOP, Trp</td>
+                                    <td>U,C,A,G</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="4">C</td>
+                                    <td>Leu</td>
+                                    <td>Pro</td>
+                                    <td>His, Gln</td>
+                                    <td>Arg</td>
+                                    <td>U,C,A,G</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="4">A</td>
+                                    <td>Ile, Met(Start)</td>
+                                    <td>Thr</td>
+                                    <td>Asn, Lys</td>
+                                    <td>Ser, Arg</td>
+                                    <td>U,C,A,G</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="4">G</td>
+                                    <td>Val</td>
+                                    <td>Ala</td>
+                                    <td>Asp, Glu</td>
+                                    <td>Gly</td>
+                                    <td>U,C,A,G</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="codon-note">* AUG (Metionin) = Kodon START. UAA, UAG, UGA = Kodon STOP.</div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

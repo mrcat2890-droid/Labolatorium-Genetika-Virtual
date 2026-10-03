@@ -4,6 +4,55 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ---
 
+## [Unreleased]
+
+### 📌 Penambahan Modul Simulasi Translasi mRNA → Protein (simulasi-translasi)
+- **Peluncuran Modul Baru `simulasi-translasi`:** Menambahkan modul simulasi interaktif yang memvisualisasikan proses sintesis protein (translasi) dari mRNA ke rantai asam amino (polipeptida) di ribosom. Dilengkapi dengan animasi interaktif untuk setiap langkah (Inisiasi, Elongasi, Terminasi), pergerakan tRNA pembawa asam amino, pembentukan ikatan peptida, dan referensi tabel genetik kodon.
+
+### 📌 Penambahan Modul Model Kromosom 3D Interaktif (chromosome-3d-interactive)
+- **Peluncuran Modul Baru `chromosome-3d-interactive`:** Menambahkan modul eksplorasi visual 3D anatomi kromosom metafase duplikasi (berbentuk X) yang saling melengkapi dengan modul DNA 3D.
+  - **Pemodelan Anatomi Sitogenetika Realistis:** Dua kromatid saudara (*Sister Chromatids*) dengan lekukan organik, penyempitan primer sentromer (*centromere*), kompleks lempeng protein kinetokor (*kinetochore*), tudung terminal telomer emas (*telomere*), serta pola pita horizontal *G-Banding* (heterokromatin padat dan eukromatin aktif).
+  - **Simulasi Mitosis & Pemisahan Kromatid (Tahap Anafase):** Menambahkan fitur simulasi anafase di mana benang spindel mikrotubulus menarik kedua kromatid saudara ke arah kutub berlawanan dengan gerakan lentur khas huruf V.
+  - **Mode Uraikan Komponen (*Exploded View*):** Memisahkan seluruh elemen anatomis (Sentromer melayang ke depan, Kinetokor ke samping, Telomer ke kutub ujung, dan Lengan p/q merekah) untuk mempermudah pemahaman struktur internal kromosom.
+  - **Inspektor Sitogenetika Interaktif & Raycaster:** Klik/sentuh pada bagian kromosom menampilkan data sitologis lengkap (komposisi molekuler, lokasi sitologis, peran mitosis, signifikansi klinis, dan fungsi biologis).
+  - **Arsitektur Responsif Universal Multi-Device:** Mengadaptasi sistem *Bottom Sheet Glassmorphism*, *Mobile Floating Quick Action Dock*, serta kamera *aspect-ratio scaling* untuk kompatibilitas sempurna pada semua rasio perangkat (smartphone, tablet, desktop).
+  - **Perbaikan Bug Render Geometri:** Memperbaiki kesalahan `TypeError` saat inisialisasi orientasi cincin pita *G-Bands* (memindahkan pemanggilan `quaternion.setFromUnitVectors` dari objek geometri ke objek mesh) yang sebelumnya sempat menghentikan eksekusi rendering kromosom.
+  - **Perbaikan Anatomi Kromosom & Crash Animasi:** Mengubah titik kurva geometri (*CatmullRomCurve3*) kromatid lengan p dan q agar berbentuk melengkung organik dan realistis (huruf X sejati), menghapus garis putih statis (mesh benang spindel), serta menulis ulang *vector lerp engine* agar tidak *crash* saat memproses rotasi Euler pada animasi pemisahan dan penguraian kromosom.
+  - **Penyesuaian Tracking Label Anatomi 3D:** Memperbarui sistem proyeksi layar (*Screen Projection*) pada anotasi 3D agar titik garis penunjuk (*pointer/bracket*) melekat akurat tepat sasaran pada permukaan kromosom melalui penerapan modifikasi *offset* komputasi menggunakan CSS Variables dan utilitas `.callout-left` berkonsep *flex-reverse*.
+
+### 📌 Penyempurnaan Realisme Molekuler & Perbaikan Fitur Pemisah DNA 3D
+- **Rekonstruksi Model B-DNA Realistis (Watson-Crick Crystallographic Geometry):**
+  - Mengganti model bola-kartun sederhana dengan visualisasi molekuler ilmiah profesional seperti ilustrasi medis/jurnal biologi molekuler.
+  - Implementasi kurva kontinu *Tube Ribbon Geometry* untuk kedua pita tulang punggung gula-fosfat antiparalel (5' ke 3' dan 3' ke 5').
+  - Penyesuaian sudut asimetris heliks (~136°) untuk membentuk **Lekukan Mayor (*Major Groove*)** dan **Lekukan Minor (*Minor Groove*)** sejati khas DNA tipe-B.
+  - Representasi cincin molekuler akurat: Purin (Adenin & Guanin) dengan struktur dua cincin terpadu (heksagonal + pentagonal) dan Pirimidin (Timin & Sitosin) dengan satu cincin heksagonal.
+  - Visualisasi jembatan **Ikatan Hidrogen** presisi: 2 ikatan pada pasangan A=T dan 3 ikatan pada pasangan G≡C.
+- **Peningkatan Saturasi, Kontras & Ketajaman Warna Molekul:**
+  - Mengatasi masalah warna pucat dengan menurunkan *exposure tone mapping* (dari 1.45 ke 1.05) dan menyeimbangkan intensitas tata cahaya studio agar warna tidak pudar (*over-exposed*).
+  - Menerapkan palet warna pekat, solid, dan kontras tinggi: **Adenin** (Biru Royal `#1d63ff`), **Timin** (Kuning Amber `#ffb703`), **Guanin** (Hijau Zamrud `#00d659`), **Sitosin** (Merah Koral `#ff2a4b`), dan **Tulang Punggung** (Lilac-Indigo Mutiara `#5c6ae4`).
+  - Menghilangkan lapisan putih *milky overlay* pada kanvas cap huruf (A, T, G, C) serta mengurangi *environment reflection* berlebih pada teks agar setiap basa nitrogen tampak jelas dan mudah dibedakan satu sama lain.
+- **Visual Match dengan Gambar Referensi Medis/Ilmiah (Ultra-Realistic):**
+  - Mengadaptasi skema warna presisi persis gambar referensi: Adenin (Biru Royal), Timin (Kuning Terang), Guanin (Hijau Daun), Sitosin (Merah Koral), dan Tulang Punggung (Pita Mutiara Lilac/Periwinkle).
+  - Implementasi cap bundar (*letter-embossed badge*) beresolusi tinggi pada ujung setiap batang basa dengan huruf tertera jelas ('A', 'T', 'G', 'C').
+  - Visualisasi jembatan ikatan hidrogen persis seperti gambar: 2 garis titik putih bercahaya (*dashed white lines*) pada pasangan A-T dan 3 garis titik pada pasangan C-G.
+  - Penambahan anotasi 3D dinamis (*Real-time 3D Screen Tracking Callouts*) dengan kurung siku (*brackets*) dan garis penunjuk ke *Major Groove*, *Minor Groove*, *Sugar-Phosphate Backbone*, serta pasangan basa A-T dan C-G.
+  - Latar belakang gradien biru laut dalam dengan partikel terlarut dan bola-bola *bokeh* kabur untuk menciptakan efek kedalaman optik (*microscopic depth of field*).
+- **Perbaikan & Peningkatan Sistem Pemisahan Bagian DNA (*Separation Modes*):**
+  - Mengganti pustaka eksternal Tween dengan *Internal Self-Contained Vector Lerp Engine* untuk menjamin tombol pemisah berfungsi 100% tanpa risiko kegagalan unduh skrip eksternal atau *offline*.
+  - Menambahkan mode **Pisahkan Untai Ganda (*Unzipping / Denaturasi*)**: membelah ikatan hidrogen dan menjauhkan kedua untai heliks ke samping secara lateral seperti aksi enzim helikase.
+  - Menambahkan mode **Uraikan Per Bagian (*Exploded View / Deconstruction*)**: mengekspansi pita tulang punggung keluar secara radial, memisahkan cincin purin ke kiri dan pirimidin ke kanan, serta mengisolasi ikatan hidrogen di tengah.
+  - Menambahkan fitur **Isolasi & Filter Komponen Interaktif**: tombol filter untuk menonjolkan bagian tertentu (Semua, Tulang Punggung, Adenin, Timin, Guanin, Sitosin, atau Ikatan Hidrogen) dengan meredupkan bagian lainnya secara transparan.
+  - Tombol **Gabungkan Kembali** untuk merekonstruksi kembali DNA ke bentuk heliks utuh secara mulus.
+- **Desain Responsif Universal Multi-Device (Semua Rasio Layar & Handphone):**
+  - Implementasi sistem kamera adaptif dinamis (*Dynamic Aspect-Ratio Camera & FOV Scaling*): otomatis menyesuaikan sudut pandang dan jarak kamera berdasarkan rasio aspek layar pengguna (smartphone vertikal 19.5:9, 20:9, 21:9, tablet 3:4, laptop 16:10, hingga desktop ultrawide 21:9) sehingga heliks DNA tidak pernah terpotong.
+  - Transformasi panel kontrol dan inspektor menjadi **Glassmorphism Bottom Sheets / Drawer** yang meluncur mulus dari bawah pada perangkat berlayar sempit (< 768px), dilengkapi dengan *drag handle bar* ramah jempol dan tombol tutup.
+  - Penambahan **Mobile Floating Quick Action Dock**: navigasi mengambang di bawah layar ponsel yang menyajikan tombol akses cepat satu ketukan (*One-Tap Unzip, Explode, Reset, Menu, dan Detail*).
+  - Optimasi interaksi sentuh (*Mobile Touch Gestures*): mengaktifkan rotasi 1 jari, *pinch-to-zoom*, dan *pan* 2 jari dengan `touch-action: none` untuk mencegah benturan gestur bawaan peramban seluler.
+  - Mendukung area aman layar ponsel modern (*CSS Safe Area Insets `env(safe-area-inset-top)` & `env(safe-area-inset-bottom)`*) untuk perangkat berponi (*notch / punch hole*).
+  - Dukungan rotasi layar ponsel (*orientationchange listener*) otomatis antara mode potret dan lanskap.
+
+---
+
 ## [1.3.0] - 2026-08-28
 
 ### 📌 Penyempurnaan Ahli Media & Integrasi Fitur Baru

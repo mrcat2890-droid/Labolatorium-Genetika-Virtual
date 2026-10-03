@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>GEN-OS | Model Kromosom Metafase 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#04070d;--ln:#17344c;--cy:#22d3ee;--mg:#e879f9;--tx:#c7d2de;--dim:#6f8399}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;overflow:hidden;background:radial-gradient(ellipse at 50% 42%,#0b1a2c,var(--bg) 70%);color:var(--tx);font:12.5px/1.6 'JetBrains Mono',ui-monospace,Consolas,monospace}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9;background:repeating-linear-gradient(0deg,rgba(34,211,238,.03) 0 1px,transparent 1px 3px)}
+#cv{position:fixed;inset:0;touch-action:none}
+header{position:fixed;top:0;left:0;right:0;padding:14px 18px;display:flex;justify-content:space-between;gap:10px;pointer-events:none;z-index:5}
+h1{font:900 clamp(15px,2.3vw,24px)/1.15 Orbitron,sans-serif;letter-spacing:.07em;color:#fff;text-shadow:0 0 18px rgba(34,211,238,.6)}
+header p{color:var(--dim);margin-top:3px}
+.tg{display:none;gap:6px;pointer-events:auto;align-self:flex-start}
+button{font:inherit;color:var(--tx);background:rgba(6,14,26,.85);border:1px solid var(--ln);padding:7px 10px;cursor:pointer;text-align:left;transition:border-color .15s,color .15s}
+button:hover,button.on{border-color:var(--cy);color:#fff}
+button:focus-visible{outline:2px solid var(--mg);outline-offset:2px}
+.panel{position:fixed;top:82px;bottom:48px;width:294px;overflow:auto;padding:14px;background:rgba(5,11,20,.84);backdrop-filter:blur(8px);border:1px solid var(--ln);z-index:6;transition:transform .3s;scrollbar-width:thin;scrollbar-color:var(--ln) transparent}
+#pc{left:14px;box-shadow:inset 2px 0 0 var(--cy)}
+#pi{right:14px;box-shadow:inset -2px 0 0 var(--mg)}
+h3{color:var(--cy);font-size:12px;margin:14px 0 7px;font-weight:600}
+.panel>h3:first-child{margin-top:0}
+#pi h3{color:var(--mg)}
+h2{color:#fff;font-size:15px}
+h4{color:var(--cy);font-size:11.5px;margin:12px 0 3px}
+.dim,.cap{color:var(--dim)}
+.cap{font-size:11px;margin-top:6px}
+.col{display:grid;gap:6px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chips button{padding:4px 8px;border-left:3px solid var(--c);font-size:11.5px}
+dl{margin:9px 0;padding:9px;border:1px solid var(--ln);background:rgba(34,211,238,.04)}
+dt{color:var(--dim);margin-top:6px}dt:first-child{margin-top:0}dd{color:#fff}
+dl.sp{display:grid;grid-template-columns:auto 1fr;gap:3px 12px}
+.sp dt{margin:0}.sp dd{text-align:right}
+#ph{padding:8px 9px;border-left:2px solid var(--cy);background:rgba(34,211,238,.05);color:#fff;font-size:11.5px}
+.lb{position:fixed;left:0;top:0;pointer-events:none;display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:1px 6px;background:rgba(4,8,14,.78);border:1px solid;white-space:nowrap;z-index:4}
+.lb:before{content:"";width:6px;height:6px;background:currentColor;flex:none}
+.lb.l{flex-direction:row-reverse}
+#hint{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);color:var(--dim);font-size:11.5px;z-index:5;pointer-events:none;white-space:nowrap}
+.hid{display:none}
+@media(max-width:1100px){
+.tg{display:flex}
+.panel{left:0!important;right:0!important;top:auto;bottom:0;width:auto;max-height:62vh;transform:translateY(105%);box-shadow:0 -2px 0 var(--cy)}
+#pi{box-shadow:0 -2px 0 var(--mg)}
+.panel.open{transform:none}
+#hint{display:none}}
+@media(prefers-reduced-motion:reduce){.panel{transition:none}}
+</style>
+</head>
+<body>
+<div id="cv"></div>
+<header>
+ <div><h1>GEN-OS // KROMOSOM 3D</h1><p>Kromosom metafase dan anafase, berdasarkan sitogenetika</p></div>
+ <div class="tg"><button id="bm">Menu</button><button id="bd">Detail</button></div>
+</header>
+
+<aside id="pc" class="panel">
+ <h3>Mitosis dan komponen</h3>
+ <div class="col">
+  <button id="bu">Pisahkan kromatid saudari (anafase)</button>
+  <button id="be">Uraikan per komponen</button>
+  <button id="br">Gabungkan kembali</button>
+ </div>
+ <p id="ph" style="margin-top:9px"></p>
+ <h3>Isolasi komponen</h3>
+ <div class="chips" id="ch"></div>
+ <h3>Kamera dan label</h3>
+ <div class="col">
+  <button id="bl" class="on">Label anatomi: tampil</button>
+  <button id="bo" class="on">Rotasi otomatis: aktif</button>
+  <button id="bc">Reset sudut pandang</button>
+ </div>
+ <h3>Parameter model</h3>
+ <dl class="sp"><dt>Kromatid</dt><dd>2 (identik)</dd><dt>Tipe sentromer</dt><dd>Submetasentrik</dd><dt>Rasio q/p</dt><dd>≈ 2,0</dd><dt>Manusia diploid</dt><dd>2n = 46</dd><dt>Kandungan DNA</dt><dd>4C (G2/M)</dd></dl>
+ <h3>Hierarki pemadatan DNA</h3>
+ <dl class="sp"><dt>Heliks ganda DNA</dt><dd>2 nm</dd><dt>Nukleosom (147 pb)</dt><dd>11 nm</dd><dt>Serat kromatin</dt><dd>≈ 30 nm</dd><dt>Gelung terjangkar</dt><dd>≈ 300 nm</dd><dt>Kromatid</dt><dd>≈ 700 nm</dd><dt>Kromosom metafase</dt><dd>≈ 1.400 nm</dd></dl>
+ <p class="cap">Skala menurut bagan buku teks. Keberadaan serat 30 nm in vivo masih diperdebatkan. Tekstur kromatin pada model bersifat skematis. Nama pita (p11 sampai q32) bersifat ilustratif, bukan kromosom manusia tertentu.</p>
+</aside>
+
+<aside id="pi" class="panel">
+ <h3>Inspektur sitogenetika</h3>
+ <p id="ie" class="dim">Ketuk lengan p atau q, sentromer, kinetokor, telomer, pita G, kohesin, mikrotubulus, atau sentrosom untuk melihat struktur dan fungsinya. Tombol Uraikan membuat lengan transparan sehingga kerangka aksial terlihat.</p>
+ <div id="ix" class="hid">
+  <h2 id="tt"></h2><p id="tc" class="dim"></p>
+  <dl><dt>Komposisi</dt><dd id="tf"></dd><dt>Lokasi</dt><dd id="tw"></dd><dt>Peran mitosis</dt><dd id="tp"></dd><dt>Signifikansi klinis</dt><dd id="tb"></dd></dl>
+  <h4>Struktur</h4><p id="tx"></p>
+  <h4>Makna genetika</h4><p id="ty"></p>
+ </div>
+</aside>
+
+<div id="hint">Seret: putar | Cubit atau gulir: zoom | Ketuk komponen: inspeksi</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+// Satuan model: lebar kromatid = 1 (\u2248 700 nm). Sumbu kromosom = Y, sumbu spindel = X, lempeng metafase = bidang YZ
+const RA=.5,C=.3,RN=.31,LP=2.2,LQ=4.4,XO=.5,POLE=5,DX=2.8,UP=new THREE.Vector3(0,1,0),
+PN=['p11','p12','p13','p21','p22'],QN=['q11','q12','q13','q21','q22','q23','q31','q32'];
+
+const RD=new THREE.WebGLRenderer({antialias:true,alpha:true});
+RD.setPixelRatio(Math.min(devicePixelRatio,2));$('#cv').appendChild(RD.domElement);
+const S=new THREE.Scene();S.fog=new THREE.FogExp2(0x05080f,.02);
+const cam=new THREE.PerspectiveCamera(45,1,.1,100),ctl=new THREE.OrbitControls(cam,RD.domElement);
+ctl.enableDamping=true;ctl.minDistance=3;ctl.maxDistance=40;ctl.autoRotateSpeed=.9;
+ctl.autoRotate=!matchMedia('(prefers-reduced-motion:reduce)').matches;
+S.add(new THREE.HemisphereLight(0xa5dcff,0x1a1030,.95));
+let l1=new THREE.DirectionalLight(0xffffff,1.1);l1.position.set(5,8,8);S.add(l1);
+let l2=new THREE.DirectionalLight(0xe879f9,.6);l2.position.set(-6,-3,-5);S.add(l2);
+{const a=[];for(let i=0;i<150;i++){const r=16+Math.random()*16,u=Math.random()*6.283,v=Math.acos(2*Math.random()-1);a.push(r*Math.sin(v)*Math.cos(u),r*Math.cos(v),r*Math.sin(v)*Math.sin(u))}
+const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(a,3));
+S.add(new THREE.Points(g,new THREE.PointsMaterial({color:0x4fb4d8,size:.07,transparent:true,opacity:.55,fog:false})))}
+
+// Tekstur kromatin skematis (gelung yang melingkari poros)
+function TX(){const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');x.fillStyle='#808080';x.fillRect(0,0,256,256);
+ for(let i=0;i<900;i++){const g=90+Math.random()*100|0,a=Math.random()*256,b=Math.random()*256,l=8+Math.random()*26,t=(Math.random()-.5)*.8;
+  x.strokeStyle='rgb('+g+','+g+','+g+')';x.lineWidth=1+Math.random()*2.5;x.beginPath();x.moveTo(a,b);x.lineTo(a+l*Math.cos(t),b+l*Math.sin(t));x.stroke()}
+ const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(5,4);return t}
+const BT=TX();
+const mk=(c,cat,o,f)=>{const m=new THREE.MeshStandardMaterial(Object.assign({color:c,emissive:c,emissiveIntensity:.16,roughness:.5,metalness:.1,transparent:true},o));m.userData={cat,f};return m};
+const M={p:mk(0x22d3ee,'parm',{bumpMap:BT,bumpScale:2}),q:mk(0xc77dff,'qarm',{bumpMap:BT,bumpScale:2}),
+cen:mk(0xfb923c,'centromere'),ki:mk(0x9f1239,'kinetochore'),ko:mk(0xf43f5e,'kinetochore'),tel:mk(0x4ade80,'telomere'),
+band:mk(0x3730a3,'bands'),coh:mk(0xfacc15,'cohesin'),scf:mk(0xe2e8f0,'scaffold'),
+mt:mk(0xbfdbfe,'spindle'),pol:mk(0x94a3b8,'spindle'),pcm:mk(0x94a3b8,'spindle',{},.3)};
+
+// Profil radius lengan: leher sentromer -> badan -> ujung membulat
+function rf(y,L){if(y<C+.65){const t=(y-C)/.65;return RN+(RA-RN)*t*t*(3-2*t)}if(y<=L-RA)return RA;return Math.sqrt(Math.max(0,RA*RA-(y-L+RA)**2))}
+const prof=(a,b,n,o,L)=>{const p=[];for(let i=0;i<=n;i++){const y=a+(b-a)*i/n;p.push(new THREE.Vector2(rf(y,L)+o,y))}return p};
+const items=[],tels=[],G=[],pgs=[],qgs=[],kgs=[],labs=[];
+function arm(L,mat,type,names){const g=new THREE.Group(),nb=names.length;
+ const mm=(geo,m,d,p)=>{const o=new THREE.Mesh(geo,m);o.userData=d;if(p)o.position.copy(p);g.add(o);items.push(o);return o};
+ mm(new THREE.LatheGeometry(prof(C,L,Math.round((L-C)*16),0,L),32),mat,{type});
+ // pita G gelap = pita bernomor genap dari sentromer; pita terang = permukaan lengan
+ for(let k=0;k<nb;k+=2)mm(new THREE.LatheGeometry(prof(C+(L-C)*k/nb,C+(L-C)*(k+1)/nb,6,.012,L),32),M.band,{type:'band',name:names[k]});
+ mm(new THREE.CylinderGeometry(.05,.05,L-C-RA*.6,8),M.scf,{type:'scf'},new THREE.Vector3(0,(C+L-RA*.6)/2,0));
+ const t=mm(new THREE.SphereGeometry(RA*1.03,20,8,0,6.2832,0,.8),M.tel,{type:'tel'},new THREE.Vector3(0,L-RA,0));t.userData.by=L-RA;tels.push(t);
+ return g}
+const an=(par,x,y)=>{const o=new THREE.Object3D();o.position.set(x,y,0);par.add(o);return o};
+const lb=(t,col,a,l,p)=>{const e=document.createElement('div');e.className='lb'+(l?' l':'');e.textContent=t;e.style.color=e.style.borderColor=col;document.body.appendChild(e);labs.push({e,a,l,p})};
+const KG=new THREE.CylinderGeometry(.26,.26,.05,24),CG=new THREE.CylinderGeometry(RN*.99,RN*.99,2*C+.02,24);
+const root=new THREE.Group();S.add(root);
+
+[-1,1].forEach((s,i)=>{
+ const g=new THREE.Group(),pg=new THREE.Group(),qg=new THREE.Group(),kg=new THREE.Group(),pa=arm(LP,M.p,'parm',PN),qa=arm(LQ,M.q,'qarm',QN);
+ qa.rotation.x=Math.PI;pg.add(pa);qg.add(qa);
+ const cm=new THREE.Mesh(CG,M.cen);cm.userData={type:'cen'};items.push(cm);
+ // kinetokor trilaminar: lempeng dalam (gelap) dan lempeng luar, di sisi luar sentromer
+ [[.31,M.ki],[.41,M.ko]].forEach(a=>{const m=new THREE.Mesh(KG,a[1]);m.rotation.z=Math.PI/2;m.position.x=s*a[0];m.userData={type:'kin'};kg.add(m);items.push(m)});
+ g.add(cm,pg,qg,kg);g.position.x=s*XO;root.add(g);G.push(g);pgs.push(pg);qgs.push(qg);kgs.push(kg);
+ if(s>0){lb('Lengan pendek (p)','#22d3ee',an(pa,.5,1.3));lb('Lengan panjang (q)','#c77dff',an(qa,.5,2.5));lb('Pita G gelap','#a5b4fc',an(qa,.5,1.58));lb('Telomer','#4ade80',an(pa,.3,LP-.15))}
+ else{lb('Kromatid saudari','#cbd5e1',an(pa,-.5,1.1),1);lb('Sentromer (konstriksi primer)','#fb923c',an(g,-.3,.3),1);lb('Kinetokor','#f43f5e',an(kg,-.46,-.2),1)}
+});
+
+// Kohesin: tiga cincin yang melingkupi kedua kromatid di sentromer
+const coh=new THREE.Group(),TG=new THREE.TorusGeometry(.5,.035,8,32);
+[-.2,0,.2].forEach(y=>{const m=new THREE.Mesh(TG,M.coh);m.rotation.x=Math.PI/2;m.position.y=y;m.userData={type:'coh'};coh.add(m);items.push(m)});root.add(coh);
+
+// Spindel: sentrosom (dua sentriol tegak lurus) dan mikrotubulus kinetokor
+const poles=[-1,1].map(s=>{const g=new THREE.Group(),CY=new THREE.CylinderGeometry(.06,.06,.55,10);g.position.x=s*POLE;
+ const b=new THREE.Mesh(new THREE.SphereGeometry(.34,16,12),M.pcm),c1=new THREE.Mesh(CY,M.pol),c2=new THREE.Mesh(CY,M.pol);c2.rotation.x=Math.PI/2;
+ [b,c1,c2].forEach(m=>{m.userData={type:'pol'};g.add(m);items.push(m)});S.add(g);return g});
+lb('Sentrosom','#94a3b8',an(poles[0],0,.5));lb('Mikrotubulus kinetokor','#bfdbfe',an(poles[1],-1.5,.35));
+const mts=[],MG=new THREE.CylinderGeometry(.018,.018,1,5);
+[0,1].forEach(i=>{for(let k=0;k<7;k++){const m=new THREE.Mesh(MG,M.mt),a=(k-1)*Math.PI/3,r=k?.16:0;m.userData={type:'mt'};S.add(m);items.push(m);mts.push({m,i,oy:r*Math.cos(a),oz:r*Math.sin(a)})}});
+const v3=new THREE.Vector3(),va=new THREE.Vector3(),vb=new THREE.Vector3();
+function place(m,a,b){m.position.copy(a).add(b).multiplyScalar(.5);v3.copy(b).sub(a);m.scale.y=v3.length();m.quaternion.setFromUnitVectors(UP,v3.normalize())}
+
+// Lempeng metafase (ekuator spindel)
+const pl=new THREE.Group(),pm=new THREE.MeshBasicMaterial({color:0x22d3ee,transparent:true,opacity:.05,side:THREE.DoubleSide,depthWrite:false}),pr=new THREE.MeshBasicMaterial({color:0x22d3ee,transparent:true,opacity:.3,side:THREE.DoubleSide});
+pl.rotation.y=Math.PI/2;pl.add(new THREE.Mesh(new THREE.CircleGeometry(4.5,48),pm),new THREE.Mesh(new THREE.RingGeometry(4.46,4.5,64),pr));S.add(pl);
+lb('Lempeng metafase','#22d3ee',an(pl,0,4.5),0,1);
+
+const INFO={
+parm:['Lengan pendek (p)','Lengan kromatid (petit)','Kromatin: DNA, histon, protein non-histon','Di atas sentromer (konvensi ISCN)','Membawa gen; ikut memadat dan terpisah saat anafase','Delesi 5p menyebabkan sindrom Cri-du-chat','Lengan kromatid yang lebih pendek. Pita dinomori dari sentromer ke arah ujung (p11, p12, ...). Kedua kromatid saudari berurutan identik hasil replikasi fase S.','Setiap sel anak menerima satu kromatid lengkap sehingga informasi genetik terbagi rata.'],
+qarm:['Lengan panjang (q)','Lengan kromatid (huruf setelah p)','Kromatin: DNA, histon, protein non-histon','Di bawah sentromer','Membawa mayoritas gen; ikut terpisah saat anafase','Delesi 22q11.2 menyebabkan sindrom DiGeorge','Lengan yang lebih panjang. Model ini submetasentrik (rasio q/p sekitar 2): sentromer mendekati tengah, tidak tepat di tengah.','Panjang lengan dan posisi sentromer dipakai untuk klasifikasi pada kariotipe (metasentrik, submetasentrik, akrosentrik, telosentrik).'],
+cen:['Sentromer','Konstriksi primer','DNA satelit alfa (monomer 171 pb) dan nukleosom CENP-A','Penyempitan primer antara lengan p dan q','Menyatukan kromatid saudari dan menjadi dasar perakitan kinetokor','Kromosom tanpa sentromer hilang saat mitosis; dua sentromer aktif membentuk jembatan anafase','Domain kromatin khusus yang ditandai varian histon H3, CENP-A. Identitas sentromer bersifat epigenetik, tidak ditentukan semata oleh urutan DNA.','Kohesin sentromerik dilindungi shugoshin sehingga kromatid tetap menyatu sampai anafase.'],
+kin:['Kinetokor','Kompleks protein trilaminar','CCAN (CENP-C, CENP-T), MIS12, KNL1, NDC80 (Hec1/Nuf2/Spc24/25)','Permukaan luar sentromer, satu per kromatid','Menambat mikrotubulus spindel dan menjadi sensor checkpoint spindel','Kegagalan perlekatan memicu nondisjungsi dan aneuploidi (misalnya trisomi 21)','Dua kinetokor saudari saling membelakangi sehingga terhubung ke kutub berlawanan (bi-orientasi). Mikroskop elektron menampakkan lempeng dalam, zona tengah, dan lempeng luar.','Kinetokor yang belum terikat memberi sinyal checkpoint (Mad2, BubR1) yang menunda anafase sampai semua kromosom bi-orientasi.'],
+tel:['Telomer','Ujung kromosom linear','Ulangan 5\u2032-TTAGGG-3\u2032 (\u2248 5-15 kb pada manusia) dan kompleks shelterin','Ujung bebas tiap lengan (4 per kromosom metafase)','Melindungi ujung dari degradasi dan fusi serta mengatasi masalah replikasi ujung','Pemendekan telomer terkait penuaan sel (batas Hayflick); telomerase aktif pada sekitar 85-90% kanker','Ujung 3\u2032 berupa juluran untai tunggal kaya G yang melipat membentuk T-loop, dilindungi shelterin (TRF1, TRF2, POT1, TIN2, TPP1, RAP1).','Telomerase (TERT dan RNA templat TERC) memperpanjang telomer pada sel punca dan sel germinal.'],
+band:['Pita G gelap','Pola pewarnaan Giemsa (G-banding)','Pita gelap: kaya AT, miskin gen, replikasi lambat','Sepanjang lengan p dan q, dinomori dari sentromer','Sistem koordinat untuk memetakan lokasi gen','Kariotipe mendeteksi translokasi, inversi, delesi; contoh t(9;22) kromosom Philadelphia pada CML','Perlakuan tripsin lalu Giemsa memunculkan pita gelap (G-positif) dan terang (G-negatif). Penamaan ISCN: lengan, wilayah, pita, misalnya p12 atau q22.','Pita terang kaya GC, kaya gen, dan direplikasi lebih awal pada fase S.'],
+coh:['Kohesin','Cincin protein kompleks SMC','SMC1, SMC3, RAD21 (SCC1), SA1/SA2','Sentromer (kohesin lengan dilepas pada profase)','Mengikat kromatid saudari sejak fase S sampai anafase','Mutasi kohesin atau pemuatnya menyebabkan kohesinopati, misalnya sindrom Cornelia de Lange (NIPBL)','Cincin melingkupi kedua untai DNA saudari. Pada model ini cincin dipertahankan di sentromer, sesuai keadaan metafase.','APC/C menguraikan securin, separase aktif memotong RAD21, kromatid terpisah (awal anafase).'],
+scf:['Kerangka aksial','Poros protein non-histon','Kondensin I dan II, topoisomerase II\u03b1, KIF4A','Sumbu dalam tiap kromatid','Menjangkar gelung kromatin dan memadatkan kromosom','Cacat kondensin menyebabkan kromosom gagal terpisah dan kerusakan segregasi','Kromatin tersusun sebagai gelung berukuran puluhan hingga ratusan kb yang mengelilingi poros ini; pembentukan gelung dibantu ekstrusi oleh kondensin.','Pemadatan sekitar 10.000 kali pada metafase membuat kromosom dapat dipisahkan tanpa kusut.'],
+mt:['Mikrotubulus kinetokor','Polimer tubulin (k-fiber)','Dimer \u03b1/\u03b2-tubulin, 13 protofilamen, diameter \u2248 25 nm','Antara kinetokor dan kutub spindel','Menarik kromatid ke kutub; pemendekan menggerakkan anafase A','Vinkristin dan paklitaksel menargetkan dinamika mikrotubulus pada kemoterapi','Satu kinetokor manusia mengikat sekitar 20 mikrotubulus. Ujung plus tertanam di kinetokor, ujung minus di kutub.','Depolimerisasi di kinetokor dan fluks ke kutub menarik kromatid ke arah kutub.'],
+pol:['Sentrosom (kutub spindel)','Pusat pengorganisasi mikrotubulus','Dua sentriol (sembilan triplet mikrotubulus) dan materi perisentriolar (\u03b3-tubulin)','Kutub spindel mitosis','Menumbuhkan mikrotubulus spindel dan menentukan sumbu pembelahan','Sentrosom berlebih ditemukan pada banyak sel kanker (spindel multipolar)','Sentrosom diduplikasi sekali per siklus sel; dua kutub membentuk spindel bipolar.','Spindel bipolar memastikan tiap sel anak menerima satu kromatid dari setiap kromosom.']};
+const CAT={parm:'parm',qarm:'qarm',cen:'centromere',kin:'kinetochore',tel:'telomere',band:'bands',coh:'cohesin',scf:'scaffold',mt:'spindle',pol:'spindle'};
+let filter='all',sel=null,tA=0,tE=0,A=0,E=0,labOn=true,lastPh='';
+
+function show(d){const f=INFO[d.type],e=(id,v)=>$(id).textContent=v;
+ e('#tt',d.type=='band'?f[0]+' '+d.name:f[0]);['#tc','#tf','#tw','#tp','#tb','#tx','#ty'].forEach((id,k)=>e(id,f[k+1]));
+ sel=CAT[d.type];$('#ie').classList.add('hid');$('#ix').classList.remove('hid');$('#pi').classList.add('open');$('#pc').classList.remove('open')}
+function clr(){sel=null;$('#ie').classList.remove('hid');$('#ix').classList.add('hid');const o=$('.panel.open');o&&o.classList.remove('open')}
+const vis=o=>{while(o){if(!o.visible)return false;o=o.parent}return true};
+const rc=new THREE.Raycaster();let dn;
+RD.domElement.addEventListener('pointerdown',e=>dn=[e.clientX,e.clientY]);
+RD.domElement.addEventListener('pointerup',e=>{if(!dn||Math.hypot(e.clientX-dn[0],e.clientY-dn[1])>5)return;
+ rc.setFromCamera(new THREE.Vector2(e.clientX/innerWidth*2-1,-e.clientY/innerHeight*2+1),cam);
+ const h=rc.intersectObjects(items).filter(x=>x.object.material.opacity>.3&&vis(x.object))[0];
+ h?show(h.object.userData):clr()});
+
+[['all','Semua','#22d3ee'],['parm','Lengan p','#22d3ee'],['qarm','Lengan q','#c77dff'],['centromere','Sentromer','#fb923c'],['kinetochore','Kinetokor','#f43f5e'],['telomere','Telomer','#4ade80'],['bands','Pita G','#3730a3'],['cohesin','Kohesin','#facc15'],['scaffold','Kerangka aksial','#e2e8f0'],['spindle','Spindel','#bfdbfe']].forEach(a=>{
+ const b=document.createElement('button');b.textContent=a[1];b.style.setProperty('--c',a[2]);b.className=a[0]=='all'?'on':'';
+ b.onclick=()=>{filter=a[0];document.querySelectorAll('#ch button').forEach(x=>x.classList.toggle('on',x==b))};$('#ch').appendChild(b)});
+const sync=()=>{$('#bu').classList.toggle('on',tA>0);$('#be').classList.toggle('on',tE>0)};
+$('#bu').onclick=()=>{tA=tA?0:1;tE=0;sync()};
+$('#be').onclick=()=>{tE=tE?0:1;tA=0;sync()};
+$('#br').onclick=()=>{tA=tE=0;sync()};
+$('#bl').onclick=e=>{labOn=!labOn;e.target.classList.toggle('on',labOn);e.target.textContent='Label anatomi: '+(labOn?'tampil':'sembunyi')};
+$('#bo').onclick=e=>{ctl.autoRotate=!ctl.autoRotate;e.target.classList.toggle('on',ctl.autoRotate);e.target.textContent='Rotasi otomatis: '+(ctl.autoRotate?'aktif':'mati')};
+function home(){const f=innerWidth/innerHeight<.8?1.9:1;cam.position.set(4.5*f,1.5*f,13.2*f);ctl.target.set(0,0,0);ctl.update()}
+$('#bc').onclick=home;
+$('#bm').onclick=()=>{$('#pi').classList.remove('open');$('#pc').classList.toggle('open')};
+$('#bd').onclick=()=>{$('#pc').classList.remove('open');$('#pi').classList.toggle('open')};
+function rs(){RD.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
+addEventListener('resize',rs);rs();home();
+
+(function loop(){requestAnimationFrame(loop);
+ A+=(tA-A)*.04;E+=(tE-E)*.07;const th=.85*A;
+ // anafase: kromatid ditarik kinetokor ke kutub, kedua lengan tertinggal membentuk huruf V
+ G.forEach((g,i)=>{const s=i?1:-1;g.position.x=s*(XO+DX*A+.9*E);pgs[i].position.y=E;qgs[i].position.y=-E;pgs[i].rotation.z=s*th;qgs[i].rotation.z=-s*th;kgs[i].position.x=s*1.1*E});
+ tels.forEach(t=>t.position.y=t.userData.by+.8*E);
+ coh.visible=A<.15;pl.visible=A<.6;pm.opacity=.05*(1-A);pr.opacity=.3*(1-A);
+ mts.forEach(t=>{const s=t.i?1:-1;va.set(G[t.i].position.x+kgs[t.i].position.x+s*.45,t.oy,t.oz);vb.set(s*(POLE-.3),t.oy*.1,t.oz*.1);place(t.m,va,vb)});
+ for(const k in M){const m=M[k],u=m.userData;let o=filter=='all'||filter==u.cat?1:.07;
+  if(k=='p'||k=='q')o*=1-.55*E;if(k=='coh')o*=Math.max(0,1-A*8);
+  m.opacity=o*(u.f||1);m.depthWrite=o>.5;m.emissiveIntensity=sel==u.cat?.8:.16}
+ const ph=A>.02?'Anafase A: separase membelah kohesin (RAD21); kromatid saudari menjadi kromosom anak dan ditarik ke kutub.':'Metafase: kromosom sejajar di lempeng metafase; kinetokor kedua kromatid menghadap kutub yang berlawanan.';
+ if(ph!=lastPh){$('#ph').textContent=ph;lastPh=ph}
+ ctl.update();RD.render(S,cam);
+ const W=innerWidth,H=innerHeight;
+ labs.forEach(l=>{const on=labOn&&!(l.p&&A>.3);l.e.style.display=on?'flex':'none';
+  if(on){l.a.getWorldPosition(v3);v3.project(cam);l.e.style.transform='translate('+((v3.x*.5+.5)*W)+'px,'+((-v3.y*.5+.5)*H)+'px) translate('+(l.l?'-100%':'0')+',-50%)'}});
+})();
+</script>
+</body>
+</html>

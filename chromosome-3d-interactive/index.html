@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Model Kromosom 3D Ultra-Realistis (Struktur Anatomi Kromosom Metafase)</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Inter & Orbitron -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 3D Canvas Background -->
+    <div id="canvas-container"></div>
+
+    <!-- UI Overlay Header Responsif -->
+    <header id="app-header">
+        <div class="header-content">
+            <div class="header-left">
+                <div class="logo-badge">
+                    <span class="pulse-dot"></span>
+                    <span class="badge-text">GEN-OS 3D BIO-CORE</span>
+                </div>
+                <h1>STRUKTUR ANATOMI KROMOSOM</h1>
+                <p class="subtitle">Eksplorasi 3D Kromosom Metafase Berdasarkan Sitogenetika Medis</p>
+            </div>
+            <!-- Tombol Toggle Cepat di Header untuk Layar Tablet / HP -->
+            <div class="header-actions">
+                <button id="btn-toggle-controls-panel" class="header-btn" title="Buka Panel Kontrol">
+                    <span class="header-btn-icon">⚙️</span>
+                    <span class="header-btn-text">Menu</span>
+                </button>
+                <button id="btn-toggle-inspector-panel" class="header-btn" title="Buka Detail Kromosom">
+                    <span class="header-btn-icon">🔬</span>
+                    <span class="header-btn-text">Detail</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Backdrop Gelap untuk Mobile Drawer -->
+    <div id="modal-backdrop" class="modal-backdrop hidden"></div>
+
+    <!-- Panel Kontrol Kiri / Bottom Sheet Mobile -->
+    <aside id="controls-panel" class="glass-panel responsive-drawer">
+        <!-- Handle Bar Khusus Sentuhan Mobile -->
+        <div class="mobile-drawer-handle"></div>
+
+        <div class="panel-header-flex">
+            <div class="panel-section-title">
+                <span class="icon">⚡</span> KONTROL PEMISAHAN & MITOSIS
+            </div>
+            <button id="btn-close-controls" class="btn-icon-close" title="Tutup Menu">&times;</button>
+        </div>
+
+        <!-- Tombol Aksi Utama Pemisahan Kromosom -->
+        <div class="btn-group-primary">
+            <button id="btn-anaphase" class="action-btn btn-neon-blue">
+                <span class="btn-icon">⚡</span>
+                <span class="btn-text">Pisahkan Kromatid Saudara (Anafase)</span>
+            </button>
+            <button id="btn-explode" class="action-btn btn-neon-purple">
+                <span class="btn-icon">💥</span>
+                <span class="btn-text">Uraikan Per Bagian (Exploded View)</span>
+            </button>
+            <button id="btn-reset-assembly" class="action-btn btn-neon-green hidden">
+                <span class="btn-icon">🔄</span>
+                <span class="btn-text">Gabungkan Kembali Kromosom Utuh</span>
+            </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Anotasi Ilmiah 3D -->
+        <div class="panel-section-title">
+            <span class="icon">🏷️</span> ANOTASI & LABEL ANATOMI
+        </div>
+        <div class="toggle-group">
+            <button id="btn-toggle-labels" class="ctrl-btn active">
+                <span id="label-status-icon">👁️</span> Label Anatomi 3D: <b id="label-status-text">TAMPIL</b>
+            </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Filter / Isolasi Bagian Kromosom -->
+        <div class="panel-section-title">
+            <span class="icon">🔬</span> ISOLASI KOMPONEN
+        </div>
+        <p class="section-hint">Ketuk untuk menonjolkan bagian tertentu:</p>
+        
+        <div class="filter-chips-scroll">
+            <div class="filter-chips">
+                <button class="chip active" data-filter="all">Semua Bagian</button>
+                <button class="chip chip-centromere" data-filter="centromere">Sentromer</button>
+                <button class="chip chip-kinetochore" data-filter="kinetochore">Kinetokor</button>
+                <button class="chip chip-telomere" data-filter="telomere">Telomer</button>
+                <button class="chip chip-parm" data-filter="parm">Lengan Pendek (p)</button>
+                <button class="chip chip-qarm" data-filter="qarm">Lengan Panjang (q)</button>
+                <button class="chip chip-bands" data-filter="bands">Pita G-Bands</button>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Kontrol Navigasi & Rotasi -->
+        <div class="panel-section-title">
+            <span class="icon">🎥</span> NAVIGASI KAMERA 3D
+        </div>
+        <div class="camera-controls">
+            <button id="btn-toggle-rotate" class="ctrl-btn active">
+                <span id="rotate-status-icon">🔄</span> Rotasi Otomatis: <b id="rotate-status-label">AKTIF</b>
+            </button>
+            <button id="btn-reset-camera" class="ctrl-btn">
+                <span>🎯</span> Reset Sudut Pandang Awal
+            </button>
+        </div>
+
+        <!-- Legenda Bagian Kromosom -->
+        <div class="legend-box">
+            <div class="legend-title">LEGENDA ANATOMI KROMOSOM</div>
+            <div class="legend-grid">
+                <div class="legend-item"><span class="color-dot dot-arm-p"></span> <b>p</b> Lengan Pendek</div>
+                <div class="legend-item"><span class="color-dot dot-arm-q"></span> <b>q</b> Lengan Panjang</div>
+                <div class="legend-item"><span class="color-dot dot-centromere"></span> <b>Cen</b> Sentromer</div>
+                <div class="legend-item"><span class="color-dot dot-kinetochore"></span> <b>Kin</b> Kinetokor</div>
+                <div class="legend-item"><span class="color-dot dot-telomere"></span> <b>Tel</b> Telomer (Ujung)</div>
+                <div class="legend-item"><span class="color-dot dot-band"></span> <b>Band</b> Pita Giemsa</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Panel Inspektur Detail Kromosom Kanan / Bottom Sheet Mobile -->
+    <aside id="inspector-panel" class="glass-panel responsive-drawer">
+        <div class="mobile-drawer-handle"></div>
+
+        <div class="panel-header-inspector">
+            <div class="inspector-badge" id="inspector-badge">INSPEKTOR SITOGENETIKA</div>
+            <button id="btn-close-inspector" class="btn-icon-close" title="Tutup">&times;</button>
+        </div>
+
+        <div id="inspector-placeholder" class="inspector-empty">
+            <div class="microscope-icon">🔬</div>
+            <h3>PILIH BAGIAN KROMOSOM</h3>
+            <p>Ketuk salah satu bagian kromosom (Sentromer, Kinetokor, Telomer, Lengan p/q, atau Pita Banding) untuk menginspeksi struktur mikroskopis dan fungsi biologisnya.</p>
+        </div>
+
+        <div id="inspector-details" class="hidden">
+            <div class="component-header">
+                <div class="component-color-indicator" id="detail-color-indicator"></div>
+                <div>
+                    <h2 id="detail-title">Nama Bagian</h2>
+                    <span id="detail-class" class="meta-tag">Klasifikasi Sitogenetika</span>
+                </div>
+            </div>
+
+            <div class="detail-card">
+                <div class="detail-row">
+                    <span class="label">Komposisi Molekuler:</span>
+                    <span class="value code-font" id="detail-formula">Heterokromatin / CENP</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Lokasi Sitologis:</span>
+                    <span class="value" id="detail-loc">Konstriksi Primer</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Peran Pembelahan Sel:</span>
+                    <span class="value highlight-text" id="detail-role">Pelekatan Spindel</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Signifikansi Klinis:</span>
+                    <span class="value" id="detail-clinical">Stabilitas Genom</span>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h4>DESKRIPSI & MORFOLOGI</h4>
+                <p id="detail-desc">Penjelasan mengenai bagian ini.</p>
+            </div>
+
+            <div class="detail-section">
+                <h4>FUNGSI GENETIKA & MITOSIS</h4>
+                <p id="detail-function">Peran penting dalam pewarisan sifat dan pembelahan sel.</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Overlay Anotasi Ilmiah 3D (Melacak Posisi Kromosom) -->
+    <div id="annotations-overlay">
+        <div class="annotation-callout callout-parm callout-left" id="callout-parm">
+            <div class="bracket-bracket"></div>
+            <div class="callout-text"><b>Lengan Pendek (p)</b><br><i>Petite Arm</i></div>
+        </div>
+        <div class="annotation-callout callout-centromere" id="callout-centromere">
+            <div class="callout-pointer"></div>
+            <div class="callout-text"><b>Sentromer</b><br>Konstriksi Primer</div>
+        </div>
+        <div class="annotation-callout callout-kinetochore callout-left" id="callout-kinetochore">
+            <div class="callout-pointer"></div>
+            <div class="callout-text"><b>Kinetokor</b><br>Kompleks Protein Spindel</div>
+        </div>
+        <div class="annotation-callout callout-qarm" id="callout-qarm">
+            <div class="bracket-bracket"></div>
+            <div class="callout-text"><b>Lengan Panjang (q)</b><br><i>Queue Arm</i></div>
+        </div>
+        <div class="annotation-callout callout-telomere callout-left" id="callout-telomere">
+            <div class="callout-pointer"></div>
+            <div class="callout-text"><b>Telomer</b><br>Tudung Pelindung Ujung</div>
+        </div>
+    </div>
+
+    <!-- Mobile Floating Quick Action Dock (Bawah) -->
+    <nav id="mobile-dock" class="mobile-dock-container">
+        <button id="dock-btn-anaphase" class="dock-btn">
+            <span class="dock-icon">⚡</span>
+            <span class="dock-label">Pisahkan</span>
+        </button>
+        <button id="dock-btn-explode" class="dock-btn">
+            <span class="dock-icon">💥</span>
+            <span class="dock-label">Uraikan</span>
+        </button>
+        <button id="dock-btn-reset" class="dock-btn hidden">
+            <span class="dock-icon">🔄</span>
+            <span class="dock-label">Satukan</span>
+        </button>
+        <button id="dock-btn-menu" class="dock-btn dock-btn-primary">
+            <span class="dock-icon">⚙️</span>
+            <span class="dock-label">Menu</span>
+        </button>
+        <button id="dock-btn-inspect" class="dock-btn">
+            <span class="dock-icon">🔬</span>
+            <span class="dock-label">Detail</span>
+        </button>
+    </nav>
+
+    <!-- Petunjuk Navigasi Desktop -->
+    <footer id="interaction-hint">
+        <div class="hint-pill">
+            <span class="hint-icon">🖱️</span>
+            <span><b>Klik / Sentuh & Geser:</b> Rotasi 360°</span>
+            <span class="hint-divider">|</span>
+            <span><b>Pinch / Scroll:</b> Zoom</span>
+            <span class="hint-divider">|</span>
+            <span><b>Ketuk Objek:</b> Inspeksi Anatomi Kromosom</span>
+        </div>
+    </footer>
+
+    <!-- Three.js & OrbitControls via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <!-- Script Logika 3D Kromosom & Animasi Anafase Mandiri -->
+    <script src="script.js"></script>
+</body>
+</html>

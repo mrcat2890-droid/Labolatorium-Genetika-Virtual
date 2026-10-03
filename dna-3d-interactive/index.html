@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Model DNA 3D Ultra-Realistis (Adaptif Semua Perangkat)</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Inter & Orbitron -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 3D Canvas Background -->
+    <div id="canvas-container"></div>
+
+    <!-- UI Overlay Header Responsif -->
+    <header id="app-header">
+        <div class="header-content">
+            <div class="header-left">
+                <div class="logo-badge">
+                    <span class="pulse-dot"></span>
+                    <span class="badge-text">GEN-OS 3D BIO-CORE</span>
+                </div>
+                <h1>STRUKTUR HELIKS GANDA DNA</h1>
+                <p class="subtitle">Eksplorasi Molekuler Interaktif 360° Watson-Crick</p>
+            </div>
+            <!-- Tombol Toggle Cepat di Header untuk Layar Tablet / HP -->
+            <div class="header-actions">
+                <button id="btn-toggle-controls-panel" class="header-btn" title="Buka Panel Kontrol">
+                    <span class="header-btn-icon">⚙️</span>
+                    <span class="header-btn-text">Menu</span>
+                </button>
+                <button id="btn-toggle-inspector-panel" class="header-btn" title="Buka Detail Molekul">
+                    <span class="header-btn-icon">🔬</span>
+                    <span class="header-btn-text">Detail</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Backdrop Gelap untuk Mobile Drawer -->
+    <div id="modal-backdrop" class="modal-backdrop hidden"></div>
+
+    <!-- Panel Kontrol Kiri / Bottom Sheet Mobile -->
+    <aside id="controls-panel" class="glass-panel responsive-drawer">
+        <!-- Handle Bar Khusus Sentuhan Mobile -->
+        <div class="mobile-drawer-handle"></div>
+
+        <div class="panel-header-flex">
+            <div class="panel-section-title">
+                <span class="icon">⚡</span> KONTROL PEMISAHAN
+            </div>
+            <button id="btn-close-controls" class="btn-icon-close" title="Tutup Menu">&times;</button>
+        </div>
+
+        <!-- Tombol Aksi Utama Pemisahan -->
+        <div class="btn-group-primary">
+            <button id="btn-unzip" class="action-btn btn-neon-blue">
+                <span class="btn-icon">⚡</span>
+                <span class="btn-text">Pisahkan Untai Ganda (Unzip)</span>
+            </button>
+            <button id="btn-explode" class="action-btn btn-neon-purple">
+                <span class="btn-icon">💥</span>
+                <span class="btn-text">Uraikan Per Bagian (Exploded)</span>
+            </button>
+            <button id="btn-reset-assembly" class="action-btn btn-neon-green hidden">
+                <span class="btn-icon">🔄</span>
+                <span class="btn-text">Gabungkan Kembali Heliks</span>
+            </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Anotasi Ilmiah Seperti Gambar Referensi -->
+        <div class="panel-section-title">
+            <span class="icon">🏷️</span> ANOTASI & LABEL
+        </div>
+        <div class="toggle-group">
+            <button id="btn-toggle-labels" class="ctrl-btn active">
+                <span id="label-status-icon">👁️</span> Label Ilmiah 3D: <b id="label-status-text">TAMPIL</b>
+            </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Filter / Isolasi Per Bagian -->
+        <div class="panel-section-title">
+            <span class="icon">🔬</span> ISOLASI KOMPONEN
+        </div>
+        <p class="section-hint">Ketuk untuk menonjolkan bagian tertentu:</p>
+        
+        <div class="filter-chips-scroll">
+            <div class="filter-chips">
+                <button class="chip active" data-filter="all">Semua</button>
+                <button class="chip chip-backbone" data-filter="backbone">Pita Gula-Fosfat</button>
+                <button class="chip chip-adenine" data-filter="A">Adenin (A - Biru)</button>
+                <button class="chip chip-thymine" data-filter="T">Timin (T - Kuning)</button>
+                <button class="chip chip-guanine" data-filter="G">Guanin (G - Hijau)</button>
+                <button class="chip chip-cytosine" data-filter="C">Sitosin (C - Merah)</button>
+                <button class="chip chip-hbond" data-filter="hbond">Ikatan Hidrogen</button>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Kontrol Navigasi & Rotasi -->
+        <div class="panel-section-title">
+            <span class="icon">🎥</span> NAVIGASI KAMERA
+        </div>
+        <div class="camera-controls">
+            <button id="btn-toggle-rotate" class="ctrl-btn active">
+                <span id="rotate-status-icon">🔄</span> Rotasi Otomatis: <b id="rotate-status-label">AKTIF</b>
+            </button>
+            <button id="btn-reset-camera" class="ctrl-btn">
+                <span>🎯</span> Reset Sudut Pandang Awal
+            </button>
+        </div>
+
+        <!-- Legenda Basa Nitrogen -->
+        <div class="legend-box">
+            <div class="legend-title">LEGENDA MOLEKUL</div>
+            <div class="legend-grid">
+                <div class="legend-item"><span class="color-dot dot-a"></span> <b>A</b> Adenin (Biru)</div>
+                <div class="legend-item"><span class="color-dot dot-t"></span> <b>T</b> Timin (Kuning)</div>
+                <div class="legend-item"><span class="color-dot dot-g"></span> <b>G</b> Guanin (Hijau)</div>
+                <div class="legend-item"><span class="color-dot dot-c"></span> <b>C</b> Sitosin (Merah)</div>
+                <div class="legend-item"><span class="color-dot dot-backbone"></span> <b>P-S</b> Gula-Fosfat</div>
+                <div class="legend-item"><span class="color-dot dot-hbond"></span> <b>···</b> Ikatan H</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Panel Inspektur Detail Molekuler Kanan / Bottom Sheet Mobile -->
+    <aside id="inspector-panel" class="glass-panel responsive-drawer">
+        <!-- Handle Bar Khusus Sentuhan Mobile -->
+        <div class="mobile-drawer-handle"></div>
+
+        <div class="panel-header-inspector">
+            <div class="inspector-badge" id="inspector-badge">INSPEKTOR MOLEKUL</div>
+            <button id="btn-close-inspector" class="btn-icon-close" title="Tutup">&times;</button>
+        </div>
+
+        <div id="inspector-placeholder" class="inspector-empty">
+            <div class="microscope-icon">🔬</div>
+            <h3>PILIH KOMPONEN DNA</h3>
+            <p>Ketuk salah satu basa nitrogen (A, T, G, C), ikatan hidrogen, atau pita tulang punggung untuk menginspeksi rumus kimia dan fungsinya.</p>
+        </div>
+
+        <div id="inspector-details" class="hidden">
+            <div class="component-header">
+                <div class="component-color-indicator" id="detail-color-indicator"></div>
+                <div>
+                    <h2 id="detail-title">Nama Bagian</h2>
+                    <span id="detail-class" class="meta-tag">Klasifikasi Kimia</span>
+                </div>
+            </div>
+
+            <div class="detail-card">
+                <div class="detail-row">
+                    <span class="label">Rumus Molekul:</span>
+                    <span class="value code-font" id="detail-formula">C₅H₅N₅</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Berat Molekul:</span>
+                    <span class="value" id="detail-weight">135.13 g/mol</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Pasangan Komplementer:</span>
+                    <span class="value highlight-text" id="detail-partner">Timin (T)</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Jembatan Hidrogen:</span>
+                    <span class="value" id="detail-bonds">2 Titik Ikatan</span>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h4>DESKRIPSI & PERAN STRUKTURAL</h4>
+                <p id="detail-desc">Penjelasan mengenai bagian ini.</p>
+            </div>
+
+            <div class="detail-section">
+                <h4>SIGNIFIKANSI GENETIKA</h4>
+                <p id="detail-function">Peran penting dalam stabilitas heliks dan replikasi.</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Overlay Anotasi Ilmiah 3D (Seperti di Gambar) -->
+    <div id="annotations-overlay">
+        <div class="annotation-callout callout-major-1" id="callout-major-1">
+            <div class="bracket-bracket"></div>
+            <div class="callout-text">Major Groove</div>
+        </div>
+        <div class="annotation-callout callout-minor-1" id="callout-minor-1">
+            <div class="bracket-bracket"></div>
+            <div class="callout-text">Minor Groove</div>
+        </div>
+        <div class="annotation-callout callout-backbone" id="callout-backbone">
+            <div class="callout-pointer"></div>
+            <div class="callout-text">Sugar-Phosphate<br>Backbone</div>
+        </div>
+        <div class="annotation-callout callout-at" id="callout-at">
+            <div class="callout-pointer"></div>
+            <div class="callout-text">Hydrogen Bonds<br><b>A-T Base Pair</b> (2 Ikatan)</div>
+        </div>
+        <div class="annotation-callout callout-cg" id="callout-cg">
+            <div class="callout-pointer"></div>
+            <div class="callout-text">Hydrogen Bonds<br><b>C-G Base Pair</b> (3 Ikatan)</div>
+        </div>
+    </div>
+
+    <!-- Mobile Floating Quick Action Dock (Bawah) -->
+    <nav id="mobile-dock" class="mobile-dock-container">
+        <button id="dock-btn-unzip" class="dock-btn">
+            <span class="dock-icon">⚡</span>
+            <span class="dock-label">Pisahkan</span>
+        </button>
+        <button id="dock-btn-explode" class="dock-btn">
+            <span class="dock-icon">💥</span>
+            <span class="dock-label">Uraikan</span>
+        </button>
+        <button id="dock-btn-reset" class="dock-btn hidden">
+            <span class="dock-icon">🔄</span>
+            <span class="dock-label">Satukan</span>
+        </button>
+        <button id="dock-btn-menu" class="dock-btn dock-btn-primary">
+            <span class="dock-icon">⚙️</span>
+            <span class="dock-label">Menu</span>
+        </button>
+        <button id="dock-btn-inspect" class="dock-btn">
+            <span class="dock-icon">🔬</span>
+            <span class="dock-label">Detail</span>
+        </button>
+    </nav>
+
+    <!-- Petunjuk Navigasi Desktop -->
+    <footer id="interaction-hint">
+        <div class="hint-pill">
+            <span class="hint-icon">🖱️</span>
+            <span><b>Klik / Sentuh & Geser:</b> Rotasi 360°</span>
+            <span class="hint-divider">|</span>
+            <span><b>Pinch / Scroll:</b> Zoom</span>
+            <span class="hint-divider">|</span>
+            <span><b>Ketuk Objek:</b> Inspeksi Molekul</span>
+        </div>
+    </footer>
+
+    <!-- Three.js & OrbitControls via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <!-- Script Logika 3D Realistis & Adaptif Multi-Device -->
+    <script src="script.js"></script>
+</body>
+</html>
