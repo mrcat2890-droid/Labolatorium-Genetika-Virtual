@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Epistasis Dominan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        squash: {
+                            white: '#f1f5f9',
+                            yellow: '#fbbf24',
+                            green: '#10b981',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020617;
+            color: #f8fafc;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 1rem;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #34d399, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.05) 0%, rgba(2, 6, 23, 0) 70%);
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 font-sans relative overflow-x-hidden">
+    <div class="bg-glow"></div>
+    <div class="max-w-5xl mx-auto space-y-6">
+
+        <!-- Header -->
+        <div class="flex items-start gap-4 glass-panel p-6">
+            <a href="Generator Penyimpangan Semu.html" class="mt-1 p-2 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg text-emerald-400 transition-colors border border-emerald-500/20">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </a>
+            <div class="flex-1">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="px-3 py-1 bg-emerald-500/10 text-emerald-400 font-mono font-bold rounded-md border border-emerald-500/20">E</span>
+                    <h1 class="text-3xl font-bold gradient-text">SIMULASI EPISTASIS DOMINAN</h1>
+                </div>
+                <p class="text-slate-400 text-lg">Warna Buah Labu (<i>Cucurbita pepo</i>) • Rasio F2 12:3:1</p>
+            </div>
+        </div>
+
+        <!-- Educational Intro Panel -->
+        <div class="glass-panel p-6 border-l-4 border-l-emerald-500">
+            <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-400"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                Konsep Epistasis Dominan
+            </h2>
+            <div class="space-y-4 text-slate-300">
+                <p><strong>Epistasis</strong> adalah peristiwa dimana gen pada satu lokus menutupi atau menekan ekspresi gen pada lokus lain yang bukan alelnya. Dalam epistasis dominan, keberadaan satu alel dominan pada gen epistatis sudah cukup untuk menutupi ekspresi gen lain.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700/50">
+                        <h3 class="font-semibold text-emerald-400 mb-2">Terminologi</h3>
+                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                            <li><strong>Gen W (Epistatis):</strong> Gen dominan yang menutupi ekspresi warna lain. Jika ada <i>W</i>, labu akan berwarna putih.</li>
+                            <li><strong>Gen Y (Hipostatis):</strong> Gen yang tertutupi. Mengekspresikan pigmen kuning (<i>Y</i>) atau hijau (<i>y</i>), tetapi hanya terekspresi jika alel epistatis bersifat homozigot resesif (<i>ww</i>).</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700/50">
+                        <h3 class="font-semibold text-emerald-400 mb-2">Mekanisme Molekuler</h3>
+                        <p class="text-sm">Gen dominan <i>W</i> mengkodekan protein yang menghambat enzim kunci dalam biosintesis pigmen. Selama ada <i>W</i>, pigmen tidak terbentuk sehingga buah tetap putih. Hanya saat genotipenya <i>ww</i>, alur pigmen berjalan; gen <i>Y</i> menghasilkan pigmen kuning, sedangkan <i>yy</i> menyebabkan labu tetap hijau (karena klorofil).</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-6 items-center justify-center p-4 bg-slate-900/30 rounded-lg mt-4 border border-slate-800">
+                    <div class="flex items-center gap-3">
+                        <div id="legend-white"></div>
+                        <div>
+                            <div class="font-mono font-bold text-white">W_Y_ atau W_yy</div>
+                            <div class="text-sm text-slate-400">Putih (12)</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div id="legend-yellow"></div>
+                        <div>
+                            <div class="font-mono font-bold text-white">wwY_</div>
+                            <div class="text-sm text-slate-400">Kuning (3)</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div id="legend-green"></div>
+                        <div>
+                            <div class="font-mono font-bold text-white">wwyy</div>
+                            <div class="text-sm text-slate-400">Hijau (1)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-500 mt-2 text-right">Referensi: Campbell Biology (12th Ed), Pierce Genetics.</div>
+            </div>
+        </div>
+
+        <!-- Input Section -->
+        <div class="glass-panel p-6">
+            <h2 class="text-xl font-semibold mb-6 text-white border-b border-emerald-500/20 pb-2">Persilangan (Parental)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Parent 1 -->
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <label class="text-sm font-medium text-emerald-400">Genotipe Induk 1 (♂)</label>
+                        <span class="text-xs text-slate-400 font-mono">P1</span>
+                    </div>
+                    <input type="text" id="p1" value="WwYy" class="w-full bg-slate-900 border border-emerald-500/30 rounded-lg px-4 py-3 text-white font-mono text-center tracking-[0.2em] focus:outline-none focus:border-emerald-400 transition-colors uppercase" maxlength="4">
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex items-center justify-between border border-slate-800">
+                        <div class="text-sm text-slate-300">Fenotipe: <span id="p1-pheno" class="font-bold text-white ml-1">Putih</span></div>
+                        <div id="p1-svg" class="w-12 h-12"></div>
+                    </div>
+                </div>
+                
+                <!-- Parent 2 -->
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <label class="text-sm font-medium text-emerald-400">Genotipe Induk 2 (♀)</label>
+                        <span class="text-xs text-slate-400 font-mono">P2</span>
+                    </div>
+                    <input type="text" id="p2" value="WwYy" class="w-full bg-slate-900 border border-emerald-500/30 rounded-lg px-4 py-3 text-white font-mono text-center tracking-[0.2em] focus:outline-none focus:border-emerald-400 transition-colors uppercase" maxlength="4">
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex items-center justify-between border border-slate-800">
+                        <div class="text-sm text-slate-300">Fenotipe: <span id="p2-pheno" class="font-bold text-white ml-1">Putih</span></div>
+                        <div id="p2-svg" class="w-12 h-12"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="error-msg" class="mt-4 text-red-400 text-sm hidden text-center">Gunakan hanya huruf W, w, Y, dan y. Contoh: WwYy</div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Punnett Square -->
+            <div class="lg:col-span-2 glass-panel p-6 overflow-x-auto">
+                <h2 class="text-xl font-semibold mb-6 text-white border-b border-emerald-500/20 pb-2">Kotak Punnett F2</h2>
+                <div id="punnett-grid" class="min-w-[400px]"></div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="space-y-6">
+                <div class="glass-panel p-6">
+                    <h2 class="text-xl font-semibold mb-6 text-white border-b border-emerald-500/20 pb-2">Rasio Fenotipe</h2>
+                    <div id="stats" class="space-y-4"></div>
+                </div>
+
+                <div class="glass-panel p-6">
+                    <h2 class="text-xl font-semibold mb-4 text-white border-b border-emerald-500/20 pb-2">Distribusi Genotipe</h2>
+                    <div id="genotype-list" class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // SVG Generator for Squash
+        function createSquashSVG(phenotype, size = '100%') {
+            let fill, stroke, lines;
+            
+            if (phenotype === 'Putih') {
+                fill = '#f1f5f9';
+                stroke = '#94a3b8';
+                lines = '#cbd5e1';
+            } else if (phenotype === 'Kuning') {
+                fill = '#fbbf24';
+                stroke = '#b45309';
+                lines = '#d97706';
+            } else {
+                fill = '#10b981';
+                stroke = '#047857';
+                lines = '#059669';
+            }
+
+            return `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="${size}" height="${size}">
+                    <g transform="translate(50, 55)">
+                        <!-- Body -->
+                        <path d="M-30,-5 C-45,-5 -40,30 -20,40 C-10,45 10,45 20,40 C40,30 45,-5 30,-5 C15,-15 -15,-15 -30,-5 Z" 
+                              fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+                        <!-- Grooves -->
+                        <path d="M-15,-10 C-25,10 -15,38 -5,42" fill="none" stroke="${lines}" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M0,-12 C-5,10 0,40 5,42" fill="none" stroke="${lines}" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M15,-10 C25,10 15,38 5,42" fill="none" stroke="${lines}" stroke-width="1.5" stroke-linecap="round"/>
+                        <!-- Stem -->
+                        <path d="M-2,-12 C-2,-20 8,-25 12,-20" fill="none" stroke="#4d7c0f" stroke-width="2.5" stroke-linecap="round"/>
+                        <!-- Leaf -->
+                        <path d="M5,-22 C10,-25 15,-15 10,-15 C5,-15 2,-20 5,-22 Z" fill="#65a30d" stroke="#4d7c0f" stroke-width="1"/>
+                        <!-- Highlight -->
+                        <path d="M-20,0 C-25,10 -15,25 -10,30" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+                    </g>
+                </svg>
+            `;
+        }
+
+        // Initialize legends
+        document.getElementById('legend-white').innerHTML = createSquashSVG('Putih', '40');
+        document.getElementById('legend-yellow').innerHTML = createSquashSVG('Kuning', '40');
+        document.getElementById('legend-green').innerHTML = createSquashSVG('Hijau', '40');
+
+        // Logic
+        function getPhenotype(genotype) {
+            const hasW = genotype.includes('W');
+            const hasY = genotype.includes('Y');
+            
+            if (hasW) {
+                return 'Putih'; // W_ epistatic over Y/y
+            } else if (hasY) {
+                return 'Kuning'; // wwY_
+            } else {
+                return 'Hijau'; // wwyy
+            }
+        }
+
+        function formatGenotype(g) {
+            let p1 = g.slice(0, 2).split('').sort((a,b) => a === a.toLowerCase() ? 1 : -1).join('');
+            let p2 = g.slice(2, 4).split('').sort((a,b) => a === a.toLowerCase() ? 1 : -1).join('');
+            return p1 + p2;
+        }
+
+        function getGametes(genotype) {
+            const g1 = genotype.slice(0, 2);
+            const g2 = genotype.slice(2, 4);
+            const gametes = new Set();
+            for (let i = 0; i < 2; i++) {
+                for (let j = 0; j < 2; j++) {
+                    gametes.add(g1[i] + g2[j]);
+                }
+            }
+            return Array.from(gametes);
+        }
+
+        function isValidGenotype(g) {
+            return /^[Ww]{2}[Yy]{2}$/.test(g);
+        }
+
+        function renderStats(phenoCounts, total) {
+            const statsDiv = document.getElementById('stats');
+            statsDiv.innerHTML = '';
+            
+            const phenoColors = {
+                'Putih': 'bg-slate-200',
+                'Kuning': 'bg-yellow-400',
+                'Hijau': 'bg-emerald-500'
+            };
+
+            const phenoBorders = {
+                'Putih': 'border-slate-300',
+                'Kuning': 'border-yellow-500',
+                'Hijau': 'border-emerald-600'
+            };
+
+            const order = ['Putih', 'Kuning', 'Hijau'];
+
+            order.forEach(pheno => {
+                const count = phenoCounts[pheno] || 0;
+                if (count === 0 && total > 0 && order.length > 0) return; // Hide zeros unless we want to show all
+                const percentage = total === 0 ? 0 : Math.round((count / total) * 100);
+                
+                statsDiv.innerHTML += `
+                    <div class="mb-3">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-slate-300 font-medium flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full ${phenoColors[pheno]} border ${phenoBorders[pheno]}"></div>
+                                ${pheno}
+                            </span>
+                            <span class="text-white font-mono">${count} / ${total} (${percentage}%)</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-2 border border-slate-700">
+                            <div class="${phenoColors[pheno]} h-2 rounded-full transition-all duration-500" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderGenotypes(genoCounts) {
+            const listDiv = document.getElementById('genotype-list');
+            listDiv.innerHTML = '';
+            
+            const sortedGeno = Object.entries(genoCounts).sort((a, b) => b[1] - a[1]);
+            
+            sortedGeno.forEach(([geno, count]) => {
+                const pheno = getPhenotype(geno);
+                let colorClass = 'text-emerald-400';
+                if(pheno === 'Putih') colorClass = 'text-slate-300';
+                if(pheno === 'Kuning') colorClass = 'text-yellow-400';
+
+                listDiv.innerHTML += `
+                    <div class="flex justify-between items-center p-2 bg-slate-900/50 rounded border border-slate-800">
+                        <span class="font-mono text-white tracking-widest">${geno}</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs px-2 py-1 bg-slate-800 rounded border border-slate-700 ${colorClass}">${pheno}</span>
+                            <span class="font-mono text-emerald-400 w-4 text-right">${count}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function calculate() {
+            let p1 = document.getElementById('p1').value;
+            let p2 = document.getElementById('p2').value;
+            const errorMsg = document.getElementById('error-msg');
+
+            // Format inputs to standard form
+            if (p1.length === 4) {
+                p1 = p1[0].toUpperCase() === 'W' || p1[0].toLowerCase() === 'w' ? p1 : 'WwYy';
+                // Very basic validation - ideally would strictly check characters
+                if (!/^[Ww]+[Yy]+$/.test(p1.split('').sort().join(''))) p1 = formatGenotype(p1);
+            }
+            if (p2.length === 4) {
+                if (!/^[Ww]+[Yy]+$/.test(p2.split('').sort().join(''))) p2 = formatGenotype(p2);
+            }
+
+
+            if (!isValidGenotype(p1) || !isValidGenotype(p2)) {
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+            errorMsg.classList.add('hidden');
+
+            p1 = formatGenotype(p1);
+            p2 = formatGenotype(p2);
+
+            // Update parent previews
+            document.getElementById('p1-pheno').textContent = getPhenotype(p1);
+            document.getElementById('p1-svg').innerHTML = createSquashSVG(getPhenotype(p1));
+            
+            document.getElementById('p2-pheno').textContent = getPhenotype(p2);
+            document.getElementById('p2-svg').innerHTML = createSquashSVG(getPhenotype(p2));
+
+            const g1 = getGametes(p1);
+            const g2 = getGametes(p2);
+
+            const phenoCounts = { 'Putih': 0, 'Kuning': 0, 'Hijau': 0 };
+            const genoCounts = {};
+            let total = 0;
+
+            let tableHTML = `
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="p-3 border border-emerald-500/30 bg-slate-900/80 text-emerald-400 font-mono">♂ \\ ♀</th>
+                            ${g2.map(g => `<th class="p-3 border border-emerald-500/30 bg-slate-900/50 text-emerald-300 font-mono text-lg">${g}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            g1.forEach(gamete1 => {
+                tableHTML += `<tr><th class="p-3 border border-emerald-500/30 bg-slate-900/50 text-emerald-300 font-mono text-lg">${gamete1}</th>`;
+                
+                g2.forEach(gamete2 => {
+                    const rawGeno = gamete1[0] + gamete2[0] + gamete1[1] + gamete2[1];
+                    const finalGeno = formatGenotype(rawGeno);
+                    const pheno = getPhenotype(finalGeno);
+                    
+                    phenoCounts[pheno]++;
+                    genoCounts[finalGeno] = (genoCounts[finalGeno] || 0) + 1;
+                    total++;
+
+                    const svg = createSquashSVG(pheno, '48');
+                    
+                    let bgClass = 'bg-slate-900/30';
+                    if (pheno === 'Putih') bgClass = 'bg-slate-800/40';
+                    if (pheno === 'Kuning') bgClass = 'bg-yellow-900/20';
+                    if (pheno === 'Hijau') bgClass = 'bg-emerald-900/20';
+
+                    tableHTML += `
+                        <td class="p-3 border border-emerald-500/20 text-center ${bgClass} hover:bg-slate-800/80 transition-colors">
+                            <div class="flex flex-col items-center gap-2">
+                                ${svg}
+                                <span class="font-mono font-bold tracking-widest text-white">${finalGeno}</span>
+                                <span class="text-xs text-slate-400">${pheno}</span>
+                            </div>
+                        </td>
+                    `;
+                });
+                tableHTML += `</tr>`;
+            });
+
+            tableHTML += `</tbody></table>`;
+            
+            document.getElementById('punnett-grid').innerHTML = tableHTML;
+            renderStats(phenoCounts, total);
+            renderGenotypes(genoCounts);
+        }
+
+        document.getElementById('p1').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^WwYy]/g, '');
+            if(this.value.length === 4) calculate();
+        });
+        
+        document.getElementById('p2').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^WwYy]/g, '');
+            if(this.value.length === 4) calculate();
+        });
+
+        // Add custom scrollbar styling
+        document.head.insertAdjacentHTML('beforeend', `
+            <style>
+                .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+                .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); border-radius: 4px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(16, 185, 129, 0.3); border-radius: 4px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(16, 185, 129, 0.5); }
+            </style>
+        `);
+
+        // Initial calculation
+        calculate();
+    </script>
+</body>
+</html>

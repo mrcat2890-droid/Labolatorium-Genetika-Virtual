@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Atavisme - Laboratorium Genetika Virtual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+            background-image: radial-gradient(circle at 15% 50%, rgba(245, 158, 11, 0.08), transparent 25%),
+                              radial-gradient(circle at 85% 30%, rgba(239, 68, 68, 0.06), transparent 25%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-top: 2px solid #f59e0b;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 1rem;
+        }
+        
+        .glass-panel-secondary {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 0.75rem;
+        }
+
+        .comb-svg {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .comb-svg:hover {
+            transform: scale(1.2) rotate(2deg);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        .punnett-cell {
+            position: relative;
+        }
+        .punnett-cell .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        .punnett-cell:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <!-- Header -->
+    <header class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 mb-8 pb-4 border-b border-slate-800">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-500 to-red-600 flex items-center justify-center font-bold text-2xl text-white shadow-lg shadow-amber-500/20">
+                A
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-3">
+                    SIMULASI ATAVISME
+                    <span class="text-xs bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-0.5 rounded-full mono">Interaksi Gen</span>
+                </h1>
+                <p class="text-sm text-slate-400">Pial Ayam (<i>Gallus gallus domesticus</i>) • Rasio F2 Klasik 9 : 3 : 3 : 1</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="Generator Penyimpangan Semu.html" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium transition border border-slate-700 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Kembali ke Menu
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto space-y-8">
+
+        <!-- Educational Panel -->
+        <section class="glass-panel p-6 border-t-amber-500">
+            <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Landasan Teori: Atavisme (Interaksi Antar Gen)
+            </h2>
+            <div class="text-sm text-slate-300 space-y-3 leading-relaxed">
+                <p>
+                    <strong>Atavisme</strong> (ditemukan oleh <i>William Bateson & Reginald Punnett</i> pada tahun 1906) adalah fenomena interaksi antara dua atau lebih pasang gen non-alelik yang saling memengaruhi untuk menghasilkan suatu sifat fenotipe baru yang tidak dijumpai pada kedua induk galur murni, atau memunculkan kembali sifat leluhur purba.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-3 text-xs">
+                    <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700/60">
+                        <strong class="text-amber-400 block mb-1">Mekanisme Alelik:</strong>
+                        <ul class="list-disc list-inside space-y-1 text-slate-300">
+                            <li>Alel <strong>R</strong> (Rose) dominan terhadap alel <strong>r</strong>.</li>
+                            <li>Alel <strong>P</strong> (Pea) dominan terhadap alel <strong>p</strong>.</li>
+                            <li>Interaksi <strong>R_P_</strong> menghasilkan fenotipe baru: <strong>Walnut (Sumpel)</strong>.</li>
+                            <li>Kombinasi homozigot ganda resesif <strong>rrpp</strong> memunculkan bentuk dasar: <strong>Single (Bilah)</strong>.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700/60">
+                        <strong class="text-amber-400 block mb-1">Mengapa Angkanya Tetap 9:3:3:1?</strong>
+                        <p class="text-slate-300">
+                            Meskipun rasionya tampak seperti persilangan dihibrid Mendel biasa (9:3:3:1), ini tergolong <em>penyimpangan semu</em> karena sifat yang diamati hanya <strong>satu karakter morfologi tunggal</strong> (bentuk pial/jengger), bukan dua sifat beda independen seperti biji bulat-kuning pada Mendel.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Visual Legend 4 Comb Types -->
+                <div class="pt-2">
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-3">Katalog 4 Fenotipe Pial Ayam:</span>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div class="glass-panel-secondary p-3 flex flex-col items-center text-center">
+                            <div class="w-14 h-14 mb-2 flex items-center justify-center" id="legend-walnut"></div>
+                            <span class="font-bold text-amber-400 text-sm">Walnut (Sumpel)</span>
+                            <span class="mono text-xs text-slate-400 mt-1">R_P_ (9/16)</span>
+                            <span class="text-[10px] text-slate-500 mt-0.5">Bulat berkerut mirip kenari</span>
+                        </div>
+                        <div class="glass-panel-secondary p-3 flex flex-col items-center text-center">
+                            <div class="w-14 h-14 mb-2 flex items-center justify-center" id="legend-rose"></div>
+                            <span class="font-bold text-rose-400 text-sm">Rose (Mawar)</span>
+                            <span class="mono text-xs text-slate-400 mt-1">R_pp (3/16)</span>
+                            <span class="text-[10px] text-slate-500 mt-0.5">Melebar berbutir + duri belakang</span>
+                        </div>
+                        <div class="glass-panel-secondary p-3 flex flex-col items-center text-center">
+                            <div class="w-14 h-14 mb-2 flex items-center justify-center" id="legend-pea"></div>
+                            <span class="font-bold text-emerald-400 text-sm">Pea (Biji/Kapri)</span>
+                            <span class="mono text-xs text-slate-400 mt-1">rrP_ (3/16)</span>
+                            <span class="text-[10px] text-slate-500 mt-0.5">Tiga alur tonjolan membujur</span>
+                        </div>
+                        <div class="glass-panel-secondary p-3 flex flex-col items-center text-center">
+                            <div class="w-14 h-14 mb-2 flex items-center justify-center" id="legend-single"></div>
+                            <span class="font-bold text-orange-400 text-sm">Single (Bilah)</span>
+                            <span class="mono text-xs text-slate-400 mt-1">rrpp (1/16)</span>
+                            <span class="text-[10px] text-slate-500 mt-0.5">Tegak bergerigi tajam khas ayam</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Input & Controls Section -->
+        <section class="glass-panel p-6 border-t-amber-500">
+            <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                Konfigurasi Parental (P1 & P2)
+            </h2>
+
+            <!-- Quick Presets -->
+            <div class="mb-6 flex flex-wrap items-center gap-2">
+                <span class="text-xs text-slate-400 font-semibold uppercase mr-2">Preset Cepat:</span>
+                <button onclick="setPreset('RrPp', 'RrPp')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 transition">
+                    Klasik F1 × F1 (RrPp × RrPp → 9:3:3:1)
+                </button>
+                <button onclick="setPreset('RRpp', 'rrPP')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+                    Murni Rose × Pea (RRpp × rrPP)
+                </button>
+                <button onclick="setPreset('RrPp', 'rrpp')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+                    Test Cross (RrPp × rrpp → 1:1:1:1)
+                </button>
+                <button onclick="setPreset('rrpp', 'rrpp')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+                    Bilah × Bilah (rrpp × rrpp)
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-11 gap-4 items-center">
+                <!-- Parental 1 -->
+                <div class="md:col-span-5 glass-panel-secondary p-4 flex flex-col items-center">
+                    <label class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">Parental 1 (♂)</label>
+                    <input type="text" id="p1" value="RrPp" maxlength="4" class="w-32 text-center text-xl mono font-bold bg-slate-900 border-2 border-slate-700 focus:border-amber-500 rounded-lg py-2 text-amber-400 outline-none transition uppercase">
+                    <div id="p1-preview" class="mt-3 flex flex-col items-center min-h-[90px] justify-center"></div>
+                </div>
+
+                <!-- Cross Sign -->
+                <div class="md:col-span-1 flex justify-center items-center">
+                    <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-lg text-slate-400">
+                        ×
+                    </div>
+                </div>
+
+                <!-- Parental 2 -->
+                <div class="md:col-span-5 glass-panel-secondary p-4 flex flex-col items-center">
+                    <label class="text-xs font-bold text-red-400 uppercase tracking-wider mb-2">Parental 2 (♀)</label>
+                    <input type="text" id="p2" value="RrPp" maxlength="4" class="w-32 text-center text-xl mono font-bold bg-slate-900 border-2 border-slate-700 focus:border-red-500 rounded-lg py-2 text-red-400 outline-none transition uppercase">
+                    <div id="p2-preview" class="mt-3 flex flex-col items-center min-h-[90px] justify-center"></div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-center">
+                <button onclick="startAnalysis()" class="px-8 py-3 rounded-xl bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 hover:from-amber-500 hover:to-red-500 text-white font-bold shadow-lg shadow-amber-900/40 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                    MULAI PERSILANGAN
+                </button>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <div id="results-area" class="space-y-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Punnett Grid 4x4 -->
+                <div class="lg:col-span-8 glass-panel p-6 border-t-amber-500">
+                    <div class="flex justify-between items-center mb-6 pb-3 border-b border-slate-800">
+                        <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
+                            Tabel Punnett 4×4 Keturunan F2
+                        </h3>
+                        <span class="text-xs mono text-slate-400">16 Kombinasi Gamet</span>
+                    </div>
+
+                    <div class="overflow-x-auto pb-4">
+                        <div id="punnett-grid" class="min-w-[500px]"></div>
+                    </div>
+                </div>
+
+                <!-- Stats & Ratios -->
+                <div class="lg:col-span-4 glass-panel p-6 border-t-amber-500 flex flex-col">
+                    <h3 class="font-bold text-white text-sm uppercase tracking-wider mb-4 pb-2 border-b border-slate-800">
+                        Rasio Fenotipe F2
+                    </h3>
+                    <div id="stats-bars" class="space-y-4 mb-6"></div>
+
+                    <h3 class="font-bold text-white text-sm uppercase tracking-wider mb-3 pb-2 border-b border-slate-800">
+                        Frekuensi Genotipe
+                    </h3>
+                    <div id="geno-chips" class="flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+
+            <!-- Academic Report -->
+            <section class="glass-panel p-6 border-t-amber-500">
+                <h3 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    Laporan Hasil Analisis Genetika
+                </h3>
+                <div id="academic-report" class="text-sm text-slate-300 space-y-3 leading-relaxed border-t border-slate-800/80 pt-4"></div>
+                <div class="mt-4 pt-3 border-t border-slate-800/60 text-[10px] text-slate-500 mono">
+                    SUMBER LITERATUR: BATESON & PUNNETT (1906) • CAMPBELL BIOLOGY 12TH ED (CHAPTER 14: MENDEL AND THE GENE IDEA)
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <script>
+        // --- ORGANISM SVG VISUALIZATION (Chicken Head + Comb) ---
+        function getChickenSVG(phenotype, size = 'w-12 h-12') {
+            let combPath = '';
+            let combColor = '#dc2626'; // Deep red
+            let combStroke = '#991b1b';
+
+            if (phenotype === 'Walnut') {
+                // Large lumpy/bumpy walnut kernel comb
+                combPath = `
+                    <path d="M 28 34 C 26 24, 34 16, 44 18 C 50 14, 60 15, 66 22 C 72 20, 78 26, 76 33 C 74 38, 68 40, 60 38 C 52 42, 40 40, 32 38 Z" fill="#b91c1c" stroke="#7f1d1d" stroke-width="1.5"/>
+                    <path d="M 38 24 Q 44 28 42 34" stroke="#ef4444" stroke-width="1.2" fill="none" opacity="0.7"/>
+                    <path d="M 52 20 Q 56 26 54 32" stroke="#ef4444" stroke-width="1.2" fill="none" opacity="0.7"/>
+                    <path d="M 64 25 Q 66 31 62 35" stroke="#ef4444" stroke-width="1.2" fill="none" opacity="0.7"/>
+                `;
+            } else if (phenotype === 'Rose') {
+                // Wide flat comb with small papillae and a backward-pointing spike
+                combPath = `
+                    <path d="M 25 36 C 24 30, 28 26, 34 26 C 37 22, 43 23, 47 26 C 51 22, 57 23, 61 26 C 65 24, 72 26, 76 30 L 86 28 C 84 32, 78 35, 74 36 C 66 40, 40 40, 25 36 Z" fill="#ef4444" stroke="#991b1b" stroke-width="1.5"/>
+                    <circle cx="36" cy="30" r="1.5" fill="#fca5a5"/>
+                    <circle cx="48" cy="29" r="1.5" fill="#fca5a5"/>
+                    <circle cx="60" cy="30" r="1.5" fill="#fca5a5"/>
+                `;
+            } else if (phenotype === 'Pea') {
+                // Three small longitudinal ridges/bumps on top
+                combPath = `
+                    <path d="M 30 36 C 30 30, 36 26, 42 27 C 46 22, 54 22, 58 26 C 64 26, 70 30, 70 36 C 64 38, 40 39, 30 36 Z" fill="#ef4444" stroke="#991b1b" stroke-width="1.5"/>
+                    <path d="M 36 32 Q 48 30 62 32" stroke="#991b1b" stroke-width="1" fill="none"/>
+                    <path d="M 40 28 Q 50 26 56 28" stroke="#fca5a5" stroke-width="1" fill="none"/>
+                `;
+            } else {
+                // Single (Bilah): Tall vertical serrated comb with 4-5 pointed spikes
+                combPath = `
+                    <path d="M 28 38 L 32 18 L 38 30 L 44 14 L 50 28 L 56 12 L 62 26 L 68 16 L 72 38 C 62 42, 40 42, 28 38 Z" fill="#ef4444" stroke="#991b1b" stroke-width="1.5"/>
+                `;
+            }
+
+            return `
+                <svg viewBox="0 0 100 100" class="${size} comb-svg drop-shadow-md">
+                    <!-- Chicken Head Profile -->
+                    <!-- Neck & Head base -->
+                    <path d="M 20 85 C 20 60, 32 45, 45 44 C 65 44, 75 52, 78 62 L 90 68 C 82 72, 78 76, 76 85 Z" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
+                    <!-- Eye -->
+                    <circle cx="58" cy="56" r="4.5" fill="#0f172a"/>
+                    <circle cx="59.5" cy="54.5" r="1.5" fill="#ffffff"/>
+                    <!-- Beak (Yellow triangular) -->
+                    <path d="M 76 60 L 93 67 L 76 72 Z" fill="#f59e0b" stroke="#d97706" stroke-width="1.5"/>
+                    <!-- Wattle (Gelambir merah di bawah paruh) -->
+                    <path d="M 68 70 C 68 82, 76 84, 78 74 C 78 70, 72 68, 68 70 Z" fill="#ef4444" stroke="#991b1b" stroke-width="1.5"/>
+                    <!-- Comb on top -->
+                    ${combPath}
+                </svg>
+            `;
+        }
+
+        // --- DOMAIN LOGIC ---
+        function formatGenotype(input) {
+            let raw = input.replace(/[^rRpP]/g, '');
+            if (raw.length !== 4) return raw;
+
+            let rPair = '';
+            let pPair = '';
+            
+            for (let c of raw) {
+                if (c.toLowerCase() === 'r') rPair += c;
+                if (c.toLowerCase() === 'p') pPair += c;
+            }
+
+            if (rPair.length !== 2 || pPair.length !== 2) return raw;
+
+            // Sort so uppercase comes first (Rr, not rR)
+            const sortAllele = (pair) => {
+                let a = pair[0], b = pair[1];
+                if (a === a.toLowerCase() && b === b.toUpperCase()) return b + a;
+                return pair;
+            };
+
+            return sortAllele(rPair) + sortAllele(pPair);
+        }
+
+        function getPhenotype(genStr) {
+            // Standard format: RrPp -> R at [0..1], P at [2..3]
+            let hasR = genStr.includes('R');
+            let hasP = genStr.includes('P');
+
+            if (hasR && hasP) {
+                return { name: 'Walnut', label: 'Walnut (Sumpel)', color: 'text-amber-400', barBg: 'bg-amber-500', badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-500/30' };
+            } else if (hasR && !hasP) {
+                return { name: 'Rose', label: 'Rose (Mawar)', color: 'text-rose-400', barBg: 'bg-rose-500', badgeClass: 'bg-rose-500/20 text-rose-300 border-rose-500/30' };
+            } else if (!hasR && hasP) {
+                return { name: 'Pea', label: 'Pea (Biji)', color: 'text-emerald-400', barBg: 'bg-emerald-500', badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' };
+            } else {
+                return { name: 'Single', label: 'Single (Bilah)', color: 'text-orange-400', barBg: 'bg-orange-500', badgeClass: 'bg-orange-500/20 text-orange-300 border-orange-500/30' };
+            }
+        }
+
+        function getGametes(genStr) {
+            let rGenes = [genStr[0], genStr[1]];
+            let pGenes = [genStr[2], genStr[3]];
+            let res = [];
+            for (let r of rGenes) {
+                for (let p of pGenes) {
+                    res.push(r + p);
+                }
+            }
+            return res;
+        }
+
+        function combineGametes(g1, g2) {
+            let rPart = [g1[0], g2[0]].sort((a, b) => (a === a.toLowerCase() && b === b.toUpperCase()) ? 1 : -1).join('');
+            let pPart = [g1[1], g2[1]].sort((a, b) => (a === a.toLowerCase() && b === b.toUpperCase()) ? 1 : -1).join('');
+            return rPart + pPart;
+        }
+
+        // --- PRESETS & PREVIEWS ---
+        function setPreset(p1Val, p2Val) {
+            document.getElementById('p1').value = p1Val;
+            document.getElementById('p2').value = p2Val;
+            updatePreviews();
+            startAnalysis();
+        }
+
+        function updatePreviews() {
+            let p1Input = document.getElementById('p1').value;
+            let p2Input = document.getElementById('p2').value;
+
+            let p1Fmt = formatGenotype(p1Input);
+            let p2Fmt = formatGenotype(p2Input);
+
+            if (p1Fmt.length === 4) {
+                let p1Info = getPhenotype(p1Fmt);
+                document.getElementById('p1-preview').innerHTML = `
+                    ${getChickenSVG(p1Info.name, 'w-16 h-16')}
+                    <span class="text-xs font-bold ${p1Info.color} mt-1">${p1Info.label}</span>
+                    <span class="mono text-[10px] text-slate-500">${p1Fmt}</span>
+                `;
+            } else {
+                document.getElementById('p1-preview').innerHTML = '<span class="text-xs text-slate-500 italic">Format salah (gunakan 2R + 2P, misal RrPp)</span>';
+            }
+
+            if (p2Fmt.length === 4) {
+                let p2Info = getPhenotype(p2Fmt);
+                document.getElementById('p2-preview').innerHTML = `
+                    ${getChickenSVG(p2Info.name, 'w-16 h-16')}
+                    <span class="text-xs font-bold ${p2Info.color} mt-1">${p2Info.label}</span>
+                    <span class="mono text-[10px] text-slate-500">${p2Fmt}</span>
+                `;
+            } else {
+                document.getElementById('p2-preview').innerHTML = '<span class="text-xs text-slate-500 italic">Format salah (gunakan 2R + 2P, misal RrPp)</span>';
+            }
+        }
+
+        document.getElementById('p1').addEventListener('input', function() {
+            this.value = formatGenotype(this.value);
+            updatePreviews();
+        });
+        document.getElementById('p2').addEventListener('input', function() {
+            this.value = formatGenotype(this.value);
+            updatePreviews();
+        });
+
+        // --- SIMULATION RUNNER ---
+        function startAnalysis() {
+            let p1Raw = document.getElementById('p1').value;
+            let p2Raw = document.getElementById('p2').value;
+
+            let p1 = formatGenotype(p1Raw);
+            let p2 = formatGenotype(p2Raw);
+
+            if (p1.length !== 4 || p2.length !== 4) {
+                alert("Mohon masukkan genotipe 4 huruf yang valid untuk kedua parental (contoh: RrPp).");
+                return;
+            }
+
+            document.getElementById('p1').value = p1;
+            document.getElementById('p2').value = p2;
+            updatePreviews();
+
+            let g1 = getGametes(p1);
+            let g2 = getGametes(p2);
+
+            let phenoCounts = { 'Walnut': 0, 'Rose': 0, 'Pea': 0, 'Single': 0 };
+            let genoCounts = {};
+
+            // Render 4x4 Grid
+            let gridHTML = `
+                <div class="grid grid-cols-5 gap-2 text-center">
+                    <div class="p-2 bg-slate-900/60 rounded border border-slate-800 flex items-center justify-center font-bold text-xs text-slate-500">♂ \\ ♀</div>
+            `;
+
+            // Top Header: Female Gametes
+            for (let j = 0; j < 4; j++) {
+                gridHTML += `
+                    <div class="p-2 bg-slate-800/80 rounded border border-slate-700/80 flex flex-col items-center justify-center">
+                        <span class="mono font-bold text-red-400 text-sm">${g2[j]}</span>
+                        <span class="text-[9px] text-slate-500">Gamet ♀</span>
+                    </div>
+                `;
+            }
+
+            // Grid Rows
+            for (let i = 0; i < 4; i++) {
+                // Left Header: Male Gamete
+                gridHTML += `
+                    <div class="p-2 bg-slate-800/80 rounded border border-slate-700/80 flex flex-col items-center justify-center">
+                        <span class="mono font-bold text-amber-400 text-sm">${g1[i]}</span>
+                        <span class="text-[9px] text-slate-500">Gamet ♂</span>
+                    </div>
+                `;
+
+                // 4 Cells
+                for (let j = 0; j < 4; j++) {
+                    let combG = combineGametes(g1[i], g2[j]);
+                    let pheno = getPhenotype(combG);
+
+                    phenoCounts[pheno.name]++;
+                    genoCounts[combG] = (genoCounts[combG] || 0) + 1;
+
+                    gridHTML += `
+                        <div class="punnett-cell bg-slate-900/60 border border-slate-700/60 hover:border-amber-500/60 rounded-xl p-2 flex flex-col items-center justify-center transition group">
+                            <div class="w-12 h-12 flex items-center justify-center">
+                                ${getChickenSVG(pheno.name, 'w-11 h-11')}
+                            </div>
+                            <span class="mono font-bold text-xs text-slate-200 mt-1">${combG}</span>
+                            <span class="text-[10px] ${pheno.color} font-medium">${pheno.name}</span>
+
+                            <!-- Tooltip -->
+                            <div class="tooltip bg-black/90 border border-slate-700 text-white text-[11px] p-2 rounded-lg shadow-xl mb-1">
+                                <div class="font-bold ${pheno.color}">${pheno.label}</div>
+                                <div class="mono text-slate-400 text-[10px]">Genotipe: ${combG}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            gridHTML += `</div>`;
+            document.getElementById('punnett-grid').innerHTML = gridHTML;
+
+            // Render Stats Bars
+            let statsDiv = document.getElementById('stats-bars');
+            statsDiv.innerHTML = '';
+            let total = 16;
+            let order = ['Walnut', 'Rose', 'Pea', 'Single'];
+
+            order.forEach(type => {
+                let count = phenoCounts[type];
+                let pct = ((count / total) * 100).toFixed(1);
+                let pInfo = getPhenotype(type === 'Walnut' ? 'RRPP' : type === 'Rose' ? 'RRpp' : type === 'Pea' ? 'rrPP' : 'rrpp');
+
+                statsDiv.innerHTML += `
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="font-bold ${pInfo.color}">${pInfo.label}</span>
+                            <span class="mono text-slate-400 font-semibold">${count}/16 (${pct}%)</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden p-0.5 border border-slate-700/50">
+                            <div class="${pInfo.barBg} h-full rounded-full transition-all duration-700" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Render Genotype Chips
+            let chipsDiv = document.getElementById('geno-chips');
+            chipsDiv.innerHTML = '';
+            let sortedGenos = Object.entries(genoCounts).sort((a, b) => b[1] - a[1]);
+            sortedGenos.forEach(([gStr, count]) => {
+                let pInfo = getPhenotype(gStr);
+                chipsDiv.innerHTML += `
+                    <div class="px-2.5 py-1 rounded-lg border ${pInfo.badgeClass} flex items-center gap-1.5 mono text-xs">
+                        <span class="font-bold">${gStr}</span>
+                        <span class="bg-black/40 px-1.5 py-0.5 rounded text-[10px] text-white font-mono">${count}</span>
+                    </div>
+                `;
+            });
+
+            // Generate Academic Report
+            generateReport(p1, p2, phenoCounts, genoCounts);
+        }
+
+        function generateReport(p1, p2, phenoCounts, genoCounts) {
+            let p1Info = getPhenotype(p1);
+            let p2Info = getPhenotype(p2);
+
+            let w = phenoCounts['Walnut'];
+            let r = phenoCounts['Rose'];
+            let p = phenoCounts['Pea'];
+            let s = phenoCounts['Single'];
+
+            let report = `
+                <p>
+                    Persilangan antara ayam jantan <strong>P1 (${p1} - ${p1Info.label})</strong> dengan ayam betina <strong>P2 (${p2} - ${p2Info.label})</strong> menghasilkan 16 kombinasi keturunan F2.
+                </p>
+                <p>
+                    Karakter pial ayam dikontrol oleh dua lokus gen yang berinteraksi secara komplementer dan bebas (asortasi independen):
+                </p>
+                <ul class="list-disc list-inside space-y-1 text-slate-300 ml-2">
+                    <li>Genotipe <strong class="text-amber-400">R_P_</strong> menghasilkan pial <strong>Walnut</strong> sebanyak <strong>${w} / 16</strong>.</li>
+                    <li>Genotipe <strong class="text-rose-400">R_pp</strong> menghasilkan pial <strong>Rose</strong> sebanyak <strong>${r} / 16</strong>.</li>
+                    <li>Genotipe <strong class="text-emerald-400">rrP_</strong> menghasilkan pial <strong>Pea</strong> sebanyak <strong>${p} / 16</strong>.</li>
+                    <li>Genotipe <strong class="text-orange-400">rrpp</strong> menghasilkan pial <strong>Single</strong> sebanyak <strong>${s} / 16</strong>.</li>
+                </ul>
+            `;
+
+            if (p1 === 'RrPp' && p2 === 'RrPp') {
+                report += `
+                    <div class="mt-4 p-4 rounded-xl bg-amber-950/30 border border-amber-500/30">
+                        <h4 class="font-bold text-amber-400 mb-1">Konfirmasi Rasio Atavisme Bateson (9 : 3 : 3 : 1):</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Hasil persilangan dihibrid heterozigot sempurna (RrPp × RrPp) menghasilkan rasio fenotipe <strong>9 Walnut : 3 Rose : 3 Pea : 1 Single</strong>. Peristiwa ini membuktikan bahwa interaksi gen R dan P yang saling bertemu memunculkan fenotipe baru <em>(Walnut)</em> yang lebih dominan daripada sifat masing-masing, sedangkan alel resesif ganda memunculkan bentuk morfologi primitif leluhur <em>(Single)</em>.
+                        </p>
+                    </div>
+                `;
+            } else {
+                let nonZero = [w, r, p, s].filter(x => x > 0);
+                let gcd = function(a, b) { return !b ? a : gcd(b, a % b); };
+                let div = nonZero.reduce((acc, val) => gcd(acc, val), nonZero[0] || 1);
+                
+                report += `
+                    <div class="mt-4 p-4 rounded-xl bg-slate-800/60 border border-slate-700">
+                        <h4 class="font-bold text-slate-200 mb-1">Rasio Fenotipe Persilangan Kustom:</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Persilangan spesifik ini menghasilkan perbandingan fenotipe <strong>${w/div} Walnut : ${r/div} Rose : ${p/div} Pea : ${s/div} Single</strong>.
+                        </p>
+                    </div>
+                `;
+            }
+
+            document.getElementById('academic-report').innerHTML = report;
+        }
+
+        // Initialize Legend Icons on load
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('legend-walnut').innerHTML = getChickenSVG('Walnut', 'w-14 h-14');
+            document.getElementById('legend-rose').innerHTML = getChickenSVG('Rose', 'w-14 h-14');
+            document.getElementById('legend-pea').innerHTML = getChickenSVG('Pea', 'w-14 h-14');
+            document.getElementById('legend-single').innerHTML = getChickenSVG('Single', 'w-14 h-14');
+
+            updatePreviews();
+            startAnalysis();
+        });
+    </script>
+</body>
+</html>

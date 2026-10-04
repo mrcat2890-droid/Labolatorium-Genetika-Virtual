@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Kriptomeri - Laboratorium Genetika Virtual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+            background-image: radial-gradient(circle at 15% 50%, rgba(168, 85, 247, 0.08), transparent 25%),
+                              radial-gradient(circle at 85% 30%, rgba(239, 68, 68, 0.05), transparent 25%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-top: 2px solid #a855f7;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 1rem;
+        }
+        
+        .glass-panel-secondary {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 0.75rem;
+        }
+
+        .flower-svg {
+            transition: transform 0.3s ease;
+        }
+        .flower-svg:hover {
+            transform: scale(1.2);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        .punnett-cell {
+            position: relative;
+        }
+        .punnett-cell .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 5px;
+            background-color: #1e293b;
+            color: #e2e8f0;
+            text-align: center;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            z-index: 10;
+            pointer-events: none;
+            border: 1px solid #475569;
+        }
+        .punnett-cell:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .bar-chart-fill {
+            transition: width 1s ease-out;
+        }
+        
+        .input-box {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid #475569;
+            color: white;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        .input-box:focus {
+            outline: none;
+            border-color: #a855f7;
+            box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.2);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto space-y-8">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <a href="Generator Penyimpangan Semu.html" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg transition-colors border border-slate-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </a>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-purple-900 flex items-center justify-center border border-purple-500 shadow-lg shadow-purple-900/50">
+                        <span class="text-2xl font-bold text-white mono">K</span>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold text-white tracking-tight">SIMULASI KRIPTOMERI</h1>
+                        <p class="text-purple-400 font-medium">Bunga <i class="font-serif">Linaria maroccana</i> • Rasio 9:3:4</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Educational Intro Panel -->
+        <section class="glass-panel p-6">
+            <h2 class="text-xl font-semibold mb-4 text-white flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                Mekanisme Kriptomeri
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6 text-slate-300 text-sm leading-relaxed">
+                <div>
+                    <p class="mb-3">
+                        <strong class="text-purple-400">Kriptomeri</strong> (dari bahasa Yunani <i>kryptos</i> = tersembunyi) adalah peristiwa di mana gen dominan seolah-olah tersembunyi jika berdiri sendiri, dan baru menampakkan pengaruhnya bila bertemu dengan gen dominan lainnya.
+                    </p>
+                    <p>
+                        Pada bunga <i>Linaria maroccana</i>:
+                        <ul class="list-disc list-inside mt-2 space-y-1 ml-2">
+                            <li><strong class="text-white mono">A</strong> = Gen pembentuk antosianin (ada pigmen)</li>
+                            <li><strong class="text-white mono">a</strong> = Gen tanpa antosianin (tanpa pigmen)</li>
+                            <li><strong class="text-white mono">B</strong> = Gen pengubah pH sel menjadi basa</li>
+                            <li><strong class="text-white mono">b</strong> = Gen pengubah pH sel menjadi asam</li>
+                        </ul>
+                    </p>
+                </div>
+                <div class="glass-panel-secondary p-4 flex flex-col justify-center">
+                    <h3 class="text-white font-medium mb-3 text-center">Fenotipe & Genotipe</h3>
+                    <div class="flex justify-around items-end">
+                        <div class="text-center">
+                            <div class="h-16 flex items-center justify-center" id="legend-ungu"></div>
+                            <span class="block mt-2 font-semibold text-purple-400">Ungu</span>
+                            <span class="text-xs mono">A_B_</span>
+                            <div class="text-xs text-slate-400 mt-1">Antosianin + Basa</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-16 flex items-center justify-center" id="legend-merah"></div>
+                            <span class="block mt-2 font-semibold text-red-400">Merah</span>
+                            <span class="text-xs mono">A_bb</span>
+                            <div class="text-xs text-slate-400 mt-1">Antosianin + Asam</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-16 flex items-center justify-center" id="legend-putih"></div>
+                            <span class="block mt-2 font-semibold text-slate-200">Putih</span>
+                            <span class="text-xs mono">aa__</span>
+                            <div class="text-xs text-slate-400 mt-1">Tanpa Pigmen</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 text-xs text-slate-500 border-t border-slate-700/50 pt-3">
+                Referensi: Campbell Biology 12th Ed; Griffiths et al. Introduction to Genetic Analysis.
+            </div>
+        </section>
+
+        <!-- Input Section -->
+        <section class="glass-panel p-6 md:p-10 text-center">
+            <h2 class="text-lg font-medium text-slate-300 mb-6">Persilangan Induk (Parental)</h2>
+            
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
+                <!-- P1 -->
+                <div class="flex flex-col items-center">
+                    <div class="text-slate-400 mb-2 flex items-center gap-2">
+                        <span>P1 (♂)</span>
+                    </div>
+                    <div class="w-24 h-24 mb-4 flex items-center justify-center bg-slate-800/50 rounded-full border border-slate-700" id="p1-preview"></div>
+                    <input type="text" id="p1-input" value="AaBb" maxlength="4" class="input-box w-32 h-12 rounded-lg" oninput="handleInput(this, 'p1-preview')">
+                    <div class="text-sm mt-2 text-slate-400" id="p1-phenotype-text">Bunga Ungu</div>
+                </div>
+
+                <!-- Cross Icon -->
+                <div class="text-4xl text-slate-500 font-light">×</div>
+
+                <!-- P2 -->
+                <div class="flex flex-col items-center">
+                    <div class="text-slate-400 mb-2 flex items-center gap-2">
+                        <span>P2 (♀)</span>
+                    </div>
+                    <div class="w-24 h-24 mb-4 flex items-center justify-center bg-slate-800/50 rounded-full border border-slate-700" id="p2-preview"></div>
+                    <input type="text" id="p2-input" value="AaBb" maxlength="4" class="input-box w-32 h-12 rounded-lg" oninput="handleInput(this, 'p2-preview')">
+                    <div class="text-sm mt-2 text-slate-400" id="p2-phenotype-text">Bunga Ungu</div>
+                </div>
+            </div>
+
+            <div class="mt-10">
+                <button id="btn-silangkan" class="px-8 py-3 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white font-bold rounded-lg shadow-lg shadow-purple-600/30 transition-all transform hover:scale-105 active:scale-95">
+                    SILANGKAN
+                </button>
+            </div>
+            <div id="input-error" class="text-red-400 text-sm mt-3 hidden">Format genotipe tidak valid. Gunakan huruf A, a, B, b (4 karakter).</div>
+        </section>
+
+        <!-- Results Section (Hidden initially) -->
+        <div id="results-section" class="hidden space-y-8 animate-[fadeIn_0.5s_ease-out]">
+            
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Punnett Square -->
+                <section class="glass-panel p-6 overflow-x-auto">
+                    <h2 class="text-xl font-semibold mb-4 text-white">Kotak Punnett (F2)</h2>
+                    <div id="punnett-container" class="min-w-[400px]">
+                        <!-- Grid injected via JS -->
+                    </div>
+                </section>
+
+                <!-- Stats & Genotypes -->
+                <div class="space-y-8">
+                    <!-- Stats Panel -->
+                    <section class="glass-panel p-6">
+                        <h2 class="text-xl font-semibold mb-4 text-white">Rasio Fenotipe</h2>
+                        <div id="stats-chart" class="space-y-4">
+                            <!-- Bars injected via JS -->
+                        </div>
+                    </section>
+
+                    <!-- Genotypes Panel -->
+                    <section class="glass-panel p-6">
+                        <h2 class="text-xl font-semibold mb-4 text-white">Distribusi Genotipe</h2>
+                        <div id="genotype-chips" class="flex flex-wrap gap-2">
+                            <!-- Chips injected via JS -->
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Academic Report -->
+            <section class="glass-panel p-6 border-t-2 border-purple-500">
+                <h2 class="text-xl font-semibold mb-4 text-white flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    Laporan Analisis Genetik
+                </h2>
+                <div id="academic-report" class="prose prose-invert max-w-none text-slate-300 text-sm leading-relaxed space-y-4">
+                    <!-- Report injected via JS -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // --- SVG Flower Generators ---
+        function createLinariaFlowerSVG(colorClass, size = 64) {
+            let fillColors = {
+                'ungu': { main: '#a855f7', dark: '#7e22ce', highlight: '#d8b4fe' }, // Purple
+                'merah': { main: '#ef4444', dark: '#b91c1c', highlight: '#fca5a5' }, // Red
+                'putih': { main: '#f8fafc', dark: '#cbd5e1', highlight: '#ffffff' }  // White
+            };
+            
+            let c = fillColors[colorClass] || fillColors['putih'];
+            
+            return `
+            <svg width="${size}" height="${size}" viewBox="0 0 100 100" class="flower-svg drop-shadow-md">
+                <g transform="translate(50, 50)">
+                    <!-- Stem -->
+                    <path d="M0,20 Q-5,40 -2,60" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M0,35 Q10,30 15,40 Q5,45 0,35" fill="#22c55e" />
+                    
+                    <!-- Petals -->
+                    <g fill="${c.main}" stroke="${c.dark}" stroke-width="1.5">
+                        <!-- Top left -->
+                        <path d="M-5,-5 C-25,-30 -40,-15 -20,5 C-10,15 0,5 -5,-5" />
+                        <!-- Top right -->
+                        <path d="M5,-5 C25,-30 40,-15 20,5 C10,15 0,5 5,-5" />
+                        <!-- Bottom left -->
+                        <path d="M-10,5 C-30,25 -15,40 -5,25 C0,20 -5,10 -10,5" />
+                        <!-- Bottom right -->
+                        <path d="M10,5 C30,25 15,40 5,25 C0,20 5,10 10,5" />
+                        <!-- Bottom middle (Lip) -->
+                        <path d="M-5,10 C-15,35 15,35 5,10 C2,5 -2,5 -5,10" fill="${c.highlight}" />
+                    </g>
+                    
+                    <!-- Center (Stamen/Pistil area) -->
+                    <circle cx="0" cy="5" r="4" fill="#fbbf24" />
+                    <circle cx="-3" cy="2" r="2" fill="#f59e0b" />
+                    <circle cx="3" cy="2" r="2" fill="#f59e0b" />
+                </g>
+            </svg>
+            `;
+        }
+
+        // --- Logic & Helpers ---
+        function getPhenotype(genotype) {
+            // genotype is a string like "AABb"
+            let hasDomA = genotype.includes('A');
+            let hasDomB = genotype.includes('B');
+            
+            if (hasDomA && hasDomB) return { id: 'ungu', label: 'Ungu', colorClass: 'ungu' };
+            if (hasDomA && !hasDomB) return { id: 'merah', label: 'Merah', colorClass: 'merah' };
+            if (!hasDomA) return { id: 'putih', label: 'Putih', colorClass: 'putih' };
+            
+            return { id: 'putih', label: 'Putih', colorClass: 'putih' }; // Fallback
+        }
+
+        function formatGenotype(geno) {
+            // Sort alleles: A/a then B/b, dominants first
+            let a = '', b = '';
+            for (let char of geno) {
+                if (char.toUpperCase() === 'A') a += char;
+                if (char.toUpperCase() === 'B') b += char;
+            }
+            // Sort each locus: uppercase first
+            a = a.split('').sort((x, y) => x === 'A' ? -1 : 1).join('');
+            b = b.split('').sort((x, y) => x === 'B' ? -1 : 1).join('');
+            return a + b;
+        }
+
+        function isValidGenotype(g) {
+            if (g.length !== 4) return false;
+            let aCount = 0, bCount = 0;
+            for (let char of g) {
+                if (char === 'A' || char === 'a') aCount++;
+                if (char === 'B' || char === 'b') bCount++;
+            }
+            return aCount === 2 && bCount === 2;
+        }
+
+        function getGametes(genotype) {
+            // genotype is like AaBb -> AB, Ab, aB, ab
+            let a_alleles = [genotype[0], genotype[1]];
+            let b_alleles = [genotype[2], genotype[3]];
+            let gametes = [];
+            for(let a of a_alleles) {
+                for(let b of b_alleles) {
+                    gametes.push(a + b);
+                }
+            }
+            return gametes; // length 4
+        }
+
+        // --- UI Updates ---
+        function updatePreview(inputId, previewId, textId) {
+            const input = document.getElementById(inputId);
+            let val = input.value;
+            
+            // Allow typing by just normalizing case for known letters loosely during typing
+            if (val.length === 4) {
+                if (isValidGenotype(val)) {
+                    val = formatGenotype(val);
+                    input.value = val;
+                    const pheno = getPhenotype(val);
+                    document.getElementById(previewId).innerHTML = createLinariaFlowerSVG(pheno.colorClass, 80);
+                    document.getElementById(textId).innerText = `Bunga ${pheno.label}`;
+                    input.classList.remove('border-red-500');
+                    return true;
+                } else {
+                    input.classList.add('border-red-500');
+                    return false;
+                }
+            } else {
+                document.getElementById(previewId).innerHTML = `<div class="text-slate-600 font-mono text-sm">?</div>`;
+                document.getElementById(textId).innerText = `Menunggu input...`;
+            }
+            return false;
+        }
+
+        window.handleInput = function(el, previewId) {
+            // Force letters A, a, B, b only
+            el.value = el.value.replace(/[^AaBb]/g, '');
+            const textId = previewId.replace('preview', 'phenotype-text');
+            updatePreview(el.id, previewId, textId);
+        };
+
+        // Initialize setup
+        document.getElementById('legend-ungu').innerHTML = createLinariaFlowerSVG('ungu', 48);
+        document.getElementById('legend-merah').innerHTML = createLinariaFlowerSVG('merah', 48);
+        document.getElementById('legend-putih').innerHTML = createLinariaFlowerSVG('putih', 48);
+        
+        updatePreview('p1-input', 'p1-preview', 'p1-phenotype-text');
+        updatePreview('p2-input', 'p2-preview', 'p2-phenotype-text');
+
+        // --- Simulation Execution ---
+        document.getElementById('btn-silangkan').addEventListener('click', () => {
+            const p1 = document.getElementById('p1-input').value;
+            const p2 = document.getElementById('p2-input').value;
+            const err = document.getElementById('input-error');
+
+            if (!isValidGenotype(p1) || !isValidGenotype(p2)) {
+                err.classList.remove('hidden');
+                return;
+            }
+            err.classList.add('hidden');
+
+            const gametesP1 = getGametes(formatGenotype(p1));
+            const gametesP2 = getGametes(formatGenotype(p2));
+
+            // Generate Punnett
+            generatePunnett(gametesP1, gametesP2);
+            document.getElementById('results-section').classList.remove('hidden');
+            
+            // Scroll to results smoothly
+            setTimeout(() => {
+                document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        });
+
+        function generatePunnett(g1, g2) {
+            let container = document.getElementById('punnett-container');
+            
+            let gridHtml = `<table class="w-full border-collapse border border-slate-700 text-center mono">`;
+            
+            // Header row (P1 gametes)
+            gridHtml += `<tr><th class="border border-slate-700 p-2 bg-slate-800/50 text-slate-400">♀ \\ ♂</th>`;
+            for (let g of g1) {
+                gridHtml += `<th class="border border-slate-700 p-2 bg-slate-800/50 text-purple-300 text-lg">${g}</th>`;
+            }
+            gridHtml += `</tr>`;
+
+            let phenoCounts = { ungu: 0, merah: 0, putih: 0 };
+            let genoCounts = {};
+            let total = g1.length * g2.length;
+
+            for (let rowG of g2) { // rows (P2 gametes)
+                gridHtml += `<tr><th class="border border-slate-700 p-2 bg-slate-800/50 text-pink-300 text-lg">${rowG}</th>`;
+                for (let colG of g1) { // cols (P1 gametes)
+                    let rawGeno = colG + rowG; // e.g. Ab + aB = AbaB
+                    let geno = formatGenotype(rawGeno); // AaBb
+                    let pheno = getPhenotype(geno);
+                    
+                    phenoCounts[pheno.id]++;
+                    genoCounts[geno] = (genoCounts[geno] || 0) + 1;
+
+                    gridHtml += `
+                        <td class="border border-slate-700 p-2 punnett-cell bg-slate-900/50 hover:bg-slate-800 transition-colors">
+                            <div class="flex flex-col items-center justify-center p-2">
+                                ${createLinariaFlowerSVG(pheno.colorClass, 40)}
+                                <span class="font-bold mt-2 text-sm text-slate-200 tracking-widest">${geno}</span>
+                            </div>
+                            <div class="tooltip">Bunga ${pheno.label}</div>
+                        </td>
+                    `;
+                }
+                gridHtml += `</tr>`;
+            }
+            gridHtml += `</table>`;
+            container.innerHTML = gridHtml;
+
+            updateStats(phenoCounts, genoCounts, total);
+            generateReport(document.getElementById('p1-input').value, document.getElementById('p2-input').value, phenoCounts, total);
+        }
+
+        function updateStats(pheno, geno, total) {
+            // Bar Chart
+            let chartContainer = document.getElementById('stats-chart');
+            chartContainer.innerHTML = '';
+            
+            let barsData = [
+                { id: 'ungu', label: 'Ungu (A_B_)', color: 'bg-purple-500', count: pheno.ungu },
+                { id: 'merah', label: 'Merah (A_bb)', color: 'bg-red-500', count: pheno.merah },
+                { id: 'putih', label: 'Putih (aa__)', color: 'bg-slate-300', count: pheno.putih }
+            ];
+
+            barsData.forEach(item => {
+                if(item.count > 0 || total === 16) { // always show for 16, or if exists
+                    let percent = (item.count / total) * 100;
+                    chartContainer.innerHTML += `
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-slate-300 font-medium">${item.label}</span>
+                                <span class="text-white font-bold">${item.count} <span class="text-slate-500 font-normal">(${percent.toFixed(1)}%)</span></span>
+                            </div>
+                            <div class="w-full bg-slate-800 rounded-full h-3 border border-slate-700">
+                                <div class="${item.color} h-3 rounded-full bar-chart-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    `;
+                    // Trigger animation
+                    setTimeout(() => {
+                        let bar = chartContainer.lastElementChild.querySelector('.bar-chart-fill');
+                        if(bar) bar.style.width = percent + '%';
+                    }, 50);
+                }
+            });
+
+            // Genotype Chips
+            let chipsContainer = document.getElementById('genotype-chips');
+            chipsContainer.innerHTML = '';
+            
+            // Sort by count descending
+            let sortedGenos = Object.keys(geno).sort((a,b) => geno[b] - geno[a]);
+            sortedGenos.forEach(g => {
+                let p = getPhenotype(g);
+                let badgeColor = '';
+                if(p.id === 'ungu') badgeColor = 'border-purple-500/50 bg-purple-900/30 text-purple-300';
+                else if(p.id === 'merah') badgeColor = 'border-red-500/50 bg-red-900/30 text-red-300';
+                else badgeColor = 'border-slate-500/50 bg-slate-800/80 text-slate-300';
+                
+                chipsContainer.innerHTML += `
+                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-full border ${badgeColor} mono text-sm shadow-sm">
+                        <span class="font-bold">${g}</span>
+                        <span class="bg-slate-950/50 text-xs px-2 py-0.5 rounded-full text-white">${geno[g]}</span>
+                    </div>
+                `;
+            });
+        }
+
+        function generateReport(p1, p2, pheno, total) {
+            p1 = formatGenotype(p1);
+            p2 = formatGenotype(p2);
+            let p1Pheno = getPhenotype(p1).label;
+            let p2Pheno = getPhenotype(p2).label;
+
+            let report = `
+                <p>Persilangan antara <strong>P1 (${p1} - ${p1Pheno})</strong> dengan <strong>P2 (${p2} - ${p2Pheno})</strong> menghasilkan total <strong>${total}</strong> kombinasi genotipe pada F2.</p>
+                <p>Dalam kasus Kriptomeri pada <i>Linaria maroccana</i>, sifat fenotipe dikendalikan oleh interaksi dua pasang alel:</p>
+                <ul class="list-disc list-inside">
+                    <li>Alel dominan <strong>A</strong> mengekspresikan pigmen antosianin, alel resesif <strong>a</strong> tidak mengekspresikan pigmen.</li>
+                    <li>Alel dominan <strong>B</strong> menciptakan lingkungan basa, alel resesif <strong>b</strong> menciptakan lingkungan asam.</li>
+                </ul>
+            `;
+
+            if (p1 === 'AaBb' && p2 === 'AaBb') {
+                report += `
+                    <div class="p-4 bg-purple-900/20 border border-purple-500/30 rounded-lg mt-4">
+                        <strong class="text-purple-400 block mb-2">Kesimpulan Rasio Mendel:</strong>
+                        <p>Persilangan dihibrida heterozigot sempurna (AaBb × AaBb) menghasilkan rasio fenotipe klasik Kriptomeri yaitu <strong>9 (Ungu) : 3 (Merah) : 4 (Putih)</strong>.</p>
+                        <p class="mt-2 text-xs text-slate-400">Penyimpangan semu ini terjadi karena fenotipe "Putih" gabungan dari kelompok genotipe aaB_ (3) dan aabb (1) yang keduanya tidak mampu memproduksi antosianin, sehingga efek gen pengubah pH (B/b) tidak bermanifestasi (tersembunyi/kriptos).</p>
+                    </div>
+                `;
+            } else {
+                // custom ratio text
+                let u = pheno.ungu, m = pheno.merah, p = pheno.putih;
+                let gcd = function(a, b) { if (!b) return a; return gcd(b, a % b); };
+                let divisor = gcd(u, gcd(m, p));
+                if (divisor === 0) divisor = 1;
+                
+                report += `
+                    <div class="p-4 bg-slate-800/50 border border-slate-600/50 rounded-lg mt-4">
+                        <strong class="text-slate-300 block mb-2">Hasil Persilangan Kustom:</strong>
+                        <p>Persilangan ini menghasilkan rasio fenotipe <strong>${u/divisor} (Ungu) : ${m/divisor} (Merah) : ${p/divisor} (Putih)</strong> dari total ${total} kemungkinan gamet fertil.</p>
+                    </div>
+                `;
+            }
+
+            document.getElementById('academic-report').innerHTML = report;
+        }
+
+    </script>
+</body>
+</html>

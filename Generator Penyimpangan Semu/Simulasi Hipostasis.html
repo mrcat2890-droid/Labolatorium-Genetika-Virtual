@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Hipostasis - Genetika Virtual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #020617;
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(99, 102, 241, 0.2);
+            --accent-blue: #6366f1;
+            --accent-indigo: #4f46e5;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: #f8fafc;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(79, 70, 229, 0.1) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .punnett-cell {
+            transition: all 0.3s ease;
+        }
+
+        .punnett-cell:hover {
+            transform: scale(1.02);
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.8);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Header Section -->
+        <header class="glass-panel p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 p-0.5 shadow-lg shadow-indigo-500/20">
+                    <div class="w-full h-full bg-slate-900 rounded-2xl flex items-center justify-center">
+                        <span class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-indigo-300 to-blue-200">H</span>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-indigo-300">SIMULASI HIPOSTASIS</h1>
+                    <p class="text-indigo-400 text-sm mt-1">Epistasis Resesif • Warna Bulu Labrador • Rasio 9:3:4</p>
+                </div>
+            </div>
+            <a href="Generator Penyimpangan Semu.html" class="px-6 py-2.5 rounded-xl border border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/10 hover:border-indigo-400 transition-all font-medium flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Kembali ke Menu
+            </a>
+        </header>
+
+        <!-- Educational Intro Panel -->
+        <section class="glass-panel p-6 border-t-4 border-t-indigo-500">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-indigo-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Konsep Biologi: Hipostasis (Epistasis Resesif)
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-slate-300 text-sm leading-relaxed">
+                <div class="space-y-4">
+                    <p>
+                        <strong class="text-indigo-200 text-base">Apa itu Hipostasis?</strong><br>
+                        Hipostasis adalah kondisi di mana ekspresi suatu gen ditutupi atau ditekan oleh gen lain yang bukan alelnya. Gen yang menutupi disebut <strong>epistatis</strong>, sedangkan gen yang ditutupi disebut <strong>hipostatis</strong>.
+                    </p>
+                    <p>
+                        <strong class="text-indigo-200 text-base">Epistasis Dominan vs Resesif</strong><br>
+                        Berbeda dengan epistasis dominan (rasio 12:3:1) di mana satu alel dominan sudah cukup untuk menutupi gen lain, pada <strong>epistasis resesif (hipostasis)</strong> dengan rasio <strong>9:3:4</strong>, sebuah gen harus dalam keadaan <em>homozigot resesif</em> untuk dapat menutupi gen lain.
+                    </p>
+                </div>
+                <div class="space-y-4">
+                    <p>
+                        <strong class="text-indigo-200 text-base">Mekanisme Genetik pada Labrador Retriever:</strong><br>
+                        • <strong>Gen B</strong> mengatur sintesis eumelanin: <strong>B_</strong> (hitam) atau <strong>bb</strong> (cokelat/chocolate).<br>
+                        • <strong>Gen E</strong> mengatur <em>deposisi</em> (peletakan) pigmen ke rambut: <strong>E_</strong> (pigmen terdeposit) atau <strong>ee</strong> (pigmen tidak terdeposit).<br>
+                        Jika anjing memiliki genotipe <strong>ee</strong>, eumelanin gagal disalurkan ke bulu, sehingga bulu tetap kuning terlepas dari gen B yang dimilikinya (BB, Bb, atau bb). Gen B bersifat <em>hipostatis</em> terhadap <em>ee</em>.
+                    </p>
+                    <p class="text-xs text-slate-500 mt-4 italic">
+                        Referensi: Griffiths et al. Introduction to Genetic Analysis; Campbell Biology.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="mt-6 pt-4 border-t border-slate-700/50 flex flex-wrap gap-4 justify-center">
+                <div class="flex items-center gap-3 bg-slate-800/50 px-4 py-2 rounded-lg border border-slate-700">
+                    <div id="legend-hitam"></div>
+                    <span class="text-sm font-medium">B_E_ = Hitam (9)</span>
+                </div>
+                <div class="flex items-center gap-3 bg-slate-800/50 px-4 py-2 rounded-lg border border-slate-700">
+                    <div id="legend-cokelat"></div>
+                    <span class="text-sm font-medium">bbE_ = Cokelat (3)</span>
+                </div>
+                <div class="flex items-center gap-3 bg-slate-800/50 px-4 py-2 rounded-lg border border-slate-700">
+                    <div id="legend-kuning"></div>
+                    <span class="text-sm font-medium">_ _ee = Kuning (4)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Workspace -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Left Column: Controls -->
+            <div class="space-y-6">
+                <!-- Input Panel -->
+                <section class="glass-panel p-6">
+                    <h3 class="text-lg font-semibold mb-4 text-indigo-300 border-b border-slate-700/50 pb-2">Pengaturan Genotipe Induk</h3>
+                    
+                    <div class="space-y-5">
+                        <!-- P1 Input -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Induk Jantan (♂) P1</label>
+                            <div class="flex gap-2 items-center">
+                                <input type="text" id="p1-input" value="BbEe" maxlength="4" 
+                                    class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-center font-mono text-lg tracking-widest text-white uppercase focus:outline-none focus:border-indigo-500 transition-colors">
+                                <div id="p1-preview" class="w-12 h-12 shrink-0 bg-slate-800 rounded-lg border border-slate-700 flex items-center justify-center"></div>
+                            </div>
+                            <p class="text-xs text-center mt-1 text-slate-500" id="p1-error"></p>
+                        </div>
+
+                        <!-- P2 Input -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Induk Betina (♀) P2</label>
+                            <div class="flex gap-2 items-center">
+                                <input type="text" id="p2-input" value="BbEe" maxlength="4" 
+                                    class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-center font-mono text-lg tracking-widest text-white uppercase focus:outline-none focus:border-indigo-500 transition-colors">
+                                <div id="p2-preview" class="w-12 h-12 shrink-0 bg-slate-800 rounded-lg border border-slate-700 flex items-center justify-center"></div>
+                            </div>
+                            <p class="text-xs text-center mt-1 text-slate-500" id="p2-error"></p>
+                        </div>
+
+                        <button id="btn-silangkan" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 rounded-lg font-bold text-white shadow-lg shadow-indigo-500/25 transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+                            Silangkan Induk
+                        </button>
+                        
+                        <div class="pt-3 border-t border-slate-700/50">
+                            <button id="btn-reset" class="w-full py-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded-lg text-sm text-slate-300 transition-colors">
+                                Reset ke BbEe × BbEe
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Statistics Panel -->
+                <section class="glass-panel p-6">
+                    <h3 class="text-lg font-semibold mb-4 text-indigo-300 border-b border-slate-700/50 pb-2">Distribusi Fenotipe</h3>
+                    <div id="stats-container" class="space-y-4">
+                        <!-- Stats will be injected here -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Column: Punnett Square & Report -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Punnett Square -->
+                <section class="glass-panel p-6 flex flex-col items-center overflow-x-auto min-h-[500px]">
+                    <h3 class="text-lg font-semibold mb-6 text-indigo-300 w-full text-center">Bujur Sangkar Punnett (F2)</h3>
+                    
+                    <div id="punnett-wrapper" class="w-full max-w-2xl bg-slate-900/50 p-4 rounded-xl border border-slate-700/50">
+                        <div id="punnett-grid" class="grid gap-1">
+                            <!-- Grid generated via JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Academic Report -->
+                <section class="glass-panel p-6">
+                    <h3 class="text-lg font-semibold mb-4 text-indigo-300 border-b border-slate-700/50 pb-2">Analisis Genetik</h3>
+                    <div class="prose prose-invert max-w-none">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-sm font-semibold text-slate-400 mb-2">Rasio Fenotipe F2</h4>
+                                <div class="bg-slate-900 rounded-lg p-4 font-mono text-lg text-center border border-slate-700" id="report-ratio">
+                                    9 Hitam : 3 Cokelat : 4 Kuning
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-slate-400 mb-2">Peluang Keturunan Kuning</h4>
+                                <div class="bg-slate-900 rounded-lg p-4 font-mono text-lg text-center border border-slate-700 text-yellow-400" id="report-prob">
+                                    25.0% (4/16)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <h4 class="text-sm font-semibold text-slate-400 mb-2">Penjelasan Hasil Persilangan:</h4>
+                            <p class="text-slate-300 text-sm leading-relaxed bg-slate-900/50 p-4 rounded-lg border border-slate-700" id="report-explanation">
+                                Persilangan dihibrid heterozigot (BbEe × BbEe) menghasilkan 16 variasi genotipe. Karena keberadaan alel resesif 'ee' menghalangi deposisi pigmen (epistasis resesif), genotipe B_ee dan bbee akan memunculkan fenotipe Kuning, mengubah rasio mendel normal 9:3:3:1 menjadi 9:3:4.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        // --- SVG Generator for Labrador Head ---
+        function getLabradorSVG(colorType, size = "100%") {
+            let fillColor, strokeColor, earColor, noseColor;
+
+            switch(colorType) {
+                case 'Hitam':
+                    fillColor = '#1e293b'; // slate-800
+                    strokeColor = '#0f172a'; // slate-900
+                    earColor = '#0f172a';
+                    noseColor = '#000000';
+                    break;
+                case 'Cokelat':
+                    fillColor = '#92400e'; // amber-900
+                    strokeColor = '#78350f'; 
+                    earColor = '#78350f';
+                    noseColor = '#451a03';
+                    break;
+                case 'Kuning':
+                    fillColor = '#fbbf24'; // amber-400
+                    strokeColor = '#d97706'; 
+                    earColor = '#f59e0b';
+                    noseColor = '#b45309';
+                    break;
+                default:
+                    fillColor = '#94a3b8';
+                    strokeColor = '#475569';
+                    earColor = '#64748b';
+                    noseColor = '#1e293b';
+            }
+
+            return `
+            <svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Neck/Body -->
+                <path d="M 70 95 C 85 95 95 85 95 60 C 95 40 80 20 60 15 C 40 10 25 25 25 45 C 20 50 15 65 15 75 C 20 85 30 95 70 95 Z" fill="${fillColor}" stroke="${strokeColor}" stroke-width="2"/>
+                <!-- Snout -->
+                <path d="M 25 45 C 10 45 5 55 5 70 C 5 80 20 85 35 85" fill="${fillColor}" stroke="${strokeColor}" stroke-width="2"/>
+                <!-- Nose -->
+                <circle cx="10" cy="62" r="5" fill="${noseColor}"/>
+                <!-- Eye -->
+                <circle cx="42" cy="38" r="3.5" fill="#111"/>
+                <circle cx="41" cy="37" r="1" fill="#fff"/>
+                <!-- Ear -->
+                <path d="M 65 25 C 80 25 85 55 75 70 C 65 85 50 65 50 40 C 50 30 55 25 65 25 Z" fill="${earColor}" stroke="${strokeColor}" stroke-width="2"/>
+                <!-- Smile/Mouth -->
+                <path d="M 12 75 C 20 78 30 75 35 70" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>`;
+        }
+
+        // Setup Legends
+        document.getElementById('legend-hitam').innerHTML = getLabradorSVG('Hitam', '32px');
+        document.getElementById('legend-cokelat').innerHTML = getLabradorSVG('Cokelat', '32px');
+        document.getElementById('legend-kuning').innerHTML = getLabradorSVG('Kuning', '32px');
+
+        // --- Core Genetics Logic ---
+
+        function isValidGenotype(g) {
+            if (g.length !== 4) return false;
+            const valid = /^[Bb]{2}[Ee]{2}$/.test(g);
+            return valid;
+        }
+
+        function formatGenotype(g) {
+            // Sort alleles properly (e.g. bB -> Bb, eE -> Ee)
+            let g1 = g.substring(0, 2).split('').sort((a,b) => a === a.toUpperCase() ? -1 : 1).join('');
+            let g2 = g.substring(2, 4).split('').sort((a,b) => a === a.toUpperCase() ? -1 : 1).join('');
+            return g1 + g2;
+        }
+
+        function getGametes(g) {
+            const gametes = new Set();
+            for (let i = 0; i < 2; i++) {
+                for (let j = 2; j < 4; j++) {
+                    gametes.add(g[i] + g[j]);
+                }
+            }
+            return Array.from(gametes);
+        }
+
+        // HIPOSTASIS LOGIC
+        // B_E_ = Hitam
+        // bbE_ = Cokelat
+        // __ee = Kuning
+        function getPhenotype(g) {
+            const hasB = g.includes('B');
+            const hasee = !g.includes('E'); // if no E, it must be ee (assuming validity)
+            
+            if (hasee) {
+                return { name: 'Kuning', colorClass: 'text-amber-400', bgClass: 'bg-amber-400/20', barClass: 'bg-amber-400' };
+            } else if (hasB) {
+                return { name: 'Hitam', colorClass: 'text-slate-300', bgClass: 'bg-slate-700/50', barClass: 'bg-slate-700' };
+            } else {
+                return { name: 'Cokelat', colorClass: 'text-amber-700', bgClass: 'bg-amber-900/40', barClass: 'bg-amber-700' };
+            }
+        }
+
+        // --- UI Interactions ---
+
+        const p1Input = document.getElementById('p1-input');
+        const p2Input = document.getElementById('p2-input');
+        const btnSilangkan = document.getElementById('btn-silangkan');
+        const btnReset = document.getElementById('btn-reset');
+        
+        function updatePreviews() {
+            let p1 = p1Input.value.trim();
+            let p2 = p2Input.value.trim();
+            
+            if (isValidGenotype(p1)) {
+                let pheno1 = getPhenotype(p1);
+                document.getElementById('p1-preview').innerHTML = getLabradorSVG(pheno1.name, '40px');
+                document.getElementById('p1-error').textContent = pheno1.name;
+                document.getElementById('p1-error').className = `text-xs text-center mt-1 font-medium ${pheno1.colorClass}`;
+            } else {
+                document.getElementById('p1-preview').innerHTML = '';
+                document.getElementById('p1-error').textContent = 'Genotipe tidak valid (misal: BbEe)';
+                document.getElementById('p1-error').className = 'text-xs text-center mt-1 text-red-400';
+            }
+
+            if (isValidGenotype(p2)) {
+                let pheno2 = getPhenotype(p2);
+                document.getElementById('p2-preview').innerHTML = getLabradorSVG(pheno2.name, '40px');
+                document.getElementById('p2-error').textContent = pheno2.name;
+                document.getElementById('p2-error').className = `text-xs text-center mt-1 font-medium ${pheno2.colorClass}`;
+            } else {
+                document.getElementById('p2-preview').innerHTML = '';
+                document.getElementById('p2-error').textContent = 'Genotipe tidak valid (misal: BbEe)';
+                document.getElementById('p2-error').className = 'text-xs text-center mt-1 text-red-400';
+            }
+        }
+
+        p1Input.addEventListener('input', updatePreviews);
+        p2Input.addEventListener('input', updatePreviews);
+
+        btnReset.addEventListener('click', () => {
+            p1Input.value = 'BbEe';
+            p2Input.value = 'BbEe';
+            updatePreviews();
+            runSimulation();
+        });
+
+        btnSilangkan.addEventListener('click', runSimulation);
+
+        function runSimulation() {
+            let p1 = p1Input.value.trim();
+            let p2 = p2Input.value.trim();
+
+            if (!isValidGenotype(p1) || !isValidGenotype(p2)) {
+                alert("Harap masukkan genotipe 4 huruf yang valid untuk kedua induk (menggunakan B, b, E, e).");
+                return;
+            }
+
+            p1 = formatGenotype(p1);
+            p2 = formatGenotype(p2);
+            p1Input.value = p1;
+            p2Input.value = p2;
+
+            const gametes1 = getGametes(p1);
+            const gametes2 = getGametes(p2);
+
+            buildPunnettSquare(gametes1, gametes2);
+        }
+
+        function buildPunnettSquare(g1, g2) {
+            const grid = document.getElementById('punnett-grid');
+            const cols = g1.length;
+            const rows = g2.length;
+            
+            // Set CSS grid layout dynamically
+            grid.style.gridTemplateColumns = `auto repeat(${cols}, 1fr)`;
+            grid.innerHTML = '';
+
+            // Top-left empty cell
+            let headerEmpty = document.createElement('div');
+            headerEmpty.className = 'p-2 flex items-center justify-center bg-slate-800 rounded-tl-lg font-bold text-slate-500 text-sm border border-slate-700';
+            headerEmpty.innerHTML = '♀ \\ ♂';
+            grid.appendChild(headerEmpty);
+
+            // Column headers (Male Gametes)
+            g1.forEach(gamete => {
+                let cell = document.createElement('div');
+                cell.className = 'p-3 flex items-center justify-center bg-indigo-900/40 font-mono text-lg font-bold text-indigo-300 border border-slate-700/50 rounded-t-lg shadow-inner';
+                cell.textContent = gamete;
+                grid.appendChild(cell);
+            });
+
+            const results = [];
+            let counts = { Hitam: 0, Cokelat: 0, Kuning: 0 };
+
+            // Rows
+            g2.forEach(gamete2 => {
+                // Row header (Female Gamete)
+                let rowHeader = document.createElement('div');
+                rowHeader.className = 'p-3 flex items-center justify-center bg-blue-900/40 font-mono text-lg font-bold text-blue-300 border border-slate-700/50 rounded-l-lg shadow-inner';
+                rowHeader.textContent = gamete2;
+                grid.appendChild(rowHeader);
+
+                // Grid cells
+                g1.forEach(gamete1 => {
+                    let rawG = gamete1[0] + gamete2[0] + gamete1[1] + gamete2[1];
+                    let finalG = formatGenotype(rawG);
+                    let pheno = getPhenotype(finalG);
+                    
+                    results.push({ genotype: finalG, phenotype: pheno.name });
+                    counts[pheno.name]++;
+
+                    let cell = document.createElement('div');
+                    cell.className = `punnett-cell p-3 flex flex-col items-center justify-center border border-slate-700/50 rounded-lg min-h-[90px] ${pheno.bgClass}`;
+                    
+                    cell.innerHTML = `
+                        <div class="mb-1">${getLabradorSVG(pheno.name, '45px')}</div>
+                        <span class="font-mono font-bold text-base tracking-wide ${pheno.colorClass}">${finalG}</span>
+                    `;
+                    grid.appendChild(cell);
+                });
+            });
+
+            updateStats(counts, results.length);
+        }
+
+        function updateStats(counts, total) {
+            const container = document.getElementById('stats-container');
+            container.innerHTML = '';
+
+            const phenoTypes = [
+                { name: 'Hitam', count: counts.Hitam, color: 'text-slate-300', bg: 'bg-slate-700' },
+                { name: 'Cokelat', count: counts.Cokelat, color: 'text-amber-700', bg: 'bg-amber-700' },
+                { name: 'Kuning', count: counts.Kuning, color: 'text-amber-400', bg: 'bg-amber-400' }
+            ];
+
+            phenoTypes.forEach(p => {
+                const percentage = total > 0 ? Math.round((p.count / total) * 100) : 0;
+                
+                let el = document.createElement('div');
+                el.className = 'flex flex-col gap-1';
+                el.innerHTML = `
+                    <div class="flex justify-between items-center text-sm font-medium">
+                        <span class="${p.color} flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full ${p.bg}"></div>
+                            ${p.name}
+                        </span>
+                        <span class="text-slate-400">${p.count} (${percentage}%)</span>
+                    </div>
+                    <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                        <div class="h-full ${p.bg} transition-all duration-1000 ease-out" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+
+            // Update Report
+            const ratioText = document.getElementById('report-ratio');
+            
+            // Identify standard 9:3:4 if it is
+            let isClassic = (counts.Hitam === 9 && counts.Cokelat === 3 && counts.Kuning === 4);
+            let ratioStr = `${counts.Hitam} Hitam : ${counts.Cokelat} Cokelat : ${counts.Kuning} Kuning`;
+            
+            if (isClassic) {
+                ratioText.innerHTML = `<span class="text-indigo-400 font-bold">${ratioStr}</span>`;
+            } else {
+                ratioText.textContent = ratioStr;
+            }
+
+            const kuningProb = total > 0 ? (counts.Kuning / total) * 100 : 0;
+            document.getElementById('report-prob').textContent = `${kuningProb.toFixed(1)}% (${counts.Kuning}/${total})`;
+
+            const p1 = document.getElementById('p1-input').value;
+            const p2 = document.getElementById('p2-input').value;
+
+            document.getElementById('report-explanation').innerHTML = `
+                Persilangan antara <strong>${p1}</strong> dan <strong>${p2}</strong> menghasilkan ${total} kombinasi genotipe. 
+                Sifat hipostasis ditunjukkan dengan munculnya ${counts.Kuning} keturunan Kuning yang memiliki alel 'ee', 
+                di mana keberadaan alel homozigot resesif tersebut mencegah deposisi pigmen (epistasis terhadap gen B).
+            `;
+        }
+
+        // Initialize
+        updatePreviews();
+        runSimulation();
+    </script>
+</body>
+</html>

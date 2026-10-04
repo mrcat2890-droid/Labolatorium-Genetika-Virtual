@@ -6,6 +6,49 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📌 Peningkatan Visualisasi Gamet & Keturunan Tanaman Ercis (Pisum sativum) - Generator Genotipe Alel
+- **Transformasi Visual Gamet & Fenotipe Menjadi Tanaman Ercis (*Pisum sativum*):**
+  - Mengganti representasi visual abstrak (garis batang kromosom kaku) dengan ilustrasi SVG tanaman ercis lengkap dan interaktif (batang merambat alami, sulur perambat *tendrils*, daun majemuk bersirip, polong ercis menggantung, dan bunga mekar khas Mendel) sehingga siswa dapat langsung melihat wujud fenotipe tanpa perlu membayangkan bentuk hasil persilangannya.
+  - **Visualisasi Fenotipe Bunga Ungu vs Putih:** Tanaman dominan (`AA` dan `Aa`) mengekspresikan mahkota bunga ungu royal bercahaya (*purple flower*), sedangkan homozigot resesif (`aa`) mengekspresikan mahkota bunga putih bersih (*white flower*), lengkap dengan anatomi mahkota bendera (*standard*), sayap (*wings*), dan lunas (*keel*).
+  - **Visualisasi Gamet Biologis Spesifik (Serbuk Sari ♂ & Bakal Biji ♀):** Mengubah header gamet Punnett square menjadi ikon representasi gametofit tumbuhan ercis yang sesungguhnya: Gamet Jantan (♂) berupa butir serbuk sari (*pollen grain*) emas/cyan bereksin gerigi dan Gamet Betina (♀) berupa bakal biji (*ovule*) pink/rose dengan integumen dan kantung embrio.
+  - **Pratinjau Langsung Tanaman Induk (*Live Parental Preview*):** Menambahkan kartu pratinjau real-time wujud fisik tanaman tetua (Parental 1 ♂ dan Parental 2 ♀) tepat di bawah kolom input alel, menampilkan zigositas, nama fenotipe, dan proporsi gamet haploid yang dihasilkan.
+  - **Dukungan 4 Karakter Klasik Mendel:** Menyediakan tombol pemilih sifat Mendel interaktif: Warna Bunga (Ungu vs Putih), Tinggi Batang (Tinggi vs Kerdil), Bentuk Biji (Bulat vs Keriput), dan Warna Biji (Kuning vs Hijau), dengan penyesuaian visual tanaman secara dinamis.
+  - **Preset Cepat Persilangan Klasik Mendel:** Menambahkan tombol 1-klik untuk eksperimen cepat: Monohibrid Heterozigot × Heterozigot (`Aa × Aa` → Rasio 3:1), Galur Murni (`AA × aa` → 100% Dominan), Uji Silang / *Test Cross* (`Aa × aa` → Rasio 1:1), dan Galur Resesif (`aa × aa` → 100% Resesif).
+  - **Galeri Hasil Panen F1 & Inspektur Morfologi Interaktif:** Menambahkan kartu galeri panen F1 yang menyandingkan visual tanaman dominan dan resesif beserta jumlah individu dan persentasenya, serta modal popup inspeksi morfologi dan landasan biokimiawi molekuler ekspresi gen (biosintesis antosianin, enzim SBEI, dll).
+  - **Infografis Alur Hukum Segregasi Mendel I:** Mengganti placeholder teks diagram dengan infografis langkah biologis Hukum I Mendel: dari sel induk diploid (2n), meiosis & segregasi alel bebas (n), fertilisasi acak serbuk sari ke bakal biji, hingga ekspresi fenotipe tanaman dewasa F1.
+
+### 📌 Penambahan Simulasi 3D Gametogenesis & Fertilisasi (gametogenesis.html)
+- **Peluncuran Modul Simulasi 3D Gametogenesis & Pewarisan Alel (AaBb × AaBb):**
+  - Mengembangkan visualisasi 3D real-time proses meiosis komprehensif (Meiosis I dan Meiosis II), sinapsis tetrad, crossing over (*pindah silang*) dengan pertukaran segmen kromatid, pembentukan badan kutub (*polar bodies*), spermiogenesis, hingga singami/fertilisasi zigot.
+  - Tabel Punnett interaktif yang menyorot kombinasi alel hasil pertemuan sperma dan ovum secara dinamis sesuai pergerakan linimasa.
+  - Dilengkapi kontrol interaktif: linimasa animasi dengan slider, pemilih kecepatan, tombol toggle meiosis & crossing over, serta inspeksi 16 tahap biologis meiosis secara rinci.
+
+### 📌 Refaktorisasi Generator Rasio Dihibrid (Generator Rasio Dihibrid.html)
+- **Fokus Murni Persilangan Hukum II Mendel (Asortasi Bebas):**
+  - Merapikan dan merampingkan modul Generator Rasio Dihibrid dengan memisahkan modul penyimpangan semu ke folder khusus `Generator Penyimpangan Semu/`.
+  - Mengoptimalkan penghitungan rasio genotipe dan fenotipe F2 klasik (9:3:3:1) dengan kartu visualisasi biji (Bulat Kuning, Bulat Hijau, Kisut Kuning, Kisut Hijau) dan laporan analisis sekuensial yang lebih cepat dan terstruktur.
+### 📌 Pemisahan & Peningkatan Modul Penyimpangan Semu Hukum Mendel Menjadi 4 Berkas Independen
+- **Arsitektur 4 Modul Mandiri (Standalone):**
+  - Memisahkan simulasi penyimpangan semu hukum Mendel menjadi 4 berkas kode independen dan mandiri di dalam folder `Generator Penyimpangan Semu/`, lengkap dengan visualisasi organisme spesifik dan panel edukasi interaktif:
+    1. **`Simulasi Kriptomeri.html` (Rasio F2 9:3:4):**
+       - **Organisme:** Bunga *Linaria maroccana*.
+       - **Visualisasi:** Bunga 5 kelopak realistis SVG dengan variasi warna Ungu (`A_B_`), Merah (`A_bb`), dan Putih (`aa__`).
+       - **Fitur:** Landasan biokimia pigmen antosianin dan pH sel, tabel Punnett 4×4 dengan SVG bunga di setiap sel, pratinjau tetua langsung, distribusi genotipe, dan laporan analisis ilmiah.
+    2. **`Simulasi Atavisme.html` (Rasio F2 9:3:3:1):**
+       - **Organisme:** Bentuk Pial/Jengger Ayam (*Gallus gallus domesticus*).
+       - **Visualisasi:** Profil kepala ayam dengan 4 variasi jengger SVG khas: Walnut/Sumpel (`R_P_`), Rose/Mawar (`R_pp`), Pea/Biji/Kapri (`rrP_`), dan Single/Bilah (`rrpp`).
+       - **Fitur:** Penjelasan konsep interaksi antar gen (Bateson & Punnett 1906), preset cepat persilangan, visualisasi 16 kombinasi F2, dan statistik fenotipe dengan indikator warna.
+    3. **`Simulasi Epistasis.html` (Epistasis Dominan - Rasio F2 12:3:1):**
+       - **Organisme:** Buah Labu Musim Panas (*Cucurbita pepo*).
+       - **Visualisasi:** Buah labu SVG beralur dengan warna Putih (`W___`), Kuning (`wwY_`), dan Hijau (`wwyy`).
+       - **Fitur:** Konsep gen penghambat biosintesis klorofil/karotenoid, hierarki gen epistatis (W) terhadap hipostatis (Y), dan tabel Punnett interaktif.
+    4. **`Simulasi Hipostasis.html` (Epistasis Resesif - Rasio F2 9:3:4):**
+       - **Organisme:** Warna Bulu Anjing *Labrador Retriever*.
+       - **Visualisasi:** Kepala anjing Labrador SVG dengan warna bulu Hitam (`B_E_`), Cokelat/Chocolate (`bbE_`), dan Kuning (`__ee`).
+       - **Fitur:** Penjelasan mekanisme deposisi pigmen eumelanin oleh lokus Extension (E), diagram jalur pigmen, dan analisis rasio F2.
+- **Transformasi Halaman Induk `Generator Penyimpangan Semu.html` Menjadi Pusat Navigasi (Hub/Dashboard):**
+  - Mengubah berkas utama menjadi landing page terpadu dengan kartu visual interaktif untuk masing-masing dari ke-4 simulasi, dilengkapi ringkasan konsep, organisme model, dan rasio fenotipenya.
+
 ### 📌 Penambahan Modul Simulasi Translasi mRNA → Protein (simulasi-translasi)
 - **Peluncuran Modul Baru `simulasi-translasi`:** Menambahkan modul simulasi interaktif yang memvisualisasikan proses sintesis protein (translasi) dari mRNA ke rantai asam amino (polipeptida) di ribosom. Dilengkapi dengan animasi interaktif untuk setiap langkah (Inisiasi, Elongasi, Terminasi), pergerakan tRNA pembawa asam amino, pembentukan ikatan peptida, dan referensi tabel genetik kodon.
 
