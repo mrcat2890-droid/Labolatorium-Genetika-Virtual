@@ -6,6 +6,19 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📌 Peningkatan Visual & Estetika: Efek Glassmorphism Penuh pada Beranda Utama (`index.html`)
+- **Penerapan Efek Glassmorphism Penuh pada 13 Kotak Modul Simulator:**
+  - Mengubah seluruh kartu modul dari warna gelap solid menjadi panel kaca beku (*frosted glassmorphism*) dengan `backdrop-filter: blur(18px)`, latar belakang gradien semi-transparan ganda, border kaca halus (`border: 1px solid rgba(255, 255, 255, 0.12)`), dan sudut melengkung modern (`rounded-2xl`).
+  - Menambahkan garis refleksi spekular di tepi atas kartu (`::before`) serta efek animasi sapuan kilau cahaya diagonal (*diagonal glass sheen sweep*) yang dinamis saat kartu di-*hover* (`::after`).
+  - Memungkinkan jaring partikel konstelasi latar belakang (`#bg-canvas`) berpendar tembus pandang secara artistik di balik seluruh kartu simulator.
+- **Kapsul Kaca Ikon Modul (`.card-icon-glass`):**
+  - Mengemas setiap emoji ikon ke dalam wadah lensa kaca frosted khusus dengan efek *shadow-inner* dan pencahayaan aksen warna tema (*theme glow*) saat kursor diarahkan.
+- **Tombol Peluncur Berbasis Kaca Futuristik (`.btn-launch`):**
+  - Mendesain ulang seluruh tombol aksi peluncuran modul dengan isian kaca semi-transparan, efek blur 12px, border aksen neon, serta transformasi interaktif saat *hover*.
+- **Header & Footer Glassmorphic Terpadu:**
+  - Menyelaraskan bilah navigasi atas (*header*) dan catatan kaki (*footer*) dengan efek kaca transparan *heavy blur* (`backdrop-blur-xl`), dilengkapi kapsul kaca elegan untuk status sistem (*SYSTEM SECURE*) dan jam digital.
+
+
 ### 📌 Refaktorisasi & Overhaul Desain: Modul GAMETO-3D (Simulasi 3D Gametogenesis & Fertilisasi)
 - **Harmonisasi Desain Sistem GEN-OS Futuristik (`gametogenesis.html`):**
   - Menggantikan antarmuka lama berbasis CSS mentah (hasil buatan Claude) menjadi standar desain sistem futuristik GEN-OS menggunakan Tailwind CSS, dark mode `#030712`, glassmorphism (`glass-panel`), tipografi resmi (`Orbitron`, `Rajdhani`, dan `Fira Code`), serta palet warna selaras (aksen Indigo `#6366f1`, Cyan `#22d3ee`, Pink `#ec4899`, dan Emerald `#10b981` sesuai tema Modul 11 pada `index.html`).

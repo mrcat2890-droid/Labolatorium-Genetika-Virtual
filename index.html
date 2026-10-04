@@ -133,63 +133,143 @@
             z-index: -1;
         }
 
+        :root {
+            --gen-panel: rgba(10, 16, 28, 0.65);
+        }
+
         .glass-card {
-            background: var(--gen-panel);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 243, 255, 0.1);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%), rgba(10, 16, 28, 0.65);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 1.25rem;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
             overflow: hidden;
-            /* Remove cursor pointer for the card container since only button is clickable */
+        }
+
+        /* Top specular highlight line on card */
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Diagonal frosted sheen reflection sweep on hover */
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -80%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                60deg,
+                transparent 42%,
+                rgba(255, 255, 255, 0.04) 47%,
+                rgba(255, 255, 255, 0.15) 50%,
+                rgba(255, 255, 255, 0.04) 53%,
+                transparent 58%
+            );
+            transform: rotate(25deg);
+            pointer-events: none;
+            transition: all 0.75s ease;
+            opacity: 0;
+            z-index: 3;
+        }
+
+        .glass-card:hover::after {
+            left: 30%;
+            opacity: 1;
         }
 
         .glass-card:hover {
             border-color: var(--theme-color);
-            box-shadow: 0 0 20px var(--theme-glow), inset 0 0 20px rgba(0, 0, 0, 0.5);
-            transform: translateY(-5px) scale(1.02);
-            background: rgba(15, 20, 30, 0.95);
+            box-shadow: 0 20px 40px -10px var(--theme-glow), 0 0 25px var(--theme-glow), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+            transform: translateY(-7px) scale(1.02);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(15, 23, 42, 0.75);
             z-index: 10;
         }
 
         .card-number {
             font-family: 'Orbitron';
-            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
-            color: transparent;
-            font-size: 4rem;
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.02);
+            font-size: 4.5rem;
+            font-weight: 900;
             position: absolute;
             top: -10px;
-            right: 10px;
-            opacity: 0.3;
-            transition: 0.3s;
+            right: 14px;
+            opacity: 0.35;
+            transition: all 0.4s ease;
+            pointer-events: none;
+            z-index: 1;
         }
 
         .glass-card:hover .card-number {
-            opacity: 1;
+            opacity: 0.85;
             color: var(--theme-color);
             -webkit-text-stroke: 0;
+            filter: drop-shadow(0 0 16px var(--theme-glow));
+            transform: scale(1.05);
+        }
+
+        .card-icon-glass {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.2);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover .card-icon-glass {
+            border-color: var(--theme-color);
+            box-shadow: 0 0 15px var(--theme-glow), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+            transform: scale(1.08);
         }
 
         .btn-launch {
             border: 1px solid var(--theme-color);
-            color: var(--theme-color);
-            background: transparent;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             font-family: 'Orbitron';
-            font-size: 0.7rem;
+            font-size: 0.72rem;
+            font-weight: 700;
             letter-spacing: 2px;
-            padding: 10px 0;
+            padding: 11px 0;
             width: 100%;
-            transition: 0.3s;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            display: inline-block; /* Ensure anchor acts like button */
+            display: inline-block;
             text-align: center;
             cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.15);
         }
 
         .btn-launch:hover {
             background: var(--theme-color);
-            color: #000;
-            box-shadow: 0 0 20px var(--theme-glow);
+            color: #030712;
+            box-shadow: 0 0 25px var(--theme-glow), 0 8px 25px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
         }
 
         .scan-overlay {
@@ -249,179 +329,220 @@
         <canvas id="bg-canvas"></canvas>
 
         <header
-            class="p-8 flex justify-between items-center border-b border-gray-800 bg-black/60 backdrop-blur-md sticky top-0 z-50">
-            <div class="flex items-center gap-6">
+            class="px-6 py-5 md:px-10 md:py-6 flex justify-between items-center border-b border-white/10 bg-black/40 backdrop-blur-xl sticky top-0 z-50 shadow-2xl">
+            <div class="flex items-center gap-5">
                 <div class="logo-glow transform hover:scale-110 transition-transform duration-500">
-                    <span class="text-5xl">🧬</span>
+                    <span class="text-4xl md:text-5xl">🧬</span>
                 </div>
                 <div>
-                    <h1 class="text-3xl md:text-4xl font-display font-bold text-white tracking-widest">
+                    <h1 class="text-2xl md:text-4xl font-display font-bold text-white tracking-widest">
                         GEN-<span class="text-gen-cyan">OS</span>
                     </h1>
-                    <p class="text-[10px] font-mono text-gray-500 tracking-[0.4em] mt-1">BIOLOGICAL INTERFACE v8.2</p>
+                    <p class="text-[10px] font-mono text-slate-400 tracking-[0.4em] mt-1">BIOLOGICAL INTERFACE v8.2</p>
                 </div>
             </div>
-            <div class="hidden md:block text-right">
-                <div class="text-xs font-mono text-gen-green mb-1">● SYSTEM SECURE</div>
-                <div class="text-[10px] text-gray-500" id="clock">00:00:00</div>
+            <div class="hidden md:flex items-center gap-4 px-4 py-2 rounded-xl bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-inner text-right">
+                <div>
+                    <div class="text-xs font-mono text-gen-green font-bold flex items-center justify-end gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block"></span>
+                        <span>● SYSTEM SECURE</span>
+                    </div>
+                    <div class="text-[10px] font-mono text-slate-400" id="clock">00:00:00</div>
+                </div>
             </div>
         </header>
 
         <main class="flex-grow p-4 sm:p-6 md:p-10 max-w-7xl mx-auto w-full relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <div class="flex items-center justify-between mb-6 pb-2.5 border-b border-white/10">
+                <div class="flex items-center gap-2.5">
+                    <span class="text-xs font-mono text-gen-cyan font-bold tracking-widest">// VIRTUAL MODULE DIRECTORY</span>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-gen-cyan/15 border border-gen-cyan/30 text-gen-cyan font-semibold">13 ACTIVE MODULES</span>
+                </div>
+                <div class="text-[11px] font-mono text-slate-400 hidden sm:block tracking-wider">
+                    LABORATORIUM GENETIKA VIRTUAL BERBASIS SAINS & KURIKULUM
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-7">
 
                 <!-- 01. GEN-LAB -->
-                <div class="glass-card rounded-xl p-5 md:p-6 relative group flex flex-col justify-between" style="--theme-color: #a78bfa; --theme-glow: rgba(167, 139, 250, 0.4)">
+                <div class="glass-card rounded-2xl p-6 relative group flex flex-col justify-between" style="--theme-color: #a78bfa; --theme-glow: rgba(167, 139, 250, 0.4)">
                     <span class="card-number">01</span>
                     <div>
-                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🌸</div>
-                        <h3 class="text-xl font-bold text-white font-display mb-1">GEN-LAB</h3>
+                        <div class="card-icon-glass">
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🌸</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">GEN-LAB</h3>
                         <p class="text-xs text-purple-400 font-mono mb-4 tracking-wider">MONOHYBRID SIMULATION</p>
-                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Simulasi persilangan satu sifat beda tanaman ercis. Visualisasi alel dominan & resesif.</p>
+                        <p class="text-sm text-slate-400 mb-6 leading-relaxed">Simulasi persilangan satu sifat beda tanaman ercis. Visualisasi alel dominan & resesif.</p>
                     </div>
                     <a href="Generator Genotipe Alel (terbaru)/Generator Genotipe Alel.html" class="btn-launch">INITIALIZE</a>
                 </div>
 
                 <!-- 02. BIO-SEQUENCER -->
-                <div class="glass-card rounded-xl p-5 md:p-6 relative group flex flex-col justify-between" style="--theme-color: #34d399; --theme-glow: rgba(52, 211, 153, 0.4)">
+                <div class="glass-card rounded-2xl p-6 relative group flex flex-col justify-between" style="--theme-color: #34d399; --theme-glow: rgba(52, 211, 153, 0.4)">
                     <span class="card-number">02</span>
                     <div>
-                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🌿</div>
-                        <h3 class="text-xl font-bold text-white font-display mb-1">BIO-SEQUENCER</h3>
+                        <div class="card-icon-glass">
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🌿</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">BIO-SEQUENCER</h3>
                         <p class="text-xs text-emerald-400 font-mono mb-4 tracking-wider">DIHYBRID CROSS ENGINE</p>
-                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Simulasi dua sifat beda (9:3:3:1) dengan visualisasi biji 3D & DNA genetik Mendel.</p>
+                        <p class="text-sm text-slate-400 mb-6 leading-relaxed">Simulasi dua sifat beda (9:3:3:1) dengan visualisasi biji 3D & DNA genetik Mendel.</p>
                     </div>
                     <a href="Generator Rasio Dihibrid (terbaru)/Generator Rasio Dihibrid.html" class="btn-launch">INITIALIZE</a>
                 </div>
 
                 <!-- 03. EPI-GENETICS -->
-                <div class="glass-card rounded-xl p-5 md:p-6 relative group flex flex-col justify-between" style="--theme-color: #a855f7; --theme-glow: rgba(168, 85, 247, 0.4)">
+                <div class="glass-card rounded-2xl p-6 relative group flex flex-col justify-between" style="--theme-color: #a855f7; --theme-glow: rgba(168, 85, 247, 0.4)">
                     <span class="card-number">03</span>
                     <div>
-                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🌺</div>
-                        <h3 class="text-xl font-bold text-white font-display mb-1">EPI-GENETICS</h3>
+                        <div class="card-icon-glass">
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🌺</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">EPI-GENETICS</h3>
                         <p class="text-xs text-purple-400 font-mono mb-4 tracking-wider">NON-MENDELIAN ENGINE</p>
-                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Simulasi interaksi genetik kompleks pada fenomena penyimpangan semu Hukum Mendel.</p>
+                        <p class="text-sm text-slate-400 mb-6 leading-relaxed">Simulasi interaksi genetik kompleks pada fenomena penyimpangan semu Hukum Mendel.</p>
                     </div>
                     <a href="Generator Penyimpangan Semu/Generator Penyimpangan Semu.html" class="btn-launch">INITIALIZE</a>
                 </div>
 
                 <!-- 04. GEN-X -->
-                <div class="glass-card rounded-xl p-5 md:p-6 relative group flex flex-col justify-between" style="--theme-color: #fb7185; --theme-glow: rgba(251, 113, 133, 0.4)">
+                <div class="glass-card rounded-2xl p-6 relative group flex flex-col justify-between" style="--theme-color: #fb7185; --theme-glow: rgba(251, 113, 133, 0.4)">
                     <span class="card-number">04</span>
                     <div>
-                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🩸</div>
-                        <h3 class="text-xl font-bold text-white font-display mb-1">GEN-X</h3>
+                        <div class="card-icon-glass">
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🩸</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">GEN-X</h3>
                         <p class="text-xs text-rose-400 font-mono mb-4 tracking-wider">SEX-LINKED ANALYZER</p>
-                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Kalkulator risiko pewarisan penyakit terpaut kromosom X (Hemofilia / Buta Warna).</p>
+                        <p class="text-sm text-slate-400 mb-6 leading-relaxed">Kalkulator risiko pewarisan penyakit terpaut kromosom X (Hemofilia / Buta Warna).</p>
                     </div>
                     <a href="Generator Risiko Pewarisan Sifat Seks (terbaru)/Generator Risiko Pewarisan Sifat Seks.html" class="btn-launch">INITIALIZE</a>
                 </div>
 
                 <!-- 05. GEN-K -->
-                <div class="glass-card rounded-xl p-5 md:p-6 relative group flex flex-col justify-between" style="--theme-color: #22d3ee; --theme-glow: rgba(34, 211, 238, 0.4)">
+                <div class="glass-card rounded-2xl p-6 relative group flex flex-col justify-between" style="--theme-color: #22d3ee; --theme-glow: rgba(34, 211, 238, 0.4)">
                     <span class="card-number">05</span>
                     <div>
-                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🔬</div>
-                        <h3 class="text-xl font-bold text-white font-display mb-1">GEN-K</h3>
+                        <div class="card-icon-glass">
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🔬</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">GEN-K</h3>
                         <p class="text-xs text-cyan-400 font-mono mb-4 tracking-wider">KARYOTYPE SCANNER</p>
-                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Mikroskop digital untuk identifikasi mutasi kromosom manusia dan efek lethal.</p>
+                        <p class="text-sm text-slate-400 mb-6 leading-relaxed">Mikroskop digital untuk identifikasi mutasi kromosom manusia dan efek lethal.</p>
                     </div>
                     <a href="Simulasi Deteksi Kromosom/Simulasi-Deteksi-Kromosom.html" class="btn-launch">INITIALIZE</a>
                 </div>
 
                 <!-- 06. GENO-PHENO -->
-                <div class="glass-card rounded-xl p-5 md:p-6 relative group flex flex-col justify-between" style="--theme-color: #38bdf8; --theme-glow: rgba(56, 189, 248, 0.4)">
+                <div class="glass-card rounded-2xl p-6 relative group flex flex-col justify-between" style="--theme-color: #38bdf8; --theme-glow: rgba(56, 189, 248, 0.4)">
                     <span class="card-number">06</span>
                     <div>
-                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🧩</div>
-                        <h3 class="text-xl font-bold text-white font-display mb-1">GENO-PHENO</h3>
+                        <div class="card-icon-glass">
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🧩</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">GENO-PHENO</h3>
                         <p class="text-xs text-sky-400 font-mono mb-4 tracking-wider">TRAIT EXPLORER</p>
-                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Eksplorasi mendalam perbedaan konseptual antara genotipe dan fenotipe pada makhluk hidup.</p>
+                        <p class="text-sm text-slate-400 mb-6 leading-relaxed">Eksplorasi mendalam perbedaan konseptual antara genotipe dan fenotipe pada makhluk hidup.</p>
                     </div>
                     <a href="Simulasi Genotipe vs Fenotipe.html" class="btn-launch">INITIALIZE</a>
                 </div>
 
                 <!-- 07. HELIX-3D -->
-                <div class="glass-card rounded-xl p-5 md:p-6 relative group flex flex-col justify-between" style="--theme-color: #00f0ff; --theme-glow: rgba(0, 240, 255, 0.4)">
+                <div class="glass-card rounded-2xl p-6 relative group flex flex-col justify-between" style="--theme-color: #00f0ff; --theme-glow: rgba(0, 240, 255, 0.4)">
                     <span class="card-number">07</span>
                     <div>
-                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🧬</div>
-                        <h3 class="text-xl font-bold text-white font-display mb-1">HELIX-3D</h3>
+                        <div class="card-icon-glass">
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🧬</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">HELIX-3D</h3>
                         <p class="text-xs text-cyan-300 font-mono mb-4 tracking-wider">DNA STRUCTURE MAPPER</p>
-                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Eksplorasi struktur molekuler heliks ganda DNA secara interaktif dalam format 3D beresolusi tinggi.</p>
+                        <p class="text-sm text-slate-400 mb-6 leading-relaxed">Eksplorasi struktur molekuler heliks ganda DNA secara interaktif dalam format 3D beresolusi tinggi.</p>
                     </div>
                     <a href="dna-3d-interactive/index.html" class="btn-launch">INITIALIZE</a>
                 </div>
 
                 <!-- 08. CHROMA-3D -->
-                <div class="glass-card rounded-xl p-5 md:p-6 relative group flex flex-col justify-between" style="--theme-color: #e879f9; --theme-glow: rgba(232, 121, 249, 0.4)">
+                <div class="glass-card rounded-2xl p-6 relative group flex flex-col justify-between" style="--theme-color: #e879f9; --theme-glow: rgba(232, 121, 249, 0.4)">
                     <span class="card-number">08</span>
                     <div>
-                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🧪</div>
-                        <h3 class="text-xl font-bold text-white font-display mb-1">CHROMA-3D</h3>
+                        <div class="card-icon-glass">
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🧪</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">CHROMA-3D</h3>
                         <p class="text-xs text-fuchsia-400 font-mono mb-4 tracking-wider">CHROMOSOME MODELER</p>
-                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Pemeriksaan struktur detail kromosom, wilayah sentromer, dan telomer secara 3D.</p>
+                        <p class="text-sm text-slate-400 mb-6 leading-relaxed">Pemeriksaan struktur detail kromosom, wilayah sentromer, dan telomer secara 3D.</p>
                     </div>
                     <a href="chromosome-3d-interactive/index.html" class="btn-launch">INITIALIZE</a>
                 </div>
 
                 <!-- 09. TRANSCRIPTION -->
-                <div class="glass-card rounded-xl p-5 md:p-6 relative group flex flex-col justify-between" style="--theme-color: #f59e0b; --theme-glow: rgba(245, 158, 11, 0.4)">
+                <div class="glass-card rounded-2xl p-6 relative group flex flex-col justify-between" style="--theme-color: #f59e0b; --theme-glow: rgba(245, 158, 11, 0.4)">
                     <span class="card-number">09</span>
                     <div>
-                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">📝</div>
-                        <h3 class="text-xl font-bold text-white font-display mb-1">TRANSCRIPTION</h3>
+                        <div class="card-icon-glass">
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">📝</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">TRANSCRIPTION</h3>
                         <p class="text-xs text-amber-400 font-mono mb-4 tracking-wider">RNA SYNTHESIS LAB</p>
-                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Simulasi biologi molekuler transkripsi genetik, mensintesis untai DNA tunggal menjadi mRNA.</p>
+                        <p class="text-sm text-slate-400 mb-6 leading-relaxed">Simulasi biologi molekuler transkripsi genetik, mensintesis untai DNA tunggal menjadi mRNA.</p>
                     </div>
                     <a href="simulasi-transkripsi/index.html" class="btn-launch">INITIALIZE</a>
                 </div>
 
                 <!-- 10. TRANSLATION -->
-                <div class="glass-card rounded-xl p-5 md:p-6 relative group flex flex-col justify-between" style="--theme-color: #10b981; --theme-glow: rgba(16, 185, 129, 0.4)">
+                <div class="glass-card rounded-2xl p-6 relative group flex flex-col justify-between" style="--theme-color: #10b981; --theme-glow: rgba(16, 185, 129, 0.4)">
                     <span class="card-number">10</span>
                     <div>
-                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">⚙️</div>
-                        <h3 class="text-xl font-bold text-white font-display mb-1">TRANSLATION</h3>
+                        <div class="card-icon-glass">
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">⚙️</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">TRANSLATION</h3>
                         <p class="text-xs text-emerald-400 font-mono mb-4 tracking-wider">PROTEIN ASSEMBLY</p>
-                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Proses otomatis pembacaan kodon mRNA di ribosom untuk membangun struktur rantai polipeptida.</p>
+                        <p class="text-sm text-slate-400 mb-6 leading-relaxed">Proses otomatis pembacaan kodon mRNA di ribosom untuk membangun struktur rantai polipeptida.</p>
                     </div>
                     <a href="simulasi-translasi/index.html" class="btn-launch">INITIALIZE</a>
                 </div>
 
                 <!-- 11. GAMETO-3D -->
-                <div class="glass-card rounded-xl p-5 md:p-6 relative group flex flex-col justify-between" style="--theme-color: #6366f1; --theme-glow: rgba(99, 102, 241, 0.4)">
+                <div class="glass-card rounded-2xl p-6 relative group flex flex-col justify-between" style="--theme-color: #6366f1; --theme-glow: rgba(99, 102, 241, 0.4)">
                     <span class="card-number">11</span>
                     <div>
-                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🥚</div>
-                        <h3 class="text-xl font-bold text-white font-display mb-1">GAMETO-3D</h3>
+                        <div class="card-icon-glass">
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🥚</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">GAMETO-3D</h3>
                         <p class="text-xs text-indigo-400 font-mono mb-4 tracking-wider">MEIOSIS ENGINE</p>
-                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Simulasi tahap-tahap gametogenesis interaktif dan proses pembuahan tingkat seluler.</p>
+                        <p class="text-sm text-slate-400 mb-6 leading-relaxed">Simulasi tahap-tahap gametogenesis interaktif dan proses pembuahan tingkat seluler.</p>
                     </div>
                     <a href="gametogenesis.html" class="btn-launch">INITIALIZE</a>
                 </div>
 
                 <!-- 12. BIO-ARCHIVE -->
-                <div class="glass-card rounded-xl p-5 md:p-6 relative group flex flex-col justify-between" style="--theme-color: #fbbf24; --theme-glow: rgba(251, 191, 36, 0.4)">
+                <div class="glass-card rounded-2xl p-6 relative group flex flex-col justify-between" style="--theme-color: #fbbf24; --theme-glow: rgba(251, 191, 36, 0.4)">
                     <span class="card-number">12</span>
                     <div>
-                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">📂</div>
-                        <h3 class="text-xl font-bold text-white font-display mb-1">BIO-ARCHIVE</h3>
+                        <div class="card-icon-glass">
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">📂</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">BIO-ARCHIVE</h3>
                         <p class="text-xs text-amber-400 font-mono mb-4 tracking-wider">CLASSIFIED DATABASE</p>
-                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Ensiklopedia digital interaktif mencakup seluruh database Bioteknologi Konvensional dan Modern.</p>
+                        <p class="text-sm text-slate-400 mb-6 leading-relaxed">Ensiklopedia digital interaktif mencakup seluruh database Bioteknologi Konvensional dan Modern.</p>
                     </div>
                     <a href="Generator Aplikasi Bioteknologi (terbaru)/Generator Bioteknologi Profesional.html" class="btn-launch">INITIALIZE</a>
                 </div>
 
                 <!-- 13. HEMATO-LAB -->
-                <div class="glass-card rounded-xl p-5 md:p-6 relative group flex flex-col justify-between" style="--theme-color: #ef4444; --theme-glow: rgba(239, 68, 68, 0.4)">
+                <div class="glass-card rounded-2xl p-6 relative group flex flex-col justify-between" style="--theme-color: #ef4444; --theme-glow: rgba(239, 68, 68, 0.4)">
                     <span class="card-number">13</span>
                     <div>
-                        <div class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🩸</div>
-                        <h3 class="text-xl font-bold text-white font-display mb-1">HEMATO-LAB</h3>
+                        <div class="card-icon-glass">
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🩸</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">HEMATO-LAB</h3>
                         <p class="text-xs text-red-400 font-mono mb-4 tracking-wider">BLOOD TYPE ANALYZER</p>
-                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Uji aglutinasi laboratorium, genetika golongan darah ABO & Rhesus, serta kalkulasi kompatibilitas transfusi.</p>
+                        <p class="text-sm text-slate-400 mb-6 leading-relaxed">Uji aglutinasi laboratorium, genetika golongan darah ABO & Rhesus, serta kalkulasi kompatibilitas transfusi.</p>
                     </div>
                     <a href="Simulasi Penggolongan Darah/Simulasi-Penggolongan-Darah.html" class="btn-launch">INITIALIZE</a>
                 </div>
@@ -429,8 +550,8 @@
             </div>
         </main>
 
-        <footer class="p-6 text-center border-t border-gray-900 bg-black/80 z-40">
-            <p class="text-[10px] font-mono text-gray-600 tracking-widest">GENETIC LABORATORY PROJECT • Developed by
+        <footer class="p-6 text-center border-t border-white/10 bg-black/50 backdrop-blur-xl z-40">
+            <p class="text-[10px] font-mono text-slate-400 tracking-widest">GENETIC LABORATORY PROJECT • Developed by
                 Muhammad Ikhwannor
             </p>
         </footer>
