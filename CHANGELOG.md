@@ -6,6 +6,30 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📌 Refaktorisasi & Overhaul Desain: Modul GENO-PHENO (Simulasi Genotipe vs Fenotipe)
+- **Harmonisasi Desain Sistem GEN-OS Futuristik (`Simulasi Genotipe vs Fenotipe.html`):**
+  - Menggantikan tampilan lama berbasis vanilla CSS (font Figtree buatan Claude) menjadi standar desain sistem futuristik GEN-OS menggunakan Tailwind CSS, dark mode `#030712`, glassmorphism (`glass-panel`), tipografi modern (`Orbitron`, `Rajdhani`, dan `Fira Code`), serta skema warna terpadu (aksen Sky `#38bdf8` dan Cyan `#00f3ff` sesuai tema Modul 06 pada `index.html`).
+- **Ekspansi Sistem Persilangan Genetika Berbasis Literatur Ilmiah (Aturan #1):**
+  - Menyediakan 4 sistem pewarisan sifat komprehensif:
+    1. *Pisum sativum* Warna Bunga (Monohibrid Dominansi Penuh Mendel, alel P/p).
+    2. *Pisum sativum* Bentuk Biji (Enzim SBEI, alel R/r).
+    3. Sistem Golongan Darah ABO (Alel Ganda Kodominan Iᴬ, Iᴮ, dan i).
+    4. *Mirabilis jalapa* Bunga Pukul Empat (Dominansi Tidak Lengkap / Intermediet, alel M/m).
+  - Dilengkapi visualisasi ilustrasi vektor SVG resolusi tinggi yang responsif terhadap perubahan alel untuk setiap fenotipe (bunga ercis, biji bulat/keriput, tetesan darah antigenik, dan bunga mirabilis).
+  - Menambahkan representasi visual pasangan lokus kromosom homolog pada kedua panel induk ($P_1$ dan $P_2$).
+- **Matriks Papan Punnett & Penyederhanaan Rasio Otomatis:**
+  - Papan catur Punnett dinamis dengan animasi sel, probabilitas per kotak 25% (1/4), dan kalkulator penyederhanaan rasio genotipe serta fenotipe otomatis (algoritma GCD).
+- **Simulasi Fertilisasi Acak (Monte Carlo) & Uji Statistik Chi-Square (χ²):**
+  - Simulasi persilangan acak dengan pilihan sampel keturunan $N = 4, 20, 100, 1.000$ untuk membuktikan *Hukum Bilangan Besar (Law of Large Numbers)*.
+  - Visualisasi perbandingan frekuensi data Teramati ($O$) vs Harapan Teori ($E$).
+  - Perhitungan Uji Chi-Square ($\chi^2 = \sum \frac{(O-E)^2}{E}$) otomatis dengan derajat kebebasan ($df$), nilai kritis taraf $\alpha = 0.05$, interpretasi kesimpulan ilmiah ($H_0$), dan peringatan frekuensi harapan kecil Cochran ($E < 5$).
+  - Galeri sampel 30 keturunan pertama dengan toggle fitur *"Ungkap Genotipe (X-Ray Mode)"*.
+- **Penerapan Modal Panduan & Referensi Ilmiah (Kepatuhan Aturan #1 & #5):**
+  - Modal **"📖 Panduan Lengkap Simulasi"** yang menyajikan tutorial langkah demi langkah bagi peserta didik sebelum dan saat menjalankan simulasi.
+  - Modal **"📚 Literatur Ilmiah"** yang mencantumkan sitasi sejarah dan data ilmiah genetika dari Gregor Mendel (1866), Karl Landsteiner (1900), Felix Bernstein (1924), dan Karl Pearson (1900).
+  - Efek audio interaktif sintetis (Web Audio API) dengan opsi on/off suara.
+
+
 ### 📌 Modul Baru: HEMATO-LAB (Simulasi Penggolongan Darah & Transfusi Interaktif)
 - **Pembuatan Modul Independen Baru (`Simulasi-Penggolongan-Darah.html`):**
   - Mengembangkan modul ke-13 yang secara khusus dan komprehensif membahas genetika penggolongan darah sistem ABO dan Rhesus sesuai standar medis klinis (merujuk pada literatur Campbell Biology dan genetika medis Landsteiner).
