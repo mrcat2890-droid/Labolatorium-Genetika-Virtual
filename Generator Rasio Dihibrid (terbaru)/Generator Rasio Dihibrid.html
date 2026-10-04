@@ -174,7 +174,12 @@
                 <p class="text-[10px] text-slate-400 font-mono">DIHYBRID SEQUENCING v4.0</p>
             </div>
         </div>
-        <a href="../index.html" class="text-sm text-slate-400 hover:text-white transition bg-slate-800 px-4 py-2 rounded-lg border border-slate-700">← Kembali</a>
+        <div class="flex items-center gap-3">
+            <button onclick="toggleTutorialModal()" class="text-sm text-emerald-300 hover:text-white transition bg-emerald-950/60 hover:bg-emerald-900/80 px-4 py-2 rounded-lg border border-emerald-500/40 flex items-center gap-1.5 font-medium shadow-sm">
+                <span>📖</span> Panduan Simulasi
+            </button>
+            <a href="../index.html" class="text-sm text-slate-400 hover:text-white transition bg-slate-800 px-4 py-2 rounded-lg border border-slate-700">← Kembali</a>
+        </div>
     </header>
 
     <main class="max-w-6xl mx-auto">
@@ -184,9 +189,29 @@
 
             <div class="relative z-10 flex flex-col items-center">
                 
-                <div class="mb-8 w-full max-w-2xl text-center">
+                <div class="mb-6 w-full max-w-2xl text-center">
                     <h2 class="text-xl font-bold text-slate-200 mb-2">Simulasi Persilangan Dihibrid Hukum Mendel II</h2>
                     <p class="text-sm text-slate-400">Persilangan dengan dua sifat beda (Bentuk Biji dan Warna Biji). Alel dominan B = Bulat, b = Kisut. Alel dominan K = Kuning, k = Hijau.</p>
+                </div>
+
+                <!-- PRESET CEPAT 1-KLIK -->
+                <div class="mb-6 w-full flex flex-wrap items-center justify-center gap-2">
+                    <span class="text-xs font-mono text-emerald-400 font-bold mr-1">PRESET CEPAT:</span>
+                    <button type="button" onclick="setPreset('BbKk', 'BbKk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition">
+                        Heterozigot (BbKk × BbKk → 9:3:3:1)
+                    </button>
+                    <button type="button" onclick="setPreset('BBKK', 'bbkk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition">
+                        Galur Murni (BBKK × bbkk → 100% Bulat Kuning)
+                    </button>
+                    <button type="button" onclick="setPreset('BbKk', 'bbkk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition">
+                        Test Cross (BbKk × bbkk → 1:1:1:1)
+                    </button>
+                    <button type="button" onclick="setPreset('BbKK', 'BbKK')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition">
+                        Monohibrid Sifat B (BbKK × BbKK → 3:1)
+                    </button>
+                    <button type="button" onclick="setPreset('bbkk', 'bbkk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition">
+                        Resesif Murni (bbkk × bbkk)
+                    </button>
                 </div>
 
                 <div class="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-16 w-full">
@@ -457,15 +482,22 @@
             document.getElementById('geno-stats').innerHTML = genoHTML;
 
             let report = "";
-            let vals = order.map(k => counts[k]).filter(x => x > 0);
-            let ratio = vals.join(':');
+            let nonZeroCounts = order.map(k => counts[k]).filter(x => x > 0);
+            let rawRatio = nonZeroCounts.join(':');
 
-            report += `<p class="mb-3"><strong class="text-amber-400">ANALISIS HUKUM MENDEL II:</strong> Sistem telah memetakan persilangan P1 (${p1}) × P2 (${p2}).</p>`;
+            // Kalkulasi Rasio Sederhana (GCD)
+            const getGcd = (a, b) => b === 0 ? a : getGcd(b, a % b);
+            let commonDivisor = nonZeroCounts.reduce((acc, val) => getGcd(acc, val), nonZeroCounts[0] || 1);
+            let simplifiedRatio = nonZeroCounts.map(x => x / commonDivisor).join(':');
 
-            if (ratio === "9:3:3:1") {
+            report += `<p class="mb-3"><strong class="text-amber-400">ANALISIS HUKUM MENDEL II:</strong> Sistem telah memetakan persilangan P1 (${p1}) × P2 (${p2}). Rasio Fenotipe Terhitung: <strong class="text-emerald-400 font-mono">${rawRatio}</strong>${rawRatio !== simplifiedRatio ? ` (Disederhanakan: <strong class="text-cyan-300 font-mono">${simplifiedRatio}</strong>)` : ''}.</p>`;
+
+            if (rawRatio === "9:3:3:1" || simplifiedRatio === "9:3:3:1") {
                 report += `<p class="mb-3">Terdeteksi rasio klasik <strong>9:3:3:1</strong>. Fenomena ini secara kuat mengkonfirmasi <span class="citation" data-ref="Prinsip Asortasi Bebas: Pasangan alel memisah secara independen satu sama lain (Campbell Biology).">Hukum II Mendel</span> (Asortasi Bebas). Kedua induk bersifat Heterozigot untuk kedua sifat.</p>`;
-            } else if (ratio === "1:1:1:1" || ratio === "4:4:4:4") {
+            } else if (rawRatio === "1:1:1:1" || simplifiedRatio === "1:1:1:1") {
                 report += `<p class="mb-3">Terdeteksi rasio <strong>1:1:1:1</strong>. Ini adalah tanda tangan genetik dari <span class="citation" data-ref="Metode persilangan dengan individu homozigot resesif untuk mengungkap genotipe.">Test Cross Dihibrid</span>.</p>`;
+            } else if (simplifiedRatio === "3:1") {
+                report += `<p class="mb-3">Terdeteksi rasio monohibrid <strong>3:1</strong> (${rawRatio}). Ini terjadi karena salah satu lokus gen bersifat homozigot seragam pada kedua induk, sehingga segregasi aktif hanya berlangsung pada satu pasang alel.</p>`;
             } else if (counts["Bulat Kuning"] === 16 || counts["Bulat Hijau"] === 16 || counts["Kisut Kuning"] === 16 || counts["Kisut Hijau"] === 16) {
                 report += `<p class="mb-3">Terdeteksi <strong>Uniformitas Genetik (100%)</strong>. Ini sesuai dengan Hukum I Mendel dimana alel dominan sepenuhnya menutupi alel resesif pada keturunan F1.</p>`;
             } else {
@@ -473,6 +505,65 @@
             }
             document.getElementById('academic-text').innerHTML = report;
         }
+
+        // --- PRESET & TUTORIAL MODAL CONTROLLERS ---
+        function setPreset(p1Val, p2Val) {
+            document.getElementById('p1').value = p1Val;
+            document.getElementById('p2').value = p2Val;
+            updatePreviews();
+            startAnalysis();
+        }
+
+        function toggleTutorialModal() {
+            const modal = document.getElementById('tutorial-modal');
+            if (modal) modal.classList.toggle('hidden');
+        }
     </script>
+
+    <!-- MODAL PANDUAN SIMULASI DIHIBRID (TUTORIAL) -->
+    <div id="tutorial-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-panel max-w-xl w-full rounded-2xl p-6 md:p-8 border border-emerald-500/40 shadow-2xl relative text-left">
+            <button onclick="toggleTutorialModal()" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition">
+                ✕
+            </button>
+            <div class="flex items-center gap-3 mb-4 border-b border-slate-700 pb-3">
+                <span class="text-3xl">📖</span>
+                <div>
+                    <h3 class="text-lg font-bold text-white">Panduan Simulasi Persilangan Dihibrid</h3>
+                    <p class="text-xs text-emerald-400 font-mono">HUKUM II MENDEL (ASORTASI BEBAS)</p>
+                </div>
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-300 leading-relaxed max-h-[60vh] overflow-y-auto pr-2">
+                <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700">
+                    <h4 class="font-bold text-emerald-400 mb-1">1. Memahami Karakter Gen</h4>
+                    <p>Simulasi menggunakan 2 lokus gen independen pada tanaman ercis:</p>
+                    <ul class="list-disc list-inside mt-1 space-y-0.5 font-mono text-[11px] text-slate-400">
+                        <li><strong>B (Bulat)</strong> dominan terhadap <strong>b (Kisut)</strong></li>
+                        <li><strong>K (Kuning)</strong> dominan terhadap <strong>k (Hijau)</strong></li>
+                    </ul>
+                </div>
+
+                <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700">
+                    <h4 class="font-bold text-amber-400 mb-1">2. Menentukan Genotipe Parental</h4>
+                    <p>Masukkan 4 huruf genotipe untuk Induk 1 (♂) dan Induk 2 (♀), misalnya <code class="text-white bg-slate-800 px-1 py-0.5 rounded">BbKk</code>. Anda juga dapat menggunakan tombol <strong>Preset Cepat 1-Klik</strong> untuk mencoba variasi klasik Mendel seperti F1 × F1 (9:3:3:1) atau Uji Silang / Test Cross (1:1:1:1).</p>
+                </div>
+
+                <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700">
+                    <h4 class="font-bold text-cyan-400 mb-1">3. Eksplorasi Papan Punnett 4×4</h4>
+                    <p>Klik tombol <strong>MULAI PERSILANGAN</strong>. Sistem akan membentuk 4 macam gamet dari masing-masing induk (BK, Bk, bK, bk) dan menggabungkannya ke dalam 16 kotak kombinasi F2 beserta ilustrasi visual biji.</p>
+                </div>
+
+                <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700">
+                    <h4 class="font-bold text-purple-400 mb-1">4. Analisis Rasio & Laporan</h4>
+                    <p>Periksa diagram batang persentase fenotipe, distribusi frekuensi genotipe, serta ringkasan analisis ilmiah yang mengacu pada literatur biologi resmi.</p>
+                </div>
+            </div>
+
+            <button onclick="toggleTutorialModal()" class="w-full mt-6 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-3 rounded-xl text-xs font-mono transition shadow-lg shadow-emerald-900/40">
+                SAYA MENGERTI, MULAI BELAJAR
+            </button>
+        </div>
+    </div>
 </body>
 </html>

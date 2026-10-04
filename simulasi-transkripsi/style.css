@@ -79,6 +79,24 @@ body {
     letter-spacing: 1px;
 }
 
+.btn-back {
+    text-decoration: none;
+    color: #e2e8f0;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--glass-border);
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-back:hover {
+    background: var(--neon-blue);
+    color: #fff;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+}
+
 .legend {
     display: flex;
     gap: 15px;

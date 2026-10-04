@@ -223,11 +223,16 @@
                 </p>
             </div>
         </div>
-        <div class="hidden md:block text-right">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold mb-1">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> VISUALISASI TANAMAN AKTIF
+        <div class="flex items-center gap-3">
+            <button onclick="togglePeaTutorialModal()" class="px-3.5 py-2 rounded-xl bg-purple-950/60 hover:bg-purple-900/80 text-purple-300 hover:text-white border border-purple-500/40 text-xs font-mono font-bold transition flex items-center gap-2 shadow-sm">
+                <span>📖</span> Panduan Simulasi
+            </button>
+            <div class="hidden md:block text-right">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold mb-1">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> VISUALISASI AKTIF
+                </div>
+                <div class="text-[10px] text-slate-500 font-mono">STANDAR EKSPERIMEN MENDEL (1866)</div>
             </div>
-            <div class="text-[10px] text-slate-500 font-mono">STANDAR EKSPERIMEN MENDEL (1866)</div>
         </div>
     </header>
 
@@ -709,8 +714,55 @@
         </div>
     </div>
 
+    <!-- MODAL PANDUAN SIMULASI MONOHIBRID (TUTORIAL) -->
+    <div id="pea-tutorial-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card max-w-xl w-full rounded-2xl p-6 md:p-8 border border-purple-500/40 shadow-2xl relative text-left">
+            <button onclick="togglePeaTutorialModal()" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition">
+                ✕
+            </button>
+            <div class="flex items-center gap-3 mb-4 border-b border-white/10 pb-3">
+                <span class="text-3xl">📖</span>
+                <div>
+                    <h3 class="text-lg font-bold text-white">Panduan Simulasi Monohibrid Tanaman Ercis</h3>
+                    <p class="text-xs text-purple-400 font-mono">HUKUM SEGREGASI BEBAS (HUKUM I MENDEL)</p>
+                </div>
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-300 leading-relaxed max-h-[60vh] overflow-y-auto pr-2">
+                <div class="p-3 bg-slate-900/60 rounded-xl border border-white/10">
+                    <h4 class="font-bold text-cyan-400 mb-1">1. Pilih Karakter Sifat Mendel</h4>
+                    <p>Pilih salah satu dari 4 karakter tanaman ercis klasik pada tab atas: <strong>Warna Bunga</strong> (Ungu vs Putih), <strong>Tinggi Batang</strong> (Tinggi vs Kerdil), <strong>Bentuk Biji</strong> (Bulat vs Keriput), atau <strong>Warna Biji</strong> (Kuning vs Hijau).</p>
+                </div>
+
+                <div class="p-3 bg-slate-900/60 rounded-xl border border-white/10">
+                    <h4 class="font-bold text-purple-400 mb-1">2. Gunakan Preset atau Tentukan Alel Induk</h4>
+                    <p>Gunakan tombol <strong>Preset Cepat 1-Klik</strong> untuk mencoba skenario persilangan standar: <em>Monohibrid Heterozigot (3:1)</em>, <em>Galur Murni (100% Dominan)</em>, <em>Uji Silang / Test Cross (1:1)</em>, atau masukkan huruf alel secara manual.</p>
+                </div>
+
+                <div class="p-3 bg-slate-900/60 rounded-xl border border-white/10">
+                    <h4 class="font-bold text-pink-400 mb-1">3. Amati Segregasi Gamet & Papan Punnett 2×2</h4>
+                    <p>Perhatikan pembentukan sel gamet haploid: serbuk sari (♂) dan bakal biji (♀). Papan Punnett menampilkan 4 kombinasi diploid F1 lengkap dengan ilustrasi morfologi tanaman ercis yang nyata.</p>
+                </div>
+
+                <div class="p-3 bg-slate-900/60 rounded-xl border border-white/10">
+                    <h4 class="font-bold text-emerald-400 mb-1">4. Inspeksi Tanaman & Dasar Biokimia</h4>
+                    <p>Klik kartu tanaman hasil panen pada papan Punnett atau galeri untuk membuka jendela <strong>Inspeksi Sitologi & Mekanisme Genetik Molekuler</strong> (biosintesis antosianin, enzim SBEI, giberelin).</p>
+                </div>
+            </div>
+
+            <button onclick="togglePeaTutorialModal()" class="w-full mt-6 bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold py-3 rounded-xl text-xs font-mono transition shadow-lg shadow-purple-900/40">
+                SAYA MENGERTI, MULAI BELAJAR
+            </button>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        function togglePeaTutorialModal() {
+            const modal = document.getElementById('pea-tutorial-modal');
+            if (modal) modal.classList.toggle('hidden');
+        }
+
         // --- 1. DEFINISI KARAKTER MENDEL TANAMAN ERCIS ---
         const TRAITS = {
             flower: {

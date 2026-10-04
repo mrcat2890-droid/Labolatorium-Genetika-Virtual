@@ -393,91 +393,200 @@ body {
             </div>
         </header>
 
-        <main class="flex-grow p-6 md:p-10 max-w-7xl mx-auto w-full relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <main class="flex-grow p-6 md:p-10 max-w-7xl mx-auto w-full relative z-10 space-y-12">
 
-                <a href="Generator Genotipe Alel (terbaru)/Generator Genotipe Alel.html" class="glass-card rounded-xl p-8 group flex flex-col"
-                    style="--theme-color: #a78bfa; --theme-glow: rgba(167, 139, 250, 0.4)">
-                    <span class="card-number">01</span>
-                    <div class="holo-icon-container">
-                        <div class="holo-icon">🧬</div>
+            <!-- SEKSI 1: PERSILANGAN & GENETIKA KLASIK -->
+            <div>
+                <div class="flex items-center gap-3 mb-6 pb-3 border-b border-gray-800">
+                    <span class="text-xl">🧬</span>
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-display font-bold text-white tracking-wider">
+                            MODUL PERSILANGAN & GENETIKA KLASIK
+                        </h2>
+                        <p class="text-xs font-mono text-gray-400">Hukum Mendel, Pewarisan Sifat Seks, Interaksi Gen & Kariotipe Klinis</p>
                     </div>
-                    <h3 class="text-xl font-bold text-white font-display mb-1">GEN-LAB</h3>
-                    <p class="text-xs text-purple-400 font-mono mb-4 tracking-wider">MONOHYBRID SIMULATION</p>
-                    <p class="text-sm text-gray-400 mb-6 leading-relaxed">Simulasi persilangan satu sifat beda.
-                        Visualisasi alel dominan & resesif.</p>
-                    <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
-                </a>
+                </div>
 
-                <a href="Generator Rasio Dihibrid (terbaru)/Generator Rasio Dihibrid.html" class="glass-card rounded-xl p-8 group flex flex-col"
-                    style="--theme-color: #34d399; --theme-glow: rgba(52, 211, 153, 0.4)">
-                    <span class="card-number">02</span>
-                    <div class="holo-icon-container">
-                        <div class="holo-icon">🌿</div>
-                    </div>
-                    <h3 class="text-xl font-bold text-white font-display mb-1">BIO-SEQUENCER</h3>
-                    <p class="text-xs text-emerald-400 font-mono mb-4 tracking-wider">DIHYBRID ENGINE</p>
-                    <p class="text-sm text-gray-400 mb-6 leading-relaxed">Simulasi dua sifat beda (9:3:3:1) dengan
-                        visualisasi biji 3D dan DNA.</p>
-                    <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
-                </a>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-                <a href="Generator Penyimpangan Semu/Generator Penyimpangan Semu.html" class="glass-card rounded-xl p-8 group flex flex-col"
-                    style="--theme-color: #a855f7; --theme-glow: rgba(168, 85, 247, 0.4)">
-                    <span class="card-number">03</span>
-                    <div class="holo-icon-container">
-                        <div class="holo-icon">🌸</div>
-                    </div>
-                    <h3 class="text-xl font-bold text-white font-display mb-1">EPI-GENETICS</h3>
-                    <p class="text-xs text-purple-400 font-mono mb-4 tracking-wider">NON-MENDELIAN ENGINE</p>
-                    <p class="text-sm text-gray-400 mb-6 leading-relaxed">Simulasi interaksi gen (Epistasis, Kriptomeri, Atavisme) dengan visualisasi fenotipe nyata.</p>
-                    <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
-                </a>
+                    <!-- 01: GEN-LAB (Monohibrid) -->
+                    <a href="Generator Genotipe Alel (terbaru)/Generator Genotipe Alel.html" class="glass-card rounded-xl p-8 group flex flex-col"
+                        style="--theme-color: #a78bfa; --theme-glow: rgba(167, 139, 250, 0.4)">
+                        <span class="card-number">01</span>
+                        <div class="holo-icon-container">
+                            <div class="holo-icon">🌸</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">GEN-LAB</h3>
+                        <p class="text-xs text-purple-400 font-mono mb-4 tracking-wider">MONOHYBRID SIMULATION</p>
+                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Simulasi persilangan satu sifat beda tanaman ercis (<em>Pisum sativum</em>). Visualisasi bunga ungu vs putih dan hukum segregasi.</p>
+                        <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
+                    </a>
 
-                <a href="Generator Risiko Pewarisan Sifat Seks (terbaru)/Generator Risiko Pewarisan Sifat Seks.html"
-                    class="glass-card rounded-xl p-8 group flex flex-col"
-                    style="--theme-color: #fb7185; --theme-glow: rgba(251, 113, 133, 0.4)">
-                    <span class="card-number">04</span>
-                    <div class="holo-icon-container">
-                        <div class="holo-icon">🩸</div>
-                    </div>
-                    <h3 class="text-xl font-bold text-white font-display mb-1">GEN-X</h3>
-                    <p class="text-xs text-rose-400 font-mono mb-4 tracking-wider">SEX-LINKED ANALYZER</p>
-                    <p class="text-sm text-gray-400 mb-6 leading-relaxed">Kalkulator risiko penyakit terpaut kromosom X
-                        (Hemofilia) dengan kartu bayi digital.</p>
-                    <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
-                </a>
+                    <!-- 02: BIO-SEQUENCER (Dihibrid) -->
+                    <a href="Generator Rasio Dihibrid (terbaru)/Generator Rasio Dihibrid.html" class="glass-card rounded-xl p-8 group flex flex-col"
+                        style="--theme-color: #34d399; --theme-glow: rgba(52, 211, 153, 0.4)">
+                        <span class="card-number">02</span>
+                        <div class="holo-icon-container">
+                            <div class="holo-icon">🌿</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">BIO-SEQUENCER</h3>
+                        <p class="text-xs text-emerald-400 font-mono mb-4 tracking-wider">DIHYBRID ENGINE</p>
+                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Simulasi dua sifat beda (9:3:3:1) dengan kalkulasi alel bebas, papan Punnett 4×4, dan visualisasi fenotipe biji.</p>
+                        <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
+                    </a>
 
-                <a href="Simulasi Deteksi Kromosom/Simulasi Deteksi Kromosom.html" class="glass-card rounded-xl p-8 group flex flex-col"
-                    style="--theme-color: #22d3ee; --theme-glow: rgba(34, 211, 238, 0.4)">
-                    <span class="card-number">05</span>
-                    <div class="holo-icon-container">
-                        <div class="holo-icon">🔬</div>
-                    </div>
-                    <h3 class="text-xl font-bold text-white font-display mb-1">GEN-K</h3>
-                    <p class="text-xs text-cyan-400 font-mono mb-4 tracking-wider">KARYOTYPE SCANNER</p>
-                    <p class="text-sm text-gray-400 mb-6 leading-relaxed">Mikroskop digital pendeteksi mutasi kromosom
-                        (Down, Turner) & efek lethal.</p>
-                    <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
-                </a>
+                    <!-- 03: EPI-GENETICS (Penyimpangan Semu) -->
+                    <a href="Generator Penyimpangan Semu/Generator Penyimpangan Semu.html" class="glass-card rounded-xl p-8 group flex flex-col"
+                        style="--theme-color: #a855f7; --theme-glow: rgba(168, 85, 247, 0.4)">
+                        <span class="card-number">03</span>
+                        <div class="holo-icon-container">
+                            <div class="holo-icon">🌺</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">EPI-GENETICS</h3>
+                        <p class="text-xs text-purple-400 font-mono mb-4 tracking-wider">NON-MENDELIAN ENGINE</p>
+                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Simulasi interaksi gen: Kriptomeri (9:3:4), Atavisme (9:3:3:1), Epistasis Dominan (12:3:1), dan Hipostasis (9:3:4).</p>
+                        <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
+                    </a>
 
-                <a href="Generator Aplikasi Bioteknologi (terbaru)/Generator Bioteknologi Profesional.html"
-                    class="glass-card rounded-xl p-8 group md:col-span-2 flex flex-col md:flex-row items-center gap-8"
-                    style="--theme-color: #fbbf24; --theme-glow: rgba(251, 191, 36, 0.4)">
-                    <span class="card-number">06</span>
-                    <div class="holo-icon-container w-full md:w-1/3">
-                        <div class="holo-icon text-6xl">📂</div>
-                    </div>
-                    <div class="flex-1 text-center md:text-left">
-                        <h3 class="text-2xl font-display font-bold text-white mb-2">BIO-ARCHIVE</h3>
-                        <p class="text-xs text-amber-400 font-mono mb-4 tracking-wider">CLASSIFIED DATABASE</p>
-                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Ensiklopedia digital interaktif. Mencakup
-                            data lengkap Bioteknologi Konvensional dan Modern dengan analisis dampak lingkungan &
-                            ekonomi.</p>
-                        <button class="btn-launch w-auto px-8">BUKA DATABASE</button>
-                    </div>
-                </a>
+                    <!-- 04: GEN-X (Pewarisan Sifat Seks) -->
+                    <a href="Generator Risiko Pewarisan Sifat Seks (terbaru)/Generator Risiko Pewarisan Sifat Seks.html"
+                        class="glass-card rounded-xl p-8 group flex flex-col"
+                        style="--theme-color: #fb7185; --theme-glow: rgba(251, 113, 133, 0.4)">
+                        <span class="card-number">04</span>
+                        <div class="holo-icon-container">
+                            <div class="holo-icon">🩸</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">GEN-X</h3>
+                        <p class="text-xs text-rose-400 font-mono mb-4 tracking-wider">SEX-LINKED ANALYZER</p>
+                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Kalkulator risiko penyakit terpaut kromosom X (Hemofilia / Buta Warna) dengan kartu silsilah digital.</p>
+                        <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
+                    </a>
+
+                    <!-- 05: GEN-K (Deteksi Kromosom) - LINK DIPERBAIKI -->
+                    <a href="Simulasi Deteksi Kromosom/Simulasi-Deteksi-Kromosom.html" class="glass-card rounded-xl p-8 group flex flex-col"
+                        style="--theme-color: #22d3ee; --theme-glow: rgba(34, 211, 238, 0.4)">
+                        <span class="card-number">05</span>
+                        <div class="holo-icon-container">
+                            <div class="holo-icon">🔬</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">GEN-K</h3>
+                        <p class="text-xs text-cyan-400 font-mono mb-4 tracking-wider">KARYOTYPE SCANNER</p>
+                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Mikroskop digital pendeteksi mutasi dan aberasi kromosom (Down, Turner, Patau, Edwards) & efek letal.</p>
+                        <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
+                    </a>
+
+                    <!-- 06: GENO-PHENO (Eksplorasi Genotipe vs Fenotipe) -->
+                    <a href="Simulasi Genotipe vs Fenotipe.html" class="glass-card rounded-xl p-8 group flex flex-col"
+                        style="--theme-color: #38bdf8; --theme-glow: rgba(56, 189, 248, 0.4)">
+                        <span class="card-number">06</span>
+                        <div class="holo-icon-container">
+                            <div class="holo-icon">🧠</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">GENO-PHENO</h3>
+                        <p class="text-xs text-sky-400 font-mono mb-4 tracking-wider">CONCEPT EXPLORER</p>
+                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Laboratorium eksplorasi konsep dasar genotipe vs fenotipe, uji silang persilangan, dan kuis pemahaman materi.</p>
+                        <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
+                    </a>
+
+                </div>
             </div>
+
+            <!-- SEKSI 2: BIOLOGI MOLEKULER & SELULER 3D -->
+            <div>
+                <div class="flex items-center gap-3 mb-6 pb-3 border-b border-gray-800">
+                    <span class="text-xl">🧬</span>
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-display font-bold text-white tracking-wider">
+                            SIMULASI BIOLOGI MOLEKULER & SELULER 3D
+                        </h2>
+                        <p class="text-xs font-mono text-cyan-400">Dogma Sentral Genetika, Heliks Ganda B-DNA, Sitogenetika & Gametogenesis 3D</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- 07: HELIX-3D (DNA 3D Watson-Crick) -->
+                    <a href="dna-3d-interactive/index.html" class="glass-card rounded-xl p-8 group flex flex-col"
+                        style="--theme-color: #00f0ff; --theme-glow: rgba(0, 240, 255, 0.4)">
+                        <span class="card-number">07</span>
+                        <div class="holo-icon-container">
+                            <div class="holo-icon">🧬</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">HELIX-3D</h3>
+                        <p class="text-xs text-cyan-400 font-mono mb-4 tracking-wider">MOLECULAR DNA LAB</p>
+                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Eksplorasi 3D 360° struktur B-DNA Watson-Crick, pasangan basa purin-pirimidin, dan fitur pembelahan denaturasi.</p>
+                        <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
+                    </a>
+
+                    <!-- 08: CHROMA-3D (Kromosom 3D Interaktif) -->
+                    <a href="chromosome-3d-interactive/index.html" class="glass-card rounded-xl p-8 group flex flex-col"
+                        style="--theme-color: #e879f9; --theme-glow: rgba(232, 121, 249, 0.4)">
+                        <span class="card-number">08</span>
+                        <div class="holo-icon-container">
+                            <div class="holo-icon">🧪</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">CHROMA-3D</h3>
+                        <p class="text-xs text-pink-400 font-mono mb-4 tracking-wider">CYTOGENETICS 3D MODEL</p>
+                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Model 3D anatomi kromosom metafase duplikasi (G-banding, sentromer, kinetokor) serta simulasi anafase mitosis.</p>
+                        <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
+                    </a>
+
+                    <!-- 09: TRANSCRIPTION (Simulasi Transkripsi) -->
+                    <a href="simulasi-transkripsi/index.html" class="glass-card rounded-xl p-8 group flex flex-col"
+                        style="--theme-color: #f59e0b; --theme-glow: rgba(245, 158, 11, 0.4)">
+                        <span class="card-number">09</span>
+                        <div class="holo-icon-container">
+                            <div class="holo-icon">⚡</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">TRANSCRIPTION</h3>
+                        <p class="text-xs text-amber-400 font-mono mb-4 tracking-wider">DNA → mRNA ENGINE</p>
+                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Simulasi pembentukan mRNA oleh enzim RNA Polimerase: Inisiasi promoter, gelembung heliks, elongasi, dan terminasi.</p>
+                        <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
+                    </a>
+
+                    <!-- 10: TRANSLATION (Simulasi Translasi) -->
+                    <a href="simulasi-translasi/index.html" class="glass-card rounded-xl p-8 group flex flex-col"
+                        style="--theme-color: #10b981; --theme-glow: rgba(16, 185, 129, 0.4)">
+                        <span class="card-number">10</span>
+                        <div class="holo-icon-container">
+                            <div class="holo-icon">🔗</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">TRANSLATION</h3>
+                        <p class="text-xs text-emerald-400 font-mono mb-4 tracking-wider">PROTEIN SYNTHESIS</p>
+                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Visualisasi sintesis protein di ribosom: pemasangan triplet kodon-antikodon tRNA dan perakitan rantai polipeptida.</p>
+                        <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
+                    </a>
+
+                    <!-- 11: GAMETO-3D (Gametogenesis & Fertilisasi 3D) -->
+                    <a href="gametogenesis.html" class="glass-card rounded-xl p-8 group flex flex-col"
+                        style="--theme-color: #6366f1; --theme-glow: rgba(99, 102, 241, 0.4)">
+                        <span class="card-number">11</span>
+                        <div class="holo-icon-container">
+                            <div class="holo-icon">✨</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">GAMETO-3D</h3>
+                        <p class="text-xs text-indigo-400 font-mono mb-4 tracking-wider">MEIOSIS & FERTILIZATION</p>
+                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Simulasi 3D meiosis lengkap, kiasma pindah silang (crossing over), spermiogenesis, hingga fertilisasi zigot 2n.</p>
+                        <div class="mt-auto"><button class="btn-launch">MULAI SIMULASI</button></div>
+                    </a>
+
+                    <!-- 12: BIO-ARCHIVE (Bioteknologi Profesional) -->
+                    <a href="Generator Aplikasi Bioteknologi (terbaru)/Generator Bioteknologi Profesional.html"
+                        class="glass-card rounded-xl p-8 group flex flex-col"
+                        style="--theme-color: #fbbf24; --theme-glow: rgba(251, 191, 36, 0.4)">
+                        <span class="card-number">12</span>
+                        <div class="holo-icon-container">
+                            <div class="holo-icon">📂</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-display mb-1">BIO-ARCHIVE</h3>
+                        <p class="text-xs text-amber-400 font-mono mb-4 tracking-wider">CLASSIFIED DATABASE</p>
+                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Ensiklopedia digital interaktif Bioteknologi Konvensional dan Modern dengan analisis dampak lingkungan & ekonomi.</p>
+                        <div class="mt-auto"><button class="btn-launch">BUKA DATABASE</button></div>
+                    </a>
+
+                </div>
+            </div>
+
         </main>
 
         <footer class="p-6 text-center border-t border-gray-900 bg-black/80 z-40">

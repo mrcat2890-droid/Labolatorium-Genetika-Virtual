@@ -6,6 +6,50 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📌 Audit Komprehensif, Perbaikan Tautan & Navigasi Antar-Modul, Penambahan Tutorial Interaktif (Aturan #5), dan Integrasi Modul 3D Molekuler
+- **Perbaikan Bug Kritis Tautan 404 pada Kartu Modul Beranda (`index.html`):**
+  - Memperbaiki tautan modul GEN-K Deteksi Kromosom dari `Simulasi Deteksi Kromosom/Simulasi Deteksi Kromosom.html` (menggunakan spasi yang menyebabkan error 404 pada web server dan GitHub Pages) menjadi `Simulasi Deteksi Kromosom/Simulasi-Deteksi-Kromosom.html` (menggunakan tanda hubung sesuai berkas aktual).
+- **Integrasi Penuh Beranda `index.html` Menjadi 12 Modul Terpadu (2 Seksi Besar):**
+  - Mengorganisasi ulang tata letak kartu beranda dengan penataan visual rapi dan badge seksi:
+    1. *Modul Persilangan & Genetika Klasik*:
+       - `01`: GEN-LAB (Monohibrid & Hukum I Mendel)
+       - `02`: BIO-SEQUENCER (Dihibrid & Hukum II Mendel)
+       - `03`: EPI-GENETICS (Pusat Penyimpangan Semu: Kriptomeri, Atavisme, Epistasis Dominan, Hipostasis)
+       - `04`: GEN-X (Pewarisan Sifat Terpaut Seks / X-Linked)
+       - `05`: GEN-K (Deteksi Aneuploidi & Kariotipe Sitogenetika)
+       - `06`: GENO-PHENO (Eksplorasi Konsep Interaktif Genotipe vs Fenotipe)
+    2. *Simulasi Biologi Molekuler & Seluler 3D (Sentral Dogma & Sitologi)*:
+       - `07`: HELIX-3D (Model Kristalografi B-DNA Watson-Crick 3D Interaktif)
+       - `08`: CHROMA-3D (Anatomi Kromosom Metafase 3D, Kinetokor & G-Banding)
+       - `09`: TRANSCRIPTION (Sintesis RNA Polimerase & Pemrosesan mRNA)
+       - `10`: TRANSLATION (Sintesis Protein Ribosom, Kodon-Antikodon & Polipeptida)
+       - `11`: GAMETO-3D (Simulasi Meiosis, Crossing Over & Fertilisasi 3D)
+       - `12`: BIO-ARCHIVE (Ensiklopedia Aplikasi Bioteknologi Modern & Rekayasa Genetik)
+- **Standardisasi Navigasi Universal ("← Beranda"):**
+  - Menambahkan tombol navigasi kembali ke beranda utama (`index.html`) pada seluruh modul simulasi yang sebelumnya terisolasi tanpa akses kembali:
+    - `simulasi-transkripsi/index.html` & `style.css`
+    - `dna-3d-interactive/index.html` & `style.css`
+    - `chromosome-3d-interactive/index.html` & `style.css`
+    - `gametogenesis.html`
+    - `Generator Aplikasi Bioteknologi (terbaru)/Generator Bioteknologi Profesional.html`
+    - `Simulasi Genotipe vs Fenotipe.html`
+- **Penerapan Modal Tutorial Interaktif (Kepatuhan Aturan Code Policy #5):**
+  - Menambahkan tombol **"📖 Panduan Simulasi" / "📖 Panduan Modul"** beserta dialog modal interaktif ramah siswa pada modul-modul utama:
+    - **Generator Rasio Dihibrid:** Panduan langkah persilangan 2 sifat beda, penjelasan papan catur 4×4 Punnett, pembacaan 16 kombinasi keturunan, dan interpretasi rasio klasik Mendel 9:3:3:1.
+    - **Generator Genotipe Alel (Monohibrid):** Panduan penentuan alel dominan-resesif, fungsi preset cepat Mendel, mekanisme meiosis pembentukan gamet ercis, dan inspeksi molekuler fenotipe.
+    - **Generator Risiko Pewarisan Sifat Seks:** Panduan pemahaman gonosom (XX vs XY), sifat terpaut X resesif (Hemofilia / Buta Warna), status karier wanita, dan pola transmisi bersilang (*criss-cross inheritance*).
+    - **Simulasi Deteksi Kromosom:** Panduan penggunaan mikroskop sitogenetika, manipulasi jumlah salinan kromosom (Monosomi 2n-1, Disomi 2n, Trisomi 2n+1), dan interpretasi laporan letalitas klinis.
+    - **Generator Penyimpangan Semu (Hub):** Panduan ringkas perbedaan mendasar mekanisme genetik Kriptomeri, Atavisme, Epistasis Dominan, dan Epistasis Resesif (Hipostasis).
+- **Peningkatan UX & Otomasi Matematis pada Generator Rasio Dihibrid:**
+  - **Bar Preset Cepat 1-Klik:** Menambahkan tombol eksperimen cepat untuk persilangan umum:
+    - `BbKk × BbKk` (Dihibrid Heterozigot Ganda → Rasio 9:3:3:1)
+    - `BBKK × bbkk` (Homozigot Dominan × Homozigot Resesif → 100% Bulat Kuning)
+    - `BbKk × bbkk` (Uji Silang / *Test Cross* Dihibrid → Rasio 1:1:1:1)
+    - `BbKK × BbKK` (Heterozigot Bunga-Kuning Homozigot → Rasio 3:1)
+    - `bbkk × bbkk` (Galur Murni Resesif → 100% Kisut Hijau)
+  - **Penyederhanaan Rasio Otomatis (Algoritma GCD / FPB):** Menghitung pembagi persekutuan terbesar secara matematis pada tabel rekapitulasi rasio fenotipe (misal: rasio 12 : 4 otomatis disederhanakan menjadi 3 : 1, atau 4 : 4 : 4 : 4 menjadi 1 : 1 : 1 : 1).
+
+
 ### 📌 Peningkatan Visualisasi Gamet & Keturunan Tanaman Ercis (Pisum sativum) - Generator Genotipe Alel
 - **Transformasi Visual Gamet & Fenotipe Menjadi Tanaman Ercis (*Pisum sativum*):**
   - Mengganti representasi visual abstrak (garis batang kromosom kaku) dengan ilustrasi SVG tanaman ercis lengkap dan interaktif (batang merambat alami, sulur perambat *tendrils*, daun majemuk bersirip, polong ercis menggantung, dan bunga mekar khas Mendel) sehingga siswa dapat langsung melihat wujud fenotipe tanpa perlu membayangkan bentuk hasil persilangannya.
