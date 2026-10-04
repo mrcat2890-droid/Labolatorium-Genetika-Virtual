@@ -62,10 +62,39 @@
         }
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(99, 102, 241, 0.8);
+        @keyframes epistasisResDrift {
+            0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.35; }
+            50% { transform: translateY(50vh) rotate(15deg); opacity: 0.55; }
+            80% { opacity: 0.35; }
+            100% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+        }
+
+        .lab-particle {
+            position: absolute;
+            pointer-events: none;
+            animation: epistasisResDrift linear infinite;
         }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-8 relative overflow-x-hidden">
+
+    <!-- Signature Epistasis Resesif Background Elements -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute -top-16 -left-16 w-96 h-96 bg-indigo-600/15 rounded-full filter blur-[100px]"></div>
+        <div class="absolute top-1/2 -right-20 w-[30rem] h-[30rem] bg-amber-600/15 rounded-full filter blur-[120px]"></div>
+
+        <!-- Floating Labrador Coat Spheres / Silhouettes (Hitam 9, Cokelat 3, Kuning 4) -->
+        <div class="lab-particle" style="left: 10%; animation-duration: 23s; animation-delay: 0s;">
+            <div class="w-8 h-8 rounded-full bg-slate-900 border border-slate-500/60 shadow-[0_0_12px_rgba(30,41,59,0.8)]"></div>
+        </div>
+        <div class="lab-particle" style="left: 80%; animation-duration: 27s; animation-delay: 5s;">
+            <div class="w-8 h-8 rounded-full bg-amber-800 border border-amber-500/60 shadow-[0_0_12px_rgba(180,83,9,0.5)]"></div>
+        </div>
+        <div class="lab-particle" style="left: 45%; animation-duration: 25s; animation-delay: 11s;">
+            <div class="w-8 h-8 rounded-full bg-amber-300 border border-amber-100/60 shadow-[0_0_14px_rgba(252,211,77,0.6)]"></div>
+        </div>
+    </div>
 
     <div class="max-w-7xl mx-auto space-y-6">
         

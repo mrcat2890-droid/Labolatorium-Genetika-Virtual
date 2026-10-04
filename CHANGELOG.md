@@ -6,6 +6,50 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🎨 Peningkatan Estetika & Identitas Visual: Palet Warna Khas & Animasi Background Khusus di Seluruh Modul Laboratorium
+- **Harmonisasi Palet Warna & Visualisasi Latar Belakang Khas Sains di 13 Modul GEN-OS:**
+  - Memberikan setiap modul laboratorium tema warna tersendiri (*curated thematic color palette*) yang merepresentasikan konsep biologis aslinya, dilengkapi gradien radial bertingkat, efek *ambient neon glow core*, dan tekstur grid heksagonal/laboratorium yang bersih tanpa mengganggu keterbacaan teks dan fungsionalitas UI (`pointer-events: none`, GPU hardware-accelerated transforms).
+  - Menghadirkan elemen animasi khas (*characteristic scientific floating elements*) pada setiap modul laboratorium virtual:
+    1. **Modul 01: GEN-LAB (`Generator Genotipe Alel (terbaru)/Generator Genotipe Alel.html`):**
+       - *Palet:* Botanical Pisum Violet (`#8b5cf6`), Petal Magenta (`#ec4899`), Chloroplast Emerald (`#10b981`), dan Dark Slate.
+       - *Animasi Khas:* Partikel serbuk sari (*pollen motes*) bercahaya bioluminesens yang melayang lembut ke atas, siluet kelopak bunga ercis (*Pisum sativum*) yang berotasi perlahan, dan lambang alel monohibrid Mendel (P, p, B, b) dengan denyut glow lembut.
+    2. **Modul 02: BIO-SEQUENCER (`Generator Rasio Dihibrid (terbaru)/Generator Rasio Dihibrid.html`):**
+       - *Palet:* Dihybrid Emerald Green (`#10b981`, `#34d399`), Golden Seed Amber (`#fbbf24`), dan Deep Biolab Dark (`#020d08`).
+       - *Animasi Khas:* Siluet 3D fenotipe biji ercis 9:3:3:1 (Bulat Kuning, Bulat Hijau, Kisut Kuning, Kisut Hijau) yang melayang dan berotasi halus, serta pasangan gamet asortasi bebas ($YR, Yr, yR, yr$) dalam kisi matriks.
+    3. **Modul 03: EPI-GENETICS (`Generator Penyimpangan Semu/Generator Penyimpangan Semu.html` & 4 Sub-Simulasi):**
+       - *Palet:* Mystical Velvet Purple (`#9333ea`, `#a855f7`), Hot Orchid/Pink (`#ec4899`), dan Velvet Midnight (`#070311`).
+       - *Animasi Khas:* Jaringan energi interaksi antar-lokus gen non-alelik (Lokus A, B, C, P, R) dengan garis aliran energi (*energy flow lines*), siluet pial ayam *Atavisme*, labu *Cucurbita pepo* pada *Epistasis*, bulu anjing Labrador pada *Hipostasis*, serta kelopak bunga *Linaria maroccana* (Ungu, Merah, Putih) pada *Kriptomeri*.
+    4. **Modul 04: GEN-X (`Generator Risiko Pewarisan Sifat Seks (terbaru)/Generator Risiko Pewarisan Sifat Seks.html`):**
+       - *Palet:* Female Chromosome Rose/Pink (`#fb7185`), Male Cyan/Electric Blue (`#06b6d4`), dan Cyber Obsidian (`#06020a`).
+       - *Animasi Khas:* Siluet kromosom gonosom 3D X (metasentrik 4 lengan bercahaya koral) dan Y (akrosentrik bertangkai bercahaya cyan) yang berotasi lambat di angkasa serta simpul transmisi silsilah pedigree ($♀$ lingkaran dan $♂$ persegi).
+    5. **Modul 05: GEN-K (`Simulasi Deteksi Kromosom/Simulasi-Deteksi-Kromosom.html`):**
+       - *Palet:* Clinical Cytogenetics Sapphire & Neon Cyan (`#00f0ff`, `#22d3ee`, `#0284c7`) dan Darkfield Navy (`#010a12`).
+       - *Animasi Khas:* Reticle lingkaran pemindai mikroskop fluoresensi dengan sapuan kerucut radar (*radar sweep cone*) berputar 360° dan sebaran kromosom metafase berpita Giemsa G-banding serta koordinat sitogenetika.
+    6. **Modul 06: GENO-PHENO (`Simulasi Genotipe vs Fenotipe.html`):**
+       - *Palet:* Sky Blue & Prismatic Violet (`#38bdf8`, `#818cf8`, `#a855f7`) dan Deep Midnight (`#020817`).
+       - *Animasi Khas:* Konsep dualitas: partikel kode genotipe molekuler ($AA, aa, Rr$) yang bertransmutasi menjadi bentuk fenotipe fisik visual (bunga ungu, bunga putih, bentuk biji) secara harmonis.
+    7. **Modul 07: HELIX-3D (`dna-3d-interactive/index.html` & `style.css`):**
+       - *Palet:* Deep Oceanic Trench & Electric Phosphor Cyan (`#00f0ff`, `#1d63ff`, `#ffb703`, `#00d659`, `#ff2a4b`).
+       - *Animasi Khas:* Huruf basa nitrogen komplementer (A, T, G, C) dengan efek kedalaman paralaks, serta kilatan percikan molekuler ikatan hidrogen (*H-bond sparks*) di latar belakang 3D heliks ganda Watson-Crick.
+    8. **Modul 08: CHROMA-3D (`chromosome-3d-interactive/index.html` & `style.css`):**
+       - *Palet:* Deep Chromatin Fuchsia & Ultraviolet (`#280936`, `#e879f9`, `#a855f7`, `#f59e0b`).
+       - *Animasi Khas:* Gelendong kromatin dan manik-manik nukleosom (inti oktamer histon terlilit pita DNA) yang melayang di ruang seluler, serta kilatan aura pelindung telomer berwarna kuning keemasan.
+    9. **Modul 09: TRANSCRIPTION (`simulasi-transkripsi/index.html` & `style.css`):**
+       - *Palet:* Radiant Molten Amber (`#f59e0b`, `#fbbf24`), Burning Orange (`#f97316`), Template Cyan (`#06b6d4`), dan Obsidian Dark (`#080401`).
+       - *Animasi Khas:* Pita transkrip untai tunggal mRNA horizontal yang mengalir bergelombang, serta partikel ribonukleotida bebas dengan penekanan pada basa khas RNA yaitu Urasil ($rUTP$), $rATP$, $rGTP$, dan $rCTP$.
+    10. **Modul 10: TRANSLATION (`simulasi-translasi/index.html` & `style.css`):**
+        - *Palet:* Bio-Reactor Emerald (`#10b981`), Ribosomal Mint (`#34d399`), Cyan Peptidyl (`#06b6d4`), dan Cytoplasm Dark (`#010c06`).
+        - *Animasi Khas:* Rantai polipeptida manik asam amino (Met — Gly — Ser — Leu) yang meliuk lentur di cairan sitoplasma, serta siluet molekul tRNA daun semanggi (*cloverleaf*) yang melayang halus.
+    11. **Modul 11: GAMETO-3D (`gametogenesis.html`):**
+        - *Palet:* Astral Deep Indigo (`#6366f1`, `#4f46e5`), Ovum Warm Rose (`#ec4899`), Sperm Cyan (`#22d3ee`), dan Cosmic Deep Space (`#040614`).
+        - *Animasi Khas:* Partikel renang sel sperma mikro berflagela gelombang sinusoidal menuju pusat sel telur (*ovum*), serta garis-garis radial aster spindel sentrosom meiosis.
+    12. **Modul 12: BIO-ARCHIVE (`Generator Aplikasi Bioteknologi (terbaru)/Generator Bioteknologi Profesional.html`):**
+        - *Palet:* High-Tech Sapphire & Cobalt (`#1d4ed8`, `#3b82f6`), Laser Cyan (`#00f0ff`), Plasmid Amber (`#f59e0b`), dan Secure Vault Dark (`#020612`).
+        - *Animasi Khas:* Cincin plasmid bakteri sirkular ganda yang berputar presisi lengkap dengan penanda situs restriksi (*EcoRI, BamHI, ori*), partikel vektor CRISPR/Cas9 & primer PCR, serta garis pemindai laser bio-teknologi.
+    13. **Modul 13: HEMATO-LAB (`Simulasi Penggolongan Darah/Simulasi-Penggolongan-Darah.html`):**
+        - *Palet:* Arterial Crimson Red (`#dc2626`, `#b91c1c`), Blood Plasma Velvet (`#0b0204`), Antibody Gold (`#f59e0b`), dan Serum Blue (`#3b82f6`).
+        - *Animasi Khas:* Sel darah merah bikonkaf (eritrosit) dengan lekukan bayangan 3D yang melayang dan berputar dalam suspensi aliran darah, serta molekul antibodi berbentuk huruf Y (*immunoglobulin Anti-A & Anti-B*).
+
 ### 📌 Refaktorisasi & Overhaul Desain: Modul BIO-SEQUENCER (Dihybrid Cross Engine & Independent Assortment)
 - **Harmonisasi Desain Sistem GEN-OS Futuristik (`Generator Rasio Dihibrid (terbaru)/Generator Rasio Dihibrid.html`):**
   - Menggantikan antarmuka lama berbasis vanilla CSS (hasil buatan Claude dengan gaya dan palet warna yang tidak seragam) menjadi standar desain sistem futuristik GEN-OS menggunakan Tailwind CSS, latar belakang dark slate `#030712`, glassmorphism (`glass-panel` melengkung modern dengan `backdrop-blur-xl`), tipografi resmi (`Orbitron`, `Rajdhani`, dan `Fira Code`), serta palet warna selaras (aksen Emerald `#10b981` & Amber `#f59e0b` sesuai identitas Modul 02 pada `index.html`).

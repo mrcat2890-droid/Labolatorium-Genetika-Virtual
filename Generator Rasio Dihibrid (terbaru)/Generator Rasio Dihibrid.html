@@ -58,15 +58,54 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Orbitron:wght@600;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Base styles & background */
+        /* Base styles & background with signature Dihybrid Emerald & Gold palette */
         body {
-            background-color: #030712;
+            background-color: #020d08;
             background-image:
-                radial-gradient(circle at 15% 20%, rgba(52, 211, 153, 0.08) 0%, transparent 45%),
-                radial-gradient(circle at 85% 80%, rgba(251, 191, 36, 0.06) 0%, transparent 50%),
-                linear-gradient(rgba(52, 211, 153, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(52, 211, 153, 0.02) 1px, transparent 1px);
-            background-size: 100%, 100%, 36px 36px, 36px 36px;
+                radial-gradient(ellipse at 15% 15%, rgba(52, 211, 153, 0.14) 0%, transparent 45%),
+                radial-gradient(ellipse at 85% 75%, rgba(251, 191, 36, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 60%),
+                linear-gradient(rgba(52, 211, 153, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(52, 211, 153, 0.03) 1px, transparent 1px);
+            background-size: 100%, 100%, 100%, 36px 36px, 36px 36px;
+        }
+
+        /* Dihybrid Background Characteristic Animations */
+        @keyframes floatSeedOrb {
+            0% {
+                transform: translateY(105vh) rotate(0deg) scale(0.85);
+                opacity: 0;
+            }
+            15% { opacity: 0.35; }
+            50% {
+                transform: translateY(50vh) rotate(180deg) scale(1.05);
+                opacity: 0.55;
+            }
+            85% { opacity: 0.3; }
+            100% {
+                transform: translateY(-10vh) rotate(360deg) scale(0.9);
+                opacity: 0;
+            }
+        }
+
+        @keyframes gameteMatrixFloat {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.15; }
+            50% { transform: translateY(-16px) scale(1.1); opacity: 0.35; filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.6)); }
+        }
+
+        .ambient-seed {
+            position: absolute;
+            pointer-events: none;
+            animation: floatSeedOrb linear infinite;
+        }
+
+        .ambient-gamete {
+            position: absolute;
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            user-select: none;
+            pointer-events: none;
+            animation: gameteMatrixFloat ease-in-out infinite;
         }
 
         .scanlines {
@@ -178,6 +217,42 @@
 
 <body class="flex flex-col min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 relative overflow-x-hidden">
     <div class="scanlines"></div>
+
+    <!-- Signature Dihybrid Animated Background (Seeds & Gametes) -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <!-- Ambient Neon Glow Core -->
+        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-emerald-600/15 rounded-full filter blur-[100px] pointer-events-none"></div>
+        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-amber-500/15 rounded-full filter blur-[110px] pointer-events-none"></div>
+        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-teal-600/10 rounded-full filter blur-[120px] pointer-events-none"></div>
+
+        <!-- Floating Dihybrid Seeds (9:3:3:1 Phenotypes: Round Yellow, Round Green, Wrinkled Yellow, Wrinkled Green) -->
+        <!-- Round Yellow Seed (Biji Bulat Kuning) -->
+        <div class="ambient-seed" style="left: 10%; animation-duration: 22s; animation-delay: 0s;">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-300 to-amber-500 shadow-[0_0_15px_rgba(251,191,36,0.5)] border border-amber-200/50"></div>
+        </div>
+        <!-- Round Green Seed (Biji Bulat Hijau) -->
+        <div class="ambient-seed" style="left: 82%; animation-duration: 26s; animation-delay: 4s;">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-300 to-emerald-600 shadow-[0_0_15px_rgba(52,211,153,0.5)] border border-emerald-200/50"></div>
+        </div>
+        <!-- Wrinkled Yellow Seed (Biji Kisut Kuning) -->
+        <div class="ambient-seed" style="left: 28%; animation-duration: 29s; animation-delay: 11s;">
+            <svg class="w-8 h-8 text-amber-400 drop-shadow-[0_0_12px_rgba(245,158,11,0.5)]" viewBox="0 0 40 40" fill="currentColor">
+                <path d="M20 3 C27 4, 34 8, 36 15 C38 22, 35 30, 29 35 C22 39, 14 38, 8 33 C2 27, 2 18, 6 11 C10 4, 15 2, 20 3 Z" />
+            </svg>
+        </div>
+        <!-- Wrinkled Green Seed (Biji Kisut Hijau) -->
+        <div class="ambient-seed" style="left: 70%; animation-duration: 24s; animation-delay: 7s;">
+            <svg class="w-7 h-7 text-emerald-400 drop-shadow-[0_0_12px_rgba(16,185,129,0.5)]" viewBox="0 0 40 40" fill="currentColor">
+                <path d="M20 4 C26 5, 33 9, 35 16 C37 23, 33 30, 28 34 C21 38, 13 37, 7 32 C2 26, 3 17, 7 11 C11 5, 15 3, 20 4 Z" />
+            </svg>
+        </div>
+
+        <!-- Ambient Floating Gamete Combinations (Mendel Assortment: YR, Yr, yR, yr) -->
+        <div class="ambient-gamete text-amber-300/25 text-2xl" style="top: 22%; left: 5%; animation-duration: 9s; animation-delay: 0s;">YR</div>
+        <div class="ambient-gamete text-emerald-300/25 text-xl" style="top: 40%; right: 6%; animation-duration: 8s; animation-delay: 2s;">Yr</div>
+        <div class="ambient-gamete text-emerald-400/25 text-xl" style="bottom: 25%; left: 8%; animation-duration: 10s; animation-delay: 4s;">yR</div>
+        <div class="ambient-gamete text-amber-400/25 text-lg" style="bottom: 35%; right: 8%; animation-duration: 8.5s; animation-delay: 1.5s;">yr</div>
+    </div>
 
     <!-- ==================== TOP NAVIGATION HEADER ==================== -->
     <header class="sticky top-0 z-40 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 px-4 md:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4 flex-shrink-0">

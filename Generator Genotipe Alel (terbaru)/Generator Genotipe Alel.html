@@ -59,15 +59,85 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Fira+Code:wght@400;500;700&display=swap"
         rel="stylesheet">
     <style>
-        /* --- CORE AESTHETICS --- */
+        /* --- CORE AESTHETICS & SIGNATURE PALETTE (PISUM SATIVUM MONOHYBRID) --- */
         body {
-            background-color: #020617;
+            background-color: #030712;
             background-image:
-                radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
-                radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
-                radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+                radial-gradient(ellipse at 15% 15%, rgba(139, 92, 246, 0.15) 0%, transparent 45%),
+                radial-gradient(ellipse at 85% 25%, rgba(236, 72, 153, 0.12) 0%, transparent 45%),
+                radial-gradient(ellipse at 50% 85%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                linear-gradient(rgba(167, 139, 250, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(167, 139, 250, 0.02) 1px, transparent 1px);
+            background-size: 100%, 100%, 100%, 40px 40px, 40px 40px;
             font-family: 'Outfit', sans-serif;
             overflow-x: hidden;
+        }
+
+        /* --- BOTANICAL BACKGROUND ANIMATIONS --- */
+        @keyframes pollenDrift {
+            0% {
+                transform: translateY(105vh) translateX(0) scale(0.8);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateY(50vh) translateX(35px) scale(1.1);
+                opacity: 0.8;
+            }
+            85% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(-25px) scale(0.9);
+                opacity: 0;
+            }
+        }
+
+        @keyframes petalFloat {
+            0% {
+                transform: translateY(-5vh) rotate(0deg) translateX(0);
+                opacity: 0;
+            }
+            15% { opacity: 0.45; }
+            50% {
+                transform: translateY(50vh) rotate(180deg) translateX(50px);
+                opacity: 0.6;
+            }
+            85% { opacity: 0.35; }
+            100% {
+                transform: translateY(105vh) rotate(360deg) translateX(-30px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes alleleAmbient {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.12; }
+            50% { transform: translateY(-18px) scale(1.08); opacity: 0.25; filter: drop-shadow(0 0 12px rgba(167, 139, 250, 0.5)); }
+        }
+
+        .pollen-mote {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(1px);
+            animation: pollenDrift linear infinite;
+        }
+
+        .petal-silhouette {
+            position: absolute;
+            pointer-events: none;
+            animation: petalFloat ease-in-out infinite;
+        }
+
+        .ambient-allele-mote {
+            position: absolute;
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            user-select: none;
+            pointer-events: none;
+            animation: alleleAmbient ease-in-out infinite;
         }
 
         /* Glassmorphism Panel */
@@ -195,11 +265,37 @@
 
 <body class="text-slate-200 min-h-screen flex flex-col items-center">
 
-    <!-- Ambient Neon Background Blobs -->
+    <!-- Signature Botanical Background & Animated Elements (Pisum Sativum) -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-        <div class="absolute top-0 -left-4 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div class="absolute top-0 -right-4 w-80 h-80 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div class="absolute -bottom-8 left-20 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+        <!-- Ambient Neon Glow Core -->
+        <div class="absolute top-0 -left-12 w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-[100px] opacity-25 animate-blob"></div>
+        <div class="absolute top-1/4 -right-12 w-96 h-96 bg-pink-600 rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-10 left-1/3 w-[30rem] h-80 bg-emerald-600 rounded-full mix-blend-screen filter blur-[110px] opacity-20 animate-blob animation-delay-4000"></div>
+
+        <!-- Floating Pollen Motes (Bioluminescent Mendel Spores) -->
+        <div class="pollen-mote bg-amber-300 w-2 h-2 shadow-[0_0_8px_#fcd34d]" style="left: 12%; animation-duration: 14s; animation-delay: 0s;"></div>
+        <div class="pollen-mote bg-purple-300 w-2.5 h-2.5 shadow-[0_0_10px_#d8b4fe]" style="left: 28%; animation-duration: 18s; animation-delay: 3s;"></div>
+        <div class="pollen-mote bg-emerald-300 w-1.5 h-1.5 shadow-[0_0_6px_#6ee7b7]" style="left: 48%; animation-duration: 16s; animation-delay: 7s;"></div>
+        <div class="pollen-mote bg-pink-300 w-2 h-2 shadow-[0_0_8px_#f472b6]" style="left: 68%; animation-duration: 21s; animation-delay: 2s;"></div>
+        <div class="pollen-mote bg-cyan-300 w-1.5 h-1.5 shadow-[0_0_6px_#67e8f9]" style="left: 84%; animation-duration: 15s; animation-delay: 5s;"></div>
+        <div class="pollen-mote bg-amber-200 w-2 h-2 shadow-[0_0_8px_#fde68a]" style="left: 92%; animation-duration: 19s; animation-delay: 9s;"></div>
+
+        <!-- Floating Pea Petal Silhouettes (Pisum sativum Flower Petals) -->
+        <svg class="petal-silhouette w-10 h-10 text-purple-400/20 fill-current drop-shadow-[0_0_12px_rgba(168,85,247,0.3)]" style="left: 8%; animation-duration: 24s; animation-delay: 1s;" viewBox="0 0 100 100">
+            <path d="M50 0 C70 25 95 45 80 75 C65 100 35 100 20 75 C5 45 30 25 50 0 Z" />
+        </svg>
+        <svg class="petal-silhouette w-8 h-8 text-pink-400/25 fill-current drop-shadow-[0_0_10px_rgba(244,114,182,0.3)]" style="left: 78%; animation-duration: 28s; animation-delay: 8s;" viewBox="0 0 100 100">
+            <path d="M50 0 C70 25 95 45 80 75 C65 100 35 100 20 75 C5 45 30 25 50 0 Z" />
+        </svg>
+        <svg class="petal-silhouette w-6 h-6 text-emerald-400/20 fill-current drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]" style="left: 38%; animation-duration: 22s; animation-delay: 14s;" viewBox="0 0 100 100">
+            <path d="M50 5 C75 25 85 55 70 85 C55 100 45 100 30 85 C15 55 25 25 50 5 Z" />
+        </svg>
+
+        <!-- Ambient Floating Mendel Allele Symbols (Dominant & Recessive Pisum Genes) -->
+        <div class="ambient-allele-mote text-purple-400/20 text-3xl" style="top: 18%; left: 6%; animation-duration: 8s; animation-delay: 0s;">P</div>
+        <div class="ambient-allele-mote text-emerald-400/20 text-2xl" style="top: 35%; right: 7%; animation-duration: 9s; animation-delay: 2s;">p</div>
+        <div class="ambient-allele-mote text-pink-400/20 text-3xl" style="bottom: 22%; left: 10%; animation-duration: 7.5s; animation-delay: 4s;">B</div>
+        <div class="ambient-allele-mote text-amber-400/20 text-2xl" style="bottom: 30%; right: 9%; animation-duration: 10s; animation-delay: 1.5s;">b</div>
     </div>
 
     <!-- Header -->

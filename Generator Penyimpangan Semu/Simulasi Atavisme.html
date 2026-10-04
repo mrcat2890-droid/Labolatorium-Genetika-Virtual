@@ -9,13 +9,68 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #020617;
+            background-color: #0c0602;
             color: #f8fafc;
-            background-image: radial-gradient(circle at 15% 50%, rgba(245, 158, 11, 0.08), transparent 25%),
-                              radial-gradient(circle at 85% 30%, rgba(239, 68, 68, 0.06), transparent 25%);
+            background-image:
+                radial-gradient(ellipse at 15% 25%, rgba(245, 158, 11, 0.14), transparent 45%),
+                radial-gradient(ellipse at 85% 75%, rgba(239, 68, 68, 0.12), transparent 45%),
+                linear-gradient(rgba(245, 158, 11, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(245, 158, 11, 0.03) 1px, transparent 1px);
+            background-size: 100%, 100%, 36px 36px, 36px 36px;
             background-attachment: fixed;
             min-height: 100vh;
         }
+
+        @keyframes combFloat {
+            0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.3; }
+            50% { transform: translateY(50vh) rotate(15deg); opacity: 0.5; }
+            80% { opacity: 0.3; }
+            100% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+        }
+
+        @keyframes atavismGlow {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 0.45; transform: scale(1.1); filter: drop-shadow(0 0 14px rgba(245, 158, 11, 0.6)); }
+        }
+
+        .comb-particle {
+            position: absolute;
+            pointer-events: none;
+            animation: combFloat linear infinite;
+        }
+
+        .gene-atavism {
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            pointer-events: none;
+            user-select: none;
+            animation: atavismGlow ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 relative overflow-x-hidden">
+
+    <!-- Signature Atavisme Background Elements -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute -top-16 -left-16 w-96 h-96 bg-amber-600/15 rounded-full filter blur-[100px]"></div>
+        <div class="absolute top-1/2 -right-20 w-[30rem] h-[30rem] bg-red-600/15 rounded-full filter blur-[120px]"></div>
+
+        <!-- Floating Comb Silhouettes (Walnut, Rose, Pea, Single) -->
+        <svg class="comb-particle w-12 h-12 text-amber-500/20 fill-current" style="left: 10%; animation-duration: 24s; animation-delay: 0s;" viewBox="0 0 100 60">
+            <path d="M10 50 C20 40, 25 20, 35 25 C45 15, 55 10, 65 20 C75 10, 85 25, 90 50 Z" />
+        </svg>
+        <svg class="comb-particle w-10 h-10 text-red-500/20 fill-current" style="left: 82%; animation-duration: 28s; animation-delay: 5s;" viewBox="0 0 100 60">
+            <path d="M10 50 C25 30, 40 35, 50 20 C60 35, 75 30, 90 50 Z" />
+        </svg>
+
+        <!-- Floating Loci R & P -->
+        <div class="gene-atavism text-amber-400/25 text-3xl" style="top: 25%; left: 6%; animation-duration: 7s;">R_P_ (Walnut)</div>
+        <div class="gene-atavism text-red-400/25 text-2xl" style="top: 45%; right: 7%; animation-duration: 8s; animation-delay: 2s;">R_pp (Rose)</div>
+        <div class="gene-atavism text-amber-300/25 text-2xl" style="bottom: 25%; left: 8%; animation-duration: 9s; animation-delay: 3s;">rrP_ (Pea)</div>
+        <div class="gene-atavism text-rose-400/25 text-2xl" style="bottom: 35%; right: 8%; animation-duration: 7.5s; animation-delay: 1s;">rrpp (Single)</div>
+    </div>
         .mono { font-family: 'JetBrains Mono', monospace; }
         
         .glass-panel {

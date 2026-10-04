@@ -29,9 +29,30 @@
     </script>
     <style>
         body {
-            background-color: #020617;
+            background-color: #030d07;
             color: #f8fafc;
+            background-image:
+                radial-gradient(ellipse at 20% 20%, rgba(16, 185, 129, 0.12) 0%, transparent 45%),
+                radial-gradient(ellipse at 80% 80%, rgba(251, 191, 36, 0.12) 0%, transparent 45%),
+                linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+            background-size: 100%, 100%, 36px 36px, 36px 36px;
         }
+
+        @keyframes squashFloat {
+            0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.35; }
+            50% { transform: translateY(50vh) rotate(15deg); opacity: 0.5; }
+            80% { opacity: 0.35; }
+            100% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+        }
+
+        .squash-particle {
+            position: absolute;
+            pointer-events: none;
+            animation: squashFloat linear infinite;
+        }
+
         .glass-panel {
             background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(12px);
@@ -43,21 +64,28 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .bg-glow {
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.05) 0%, rgba(2, 6, 23, 0) 70%);
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: -1;
-            pointer-events: none;
-        }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8 font-sans relative overflow-x-hidden">
-    <div class="bg-glow"></div>
+    <!-- Signature Epistasis Dominan Background Elements (Cucurbita pepo) -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute -top-16 -left-16 w-96 h-96 bg-emerald-600/15 rounded-full filter blur-[100px]"></div>
+        <div class="absolute top-1/2 -right-20 w-[30rem] h-[30rem] bg-amber-500/15 rounded-full filter blur-[120px]"></div>
+
+        <!-- Floating Squash Silhouettes (Putih 12, Kuning 3, Hijau 1) -->
+        <svg class="squash-particle w-12 h-12 text-slate-200/20 fill-current" style="left: 8%; animation-duration: 25s; animation-delay: 0s;" viewBox="0 0 100 100">
+            <path d="M50 15 C35 15, 25 35, 25 60 C25 80, 35 90, 50 90 C65 90, 75 80, 75 60 C75 35, 65 15, 50 15 Z" />
+            <path d="M50 5 L50 15" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+        <svg class="squash-particle w-10 h-10 text-amber-400/25 fill-current" style="left: 85%; animation-duration: 28s; animation-delay: 6s;" viewBox="0 0 100 100">
+            <path d="M50 15 C35 15, 25 35, 25 60 C25 80, 35 90, 50 90 C65 90, 75 80, 75 60 C75 35, 65 15, 50 15 Z" />
+            <path d="M50 5 L50 15" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+        <svg class="squash-particle w-8 h-8 text-emerald-400/25 fill-current" style="left: 45%; animation-duration: 22s; animation-delay: 13s;" viewBox="0 0 100 100">
+            <path d="M50 15 C35 15, 25 35, 25 60 C25 80, 35 90, 50 90 C65 90, 75 80, 75 60 C75 35, 65 15, 50 15 Z" />
+            <path d="M50 5 L50 15" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+    </div>
     <div class="max-w-5xl mx-auto space-y-6">
 
         <!-- Header -->

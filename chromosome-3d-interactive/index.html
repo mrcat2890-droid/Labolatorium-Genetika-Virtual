@@ -11,6 +11,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Signature Chromatin & Nucleosome Animated Background Layer -->
+    <div style="position: fixed; inset: 0; overflow: hidden; z-index: 0; pointer-events: none;">
+        <!-- Ambient Neon Glow Core -->
+        <div style="position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(232, 121, 249, 0.12) 0%, transparent 70%); filter: blur(65px);"></div>
+        <div style="position: absolute; bottom: -15%; right: -10%; width: 55vw; height: 55vw; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%); filter: blur(75px);"></div>
+
+        <!-- Floating Chromatin Fiber Loops & Nucleosome Beads -->
+        <div class="ambient-chromatin-particle" style="left: 10%; animation-duration: 24s; animation-delay: 0s;">
+            <svg class="w-10 h-10 text-fuchsia-400 drop-shadow-[0_0_12px_rgba(232,121,249,0.5)]" viewBox="0 0 40 40" fill="none">
+                <!-- Octagonal Histone Octamer Core with DNA Wrap -->
+                <circle cx="20" cy="20" r="10" fill="#a855f7" opacity="0.3"/>
+                <ellipse cx="20" cy="20" rx="14" ry="7" stroke="#e879f9" stroke-width="2" stroke-dasharray="3 2" opacity="0.7"/>
+            </svg>
+        </div>
+        <div class="ambient-chromatin-particle" style="left: 82%; animation-duration: 27s; animation-delay: 5s;">
+            <svg class="w-8 h-8 text-purple-400 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]" viewBox="0 0 40 40" fill="none">
+                <circle cx="20" cy="20" r="8" fill="#7c3aed" opacity="0.3"/>
+                <ellipse cx="20" cy="20" rx="12" ry="6" stroke="#c084fc" stroke-width="2" stroke-dasharray="3 2" opacity="0.7"/>
+            </svg>
+        </div>
+
+        <!-- Telomere Protective Sparks (Yellow/Amber) -->
+        <div class="ambient-telomere-spark" style="top: 20%; left: 18%; width: 5px; height: 5px; background: #f59e0b; box-shadow: 0 0 10px #f59e0b; animation-duration: 4s;"></div>
+        <div class="ambient-telomere-spark" style="top: 75%; left: 22%; width: 4px; height: 4px; background: #e879f9; box-shadow: 0 0 8px #e879f9; animation-duration: 4.8s; animation-delay: 2s;"></div>
+        <div class="ambient-telomere-spark" style="top: 30%; right: 15%; width: 6px; height: 6px; background: #eab308; box-shadow: 0 0 12px #eab308; animation-duration: 5s; animation-delay: 1.2s;"></div>
+    </div>
+
     <!-- 3D Canvas Background -->
     <div id="canvas-container"></div>
 

@@ -44,12 +44,39 @@
         rel="stylesheet">
     <style>
         body {
-            background-color: #030712;
+            background-color: #020612;
             background-image:
+                radial-gradient(ellipse at 15% 20%, rgba(37, 99, 235, 0.16) 0%, transparent 45%),
+                radial-gradient(ellipse at 85% 80%, rgba(6, 182, 212, 0.14) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.04) 0%, transparent 60%),
                 linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-size: 100%, 100%, 100%, 40px 40px, 40px 40px;
             color: #e2e8f0;
+        }
+
+        /* Biotechnology Database Background Characteristic Animations */
+        @keyframes plasmidSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes vectorDrift {
+            0% { transform: translateY(105vh) scale(0.9); opacity: 0; }
+            20% { opacity: 0.35; }
+            50% { transform: translateY(50vh) scale(1.05); opacity: 0.55; }
+            80% { opacity: 0.35; }
+            100% { transform: translateY(-10vh) scale(0.9); opacity: 0; }
+        }
+
+        .ambient-plasmid-ring {
+            animation: plasmidSpin 30s linear infinite;
+        }
+
+        .ambient-biotech-vector {
+            position: absolute;
+            pointer-events: none;
+            animation: vectorDrift linear infinite;
         }
 
         /* Glass Panel Professional */
@@ -225,7 +252,44 @@
     </style>
 </head>
 
-<body class="flex flex-col h-screen overflow-hidden selection:bg-blue-500 selection:text-white">
+<body class="flex flex-col h-screen overflow-hidden selection:bg-blue-500 selection:text-white relative">
+
+    <!-- Signature Biotechnology Animated Background Layer (Plasmid Vectors & Telemetry) -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <!-- Ambient Neon Glow Core -->
+        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-blue-600/15 rounded-full filter blur-[100px] pointer-events-none"></div>
+        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-cyan-500/15 rounded-full filter blur-[110px] pointer-events-none"></div>
+        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-indigo-700/10 rounded-full filter blur-[120px] pointer-events-none"></div>
+
+        <!-- Rotating Circular Bacterial Plasmid Vector (Double Circular DNA + Restriction Sites) -->
+        <div class="absolute top-1/4 right-[12%] w-64 h-64 opacity-25">
+            <svg class="w-full h-full ambient-plasmid-ring" viewBox="0 0 200 200" style="transform-origin: 100px 100px;">
+                <circle cx="100" cy="100" r="80" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                <circle cx="100" cy="100" r="72" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="6 3"/>
+                <!-- Restriction Cleavage Sites: EcoRI, BamHI, HindIII -->
+                <line x1="100" y1="12" x2="100" y2="28" stroke="#f59e0b" stroke-width="3"/>
+                <text x="100" y="8" fill="#f59e0b" font-size="8" font-family="monospace" text-anchor="middle">EcoRI</text>
+                
+                <line x1="180" y1="100" x2="168" y2="100" stroke="#10b981" stroke-width="3"/>
+                <text x="188" y="103" fill="#10b981" font-size="8" font-family="monospace">BamHI</text>
+                
+                <line x1="100" y1="188" x2="100" y2="172" stroke="#ec4899" stroke-width="3"/>
+                <text x="100" y="198" fill="#ec4899" font-size="8" font-family="monospace" text-anchor="middle">ori</text>
+            </svg>
+        </div>
+
+        <!-- Floating Biotechnology Vector Particles (CRISPR, PCR Primer, Recombinant Vector) -->
+        <div class="ambient-biotech-vector" style="left: 10%; animation-duration: 22s; animation-delay: 0s;">
+            <div class="px-2.5 py-1 rounded-lg bg-blue-950/60 border border-blue-400/40 text-blue-300 font-mono text-xs shadow-[0_0_10px_rgba(59,130,246,0.5)]">pBR322 (Plasmid)</div>
+        </div>
+        <div class="ambient-biotech-vector" style="left: 75%; animation-duration: 26s; animation-delay: 6s;">
+            <div class="px-2.5 py-1 rounded-lg bg-cyan-950/60 border border-cyan-400/40 text-cyan-300 font-mono text-xs shadow-[0_0_10px_rgba(6,182,212,0.5)]">CRISPR-Cas9 (sgRNA)</div>
+        </div>
+
+        <!-- Ambient Security Level & Telemetry Tags -->
+        <div class="absolute top-[22%] left-[6%] font-mono text-[10px] text-blue-400/25 tracking-widest">[DATABASE CLEARANCE LEVEL: RECOMBINANT OVERSIGHT]</div>
+        <div class="absolute bottom-[28%] right-[7%] font-mono text-[10px] text-cyan-400/25 tracking-widest">[GENETIC ENGINEERING & BIO-SYNTHESIS REPOSITORY]</div>
+    </div>
 
     <header
         class="h-16 border-b border-slate-800 bg-arch-bg/90 backdrop-blur flex items-center justify-between px-6 shrink-0 z-50">

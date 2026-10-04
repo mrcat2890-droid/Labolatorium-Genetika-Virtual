@@ -93,11 +93,42 @@
         .input-box:focus {
             outline: none;
             border-color: #a855f7;
-            box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.2);
+        @keyframes linariaDrift {
+            0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.35; }
+            50% { transform: translateY(50vh) rotate(30deg); opacity: 0.6; }
+            80% { opacity: 0.35; }
+            100% { transform: translateY(-10vh) rotate(60deg); opacity: 0; }
+        }
+
+        .linaria-particle {
+            position: absolute;
+            pointer-events: none;
+            animation: linariaDrift linear infinite;
         }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-8 relative overflow-x-hidden">
+
+    <!-- Signature Kriptomeri Background Elements (Linaria maroccana: Ungu 9, Merah 3, Putih 4) -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute -top-16 -left-16 w-96 h-96 bg-purple-600/15 rounded-full filter blur-[100px]"></div>
+        <div class="absolute top-1/2 -right-20 w-[30rem] h-[30rem] bg-pink-600/15 rounded-full filter blur-[120px]"></div>
+
+        <!-- Floating Linaria Flower Silhouettes -->
+        <svg class="linaria-particle w-12 h-12 text-purple-400/25 fill-current" style="left: 10%; animation-duration: 22s; animation-delay: 0s;" viewBox="0 0 100 100">
+            <path d="M50 15 C35 8 20 20 20 35 C20 50 50 55 50 55 C50 55 80 50 80 35 C80 20 65 8 50 15 Z"/>
+            <path d="M50 55 C35 58 20 65 20 80 C20 90 35 95 50 95 C65 95 80 90 80 80 C80 65 65 58 50 55 Z"/>
+        </svg>
+        <svg class="linaria-particle w-10 h-10 text-rose-400/25 fill-current" style="left: 80%; animation-duration: 26s; animation-delay: 4s;" viewBox="0 0 100 100">
+            <path d="M50 15 C35 8 20 20 20 35 C20 50 50 55 50 55 C50 55 80 50 80 35 C80 20 65 8 50 15 Z"/>
+            <path d="M50 55 C35 58 20 65 20 80 C20 90 35 95 50 95 C65 95 80 90 80 80 C80 65 65 58 50 55 Z"/>
+        </svg>
+        <svg class="linaria-particle w-8 h-8 text-slate-200/20 fill-current" style="left: 48%; animation-duration: 24s; animation-delay: 10s;" viewBox="0 0 100 100">
+            <path d="M50 15 C35 8 20 20 20 35 C20 50 50 55 50 55 C50 55 80 50 80 35 C80 20 65 8 50 15 Z"/>
+            <path d="M50 55 C35 58 20 65 20 80 C20 90 35 95 50 95 C65 95 80 90 80 80 C80 65 65 58 50 55 Z"/>
+        </svg>
+    </div>
 
     <div class="max-w-6xl mx-auto space-y-8">
         <!-- Header -->

@@ -70,11 +70,44 @@
         html, body {
             height: 100%;
             overflow: hidden;
-            background-color: #030712;
+            background-color: #040614;
+            background-image:
+                radial-gradient(ellipse at 15% 20%, rgba(99, 102, 241, 0.16) 0%, transparent 45%),
+                radial-gradient(ellipse at 85% 75%, rgba(236, 72, 153, 0.14) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.05) 0%, transparent 60%),
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 100%, 100%, 100%, 36px 36px, 36px 36px;
             color: #cbd5e1;
             font-family: 'Rajdhani', sans-serif;
             user-select: none;
             -webkit-user-select: none;
+        }
+
+        /* Meiosis Characteristic Background Animations */
+        @keyframes spermSwim {
+            0% { transform: translateY(105vh) translateX(0) rotate(15deg); opacity: 0; }
+            20% { opacity: 0.4; }
+            50% { transform: translateY(50vh) translateX(30px) rotate(25deg); opacity: 0.6; }
+            80% { opacity: 0.4; }
+            100% { transform: translateY(-10vh) translateX(-20px) rotate(10deg); opacity: 0; }
+        }
+
+        @keyframes asterGlow {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 0.55; transform: scale(1.15); filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.6)); }
+        }
+
+        .ambient-sperm-cell {
+            position: absolute;
+            pointer-events: none;
+            animation: spermSwim linear infinite;
+        }
+
+        .ambient-aster-spindle {
+            position: absolute;
+            pointer-events: none;
+            animation: asterGlow ease-in-out infinite;
         }
 
         /* CRT Scanline Overlay */
@@ -266,6 +299,53 @@
 
 <body class="flex flex-col h-screen overflow-hidden relative">
     <div class="scanlines"></div>
+
+    <!-- Signature Meiosis & Fertilization Animated Background Layer -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <!-- Ambient Neon Glow Core -->
+        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-indigo-600/15 rounded-full filter blur-[100px] pointer-events-none"></div>
+        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-pink-600/15 rounded-full filter blur-[110px] pointer-events-none"></div>
+        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-purple-700/10 rounded-full filter blur-[120px] pointer-events-none"></div>
+
+        <!-- Swimming Micro-Sperm Cells (Cyan Head + Wavy Sinusoidal Flagellum Tail) -->
+        <div class="ambient-sperm-cell" style="left: 12%; animation-duration: 22s; animation-delay: 0s;">
+            <svg class="w-8 h-14 text-cyan-400 drop-shadow-[0_0_12px_rgba(34,211,238,0.7)]" viewBox="0 0 30 60">
+                <!-- Oval Sperm Head -->
+                <ellipse cx="15" cy="10" rx="5" ry="8" fill="#22d3ee"/>
+                <!-- Undulating Flagellum Tail -->
+                <path d="M15 18 Q10 28 15 38 T15 58" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+
+        <div class="ambient-sperm-cell" style="left: 78%; animation-duration: 25s; animation-delay: 4s;">
+            <svg class="w-7 h-12 text-cyan-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]" viewBox="0 0 30 60">
+                <ellipse cx="15" cy="10" rx="4" ry="7" fill="#67e8f9"/>
+                <path d="M15 17 Q20 27 15 37 T15 55" fill="none" stroke="#22d3ee" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+
+        <div class="ambient-sperm-cell" style="left: 42%; animation-duration: 27s; animation-delay: 11s;">
+            <svg class="w-6 h-11 text-teal-300 drop-shadow-[0_0_8px_rgba(45,212,191,0.6)]" viewBox="0 0 30 60">
+                <ellipse cx="15" cy="10" rx="4" ry="6" fill="#2dd4bf"/>
+                <path d="M15 16 Q11 25 15 35 T15 50" fill="none" stroke="#2dd4bf" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+
+        <!-- Meiotic Spindle Aster Radial Rays (Pusat Sentrosom Kutub Pembelahan) -->
+        <div class="ambient-aster-spindle absolute top-[28%] right-[8%] w-24 h-24 opacity-30">
+            <svg class="w-full h-full" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="5" fill="#ec4899"/>
+                <line x1="50" y1="50" x2="10" y2="20" stroke="#f472b6" stroke-width="1.5" stroke-dasharray="3 3"/>
+                <line x1="50" y1="50" x2="90" y2="20" stroke="#f472b6" stroke-width="1.5" stroke-dasharray="3 3"/>
+                <line x1="50" y1="50" x2="20" y2="80" stroke="#f472b6" stroke-width="1.5" stroke-dasharray="3 3"/>
+                <line x1="50" y1="50" x2="80" y2="80" stroke="#f472b6" stroke-width="1.5" stroke-dasharray="3 3"/>
+            </svg>
+        </div>
+
+        <!-- Ambient Meiosis & Fertilization Genetic Badges -->
+        <div class="absolute top-[22%] left-[6%] font-mono text-[10px] text-indigo-400/25 tracking-widest">[MEIOSIS I ➔ CROSSING OVER ➔ MEIOSIS II]</div>
+        <div class="absolute bottom-[28%] right-[7%] font-mono text-[10px] text-pink-400/25 tracking-widest">[GAMETES (n=23) + SPERM (n=23) ➔ ZYGOTE (2n=46)]</div>
+    </div>
 
     <!-- ==================== TOP NAVIGATION HEADER ==================== -->
     <header class="h-14 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-4 md:px-6 flex items-center justify-between gap-4 flex-shrink-0">

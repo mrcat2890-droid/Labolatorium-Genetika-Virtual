@@ -48,8 +48,38 @@ body, html {
     overflow: hidden;
     position: fixed; /* Mencegah pull-to-refresh & bounce di mobile browser */
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background: radial-gradient(circle at 65% 40%, #0f3562 0%, #082142 45%, #041024 100%);
+    background: radial-gradient(ellipse at 65% 40%, #0b2b52 0%, #061935 45%, #020914 100%);
     color: var(--text-primary);
+}
+
+/* Background Characteristic Molecular Animations */
+@keyframes nucleotideMoteFloat {
+    0% { transform: translateY(105vh) rotate(0deg) scale(0.9); opacity: 0; }
+    20% { opacity: 0.35; }
+    50% { transform: translateY(50vh) rotate(15deg) scale(1.05); opacity: 0.55; }
+    80% { opacity: 0.35; }
+    100% { transform: translateY(-10vh) rotate(-10deg) scale(0.9); opacity: 0; }
+}
+
+@keyframes hBondSparkle {
+    0%, 100% { opacity: 0.15; transform: scale(0.8); }
+    50% { opacity: 0.65; transform: scale(1.2); filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.8)); }
+}
+
+.ambient-nucleotide {
+    position: absolute;
+    font-family: 'Orbitron', monospace;
+    font-weight: 800;
+    pointer-events: none;
+    user-select: none;
+    animation: nucleotideMoteFloat linear infinite;
+}
+
+.ambient-hbond-spark {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: hBondSparkle ease-in-out infinite;
 }
 
 /* 3D Canvas */
