@@ -6,6 +6,27 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🔬 Optimasi Keterbacaan Teks & Transformasi Palet Warna Cerah (Non-Pucat) pada Modul GEN-X dan GEN-K
+- **Peningkatan Kontras Keterbacaan Teks pada Efek Glassmorphism (Anti-Washout):**
+  - Mengeliminasi kendala teks memudar (*washout text*) akibat transparansi kaca buram yang berbenturan dengan animasi latar belakang mikroskopik dan kromosomal.
+  - Meningkatkan densitas lapisan kaca buram (*glassmorphism base opacity*) dari `0.42` menjadi `0.85` - `0.88` (`rgba(..., 0.85)` - `0.88`) dengan mempertahankan kedalaman optik `backdrop-filter: blur(24px) saturate(190%)`, garis tepi bersinar tegas `1.5px`, serta kilau specular atas (*specular top edge*).
+  - Memberlakukan aturan tipografi berkontras tinggi secara global (`p, .text-slate-300 { color: #f1f5f9 !important; }`, `.text-slate-400 { color: #cbd5e1 !important; }`, dan heading `color: #ffffff !important; text-shadow: 0 2px 4px rgba(0,0,0,0.6)`), memastikan seluruh teks, label alel/gamet, status fenotipe, formula ISCN, dan laporan konseling terbaca tajam dan jelas.
+- **Transformasi Palet Warna Cerah, Segar & Non-Pucat:**
+  - **Modul 04: Generator Risiko Pewarisan Sifat Seks / GEN-X (`Generator Risiko Pewarisan Sifat Seks (terbaru)/Generator Risiko Pewarisan Sifat Seks.html`):**
+    - Mengganti palet rose/cyan pucat sebelumnya dengan tema **Electric Neon Crimson (`#ff007f`, `#f43f5e`)**, **Laser Cyan (`#00f0ff`, `#06b6d4`)**, dan **Vivid Solar Amber (`#fbbf24`)** berlatar *Deep Cyber Obsidian Plum* (`#07020d`).
+    - Memperbarui matriks segregasi papan Punnett gonosom, ring chart telemetri risiko, 4 kartu profil bayi F1 (Sakit, Carrier, Normal) dengan aksen cahaya neon dan badge berstatus kontras tinggi, serta kartu rekam medis konseling klinis prenatal.
+  - **Modul 05: Simulasi Deteksi Kromosom / GEN-K (`Simulasi Deteksi Kromosom/Simulasi-Deteksi-Kromosom.html`):**
+    - Mengganti palet cyan/teal pudar sebelumnya dengan kombinasi **High-Voltage Laser Cyan (`#00f0ff`, `#00e5ff`)**, **Deep Cobalt Sapphire (`#2563eb`, `#38bdf8`)**, **High-Alert Neon Crimson Coral (`#ff2a55`)**, **Vivid Solar Amber (`#fbbf24`)**, dan **Mint Emerald (`#00f59b`)** berlatar *Deep Quantum Darkfield Obsidian* (`#020b14`).
+    - Memperbarui radar sweep scanner mikroskopik, animasi drift kromosom G-banding metaphase, tombol target kromosom (Chr 1, 3, 13, 18, 21, X), tombol ploidi (Mono, Di, Tri), gauge letalitas genetik, render SVG kromatid homolog beresolusi tinggi, serta panel laporan sitogenetika ISCN 2020.
+- **Penyelarasan Portal Utama (`index.html`):**
+  - Menyelaraskan aksen `--theme-color`, *glow*, dan deskripsi untuk Kartu 04 (`GEN-X`: `#ff007f`) dan Kartu 05 (`GEN-K`: `#00f0ff`) dengan tipografi kontras tinggi.
+- **Berkas yang Diperbarui:**
+  - `Generator Risiko Pewarisan Sifat Seks (terbaru)/Generator Risiko Pewarisan Sifat Seks.html`
+  - `Simulasi Deteksi Kromosom/Simulasi-Deteksi-Kromosom.html`
+  - `index.html`
+  - `CHANGELOG.md`
+
+
 ### 👁️ Optimasi Keterbacaan Teks & Transformasi Palet Warna Cerah (Non-Pucat) pada Modul Dihibrid, Transkripsi, dan Translasi
 - **Peningkatan Kontras Keterbacaan Teks pada Efek Glassmorphism (Anti-Washout):**
   - Mengatasi kendala teks yang sulit dibaca akibat transparansi panel kaca buram (`opacity 0.42`) yang terlalu tembus ke animasi latar belakang dinamis.

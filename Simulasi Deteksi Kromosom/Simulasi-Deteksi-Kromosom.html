@@ -16,16 +16,16 @@
                 extend: {
                     colors: {
                         karyo: {
-                            dark: '#030712',
-                            panel: 'rgba(15, 23, 42, 0.82)',
-                            border: 'rgba(34, 211, 238, 0.25)',
-                            cyan: '#06b6d4',
-                            neon: '#22d3ee',
+                            dark: '#020b14',
+                            panel: 'rgba(4, 18, 34, 0.86)',
+                            border: 'rgba(0, 240, 255, 0.28)',
+                            cyan: '#00f0ff',
+                            neon: '#00e5ff',
                             sky: '#38bdf8',
-                            alert: '#f43f5e',
-                            warn: '#f59e0b',
-                            purple: '#a855f7',
-                            emerald: '#10b981'
+                            alert: '#ff2a55',
+                            warn: '#fbbf24',
+                            purple: '#c084fc',
+                            emerald: '#00f59b'
                         }
                     },
                     fontFamily: {
@@ -41,8 +41,8 @@
                     },
                     keyframes: {
                         pulseGlow: {
-                            '0%, 100%': { boxShadow: '0 0 15px rgba(34, 211, 238, 0.25)' },
-                            '50%': { boxShadow: '0 0 30px rgba(34, 211, 238, 0.6)' }
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(0, 240, 255, 0.3)' },
+                            '50%': { boxShadow: '0 0 35px rgba(0, 240, 255, 0.7)' }
                         },
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
@@ -69,16 +69,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Orbitron:wght@600;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Base styles & signature karyotype cyan & sapphire palette */
+        /* Base styles & signature karyotype laser cyan & cobalt sapphire palette */
         body {
-            background-color: #010a12;
+            background-color: #020b14;
             background-image:
-                radial-gradient(ellipse at 15% 20%, rgba(34, 211, 238, 0.15) 0%, transparent 45%),
-                radial-gradient(ellipse at 85% 80%, rgba(6, 182, 212, 0.12) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.05) 0%, transparent 60%),
-                linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px);
+                radial-gradient(ellipse at 15% 20%, rgba(0, 240, 255, 0.18) 0%, transparent 45%),
+                radial-gradient(ellipse at 85% 80%, rgba(37, 99, 235, 0.16) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(0, 245, 155, 0.08) 0%, transparent 60%),
+                linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
             background-size: 100%, 100%, 100%, 36px 36px, 36px 36px;
+        }
+
+        /* High-Legibility Global Typography Overrides */
+        p, .text-slate-300 {
+            color: #f1f5f9 !important;
+        }
+        .text-slate-400 {
+            color: #cbd5e1 !important;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #ffffff !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
         }
 
         /* Karyotype Background Characteristic Animations */
@@ -89,9 +101,9 @@
 
         @keyframes karyoDrift {
             0% { transform: translateY(105vh) rotate(0deg) scale(0.9); opacity: 0; }
-            20% { opacity: 0.35; }
-            50% { transform: translateY(50vh) rotate(25deg) scale(1.05); opacity: 0.55; }
-            80% { opacity: 0.35; }
+            20% { opacity: 0.45; }
+            50% { transform: translateY(50vh) rotate(25deg) scale(1.05); opacity: 0.7; }
+            80% { opacity: 0.45; }
             100% { transform: translateY(-10vh) rotate(-15deg) scale(0.9); opacity: 0; }
         }
 
@@ -112,16 +124,16 @@
             z-index: 50;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
             background-size: 100% 4px;
-            opacity: 0.35;
+            opacity: 0.25;
         }
 
-        /* High-End Frosted Glassmorphism Panel (Translucent Glass Effect) */
+        /* High-End Frosted Glassmorphism Panel (High Contrast + Specular Highlights) */
         .glass-panel {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(2, 14, 26, 0.42);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border: 1px solid rgba(34, 211, 238, 0.22);
-            box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.55), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(4, 18, 34, 0.86);
+            backdrop-filter: blur(24px) saturate(190%);
+            -webkit-backdrop-filter: blur(24px) saturate(190%);
+            border: 1.5px solid rgba(0, 240, 255, 0.28);
+            box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.7), inset 0 1px 1px 0 rgba(255, 255, 255, 0.22);
             position: relative;
         }
 
@@ -131,59 +143,59 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.5), transparent);
+            height: 1.5px;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.7), transparent);
             pointer-events: none;
         }
 
         /* Frosted Glass Translucency for Sub-panels and Internal Cards */
         [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-slate-800/"] {
-            background-color: rgba(3, 16, 30, 0.42) !important;
+            background-color: rgba(6, 22, 42, 0.88) !important;
             backdrop-filter: blur(16px) saturate(160%) !important;
             -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
-            border-color: rgba(34, 211, 238, 0.16) !important;
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
+            border-color: rgba(0, 240, 255, 0.22) !important;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12), 0 4px 12px rgba(0, 0, 0, 0.3) !important;
         }
 
         /* Interactive High-Tech Buttons */
         .tech-btn {
-            background: rgba(3, 18, 32, 0.55);
+            background: rgba(8, 26, 48, 0.85);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: #94a3b8;
+            border: 1.5px solid rgba(255, 255, 255, 0.16);
+            color: #e2e8f0;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
 
         .tech-btn:hover {
-            border-color: var(--color, #22d3ee);
+            border-color: var(--color, #00f0ff);
             color: #ffffff;
-            background: rgba(34, 211, 238, 0.15);
-            box-shadow: 0 0 16px var(--glow, rgba(34, 211, 238, 0.35));
+            background: rgba(0, 240, 255, 0.18);
+            box-shadow: 0 0 18px var(--glow, rgba(0, 240, 255, 0.45));
         }
 
         .tech-btn.active {
-            border-color: var(--color, #22d3ee);
-            color: var(--color, #22d3ee);
-            background: linear-gradient(135deg, rgba(34, 211, 238, 0.18), rgba(15, 23, 42, 0.9));
+            border-color: var(--color, #00f0ff);
+            color: #ffffff;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.28), rgba(8, 30, 58, 0.95));
             font-weight: 700;
-            box-shadow: 0 0 16px var(--glow, rgba(34, 211, 238, 0.4)), inset 0 0 12px var(--glow, rgba(34, 211, 238, 0.2));
-            text-shadow: 0 0 8px var(--color, #22d3ee);
+            box-shadow: 0 0 20px var(--glow, rgba(0, 240, 255, 0.5)), inset 0 0 14px var(--glow, rgba(0, 240, 255, 0.3));
+            text-shadow: 0 0 10px var(--color, #00f0ff);
         }
 
         /* Microscope Viewport Styling */
         .microscope-lens {
-            background: radial-gradient(circle at center, transparent 40%, rgba(3, 7, 18, 0.6) 80%, rgba(3, 7, 18, 0.95) 100%);
+            background: radial-gradient(circle at center, transparent 40%, rgba(2, 11, 20, 0.6) 80%, rgba(2, 11, 20, 0.95) 100%);
             pointer-events: none;
         }
 
         .scan-laser {
             height: 2px;
             width: 100%;
-            background: linear-gradient(90deg, transparent, #22d3ee, #00f0ff, #22d3ee, transparent);
-            box-shadow: 0 0 18px #22d3ee, 0 0 35px #00f0ff;
-            opacity: 0.85;
+            background: linear-gradient(90deg, transparent, #00f0ff, #ffffff, #00f0ff, transparent);
+            box-shadow: 0 0 20px #00f0ff, 0 0 40px #00f0ff;
+            opacity: 0.95;
             position: absolute;
             top: 0;
             animation: scanLine 2.5s ease-in-out infinite;
@@ -191,7 +203,7 @@
 
         /* Chromosome SVG Glow */
         .chromo-svg {
-            filter: drop-shadow(0 0 8px currentColor);
+            filter: drop-shadow(0 0 12px currentColor);
             transition: all 0.3s ease;
         }
 
@@ -201,44 +213,44 @@
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #090d16;
+            background: #020b14;
         }
         ::-webkit-scrollbar-thumb {
-            background: #1e293b;
+            background: #1e3a5f;
             border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #22d3ee;
+            background: #00f0ff;
         }
     </style>
 </head>
 
-<body class="flex flex-col min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 relative overflow-x-hidden">
+<body class="flex flex-col min-h-screen bg-[#020b14] text-slate-100 font-sans selection:bg-cyan-500/40 selection:text-cyan-100 relative overflow-x-hidden">
     <div class="scanlines"></div>
 
     <!-- Signature Karyotype Animated Background (Microscope Radar Reticle & Chromosome Spreads) -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <!-- Ambient Neon Glow Core -->
-        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-cyan-600/15 rounded-full filter blur-[100px] pointer-events-none"></div>
-        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-teal-500/15 rounded-full filter blur-[110px] pointer-events-none"></div>
-        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-sky-600/10 rounded-full filter blur-[120px] pointer-events-none"></div>
+        <div class="absolute -top-20 -left-20 w-[32rem] h-[32rem] bg-cyan-500/25 rounded-full filter blur-[110px] pointer-events-none"></div>
+        <div class="absolute top-1/2 -right-24 w-[30rem] h-[30rem] bg-blue-600/22 rounded-full filter blur-[120px] pointer-events-none"></div>
+        <div class="absolute -bottom-24 left-1/4 w-[34rem] h-[34rem] bg-emerald-500/15 rounded-full filter blur-[130px] pointer-events-none"></div>
 
         <!-- Microscopic Radar Scanner Reticle (Concentric Circles & Sweeping Radar Cone) -->
-        <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[34rem] h-[34rem] opacity-25">
+        <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[34rem] h-[34rem] opacity-35">
             <svg class="w-full h-full" viewBox="0 0 500 500">
-                <circle cx="250" cy="250" r="230" fill="none" stroke="rgba(34, 211, 238, 0.25)" stroke-width="1.5" stroke-dasharray="8 8"/>
-                <circle cx="250" cy="250" r="160" fill="none" stroke="rgba(34, 211, 238, 0.3)" stroke-width="1"/>
-                <circle cx="250" cy="250" r="90" fill="none" stroke="rgba(34, 211, 238, 0.35)" stroke-width="1.5" stroke-dasharray="4 4"/>
-                <line x1="20" y1="250" x2="480" y2="250" stroke="rgba(34, 211, 238, 0.2)" stroke-width="1"/>
-                <line x1="250" y1="20" x2="250" y2="480" stroke="rgba(34, 211, 238, 0.2)" stroke-width="1"/>
+                <circle cx="250" cy="250" r="230" fill="none" stroke="rgba(0, 240, 255, 0.35)" stroke-width="1.5" stroke-dasharray="8 8"/>
+                <circle cx="250" cy="250" r="160" fill="none" stroke="rgba(0, 240, 255, 0.4)" stroke-width="1"/>
+                <circle cx="250" cy="250" r="90" fill="none" stroke="rgba(0, 240, 255, 0.45)" stroke-width="1.5" stroke-dasharray="4 4"/>
+                <line x1="20" y1="250" x2="480" y2="250" stroke="rgba(0, 240, 255, 0.25)" stroke-width="1"/>
+                <line x1="250" y1="20" x2="250" y2="480" stroke="rgba(0, 240, 255, 0.25)" stroke-width="1"/>
                 <!-- Rotating Radar Sweep Cone -->
                 <g class="radar-scanner" style="transform-origin: 250px 250px;">
-                    <path d="M250 250 L480 250 A230 230 0 0 0 412 87 Z" fill="url(#radarGradient)" opacity="0.35"/>
-                    <line x1="250" y1="250" x2="480" y2="250" stroke="#22d3ee" stroke-width="2"/>
+                    <path d="M250 250 L480 250 A230 230 0 0 0 412 87 Z" fill="url(#radarGradient)" opacity="0.45"/>
+                    <line x1="250" y1="250" x2="480" y2="250" stroke="#00f0ff" stroke-width="2.5"/>
                 </g>
                 <defs>
                     <radialGradient id="radarGradient" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stop-color="rgba(34, 211, 238, 0.4)"/>
+                        <stop offset="0%" stop-color="rgba(0, 240, 255, 0.55)"/>
                         <stop offset="100%" stop-color="transparent"/>
                     </radialGradient>
                 </defs>
@@ -247,48 +259,48 @@
 
         <!-- Floating Metaphase Chromosomes (G-Banding Patterns) -->
         <div class="karyo-particle" style="left: 12%; animation-duration: 24s; animation-delay: 0s;">
-            <svg class="w-8 h-14 text-cyan-400 drop-shadow-[0_0_12px_rgba(34,211,238,0.5)]" viewBox="0 0 40 80" fill="currentColor">
+            <svg class="w-9 h-16 text-cyan-400 drop-shadow-[0_0_16px_rgba(0,240,255,0.7)]" viewBox="0 0 40 80" fill="currentColor">
                 <!-- Metaphase Chromosome with G-bands -->
-                <rect x="12" y="5" width="6" height="30" rx="3" opacity="0.4"/>
-                <rect x="22" y="5" width="6" height="30" rx="3" opacity="0.4"/>
-                <rect x="12" y="45" width="6" height="30" rx="3" opacity="0.4"/>
-                <rect x="22" y="45" width="6" height="30" rx="3" opacity="0.4"/>
+                <rect x="12" y="5" width="6" height="30" rx="3" opacity="0.5"/>
+                <rect x="22" y="5" width="6" height="30" rx="3" opacity="0.5"/>
+                <rect x="12" y="45" width="6" height="30" rx="3" opacity="0.5"/>
+                <rect x="22" y="45" width="6" height="30" rx="3" opacity="0.5"/>
                 <!-- Dark heterochromatin bands -->
-                <rect x="12" y="12" width="16" height="4" fill="#0284c7" opacity="0.9"/>
-                <rect x="12" y="24" width="16" height="4" fill="#0284c7" opacity="0.9"/>
-                <rect x="12" y="54" width="16" height="5" fill="#0284c7" opacity="0.9"/>
-                <rect x="12" y="65" width="16" height="4" fill="#0284c7" opacity="0.9"/>
-                <circle cx="20" cy="38" r="4" fill="#22d3ee"/>
+                <rect x="12" y="12" width="16" height="4" fill="#0284c7" opacity="0.95"/>
+                <rect x="12" y="24" width="16" height="4" fill="#0284c7" opacity="0.95"/>
+                <rect x="12" y="54" width="16" height="5" fill="#0284c7" opacity="0.95"/>
+                <rect x="12" y="65" width="16" height="4" fill="#0284c7" opacity="0.95"/>
+                <circle cx="20" cy="38" r="4.5" fill="#00f0ff"/>
             </svg>
         </div>
 
         <div class="karyo-particle" style="left: 78%; animation-duration: 27s; animation-delay: 6s;">
-            <svg class="w-7 h-12 text-teal-400 drop-shadow-[0_0_12px_rgba(20,184,166,0.5)]" viewBox="0 0 40 80" fill="currentColor">
-                <rect x="12" y="10" width="6" height="25" rx="3" opacity="0.4"/>
-                <rect x="22" y="10" width="6" height="25" rx="3" opacity="0.4"/>
-                <rect x="12" y="45" width="6" height="25" rx="3" opacity="0.4"/>
-                <rect x="22" y="45" width="6" height="25" rx="3" opacity="0.4"/>
-                <rect x="12" y="18" width="16" height="4" fill="#0d9488" opacity="0.9"/>
-                <rect x="12" y="52" width="16" height="5" fill="#0d9488" opacity="0.9"/>
-                <circle cx="20" cy="38" r="3.5" fill="#14b8a6"/>
+            <svg class="w-8 h-14 text-sky-400 drop-shadow-[0_0_16px_rgba(56,189,248,0.7)]" viewBox="0 0 40 80" fill="currentColor">
+                <rect x="12" y="10" width="6" height="25" rx="3" opacity="0.5"/>
+                <rect x="22" y="10" width="6" height="25" rx="3" opacity="0.5"/>
+                <rect x="12" y="45" width="6" height="25" rx="3" opacity="0.5"/>
+                <rect x="22" y="45" width="6" height="25" rx="3" opacity="0.5"/>
+                <rect x="12" y="18" width="16" height="4" fill="#0369a1" opacity="0.95"/>
+                <rect x="12" y="52" width="16" height="5" fill="#0369a1" opacity="0.95"/>
+                <circle cx="20" cy="38" r="4" fill="#38bdf8"/>
             </svg>
         </div>
 
         <!-- Cytogenetic Coordinate Badges -->
-        <div class="absolute top-[22%] left-[6%] font-mono text-[10px] text-cyan-400/25 tracking-widest">[46,XX/XY META-SCAN]</div>
-        <div class="absolute bottom-[28%] right-[6%] font-mono text-[10px] text-teal-400/25 tracking-widest">[GIEMSA G-BAND RESOLUTION: 550]</div>
+        <div class="absolute top-[22%] left-[6%] font-mono text-[10px] text-cyan-300/40 tracking-widest">[46,XX/XY META-SCAN]</div>
+        <div class="absolute bottom-[28%] right-[6%] font-mono text-[10px] text-sky-300/40 tracking-widest">[GIEMSA G-BAND RESOLUTION: 550]</div>
     </div>
 
     <!-- ==================== TOP NAVIGATION HEADER ==================== -->
-    <header class="sticky top-0 z-40 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 px-4 md:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4 flex-shrink-0">
+    <header class="sticky top-0 z-40 bg-[#030d1a]/90 backdrop-blur-xl border-b border-cyan-500/25 px-4 md:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4 flex-shrink-0 shadow-lg shadow-black/40">
         <div class="flex items-center gap-4">
-            <a href="../index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-700/80 bg-slate-900/90 hover:border-cyan-400 hover:text-cyan-300 text-slate-300 text-xs font-mono transition group">
+            <a href="../index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-cyan-500/30 bg-[#06172a] hover:border-cyan-400 hover:text-cyan-300 text-slate-200 text-xs font-mono transition group shadow-sm">
                 <span class="transform group-hover:-translate-x-1 transition-transform">←</span>
                 <span>BERANDA GEN-OS</span>
             </a>
-            <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
+            <div class="h-6 w-px bg-cyan-500/20 hidden sm:block"></div>
             <div class="flex items-center gap-3">
-                <div class="p-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xl">
+                <div class="p-1.5 rounded-lg bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 text-xl shadow-[0_0_12px_rgba(0,240,255,0.3)]">
                     🔬
                 </div>
                 <div>
@@ -296,32 +308,32 @@
                         <h1 class="text-base md:text-lg font-display font-bold text-white tracking-wider flex items-center gap-2">
                             GEN-K
                         </h1>
-                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-semibold tracking-wider">
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/25 text-cyan-200 border border-cyan-400/40 font-bold tracking-wider">
                             MODUL 05
                         </span>
                     </div>
-                    <p class="text-[11px] font-mono text-slate-400 tracking-wider">KARYOTYPE SCANNER & ANEUPLOIDY ENGINE</p>
+                    <p class="text-[11px] font-mono text-cyan-300/70 tracking-wider">KARYOTYPE SCANNER & ANEUPLOIDY ENGINE</p>
                 </div>
             </div>
         </div>
 
         <div class="flex items-center gap-2 sm:gap-3">
             <!-- Audio Toggle -->
-            <button id="btn-sound" onclick="toggleSound()" class="px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 hover:border-cyan-400 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition" title="Toggle Efek Suara">
+            <button id="btn-sound" onclick="toggleSound()" class="px-2.5 py-1.5 rounded-lg border border-cyan-500/30 bg-[#06172a] hover:border-cyan-400 text-slate-200 text-xs font-mono flex items-center gap-1.5 transition shadow-sm" title="Toggle Efek Suara">
                 <span id="sound-icon">🔊</span>
                 <span class="hidden md:inline">AUDIO</span>
             </button>
 
             <!-- Literature Button -->
-            <button onclick="openLiteratureModal()" class="px-3 py-1.5 rounded-lg border border-purple-500/40 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-xs font-mono flex items-center gap-1.5 transition">
+            <button onclick="openLiteratureModal()" class="px-3 py-1.5 rounded-lg border border-purple-500/50 bg-purple-950/40 hover:bg-purple-900/50 text-purple-200 text-xs font-mono flex items-center gap-1.5 transition shadow-sm">
                 <span>📚</span>
-                <span class="hidden sm:inline">LITERATUR</span>
+                <span class="hidden sm:inline font-bold">LITERATUR</span>
             </button>
 
             <!-- Tutorial Button -->
-            <button onclick="openTutorialModal()" class="px-3 py-1.5 rounded-lg border border-cyan-500/50 bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 text-xs font-mono flex items-center gap-1.5 transition animate-pulse">
+            <button onclick="openTutorialModal()" class="px-3 py-1.5 rounded-lg border border-cyan-400/60 bg-cyan-500/25 hover:bg-cyan-500/35 text-cyan-100 text-xs font-mono flex items-center gap-1.5 transition animate-pulse shadow-[0_0_12px_rgba(0,240,255,0.35)]">
                 <span>📖</span>
-                <span>PANDUAN</span>
+                <span class="font-bold">PANDUAN</span>
             </button>
         </div>
     </header>
@@ -336,15 +348,15 @@
                 <div class="flex items-start justify-between">
                     <div>
                         <div class="flex items-center gap-2 mb-1">
-                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold">KATEGORI 1</span>
-                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">CHR 1 & CHR 3</span>
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-rose-500/25 text-rose-200 border border-rose-500/50 font-bold">KATEGORI 1</span>
+                            <span class="text-[10px] font-mono text-slate-300 tracking-wider font-semibold">CHR 1 & CHR 3</span>
                         </div>
                         <h2 class="text-sm md:text-base font-bold text-white font-sans">Autosom Besar (Efek Letal)</h2>
                     </div>
-                    <span class="text-2xl text-rose-400 opacity-80 group-hover:scale-110 transition-transform">⚠️</span>
+                    <span class="text-2xl text-rose-400 opacity-90 group-hover:scale-110 transition-transform">⚠️</span>
                 </div>
-                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-                    Kromosom 1 & 3 memuat ribuan gen esensial. Setiap penambahan (trisomi) atau pengurangan (monosomi) memicu <b>ketidakseimbangan dosis gen masif</b> yang letal pada embrio awal (abortus spontan).
+                <p class="text-xs text-slate-200 mt-2 leading-relaxed">
+                    Kromosom 1 & 3 memuat ribuan gen esensial. Setiap penambahan (trisomi) atau pengurangan (monosomi) memicu <b class="text-rose-300">ketidakseimbangan dosis gen masif</b> yang letal pada embrio awal (abortus spontan).
                 </p>
             </div>
 
@@ -353,15 +365,15 @@
                 <div class="flex items-start justify-between">
                     <div>
                         <div class="flex items-center gap-2 mb-1">
-                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">KATEGORI 2</span>
-                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">CHR 13, 18, 21</span>
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/25 text-amber-200 border border-amber-500/50 font-bold">KATEGORI 2</span>
+                            <span class="text-[10px] font-mono text-slate-300 tracking-wider font-semibold">CHR 13, 18, 21</span>
                         </div>
                         <h2 class="text-sm md:text-base font-bold text-white font-sans">Trisomi Autosom Klinis</h2>
                     </div>
-                    <span class="text-2xl text-amber-400 opacity-80 group-hover:scale-110 transition-transform">🧬</span>
+                    <span class="text-2xl text-amber-400 opacity-90 group-hover:scale-110 transition-transform">🧬</span>
                 </div>
-                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-                    Kromosom dengan kepadatan gen relatif rendah mampu menghasilkan kelahiran hidup: <b>Sindrom Down (+21)</b>, <b>Sindrom Edwards (+18)</b>, dan <b>Sindrom Patau (+13)</b> dengan variasi spektrum keparahan.
+                <p class="text-xs text-slate-200 mt-2 leading-relaxed">
+                    Kromosom dengan kepadatan gen relatif rendah mampu menghasilkan kelahiran hidup: <b class="text-amber-300">Sindrom Down (+21)</b>, <b class="text-amber-300">Sindrom Edwards (+18)</b>, dan <b class="text-amber-300">Sindrom Patau (+13)</b>.
                 </p>
             </div>
 
@@ -370,15 +382,15 @@
                 <div class="flex items-start justify-between">
                     <div>
                         <div class="flex items-center gap-2 mb-1">
-                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold">KATEGORI 3</span>
-                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">KROMOSOM SEKS (X)</span>
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-purple-500/25 text-purple-200 border border-purple-500/50 font-bold">KATEGORI 3</span>
+                            <span class="text-[10px] font-mono text-slate-300 tracking-wider font-semibold">KROMOSOM SEKS (X)</span>
                         </div>
                         <h2 class="text-sm md:text-base font-bold text-white font-sans">Aneuploidi Kromosom Seks</h2>
                     </div>
-                    <span class="text-2xl text-purple-400 opacity-80 group-hover:scale-110 transition-transform">⚧️</span>
+                    <span class="text-2xl text-purple-400 opacity-90 group-hover:scale-110 transition-transform">⚧️</span>
                 </div>
-                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-                    Inaktivasi kromosom X (<i>Barr Body</i>) membuat aneuploidi seks lebih ditoleransi: <b>Sindrom Turner (45, X)</b> merupakan satu-satunya monosomi yang dapat hidup; serta <b>Sindrom Triple X (47, XXX)</b>.
+                <p class="text-xs text-slate-200 mt-2 leading-relaxed">
+                    Inaktivasi kromosom X (<i>Barr Body</i>) membuat aneuploidi seks lebih ditoleransi: <b class="text-purple-300">Sindrom Turner (45, X)</b> merupakan satu-satunya monosomi hidup; serta <b class="text-purple-300">Sindrom Triple X (47, XXX)</b>.
                 </p>
             </div>
         </section>
@@ -390,36 +402,36 @@
             <div class="lg:col-span-4 space-y-4">
                 <!-- Panel 01: Parameter Sitogenetika -->
                 <div class="glass-panel rounded-2xl p-5 sm:p-6 space-y-5 border-t-2 border-t-cyan-400">
-                    <div class="border-b border-slate-800 pb-3 flex items-center justify-between">
+                    <div class="border-b border-cyan-500/20 pb-3 flex items-center justify-between">
                         <div>
-                            <span class="text-[10px] font-mono text-cyan-400 uppercase tracking-widest block">// PANEL KONTROL SITOGENETIKA</span>
+                            <span class="text-[10px] font-mono text-cyan-400 uppercase tracking-widest block font-bold">// PANEL KONTROL SITOGENETIKA</span>
                             <h3 class="text-base sm:text-lg font-display font-bold text-white tracking-wide">Konfigurasi Kariotipe</h3>
                         </div>
-                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                        <span class="text-xs font-mono px-2.5 py-0.5 rounded bg-cyan-500/25 text-cyan-200 border border-cyan-400/40 font-bold">
                             HG38
                         </span>
                     </div>
 
                     <!-- Preset Skenario Klinis Cepat -->
                     <div>
-                        <label class="text-[10px] text-slate-400 font-mono mb-2 block uppercase tracking-wider">Pintas Skenario Klinis Populer:</label>
+                        <label class="text-[10px] text-slate-300 font-mono mb-2 block uppercase tracking-wider font-semibold">Pintas Skenario Klinis Populer:</label>
                         <div class="grid grid-cols-2 gap-1.5">
-                            <button onclick="applyPreset('21', 3)" class="text-left px-2.5 py-1.5 rounded-lg border border-slate-800 bg-slate-900/80 hover:border-cyan-400 text-slate-300 hover:text-white text-[11px] font-mono transition">
+                            <button onclick="applyPreset('21', 3)" class="text-left px-2.5 py-1.5 rounded-lg border border-cyan-500/20 bg-[#07192d] hover:border-cyan-400 text-slate-200 hover:text-white text-[11px] font-mono transition shadow-sm">
                                 🔹 Down (+21)
                             </button>
-                            <button onclick="applyPreset('18', 3)" class="text-left px-2.5 py-1.5 rounded-lg border border-slate-800 bg-slate-900/80 hover:border-amber-400 text-slate-300 hover:text-white text-[11px] font-mono transition">
+                            <button onclick="applyPreset('18', 3)" class="text-left px-2.5 py-1.5 rounded-lg border border-amber-500/20 bg-[#07192d] hover:border-amber-400 text-slate-200 hover:text-white text-[11px] font-mono transition shadow-sm">
                                 🔸 Edwards (+18)
                             </button>
-                            <button onclick="applyPreset('13', 3)" class="text-left px-2.5 py-1.5 rounded-lg border border-slate-800 bg-slate-900/80 hover:border-amber-400 text-slate-300 hover:text-white text-[11px] font-mono transition">
+                            <button onclick="applyPreset('13', 3)" class="text-left px-2.5 py-1.5 rounded-lg border border-amber-500/20 bg-[#07192d] hover:border-amber-400 text-slate-200 hover:text-white text-[11px] font-mono transition shadow-sm">
                                 🔸 Patau (+13)
                             </button>
-                            <button onclick="applyPreset('X', 1)" class="text-left px-2.5 py-1.5 rounded-lg border border-slate-800 bg-slate-900/80 hover:border-purple-400 text-slate-300 hover:text-white text-[11px] font-mono transition">
+                            <button onclick="applyPreset('X', 1)" class="text-left px-2.5 py-1.5 rounded-lg border border-purple-500/20 bg-[#07192d] hover:border-purple-400 text-slate-200 hover:text-white text-[11px] font-mono transition shadow-sm">
                                 🟣 Turner (45, X)
                             </button>
-                            <button onclick="applyPreset('1', 3)" class="text-left px-2.5 py-1.5 rounded-lg border border-slate-800 bg-slate-900/80 hover:border-rose-400 text-slate-300 hover:text-white text-[11px] font-mono transition">
+                            <button onclick="applyPreset('1', 3)" class="text-left px-2.5 py-1.5 rounded-lg border border-rose-500/20 bg-[#07192d] hover:border-rose-400 text-slate-200 hover:text-white text-[11px] font-mono transition shadow-sm">
                                 🔴 Letal Trisomi 1
                             </button>
-                            <button onclick="applyPreset('21', 2)" class="text-left px-2.5 py-1.5 rounded-lg border border-slate-800 bg-slate-900/80 hover:border-emerald-400 text-slate-300 hover:text-white text-[11px] font-mono transition">
+                            <button onclick="applyPreset('21', 2)" class="text-left px-2.5 py-1.5 rounded-lg border border-emerald-500/20 bg-[#07192d] hover:border-emerald-400 text-slate-200 hover:text-white text-[11px] font-mono transition shadow-sm">
                                 🟢 Normal (2n = 46)
                             </button>
                         </div>
@@ -427,24 +439,24 @@
 
                     <!-- Target Autosom / Gonosom Selector -->
                     <div>
-                        <label class="text-[10px] text-slate-400 font-mono mb-2 block uppercase tracking-wider">Target Kromosom:</label>
+                        <label class="text-[10px] text-slate-300 font-mono mb-2 block uppercase tracking-wider font-semibold">Target Kromosom:</label>
                         <div class="grid grid-cols-3 gap-2">
-                            <button onclick="setChromo('1')" id="btn-c-1" class="tech-btn py-2.5 rounded-xl font-bold font-display text-xs" style="--color: #f43f5e; --glow: rgba(244, 63, 94, 0.4)">
+                            <button onclick="setChromo('1')" id="btn-c-1" class="tech-btn py-2.5 rounded-xl font-bold font-display text-xs" style="--color: #ff2a55; --glow: rgba(255, 42, 85, 0.45)">
                                 CHR 1
                             </button>
-                            <button onclick="setChromo('3')" id="btn-c-3" class="tech-btn py-2.5 rounded-xl font-bold font-display text-xs" style="--color: #f43f5e; --glow: rgba(244, 63, 94, 0.4)">
+                            <button onclick="setChromo('3')" id="btn-c-3" class="tech-btn py-2.5 rounded-xl font-bold font-display text-xs" style="--color: #ff2a55; --glow: rgba(255, 42, 85, 0.45)">
                                 CHR 3
                             </button>
-                            <button onclick="setChromo('13')" id="btn-c-13" class="tech-btn py-2.5 rounded-xl font-bold font-display text-xs" style="--color: #f59e0b; --glow: rgba(245, 158, 11, 0.4)">
+                            <button onclick="setChromo('13')" id="btn-c-13" class="tech-btn py-2.5 rounded-xl font-bold font-display text-xs" style="--color: #fbbf24; --glow: rgba(251, 191, 36, 0.45)">
                                 CHR 13
                             </button>
-                            <button onclick="setChromo('18')" id="btn-c-18" class="tech-btn py-2.5 rounded-xl font-bold font-display text-xs" style="--color: #f59e0b; --glow: rgba(245, 158, 11, 0.4)">
+                            <button onclick="setChromo('18')" id="btn-c-18" class="tech-btn py-2.5 rounded-xl font-bold font-display text-xs" style="--color: #fbbf24; --glow: rgba(251, 191, 36, 0.45)">
                                 CHR 18
                             </button>
-                            <button onclick="setChromo('21')" id="btn-c-21" class="tech-btn py-2.5 rounded-xl font-bold font-display text-xs active" style="--color: #22d3ee; --glow: rgba(34, 211, 238, 0.4)">
+                            <button onclick="setChromo('21')" id="btn-c-21" class="tech-btn py-2.5 rounded-xl font-bold font-display text-xs active" style="--color: #00f0ff; --glow: rgba(0, 240, 255, 0.45)">
                                 CHR 21
                             </button>
-                            <button onclick="setChromo('X')" id="btn-c-X" class="tech-btn py-2.5 rounded-xl font-bold font-display text-xs" style="--color: #a855f7; --glow: rgba(168, 85, 247, 0.4)">
+                            <button onclick="setChromo('X')" id="btn-c-X" class="tech-btn py-2.5 rounded-xl font-bold font-display text-xs" style="--color: #c084fc; --glow: rgba(192, 132, 252, 0.45)">
                                 SEX (X)
                             </button>
                         </div>
@@ -452,22 +464,22 @@
 
                     <!-- Jumlah Salinan (Ploidi / Copy Number) -->
                     <div>
-                        <label class="text-[10px] text-slate-400 font-mono mb-2 block uppercase tracking-wider">Jumlah Salinan Kromatid Homolog:</label>
-                        <div class="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-slate-900 border border-slate-800">
-                            <button onclick="setCopy(1)" id="btn-n-1" class="tech-btn py-2 rounded-lg text-xs font-mono font-bold" style="--color: #f59e0b; --glow: rgba(245, 158, 11, 0.4)">
+                        <label class="text-[10px] text-slate-300 font-mono mb-2 block uppercase tracking-wider font-semibold">Jumlah Salinan Kromatid Homolog:</label>
+                        <div class="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-[#06172a] border border-cyan-500/20">
+                            <button onclick="setCopy(1)" id="btn-n-1" class="tech-btn py-2 rounded-lg text-xs font-mono font-bold" style="--color: #fbbf24; --glow: rgba(251, 191, 36, 0.45)">
                                 1 (MONO)
                             </button>
-                            <button onclick="setCopy(2)" id="btn-n-2" class="tech-btn py-2 rounded-lg text-xs font-mono font-bold active" style="--color: #22d3ee; --glow: rgba(34, 211, 238, 0.4)">
+                            <button onclick="setCopy(2)" id="btn-n-2" class="tech-btn py-2 rounded-lg text-xs font-mono font-bold active" style="--color: #00f0ff; --glow: rgba(0, 240, 255, 0.45)">
                                 2 (DI/NORM)
                             </button>
-                            <button onclick="setCopy(3)" id="btn-n-3" class="tech-btn py-2 rounded-lg text-xs font-mono font-bold" style="--color: #f43f5e; --glow: rgba(244, 63, 94, 0.4)">
+                            <button onclick="setCopy(3)" id="btn-n-3" class="tech-btn py-2 rounded-lg text-xs font-mono font-bold" style="--color: #ff2a55; --glow: rgba(255, 42, 85, 0.45)">
                                 3 (TRI)
                             </button>
                         </div>
                     </div>
 
                     <!-- Tombol Eksekusi Pindaian -->
-                    <button onclick="runSimulation()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-display font-bold text-sm tracking-widest transition shadow-lg shadow-cyan-500/25 active:scale-95 flex items-center justify-center gap-2">
+                    <button onclick="runSimulation()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-display font-bold text-sm tracking-widest transition shadow-lg shadow-cyan-500/35 active:scale-95 flex items-center justify-center gap-2">
                         <span>⚡</span>
                         <span>PINDAI & ANALISIS KROMOSOM</span>
                     </button>
@@ -475,24 +487,24 @@
 
                 <!-- Lethality & Clinical Risk Telemetry Monitor -->
                 <div id="monitor-panel" class="glass-panel rounded-2xl p-5 space-y-4 border-l-4 border-l-cyan-400 hidden transition-all">
-                    <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                        <span class="text-[10px] font-mono text-slate-400 tracking-wider uppercase">INDEKS LETALITAS GENETIK</span>
+                    <div class="flex justify-between items-center border-b border-cyan-500/20 pb-2">
+                        <span class="text-[10px] font-mono text-slate-300 tracking-wider uppercase font-semibold">INDEKS LETALITAS GENETIK</span>
                         <span id="lethality-val" class="text-xl font-display font-bold text-rose-400">0%</span>
                     </div>
 
                     <!-- Progress bar letalitas -->
-                    <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800 p-0.5">
-                        <div id="lethality-bar" class="h-full rounded-full bg-gradient-to-r from-cyan-500 to-rose-500 w-0 transition-all duration-1000"></div>
+                    <div class="w-full h-3 bg-[#030d1a] rounded-full overflow-hidden border border-cyan-500/20 p-0.5 shadow-inner">
+                        <div id="lethality-bar" class="h-full rounded-full bg-gradient-to-r from-cyan-400 to-rose-500 w-0 transition-all duration-1000 shadow-[0_0_8px_#ff2a55]"></div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3 pt-1">
-                        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
-                            <span class="text-[10px] text-slate-400 font-mono block uppercase">Ekspektasi Hidup</span>
+                        <div class="p-2.5 rounded-xl bg-[#07192d] border border-cyan-500/25 shadow-sm">
+                            <span class="text-[10px] text-slate-300 font-mono block uppercase font-semibold">Ekspektasi Hidup</span>
                             <span id="life-exp" class="text-xs font-bold text-white block mt-0.5">Normal</span>
                         </div>
-                        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
-                            <span class="text-[10px] text-slate-400 font-mono block uppercase">Tipe Mutasi</span>
-                            <span id="mut-type" class="text-xs font-bold text-cyan-400 block mt-0.5">Euploidi</span>
+                        <div class="p-2.5 rounded-xl bg-[#07192d] border border-cyan-500/25 shadow-sm">
+                            <span class="text-[10px] text-slate-300 font-mono block uppercase font-semibold">Tipe Mutasi</span>
+                            <span id="mut-type" class="text-xs font-bold text-cyan-300 block mt-0.5">Euploidi</span>
                         </div>
                     </div>
                 </div>
@@ -502,24 +514,24 @@
             <div class="lg:col-span-8 space-y-4 flex flex-col">
 
                 <!-- Digital Microscope Viewport -->
-                <div class="glass-panel rounded-2xl p-4 relative overflow-hidden flex-grow flex flex-col justify-between" style="min-height: 440px;">
+                <div class="glass-panel rounded-2xl p-4 sm:p-5 relative overflow-hidden flex-grow flex flex-col justify-between" style="min-height: 440px;">
                     <!-- Floating Viewport HUD Header -->
-                    <div class="flex items-center justify-between z-10 pointer-events-none mb-2">
+                    <div class="flex items-center justify-between z-10 pointer-events-none mb-3">
                         <div class="flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
-                            <span class="text-[11px] font-mono text-cyan-300 font-bold tracking-widest bg-slate-950/80 px-2.5 py-1 rounded-md border border-cyan-500/30">
+                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping shadow-[0_0_8px_#00f0ff]"></span>
+                            <span class="text-[11px] font-mono text-cyan-200 font-bold tracking-widest bg-[#030d1a]/90 px-3 py-1.5 rounded-lg border border-cyan-400/40 shadow-sm">
                                 MIKROSKOP SITOGENETIKA // RESOLUSI TINGGI
                             </span>
                         </div>
-                        <div class="text-[10px] font-mono text-slate-400 bg-slate-950/80 px-2.5 py-1 rounded-md border border-slate-800">
-                            PEWARNAAN: <span class="text-cyan-400 font-bold">GIEMSA (G-BANDING)</span>
+                        <div class="text-[10px] font-mono text-slate-300 bg-[#030d1a]/90 px-3 py-1.5 rounded-lg border border-cyan-500/25 font-semibold">
+                            PEWARNAAN: <span class="text-cyan-300 font-bold">GIEMSA (G-BANDING)</span>
                         </div>
                     </div>
 
                     <!-- Microscope Viewport Area -->
-                    <div id="microscope" class="relative w-full flex-grow flex items-center justify-center rounded-xl bg-black overflow-hidden border border-slate-800/80" style="min-height: 320px;">
+                    <div id="microscope" class="relative w-full flex-grow flex items-center justify-center rounded-xl bg-black overflow-hidden border border-cyan-500/25 shadow-inner" style="min-height: 320px;">
                         <!-- Reticle grid background -->
-                        <div class="absolute inset-0 grid grid-cols-12 grid-rows-6 opacity-15 pointer-events-none">
+                        <div class="absolute inset-0 grid grid-cols-12 grid-rows-6 opacity-20 pointer-events-none">
                             <div class="border border-cyan-400/30 w-full h-full col-span-12 row-span-6"></div>
                         </div>
 
@@ -529,30 +541,30 @@
                         <!-- Chromosome Stage (where SVG chromosomes appear) -->
                         <div id="chromo-stage" class="flex items-center justify-center gap-6 sm:gap-12 md:gap-16 z-10 relative py-6">
                             <!-- Initial Placeholder before scan -->
-                            <div class="text-center p-6 space-y-2 opacity-60">
+                            <div class="text-center p-6 space-y-2 opacity-80">
                                 <span class="text-5xl block animate-pulse">🔬</span>
-                                <p class="text-xs font-mono text-slate-400 tracking-wider">PILIH PARAMETER DI PANEL KIRI & KLIK "MULAI PINDAIAN"</p>
+                                <p class="text-xs font-mono text-cyan-300 tracking-wider font-semibold">PILIH PARAMETER DI PANEL KIRI & KLIK "PINDAI & ANALISIS KROMOSOM"</p>
                             </div>
                         </div>
 
                         <!-- Loading Overlay (Mitosis / Cell Division) -->
-                        <div id="loader" class="absolute inset-0 z-20 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center hidden space-y-4">
-                            <div class="w-14 h-14 rounded-full border-4 border-cyan-400 border-t-transparent animate-spin"></div>
+                        <div id="loader" class="absolute inset-0 z-20 bg-[#020b14]/95 backdrop-blur-md flex flex-col items-center justify-center hidden space-y-4">
+                            <div class="w-14 h-14 rounded-full border-4 border-cyan-400 border-t-transparent animate-spin shadow-[0_0_16px_#00f0ff]"></div>
                             <div class="text-center">
-                                <div class="text-cyan-400 font-display text-sm tracking-widest font-bold animate-pulse">
+                                <div class="text-cyan-300 font-display text-sm tracking-widest font-bold animate-pulse">
                                     PEMISAHAN KROMATID (MITOSIS)
                                 </div>
-                                <div class="text-[11px] text-slate-400 font-mono mt-1">
+                                <div class="text-[11px] text-slate-300 font-mono mt-1 font-semibold">
                                     Menginduksi Colchicine & Menata Kariogram...
                                 </div>
                             </div>
                         </div>
 
                         <!-- HUD Floating Annotations -->
-                        <div class="absolute top-3 left-3 text-[10px] font-mono text-cyan-400/60 bg-slate-950/70 px-2 py-0.5 rounded border border-cyan-500/20">
+                        <div class="absolute top-3 left-3 text-[10px] font-mono text-cyan-300 bg-[#020b14]/80 px-2.5 py-1 rounded border border-cyan-500/30 font-semibold shadow-sm">
                             PEMBESARAN: 2500x • LENSA IMERSI MINYAK
                         </div>
-                        <div class="absolute bottom-3 right-3 text-[10px] font-mono text-rose-400 animate-pulse hidden bg-slate-950/80 px-2.5 py-1 rounded border border-rose-500/40" id="alert-msg">
+                        <div class="absolute bottom-3 right-3 text-[10px] font-mono text-rose-200 animate-pulse hidden bg-rose-950/90 px-3 py-1 rounded-lg border border-rose-500/50 font-bold shadow-[0_0_12px_rgba(255,42,85,0.4)]" id="alert-msg">
                             ⚠️ ABNORMALITAS ANEUPLOIDI TERDETEKSI
                         </div>
 
@@ -561,78 +573,78 @@
                     </div>
 
                     <!-- Legend Chips Overlay -->
-                    <div class="flex flex-wrap items-center justify-center gap-3 pt-3 border-t border-slate-800/80 text-[11px] font-mono text-slate-400">
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3 h-3 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400"></span>
+                    <div class="flex flex-wrap items-center justify-center gap-4 pt-3.5 border-t border-cyan-500/20 text-[11px] font-mono text-slate-300">
+                        <div class="flex items-center gap-1.5 font-semibold text-cyan-200">
+                            <span class="w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_8px_#00f0ff]"></span>
                             <span>Normal (Disomi 2n)</span>
                         </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3 h-3 rounded-full bg-amber-400 shadow-sm shadow-amber-400"></span>
+                        <div class="flex items-center gap-1.5 font-semibold text-amber-200">
+                            <span class="w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]"></span>
                             <span>Monosomi (1 Salinan)</span>
                         </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3 h-3 rounded-full bg-purple-400 shadow-sm shadow-purple-400"></span>
+                        <div class="flex items-center gap-1.5 font-semibold text-purple-200">
+                            <span class="w-3 h-3 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc]"></span>
                             <span>Trisomi Seks / Sindrom</span>
                         </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3 h-3 rounded-full bg-rose-500 shadow-sm shadow-rose-500"></span>
+                        <div class="flex items-center gap-1.5 font-semibold text-rose-200">
+                            <span class="w-3 h-3 rounded-full bg-rose-500 shadow-[0_0_8px_#ff2a55]"></span>
                             <span>Trisomi Letal (Fatal)</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Comprehensive Clinical Cytogenetic Report Card -->
-                <div id="report-card" class="glass-panel rounded-2xl p-6 sm:p-7 hidden border-t-2 border-t-cyan-400 space-y-6 transition-all">
+                <div id="report-card" class="glass-panel rounded-2xl p-6 sm:p-7 hidden border-t-2 border-t-cyan-400 space-y-6 transition-all shadow-xl">
                     <!-- Report Header -->
-                    <div class="flex flex-wrap items-start justify-between gap-4 border-b border-slate-800 pb-4">
+                    <div class="flex flex-wrap items-start justify-between gap-4 border-b border-cyan-500/20 pb-4">
                         <div>
-                            <span class="text-[10px] font-mono text-cyan-400 uppercase tracking-widest block mb-1">
+                            <span class="text-[10px] font-mono text-cyan-400 uppercase tracking-widest block mb-1 font-bold">
                                 // REKAM MEDIS SITOGENETIKA KLINIS
                             </span>
                             <h2 class="text-xl sm:text-2xl font-display font-bold text-white tracking-wide" id="syn-name">
                                 HASIL ANALISIS
                             </h2>
-                            <p class="text-xs font-mono text-purple-400 font-bold mt-1" id="syn-karyotype">
+                            <p class="text-xs font-mono text-purple-300 font-bold mt-1 tracking-wide" id="syn-karyotype">
                                 46, XX (Normal)
                             </p>
                         </div>
                         <div class="text-right">
-                            <span class="text-[10px] font-mono text-slate-400 block uppercase">KLASIFIKASI ISCN</span>
-                            <span class="text-xs sm:text-sm font-mono font-bold px-3 py-1 rounded-lg bg-slate-900 border border-slate-700 text-cyan-300 inline-block mt-1" id="syn-class">
+                            <span class="text-[10px] font-mono text-slate-300 block uppercase font-semibold">KLASIFIKASI ISCN</span>
+                            <span class="text-xs sm:text-sm font-mono font-bold px-3 py-1 rounded-lg bg-[#07192d] border border-cyan-500/40 text-cyan-200 inline-block mt-1 shadow-sm" id="syn-class">
                                 EUPLOID
                             </span>
                         </div>
                     </div>
 
                     <!-- Clinical Findings Sections -->
-                    <div class="space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
-                        <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+                    <div class="space-y-4 text-xs sm:text-sm text-slate-100 leading-relaxed font-sans">
+                        <div class="p-4 rounded-xl bg-[#07192d] border border-cyan-500/25 space-y-1.5 shadow-md">
                             <h4 class="text-cyan-300 font-bold text-xs tracking-wider uppercase font-mono">
                                 1. Manifestasi & Gambaran Klinis
                             </h4>
-                            <p id="desc-clinical" class="text-xs leading-relaxed text-slate-300">-</p>
+                            <p id="desc-clinical" class="text-xs leading-relaxed text-slate-200">-</p>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+                            <div class="p-4 rounded-xl bg-[#07192d] border border-amber-500/25 space-y-1.5 shadow-md">
                                 <h4 class="text-amber-300 font-bold text-xs tracking-wider uppercase font-mono">
                                     2. Mekanisme Mutasi Meiosis
                                 </h4>
-                                <p id="desc-mech" class="text-xs leading-relaxed text-slate-300">-</p>
+                                <p id="desc-mech" class="text-xs leading-relaxed text-slate-200">-</p>
                             </div>
-                            <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+                            <div class="p-4 rounded-xl bg-[#07192d] border border-rose-500/25 space-y-1.5 shadow-md">
                                 <h4 class="text-rose-300 font-bold text-xs tracking-wider uppercase font-mono">
                                     3. Prognosis & Dampak Harapan Hidup
                                 </h4>
-                                <p id="desc-prog" class="text-xs leading-relaxed text-slate-300">-</p>
+                                <p id="desc-prog" class="text-xs leading-relaxed text-slate-200">-</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Report Verification Footer -->
-                    <div class="pt-3 border-t border-slate-800 flex flex-wrap justify-between items-center gap-2 text-[11px] font-mono text-slate-500">
+                    <div class="pt-3 border-t border-cyan-500/20 flex flex-wrap justify-between items-center gap-2 text-[11px] font-mono text-slate-400">
                         <span>STANDAR KARIOTIPE: ISCN 2020 & THOMPSON & THOMPSON GENETICS IN MEDICINE ED. 8</span>
-                        <span class="text-cyan-400/80">VALIDASI: GEN-K CYTO-CORE</span>
+                        <span class="text-cyan-300 font-semibold">VALIDASI: GEN-K CYTO-CORE</span>
                     </div>
                 </div>
 
@@ -643,53 +655,53 @@
     </main>
 
     <!-- ==================== FOOTER ==================== -->
-    <footer class="mt-8 border-t border-slate-800/80 bg-slate-950/80 py-6 px-4 text-center text-xs font-mono text-slate-500">
-        <p>GEN-OS // BIO-CORE • Modul 05: Simulasi Deteksi Mutasi Kromosom (GEN-K)</p>
-        <p class="mt-1 text-[11px] text-slate-600">Simulasi Sitogenetika Manusia berdasarkan Nomenklatur ISCN & Sitopatologi Meiosis</p>
+    <footer class="mt-8 border-t border-cyan-500/20 bg-[#020b14]/90 py-6 px-4 text-center text-xs font-mono text-slate-400 shadow-inner">
+        <p class="text-slate-300">GEN-OS // BIO-CORE • Modul 05: Simulasi Deteksi Mutasi Kromosom (GEN-K)</p>
+        <p class="mt-1 text-[11px] text-cyan-400/70">Simulasi Sitogenetika Manusia berdasarkan Nomenklatur ISCN & Sitopatologi Meiosis</p>
     </footer>
 
     <!-- ==================== TUTORIAL MODAL ==================== -->
     <div id="modal-tutorial" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden transition-opacity">
-        <div class="glass-panel rounded-2xl max-w-2xl w-full border border-cyan-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="glass-panel rounded-2xl max-w-2xl w-full border border-cyan-400/50 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto shadow-2xl bg-[#041220]/95">
+            <div class="flex items-center justify-between border-b border-cyan-500/20 pb-4">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30">📖</span>
+                    <span class="text-2xl p-2 rounded-xl bg-cyan-500/20 border border-cyan-400/40 shadow-[0_0_10px_rgba(0,240,255,0.3)]">📖</span>
                     <div>
                         <h3 class="text-lg font-display font-bold text-white tracking-wider">PANDUAN LENGKAP SIMULASI GEN-K</h3>
-                        <p class="text-xs font-mono text-cyan-400">MODUL 05: PEMINDAIAN KARIOTIPE & ANEUPLOIDI</p>
+                        <p class="text-xs font-mono text-cyan-300">MODUL 05: PEMINDAIAN KARIOTIPE & ANEUPLOIDI</p>
                     </div>
                 </div>
-                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+                <button onclick="closeTutorialModal()" class="text-slate-300 hover:text-white text-xl p-1 font-mono transition">✕</button>
             </div>
 
-            <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
-                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+            <div class="space-y-4 text-sm text-slate-100 leading-relaxed font-sans">
+                <div class="p-4 rounded-xl bg-[#07192d] border border-cyan-500/30 space-y-2 shadow-md">
                     <h4 class="font-display font-bold text-cyan-300 text-xs tracking-wider uppercase">1. Apa Itu Kariotipe & Aneuploidi?</h4>
-                    <p class="text-xs text-slate-300">
-                        Kariotipe adalah representasi visual susunan lengkap kromosom individu yang diurutkan berdasarkan ukuran, posisi sentromer, dan pola pita G-banding. <b>Aneuploidi</b> adalah kondisi abnormalitas di mana sel memiliki jumlah kromosom yang bukan kelipatan bulat dari haploid (misalnya $2n-1$ untuk monosomi, atau $2n+1$ untuk trisomi) akibat kegagalan pemisahan kromosom (*non-disjunction*) pada meiosis.
+                    <p class="text-xs text-slate-200 leading-relaxed">
+                        Kariotipe adalah representasi visual susunan lengkap kromosom individu yang diurutkan berdasarkan ukuran, posisi sentromer, dan pola pita G-banding. <b class="text-white">Aneuploidi</b> adalah kondisi abnormalitas di mana sel memiliki jumlah kromosom yang bukan kelipatan bulat dari haploid (misalnya $2n-1$ untuk monosomi, atau $2n+1$ untuk trisomi) akibat kegagalan pemisahan kromosom (*non-disjunction*) pada meiosis.
                     </p>
                 </div>
 
-                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                <div class="p-4 rounded-xl bg-[#07192d] border border-amber-500/30 space-y-2 shadow-md">
                     <h4 class="font-display font-bold text-amber-300 text-xs tracking-wider uppercase">2. Cara Mengoperasikan Simulator</h4>
-                    <ol class="list-decimal list-inside text-xs space-y-1.5 text-slate-300">
-                        <li>Pilih <b>Target Kromosom</b> (Kromosom Autosom Besar 1 & 3, Autosom Sindrom 13, 18, 21, atau Kromosom Seks X).</li>
-                        <li>Tentukan <b>Jumlah Salinan (Ploidi)</b>: 1 (Monosomi), 2 (Normal Disomi), atau 3 (Trisomi).</li>
-                        <li>Atau gunakan tombol <b>Pintas Skenario Klinis Populer</b> untuk memuat kasus terkenal seperti Sindrom Down atau Sindrom Turner dalam satu klik.</li>
-                        <li>Klik <b>PINDAI & ANALISIS KROMOSOM</b> untuk memulai simulasi pembelahan sel, pemindaian mikroskop, dan penerbitan rekam medis sitogenetika.</li>
+                    <ol class="list-decimal list-inside text-xs space-y-1.5 text-slate-200">
+                        <li>Pilih <b class="text-white">Target Kromosom</b> (Kromosom Autosom Besar 1 & 3, Autosom Sindrom 13, 18, 21, atau Kromosom Seks X).</li>
+                        <li>Tentukan <b class="text-white">Jumlah Salinan (Ploidi)</b>: 1 (Monosomi), 2 (Normal Disomi), atau 3 (Trisomi).</li>
+                        <li>Atau gunakan tombol <b class="text-amber-200">Pintas Skenario Klinis Populer</b> untuk memuat kasus terkenal seperti Sindrom Down atau Sindrom Turner dalam satu klik.</li>
+                        <li>Klik <b class="text-cyan-200">PINDAI & ANALISIS KROMOSOM</b> untuk memulai simulasi pembelahan sel, pemindaian mikroskop, dan penerbitan rekam medis sitogenetika.</li>
                     </ol>
                 </div>
 
-                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                <div class="p-4 rounded-xl bg-[#07192d] border border-rose-500/30 space-y-2 shadow-md">
                     <h4 class="font-display font-bold text-rose-300 text-xs tracking-wider uppercase">3. Mengapa Ada Mutasi yang Bersifat Letal?</h4>
-                    <p class="text-xs text-slate-300">
+                    <p class="text-xs text-slate-200 leading-relaxed">
                         Kromosom 1 dan 3 mengandung lebih dari 2.000 gen pengkode protein penting. Kelebihan atau kekurangan 1 kromosom utuh pada autosom besar menciptakan ketidakseimbangan stoikiometri protein seluler (*gene dosage effect*) yang fatal sehingga embrio gugur pada trimester awal.
                     </p>
                 </div>
             </div>
 
-            <div class="text-right border-t border-slate-800 pt-4">
-                <button onclick="closeTutorialModal()" class="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-display font-bold text-xs tracking-wider transition">
+            <div class="text-right border-t border-cyan-500/20 pt-4">
+                <button onclick="closeTutorialModal()" class="px-5 py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-display font-bold text-xs tracking-wider transition shadow-lg shadow-cyan-400/30">
                     MENGERTI, MULAI PEMINDAIAN
                 </button>
             </div>
@@ -698,79 +710,79 @@
 
     <!-- ==================== SCIENTIFIC LITERATURE MODAL ==================== -->
     <div id="modal-literature" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden transition-opacity">
-        <div class="glass-panel rounded-2xl max-w-2xl w-full border border-purple-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="glass-panel rounded-2xl max-w-2xl w-full border border-purple-500/40 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto shadow-2xl bg-[#0c051a]/95">
+            <div class="flex items-center justify-between border-b border-purple-500/20 pb-4">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">📚</span>
+                    <span class="text-2xl p-2 rounded-xl bg-purple-500/20 border border-purple-500/40 shadow-[0_0_10px_rgba(192,132,252,0.3)]">📚</span>
                     <div>
                         <h3 class="text-lg font-display font-bold text-white tracking-wider">DASAR TEORETIS & REFERENSI ILMIAH</h3>
-                        <p class="text-xs font-mono text-purple-400">SITOGENETIKA KLINIS, ANEUPLOIDI & NOMENKLATUR ISCN</p>
+                        <p class="text-xs font-mono text-purple-300">SITOGENETIKA KLINIS, ANEUPLOIDI & NOMENKLATUR ISCN</p>
                     </div>
                 </div>
-                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+                <button onclick="closeLiteratureModal()" class="text-slate-300 hover:text-white text-xl p-1 font-mono transition">✕</button>
             </div>
 
-            <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
+            <div class="space-y-4 text-xs text-slate-100 leading-relaxed font-sans">
                 <!-- Ref 1 -->
-                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                <div class="p-4 rounded-xl bg-[#150a2e] border border-cyan-500/30 space-y-1.5 shadow-md">
                     <div class="flex items-center justify-between">
-                        <span class="font-bold text-cyan-400 font-mono">1. Penentuan Jumlah Kromosom Diploid Manusia (2n = 46)</span>
-                        <span class="text-[10px] font-mono text-slate-500">1956</span>
+                        <span class="font-bold text-cyan-300 font-mono">1. Penentuan Jumlah Kromosom Diploid Manusia (2n = 46)</span>
+                        <span class="text-[10px] font-mono text-cyan-200">1956</span>
                     </div>
-                    <p class="text-slate-300">
-                        <b>Tjio, Joe Hin, & Levan, Albert (1956).</b> <i>The chromosome number of man.</i> Hereditas, 42(1-2): 1–6.
+                    <p class="text-slate-200">
+                        <b class="text-white">Tjio, Joe Hin, & Levan, Albert (1956).</b> <i>The chromosome number of man.</i> Hereditas, 42(1-2): 1–6.
                     </p>
-                    <p class="text-slate-400 text-[11px]">
+                    <p class="text-slate-300 text-[11px]">
                         → Membuktikan secara definitif menggunakan sel kultur jaringan embrionik paru-paru bahwa manusia memiliki 46 kromosom (23 pasang), mengoreksi kesalahan teori lama 48 kromosom.
                     </p>
                 </div>
 
                 <!-- Ref 2 -->
-                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                <div class="p-4 rounded-xl bg-[#150a2e] border border-amber-500/30 space-y-1.5 shadow-md">
                     <div class="flex items-center justify-between">
-                        <span class="font-bold text-amber-400 font-mono">2. Penemuan Trisomi 21 (Sindrom Down) & Kelahiran Sitogenetika Medis</span>
-                        <span class="text-[10px] font-mono text-slate-500">1959</span>
+                        <span class="font-bold text-amber-300 font-mono">2. Penemuan Trisomi 21 (Sindrom Down) & Kelahiran Sitogenetika Medis</span>
+                        <span class="text-[10px] font-mono text-amber-200">1959</span>
                     </div>
-                    <p class="text-slate-300">
-                        <b>Lejeune, Jérôme, Gautier, Marthe, & Turpin, Raymond (1959).</b> <i>Étude des chromosomes somatiques de neuf enfants mongoliens.</i> Comptes Rendus de l'Académie des Sciences, 248: 1721–1722.
+                    <p class="text-slate-200">
+                        <b class="text-white">Lejeune, Jérôme, Gautier, Marthe, & Turpin, Raymond (1959).</b> <i>Étude des chromosomes somatiques de neuf enfants mongoliens.</i> Comptes Rendus de l'Académie des Sciences, 248: 1721–1722.
                     </p>
-                    <p class="text-slate-400 text-[11px]">
+                    <p class="text-slate-300 text-[11px]">
                         → Identifikasi pertama aneuploidi kromosom sebagai etiologi penyakit genetik pada manusia, membuktikan bahwa Sindrom Down disebabkan oleh adanya kromosom ke-21 tambahan.
                     </p>
                 </div>
 
                 <!-- Ref 3 -->
-                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                <div class="p-4 rounded-xl bg-[#150a2e] border border-purple-500/30 space-y-1.5 shadow-md">
                     <div class="flex items-center justify-between">
-                        <span class="font-bold text-purple-400 font-mono">3. Deskripsi Trisomi 13 (Sindrom Patau) & Trisomi 18 (Sindrom Edwards)</span>
-                        <span class="text-[10px] font-mono text-slate-500">1960</span>
+                        <span class="font-bold text-purple-300 font-mono">3. Deskripsi Trisomi 13 (Sindrom Patau) & Trisomi 18 (Sindrom Edwards)</span>
+                        <span class="text-[10px] font-mono text-purple-200">1960</span>
                     </div>
-                    <p class="text-slate-300">
-                        <b>Patau, K., Smith, D. W., Therman, E., Inhorn, S. L., & Wagner, H. P. (1960).</b> <i>Multiple congenital anomaly caused by an extra autosome.</i> The Lancet, 275(7128): 790–793.<br>
-                        <b>Edwards, J. H., Harnden, D. G., Cameron, A. H., Crosse, V. M., & Wolff, O. H. (1960).</b> <i>A new trisomic syndrome.</i> The Lancet, 275(7128): 787–790.
+                    <p class="text-slate-200">
+                        <b class="text-white">Patau, K., Smith, D. W., Therman, E., Inhorn, S. L., & Wagner, H. P. (1960).</b> <i>Multiple congenital anomaly caused by an extra autosome.</i> The Lancet, 275(7128): 790–793.<br>
+                        <b class="text-white">Edwards, J. H., Harnden, D. G., Cameron, A. H., Crosse, V. M., & Wolff, O. H. (1960).</b> <i>A new trisomic syndrome.</i> The Lancet, 275(7128): 787–790.
                     </p>
-                    <p class="text-slate-400 text-[11px]">
+                    <p class="text-slate-300 text-[11px]">
                         → Mendokumentasikan sindrom malformasi kongenital berat akibat trisomi autosom akrosentrik (13) dan submetasentrik (18).
                     </p>
                 </div>
 
                 <!-- Ref 4 -->
-                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                <div class="p-4 rounded-xl bg-[#150a2e] border border-rose-500/30 space-y-1.5 shadow-md">
                     <div class="flex items-center justify-between">
-                        <span class="font-bold text-rose-400 font-mono">4. Standardisasi Nomenklatur Sitogenomik Internasional (ISCN)</span>
-                        <span class="text-[10px] font-mono text-slate-500">2020</span>
+                        <span class="font-bold text-rose-300 font-mono">4. Standardisasi Nomenklatur Sitogenomik Internasional (ISCN)</span>
+                        <span class="text-[10px] font-mono text-rose-200">2020</span>
                     </div>
-                    <p class="text-slate-300">
-                        <b>McGowan-Jordan, J., Simons, A., & Schmid, M. (Eds.) (2020).</b> <i>ISCN 2020: An International System for Human Cytogenomic Nomenclature.</i> S. Karger AG, Basel.
+                    <p class="text-slate-200">
+                        <b class="text-white">McGowan-Jordan, J., Simons, A., & Schmid, M. (Eds.) (2020).</b> <i>ISCN 2020: An International System for Human Cytogenomic Nomenclature.</i> S. Karger AG, Basel.
                     </p>
-                    <p class="text-slate-400 text-[11px]">
+                    <p class="text-slate-300 text-[11px]">
                         → Standar global resmi penulisan formula formula kariotipe klinis (misal: 47, XX, +21; 45, X; 47, XX, +18).
                     </p>
                 </div>
             </div>
 
-            <div class="text-right border-t border-slate-800 pt-4">
-                <button onclick="closeLiteratureModal()" class="px-5 py-2 rounded-xl bg-purple-500 hover:bg-purple-400 text-slate-950 font-display font-bold text-xs tracking-wider transition">
+            <div class="text-right border-t border-purple-500/20 pt-4">
+                <button onclick="closeLiteratureModal()" class="px-5 py-2.5 rounded-xl bg-purple-500 hover:bg-purple-400 text-white font-display font-bold text-xs tracking-wider transition shadow-lg shadow-purple-500/30">
                     TUTUP
                 </button>
             </div>
@@ -1141,26 +1153,26 @@
             let html = '';
 
             // Color coding according to mutation severity
-            let color = '#22d3ee'; // Normal Cyan
+            let color = '#00f0ff'; // Normal Electric Laser Cyan
             let anim = 'animate-float';
 
             if (state.copy === 3) {
                 if (state.chromo === '1' || state.chromo === '3') {
-                    color = '#f43f5e'; // Red for Lethal Autosomal
+                    color = '#ff2a55'; // Vibrant Red for Lethal Autosomal
                     anim = 'animate-jitter';
                 } else if (state.chromo === 'X') {
-                    color = '#a855f7'; // Purple for Triple X
+                    color = '#c084fc'; // Purple for Triple X
                     anim = 'animate-float';
                 } else {
-                    color = '#f59e0b'; // Amber for Viable Trisomy (Down, Edwards, Patau)
+                    color = '#fbbf24'; // Vivid Amber for Viable Trisomy (Down, Edwards, Patau)
                     anim = 'animate-float';
                 }
             } else if (state.copy === 1) {
                 if (state.chromo === 'X') {
-                    color = '#a855f7'; // Turner (X)
+                    color = '#c084fc'; // Turner (X)
                     anim = 'animate-float';
                 } else {
-                    color = '#f43f5e'; // Monosomy Autosome Lethal
+                    color = '#ff2a55'; // Monosomy Autosome Lethal
                     anim = 'animate-jitter opacity-75';
                 }
             }
