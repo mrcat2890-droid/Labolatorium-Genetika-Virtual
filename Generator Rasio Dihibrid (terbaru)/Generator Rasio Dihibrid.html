@@ -58,15 +58,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Orbitron:wght@600;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Base styles & background with signature Dihybrid Emerald & Gold palette */
+        /* Base styles & background with Vibrant Electric Emerald & Sunburst Gold palette */
         body {
-            background-color: #020d08;
+            background-color: #020d12;
             background-image:
-                radial-gradient(ellipse at 15% 15%, rgba(52, 211, 153, 0.14) 0%, transparent 45%),
-                radial-gradient(ellipse at 85% 75%, rgba(251, 191, 36, 0.12) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 60%),
-                linear-gradient(rgba(52, 211, 153, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(52, 211, 153, 0.03) 1px, transparent 1px);
+                radial-gradient(ellipse at 15% 15%, rgba(0, 245, 155, 0.18) 0%, transparent 45%),
+                radial-gradient(ellipse at 85% 75%, rgba(255, 193, 7, 0.16) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 60%),
+                linear-gradient(rgba(0, 245, 155, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 245, 155, 0.04) 1px, transparent 1px);
             background-size: 100%, 100%, 100%, 36px 36px, 36px 36px;
         }
 
@@ -76,12 +76,12 @@
                 transform: translateY(105vh) rotate(0deg) scale(0.85);
                 opacity: 0;
             }
-            15% { opacity: 0.35; }
+            15% { opacity: 0.45; }
             50% {
                 transform: translateY(50vh) rotate(180deg) scale(1.05);
-                opacity: 0.55;
+                opacity: 0.7;
             }
-            85% { opacity: 0.3; }
+            85% { opacity: 0.4; }
             100% {
                 transform: translateY(-10vh) rotate(360deg) scale(0.9);
                 opacity: 0;
@@ -89,8 +89,8 @@
         }
 
         @keyframes gameteMatrixFloat {
-            0%, 100% { transform: translateY(0) scale(1); opacity: 0.15; }
-            50% { transform: translateY(-16px) scale(1.1); opacity: 0.35; filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.6)); }
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.25; }
+            50% { transform: translateY(-16px) scale(1.1); opacity: 0.55; filter: drop-shadow(0 0 12px rgba(0, 245, 155, 0.8)); }
         }
 
         .ambient-seed {
@@ -115,16 +115,16 @@
             z-index: 50;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
             background-size: 100% 4px;
-            opacity: 0.35;
+            opacity: 0.25;
         }
 
-        /* High-End Frosted Glassmorphism Panel (Translucent Glass Effect) */
+        /* High-Contrast Frosted Glassmorphism Panel (Sharp & Clear) */
         .glass-panel {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(2, 18, 12, 0.42);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border: 1px solid rgba(52, 211, 153, 0.22);
-            box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.55), inset 0 1px 1px 0 rgba(255, 255, 255, 0.22);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(3, 18, 24, 0.84);
+            backdrop-filter: blur(24px) saturate(190%);
+            -webkit-backdrop-filter: blur(24px) saturate(190%);
+            border: 1.5px solid rgba(0, 245, 155, 0.35);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.75), inset 0 1px 1px 0 rgba(255, 255, 255, 0.25);
             position: relative;
         }
 
@@ -135,62 +135,92 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.45), transparent);
+            background: linear-gradient(90deg, transparent, rgba(0, 245, 155, 0.6), transparent);
             pointer-events: none;
         }
 
-        /* Frosted Glass Translucency for Sub-panels and Internal Cards */
+        /* Frosted Glass Translucency with High Contrast for Sub-panels and Internal Cards */
         [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-slate-800/"] {
-            background-color: rgba(3, 19, 13, 0.42) !important;
-            backdrop-filter: blur(16px) saturate(160%) !important;
-            -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
-            border-color: rgba(52, 211, 153, 0.16) !important;
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
+            background-color: rgba(5, 25, 32, 0.84) !important;
+            backdrop-filter: blur(16px) saturate(170%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(170%) !important;
+            border-color: rgba(0, 245, 155, 0.25) !important;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
+        }
+
+        /* High-Contrast Typography Overrides (Anti-Washout) */
+        p, .text-slate-300 {
+            color: #f1f5f9 !important;
+        }
+        .text-slate-400 {
+            color: #cbd5e1 !important;
+            font-weight: 500;
+        }
+        .text-slate-500 {
+            color: #94a3b8 !important;
+        }
+        h1, h2, h3, h4, .text-white {
+            color: #ffffff !important;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
         }
 
         /* Genotype Inputs */
         .input-gen {
-            background: rgba(3, 18, 12, 0.6) !important;
+            background: rgba(2, 20, 26, 0.88) !important;
             backdrop-filter: blur(12px) !important;
-            border: 2px solid rgba(52, 211, 153, 0.3);
-            color: #34d399;
+            border: 2px solid #00f59b !important;
+            color: #00f59b !important;
             font-family: 'Fira Code', monospace;
             font-size: 1.5rem;
+            font-weight: 700;
             text-align: center;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             letter-spacing: 3px;
+            box-shadow: 0 0 15px rgba(0, 245, 155, 0.25), inset 0 2px 6px rgba(0, 0, 0, 0.6);
         }
 
         .input-gen:focus {
             outline: none;
-            border-color: #10b981;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
-            background: rgba(6, 78, 59, 0.25) !important;
+            border-color: #ffd600 !important;
+            color: #ffd600 !important;
+            box-shadow: 0 0 25px rgba(255, 214, 0, 0.5), inset 0 2px 6px rgba(0, 0, 0, 0.6);
+            background: rgba(3, 28, 36, 0.95) !important;
         }
 
         /* Punnett 4x4 Grid */
         .grid-16 {
             display: grid;
             grid-template-columns: auto repeat(4, 1fr);
-            gap: 6px;
+            gap: 8px;
         }
 
-        /* Punnett Cells Frosted Glass */
+        /* Punnett Cells Frosted Glass - High Contrast */
         .punnett-cell {
-            background: rgba(4, 24, 16, 0.48) !important;
-            backdrop-filter: blur(14px) saturate(160%) !important;
-            -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
-            border: 1px solid rgba(52, 211, 153, 0.18) !important;
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12) !important;
+            background: rgba(6, 32, 40, 0.88) !important;
+            backdrop-filter: blur(14px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(14px) saturate(180%) !important;
+            border: 1.5px solid rgba(0, 245, 155, 0.32) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .punnett-cell:hover {
-            transform: translateY(-2px) scale(1.03);
-            border-color: #34d399 !important;
-            box-shadow: 0 0 18px rgba(52, 211, 153, 0.45) !important;
-            background: rgba(8, 40, 26, 0.65) !important;
+            transform: translateY(-2px) scale(1.04);
+            border-color: #00f59b !important;
+            box-shadow: 0 0 22px rgba(0, 245, 155, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.3) !important;
+            background: rgba(8, 48, 56, 0.95) !important;
             z-index: 10;
+        }
+
+        .punnett-cell span:nth-of-type(1) {
+            color: #ffffff !important;
+            font-size: 0.85rem !important;
+            letter-spacing: 0.5px;
+        }
+
+        .punnett-cell span:nth-of-type(2) {
+            color: #a7f3d0 !important;
+            font-weight: 600;
         }
 
         /* Animated DNA Helix */
@@ -843,15 +873,16 @@
             const wrinkledPath = "M50 10 C30 10 14 26 14 42 C11 54 22 64 16 74 C11 84 30 90 50 93 C70 90 89 84 84 74 C78 64 89 54 86 42 C86 26 70 10 50 10 Z";
 
             const isYellow = phenotype.includes("Kuning");
-            const mainColor = isYellow ? "#fbbf24" : "#10b981";
-            const strokeColor = isYellow ? "#d97706" : "#047857";
+            const mainColor = isYellow ? "#ffd600" : "#00f59b";
+            const strokeColor = isYellow ? "#ff9100" : "#059669";
+            const highlightColor = isYellow ? "#ffffff" : "#d1fae5";
 
             return `
-            <svg viewBox="0 0 100 100" class="${sizeClass} mx-auto drop-shadow-md transition-transform duration-300 hover:scale-125">
+            <svg viewBox="0 0 100 100" class="${sizeClass} mx-auto drop-shadow-[0_4px_12px_${isYellow ? 'rgba(255,214,0,0.5)' : 'rgba(0,245,155,0.5)'}] transition-transform duration-300 hover:scale-125">
                 <defs>
                     <radialGradient id="grad-seed-${isYellow ? 'y' : 'g'}-${isRound ? 'r' : 'w'}" cx="35%" cy="30%" r="65%">
-                        <stop offset="0%" stop-color="${isYellow ? '#fef08a' : '#a7f3d0'}"/>
-                        <stop offset="60%" stop-color="${mainColor}"/>
+                        <stop offset="0%" stop-color="${highlightColor}"/>
+                        <stop offset="55%" stop-color="${mainColor}"/>
                         <stop offset="100%" stop-color="${strokeColor}"/>
                     </radialGradient>
                 </defs>
@@ -996,10 +1027,10 @@
                     genoCounts[fullGen] = (genoCounts[fullGen] || 0) + 1;
 
                     grid.innerHTML += `
-                        <div class="punnett-cell bg-slate-900/60 border border-slate-800/80 rounded-xl p-2.5 flex flex-col items-center justify-between group relative hover:border-emerald-400 cursor-pointer">
+                        <div class="punnett-cell rounded-xl p-2.5 flex flex-col items-center justify-between group relative cursor-pointer">
                             ${getSeedSVG(pLabel, "w-8 h-8 md:w-11 md:h-11")}
-                            <span class="text-xs font-mono font-bold text-slate-200 mt-1">${fullGen}</span>
-                            <span class="text-[9px] font-mono text-slate-400 tracking-wider">${pLabel}</span>
+                            <span class="text-xs font-mono font-bold text-white mt-1 drop-shadow">${fullGen}</span>
+                            <span class="text-[10px] font-mono text-emerald-200 font-semibold tracking-wider">${pLabel}</span>
                         </div>
                     `;
                 }
@@ -1017,30 +1048,30 @@
             order.forEach(key => {
                 let val = counts[key];
                 let pct = (val / 16) * 100;
-                let colorClass = "from-amber-400 to-yellow-500";
-                let textCol = "text-amber-400";
+                let colorClass = "from-amber-400 to-yellow-300";
+                let textCol = "text-amber-300";
 
                 if (key === "Bulat Hijau") {
-                    colorClass = "from-emerald-400 to-green-500";
-                    textCol = "text-emerald-400";
+                    colorClass = "from-emerald-400 to-teal-300";
+                    textCol = "text-emerald-300";
                 } else if (key === "Kisut Kuning") {
-                    colorClass = "from-yellow-600 to-amber-700";
-                    textCol = "text-yellow-500";
+                    colorClass = "from-amber-500 to-yellow-500";
+                    textCol = "text-yellow-300";
                 } else if (key === "Kisut Hijau") {
-                    colorClass = "from-teal-600 to-emerald-800";
-                    textCol = "text-teal-400";
+                    colorClass = "from-teal-400 to-emerald-500";
+                    textCol = "text-teal-300";
                 }
 
                 statsDiv.innerHTML += `
-                    <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5">
+                    <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-700/80 space-y-1.5 shadow-sm">
                         <div class="flex justify-between items-center text-xs">
-                            <span class="font-bold ${textCol} flex items-center gap-1.5">
+                            <span class="font-bold ${textCol} flex items-center gap-1.5 font-sans">
                                 <span>●</span> ${key}
                             </span>
-                            <span class="font-mono font-bold text-slate-200">${val}/16 (${pct.toFixed(1)}%)</span>
+                            <span class="font-mono font-bold text-white">${val}/16 (${pct.toFixed(1)}%)</span>
                         </div>
-                        <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
-                            <div class="bg-gradient-to-r ${colorClass} h-full rounded-full transition-all duration-1000" style="width: ${pct}%"></div>
+                        <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-700">
+                            <div class="bg-gradient-to-r ${colorClass} h-full rounded-full transition-all duration-1000 shadow-sm" style="width: ${pct}%"></div>
                         </div>
                     </div>
                 `;

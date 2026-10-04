@@ -6,6 +6,32 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 👁️ Optimasi Keterbacaan Teks & Transformasi Palet Warna Cerah (Non-Pucat) pada Modul Dihibrid, Transkripsi, dan Translasi
+- **Peningkatan Kontras Keterbacaan Teks pada Efek Glassmorphism (Anti-Washout):**
+  - Mengatasi kendala teks yang sulit dibaca akibat transparansi panel kaca buram (`opacity 0.42`) yang terlalu tembus ke animasi latar belakang dinamis.
+  - Meningkatkan densitas dasar panel kaca buram (*glassmorphism base opacity*) menjadi `0.84` (`rgba(..., 0.84)` - `0.86`) yang dipadukan dengan filter pemburaman lensa mendalam (`backdrop-filter: blur(24px) saturate(190%)`), garis tepi bersinar (*luminous borders* `1.5px`), specular sheen di tepi atas, dan bayangan dalam (*inset ambient highlight*).
+  - Memberlakukan aturan kontras teks eksplisit dengan prioritas tinggi (`#f1f5f9` untuk paragraf, `#cbd5e1` untuk label teknis/monospaced, `#ffffff` dengan drop shadow halus untuk semua heading $H_1 - H_4$, serta bolding bernilai `color: #ffffff`), memastikan teks terbaca tajam di berbagai resolusi layar.
+- **Transformasi Palet Warna Cerah & Segar (Non-Pucat):**
+  - **Modul 02: Generator Rasio Dihibrid (`Generator Rasio Dihibrid (terbaru)/Generator Rasio Dihibrid.html`):**
+    - Mengganti palet hijau redup sebelumnya dengan kombinasi **Electric Emerald (`#00f59b`)**, **Sunburst Topaz Gold (`#ffd600`, `#ff9100`)**, dan **Cyan (`#00e5ff`)** berlatar *Deep Obsidian Teal* (`#020d12`).
+    - Memperbarui matriks Punnett 4×4, kartu konfigurasi parental, dan SVG fenotipe biji (Bulat Kuning, Bulat Hijau, Kisut Kuning, Kisut Hijau) dengan warna saturasi tinggi dan label gamet/genotipe putih tajam.
+  - **Modul 09: Simulasi Transkripsi (`simulasi-transkripsi/index.html` & `style.css`):**
+    - Mengganti palet cokelat/krem pudar dengan tema **Electric Flame Coral (`#ff5722`, `#ff6d00`)**, **Vivid Magma Gold (`#ff9100`)**, dan **Laser Sky Cyan (`#00e5ff`)** berlatar *Deep Cosmic Obsidian* (`#050816`).
+    - Meningkatkan kecerahan dan kontras pita mRNA heliks ganda, gelembung transkripsi (*transcription bubble*), aturan komplementaritas basa, dan badge nukleotida rNTP (`rUTP`, `rATP`, `rGTP`, `rCTP`).
+  - **Modul 10: Simulasi Translasi (`simulasi-translasi/index.html` & `style.css`):**
+    - Mengganti palet hijau-kelabu redup dengan tema **Electric Cyber Violet (`#c084fc`, `#a855f7`)**, **Laser Cyan (`#06b6d4`)**, **Neon Rose (`#f43f5e`)**, dan **Amber Gold (`#fbbf24`)** berlatar *Deep Cyber Velvet Obsidian* (`#070514`).
+    - Menyempurnakan kontras kartu 3 tahap (Inisiasi, Elongasi, Terminasi), status real-time kodon/antikodon/asam amino, visualizer rantai polipeptida, dan tabel 64 kode genetik standar.
+- **Penyelarasan Dashboard Utama (`index.html`):**
+  - Memperbarui aksen `--theme-color`, *glow*, dan deskripsi untuk kartu Modul 02 (`#00f59b`), Modul 09 (`#ff6d00`), dan Modul 10 (`#c084fc`).
+- **Berkas yang Diperbarui:**
+  - `Generator Rasio Dihibrid (terbaru)/Generator Rasio Dihibrid.html`
+  - `simulasi-transkripsi/index.html`
+  - `simulasi-transkripsi/style.css`
+  - `simulasi-translasi/index.html`
+  - `simulasi-translasi/style.css`
+  - `index.html`
+  - `CHANGELOG.md`
+
 ### 💎 Overhaul Estetika Visual: Efek Frosted Glassmorphism Semi-Transparan Bersinar di Seluruh Modul Laboratorium
 - **Implementasi Frosted Glassmorphism Berstandar Premium (*Kaca Buram Kebeningan*):**
   - Mengubah seluruh kotak kontainer, panel analitik, kartu input, matriks punnett, header, dan layout di seluruh 13 modul laboratorium (+ sub-simulasi dan dashboard utama) dari panel gelap pekat/opak menjadi panel kaca buram semi-transparan berestetika tinggi.
