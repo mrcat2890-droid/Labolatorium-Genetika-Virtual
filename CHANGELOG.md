@@ -6,6 +6,21 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🧩 Perbaikan Bug Alur Mode Kuis: Simulasi Penggolongan Darah (`Simulasi Penggolongan Darah/Simulasi-Penggolongan-Darah.html`)
+- **Penundaan Tampilan Penjelasan & Hasil Hingga Jawaban Kuis Dipilih (Anti-Spoiler):**
+  - Memperbaiki *timing leak* pada fungsi `runAgglutinationTest()` di mana panel `agglut-explanation` (penjelasan reaksi antigen-antibodi) sebelumnya langsung dipanggil dan ditampilkan di bawah sumur uji sebelum pengguna memilih tebakan golongan darah.
+  - Memastikan pada `labState.mode === 'quiz'`, panel `#lab-result-panel` dan `#agglut-explanation` tetap tersembunyi selama animasi pengujian berlangsung, sehingga pengguna hanya melihat fenomena aglutinasi pada sumur reagen Anti-A, Anti-B, dan Anti-D untuk menganalisis sendiri.
+  - Memperbarui fungsi `checkQuiz(guess, correct)` agar:
+    - Memberikan feedback visual langsung (hijau jika benar, merah jika salah).
+    - Menonaktifkan tombol pilihan agar tidak dapat ditekan berulang kali.
+    - Menampilkan panel hasil laboratorium dan penjelasan reaksi antigen-antibodi secara komprehensif **hanya setelah** pengguna memilih jawaban.
+    - Menyediakan tombol interaktif `🔄 UJI SAMPEL KUIS BERIKUTNYA` untuk melanjutkan latihan identifikasi sampel darah acak berikutnya secara mulus.
+- **Berkas yang Diperbarui:**
+  - `Simulasi Penggolongan Darah/Simulasi-Penggolongan-Darah.html`
+  - `CHANGELOG.md`
+
+
+
 ### 🔬 Optimasi Keterbacaan Teks & Transformasi Palet Warna Cerah (Non-Pucat) pada Modul GEN-X dan GEN-K
 - **Peningkatan Kontras Keterbacaan Teks pada Efek Glassmorphism (Anti-Washout):**
   - Mengeliminasi kendala teks memudar (*washout text*) akibat transparansi kaca buram yang berbenturan dengan animasi latar belakang mikroskopik dan kromosomal.

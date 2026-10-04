@@ -1130,11 +1130,14 @@
 
                     if (labState.mode === 'edu') {
                         showLabResult(bt, agg);
+                        showAgglutExplanation(bt, agg);
                     } else {
+                        // In quiz mode: reveal quiz choices and keep explanation/result hidden until user answers!
                         showQuizPanel(bt);
+                        document.getElementById('lab-result-panel').classList.add('hidden');
+                        document.getElementById('agglut-explanation').classList.add('hidden');
                     }
 
-                    showAgglutExplanation(bt, agg);
                     labState.testRunning = false;
                 }, 2200);
 
@@ -1192,7 +1195,11 @@
             panel.classList.remove('hidden');
             const grid = document.getElementById('quiz-choices');
             grid.innerHTML = '';
-            document.getElementById('quiz-feedback').classList.add('hidden');
+            const fb = document.getElementById('quiz-feedback');
+            fb.classList.add('hidden');
+            fb.innerHTML = '';
+            document.getElementById('lab-result-panel').classList.add('hidden');
+            document.getElementById('agglut-explanation').classList.add('hidden');
 
             BT_ORDER.forEach(bt => {
                 const btn = document.createElement('button');
@@ -1206,15 +1213,41 @@
         function checkQuiz(guess, correct) {
             const fb = document.getElementById('quiz-feedback');
             fb.classList.remove('hidden');
+
+            // Disable all choice buttons to prevent repeated clicking and style results
+            const btButtons = document.querySelectorAll('#quiz-choices button');
+            btButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('cursor-not-allowed');
+                if (btn.textContent === correct) {
+                    btn.classList.remove('border-slate-700', 'bg-slate-800/80');
+                    btn.classList.add('border-green-500', 'bg-green-500/25', 'text-green-300', 'shadow-[0_0_12px_rgba(16,185,129,0.4)]');
+                } else if (btn.textContent === guess && guess !== correct) {
+                    btn.classList.remove('border-slate-700', 'bg-slate-800/80');
+                    btn.classList.add('border-red-500', 'bg-red-500/25', 'text-red-300');
+                } else {
+                    btn.classList.add('opacity-40');
+                }
+            });
+
             if (guess === correct) {
                 fb.className = 'p-4 rounded-xl text-sm text-center font-bold font-sans bg-green-500/15 border border-green-500/40 text-green-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]';
-                fb.innerHTML = `✅ BENAR! Golongan darah sampel adalah <strong>${correct}</strong>.`;
+                fb.innerHTML = `<div>✅ <strong>BENAR!</strong> Sampel darah yang diuji adalah golongan <strong>${correct}</strong>.</div>`;
             } else {
                 fb.className = 'p-4 rounded-xl text-sm text-center font-bold font-sans bg-red-500/15 border border-red-500/40 text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.2)]';
-                fb.innerHTML = `❌ Salah. Jawaban Anda: ${guess}. Jawaban yang benar adalah <strong>${correct}</strong>.`;
+                fb.innerHTML = `<div>❌ <strong>Kurang tepat.</strong> Pilihan Anda: <strong>${guess}</strong>.<br>Jawaban yang benar adalah golongan <strong>${correct}</strong>.</div>`;
             }
-            
-            // Show the actual education result panel as well to provide complete context
+
+            // Tombol uji sampel kuis berikutnya
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'mt-3 w-full py-2.5 px-4 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-bold font-display text-xs tracking-wider transition shadow-md shadow-amber-500/20 active:scale-95 flex items-center justify-center gap-2';
+            nextBtn.innerHTML = '<span>🔄</span> <span>UJI SAMPEL KUIS BERIKUTNYA</span>';
+            nextBtn.onclick = () => {
+                runAgglutinationTest();
+            };
+            fb.appendChild(nextBtn);
+
+            // Tampilkan hasil laboratorium dan penjelasan reaksi aglutinasi HANYA SETELAH dijawab
             const data = BLOOD_DATA[correct];
             const agg = {
                 antiA: data.antigens.includes('A'),
@@ -1222,6 +1255,10 @@
                 antiD: data.antigens.includes('D')
             };
             showLabResult(correct, agg);
+            showAgglutExplanation(correct, agg);
+
+            // Scroll halus ke area feedback kuis
+            fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         function showAgglutExplanation(bt, agg) {
