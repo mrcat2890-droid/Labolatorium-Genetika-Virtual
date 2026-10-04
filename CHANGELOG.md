@@ -6,6 +6,34 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📌 Refaktorisasi & Overhaul Desain: Modul GEN-K (Karyotype Scanner & Aneuploidy Engine)
+- **Harmonisasi Desain Sistem GEN-OS Futuristik (`Simulasi Deteksi Kromosom/Simulasi-Deteksi-Kromosom.html`):**
+  - Menggantikan antarmuka lama berbasis vanilla CSS (hasil buatan Claude dengan sudut tajam kaku dan tema gelap polos) menjadi standar desain sistem futuristik GEN-OS menggunakan Tailwind CSS, latar belakang dark slate `#030712`, glassmorphism (`glass-panel` melengkung modern dengan `backdrop-blur-xl`), tipografi resmi (`Orbitron`, `Rajdhani`, dan `Fira Code`), serta palet warna selaras (aksen Cyan `#06b6d4` & `#22d3ee` sesuai tema Modul 05 pada `index.html`).
+  - Menghubungkan modul secara utuh ke Beranda dengan tombol navigasi `← BERANDA GEN-OS` menuju `../index.html`.
+- **Banner Edukatif 3 Kategori Sitogenetika Manusia:**
+  - Menyediakan 3 kartu ringkasan visual interaktif:
+    1. *Kategori 1: Autosom Besar (Efek Letal)* – Kromosom 1 & 3 (ketidakseimbangan dosis gen masif, letal embrional awal / abortus spontan).
+    2. *Kategori 2: Trisomi Autosom Klinis* – Kromosom 13 (Sindrom Patau), 18 (Sindrom Edwards), 21 (Sindrom Down) yang dapat lahir hidup.
+    3. *Kategori 3: Aneuploidi Kromosom Seks* – Monosomi X (Sindrom Turner 45, X) dan Trisomi X (Sindrom Triple X 47, XXX).
+- **Peningkatan Visualisasi Ideogram Kromosom SVG & Mikroskop Sitogenetika:**
+  - Pemodelan kromosom SVG beresolusi tinggi dengan anatomi sitogenetika realistis: lengan pendek ($p$), lengan panjang ($q$), penyempitan primer (*primary constriction / centromere*), satelit akrosentrik pada kromosom 13 dan 21, serta pola pita gelap heterokromatin Giemsa (G-banding).
+  - Pembedaan morfologis: Metasentrik (Chr 1, 3), Submetasentrik (Chr 18, X), dan Akrosentrik (Chr 13, 21).
+  - Efek pencahayaan fluoresensi (*FISH probe simulation*) dengan kode warna mutasi (Cyan untuk normal, Amber untuk aneuploidi sindromik, Rose/Merah untuk mutasi letal dengan animasi *jitter*).
+  - Tampilan viewport mikroskop digital dengan retikel kisi-kisi medan pandang, animasi pemindaian laser melintang (*scan line*), dan fase induksi mitosis colchicine.
+- **Pintas Skenario Klinis Cepat & Rekam Medis Standar ISCN:**
+  - 6 tombol pintas kasus sitogenetika populer: *Down (+21)*, *Edwards (+18)*, *Patau (+13)*, *Turner (45, X)*, *Letal Trisomi 1*, dan *Normal Diploid (46)*.
+  - Kartu rekam medis sitogenetika komprehensif memuat formula resmi ISCN (*International System for Human Cytogenomic Nomenclature*), klasifikasi euploidi/aneuploidi, gambaran klinis, mekanisme *non-disjunction* meiosis, dan prognosis harapan hidup.
+  - Indeks letalitas genetik dengan *realtime gauge bar* gradien bercahaya.
+- **Penerapan Modal Panduan & Referensi Ilmiah (Kepatuhan Aturan #1 & #5):**
+  - Dialog modal **"📖 Panduan Lengkap Simulasi GEN-K"** yang merinci konsep kariotipe, variasi jumlah salinan (monosomi, disomi, trisomi), dan interpretasi data letalitas.
+  - Dialog modal **"📚 Literatur Ilmiah"** dengan sitasi ilmiah primer:
+    - *Tjio & Levan (1956)* – Penetapan jumlah kromosom diploid manusia $2n = 46$.
+    - *Lejeune, Gautier, & Turpin (1959)* – Penemuan trisomi 21 (Sindrom Down) dan kelahiran sitogenetika medis.
+    - *Patau et al. (1960) & Edwards et al. (1960)* – Deskripsi klinis trisomi 13 dan 18.
+    - *ISCN (2020)* – Standar nomenklatur sitogenomik internasional.
+  - Efek audio interaktif sintetis (Web Audio API) untuk pindaian laser, peringatan alarm anomali (*warning klaxon*), dan nada normalitas euploidi.
+
+
 ### 📌 Refaktorisasi & Overhaul Desain: Modul TRANSCRIPTION (Simulasi Transkripsi DNA & Sintesis mRNA)
 - **Harmonisasi Desain Sistem GEN-OS Futuristik (`simulasi-transkripsi/index.html` & `style.css`):**
   - Menggantikan antarmuka lama berbasis vanilla CSS (hasil buatan Claude yang tidak seragam) menjadi standar desain sistem futuristik GEN-OS menggunakan Tailwind CSS, latar belakang dark mode `#030712`, glassmorphism (`glass-panel`), tipografi resmi (`Orbitron`, `Rajdhani`, dan `Fira Code`), serta palet warna selaras (aksen Amber `#f59e0b` dan Orange `#f97316` sesuai tema Modul 09 pada `index.html`).
