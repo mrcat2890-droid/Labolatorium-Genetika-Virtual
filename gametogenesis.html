@@ -1,272 +1,1273 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>GEN-OS | Simulasi 3D Gametogenesis dan Fertilisasi</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#04070d;--ln:#17344c;--cy:#22d3ee;--mg:#e879f9;--tx:#c7d2de;--dim:#6f8399;--gr:#4ade80}
-*{box-sizing:border-box;margin:0}
-html,body{height:100%;overflow:hidden}
-body{height:100dvh;display:grid;grid-template-rows:minmax(0,1fr) auto;background:radial-gradient(ellipse at 50% 38%,#0b1a2c,var(--bg) 70%);color:var(--tx);font:12px/1.55 'JetBrains Mono',ui-monospace,Consolas,monospace}
-body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9;background:repeating-linear-gradient(0deg,rgba(34,211,238,.03) 0 1px,transparent 1px 3px)}
-#stg{position:relative;min-height:0;overflow:hidden}
-#stg canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
-header{position:absolute;top:0;left:0;padding:12px 16px;pointer-events:none;z-index:3}
-h1{font:900 clamp(14px,2.2vw,22px)/1.15 Orbitron,sans-serif;letter-spacing:.07em;color:#fff;text-shadow:0 0 18px rgba(34,211,238,.6)}
-header p{color:var(--dim);margin-top:3px}
-#zm{position:absolute;right:10px;bottom:10px;display:flex;flex-direction:column;gap:6px;z-index:3}
-#zm button{width:38px;height:38px;padding:0;text-align:center}
-button{font:inherit;color:var(--tx);background:rgba(6,14,26,.85);border:1px solid var(--ln);padding:6px 10px;min-height:32px;cursor:pointer;transition:border-color .15s,color .15s}
-button:hover,button.on{border-color:var(--cy);color:#fff}
-button:focus-visible{outline:2px solid var(--mg);outline-offset:2px}
-#dk{border-top:1px solid var(--ln);box-shadow:inset 0 2px 0 var(--cy);background:rgba(5,11,20,.95);padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));max-height:46vh;overflow:auto;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:10px 18px}
-#cbar{grid-column:1/-1;display:grid;gap:6px}
-h2{color:#fff;font-size:13.5px;margin-bottom:3px}
-h3{color:var(--mg);font-size:12px;margin-bottom:3px}
-.r{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-input[type=range]{flex:1;min-width:140px;accent-color:var(--cy);height:26px}
-table{border-collapse:collapse;margin:6px 0;font-size:10.5px}
-th,td{border:1px solid var(--ln);padding:1px 5px;text-align:center}
-th{color:var(--cy);font-weight:600}
-td.hl{background:var(--cy);color:#000;font-weight:600}
-.cap{color:var(--dim);font-size:11px;margin-top:4px}
-#gm u{color:var(--gr);text-decoration:none;border-bottom:1px solid var(--gr)}
-.lb{position:absolute;left:0;top:0;pointer-events:none;display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:1px 6px;background:rgba(4,8,14,.78);border:1px solid;white-space:nowrap;z-index:2}
-.lb:before{content:"";width:6px;height:6px;background:currentColor;flex:none}
-.lb.l{flex-direction:row-reverse}
-@media(max-width:900px){#dk{grid-template-columns:1fr;max-height:50vh}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>GEN-OS // GAMETO-3D: Meiosis & Fertilization Engine</title>
+    <meta name="description" content="Simulasi 3D interaktif gametogenesis (spermatogenesis & oogenesis), pindah silang (crossing over), fertilisasi seluler, dan segregasi alel Mendel.">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gameto: {
+                            dark: '#030712',
+                            panel: 'rgba(15, 23, 42, 0.85)',
+                            border: 'rgba(99, 102, 241, 0.25)',
+                            indigo: '#6366f1',
+                            cyan: '#22d3ee',
+                            pink: '#ec4899',
+                            purple: '#a855f7',
+                            amber: '#f59e0b',
+                            emerald: '#10b981'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['Fira Code', 'JetBrains Mono', 'monospace'],
+                        display: ['Orbitron', 'sans-serif'],
+                        sans: ['Rajdhani', 'sans-serif']
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2.5s infinite ease-in-out',
+                        'float': 'float 3s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(99, 102, 241, 0.25)' },
+                            '50%': { boxShadow: '0 0 30px rgba(99, 102, 241, 0.6)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Orbitron:wght@600;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Three.js & Controls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <style>
+        /* Base Cyber Aesthetics */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            background-color: #030712;
+            color: #cbd5e1;
+            font-family: 'Rajdhani', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* CRT Scanline Overlay */
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 15;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
+            background-size: 100% 4px;
+            opacity: 0.5;
+        }
+
+        /* Glassmorphism Panel */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 3D Stage Container */
+        #stg {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #stg canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+            outline: none;
+        }
+
+        /* 3D Projected Billboard Labels */
+        .lb {
+            position: absolute;
+            left: 0;
+            top: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: 'Fira Code', monospace;
+            padding: 2.5px 8px;
+            background: rgba(10, 15, 30, 0.88);
+            backdrop-filter: blur(8px);
+            border: 1px solid currentColor;
+            border-radius: 6px;
+            white-space: nowrap;
+            z-index: 10;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+            transition: opacity 0.15s ease, transform 0.05s linear;
+        }
+
+        .lb:before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 8px currentColor;
+            flex: none;
+        }
+
+        .lb.l {
+            flex-direction: row-reverse;
+        }
+
+        /* Punnett Square Table */
+        #pn {
+            border-collapse: separate;
+            border-spacing: 3px;
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+            margin: 6px 0;
+        }
+
+        #pn th {
+            padding: 3px 8px;
+            color: #22d3ee;
+            font-weight: 700;
+            background: rgba(34, 211, 238, 0.08);
+            border: 1px solid rgba(34, 211, 238, 0.25);
+            border-radius: 4px;
+        }
+
+        #pn td {
+            padding: 3px 7px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 4px;
+            text-align: center;
+            color: #94a3b8;
+            transition: all 0.2s ease;
+        }
+
+        #pn td.hl {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.35), rgba(99, 102, 241, 0.45));
+            border-color: #22d3ee;
+            color: #ffffff;
+            font-weight: 700;
+            box-shadow: 0 0 12px rgba(34, 211, 238, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
+
+        /* Range Slider */
+        input[type=range] {
+            accent-color: #6366f1;
+            height: 6px;
+            background: #1e293b;
+            border-radius: 4px;
+        }
+
+        /* Action Buttons */
+        .dock-btn {
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.8);
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .dock-btn:hover {
+            border-color: #6366f1;
+            color: #ffffff;
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .dock-btn.on {
+            border-color: #22d3ee;
+            background: rgba(34, 211, 238, 0.15);
+            color: #22d3ee;
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.25);
+        }
+
+        /* Stage Bookmark Buttons */
+        .stage-btn {
+            font-family: 'Fira Code', monospace;
+            font-size: 10.5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(15, 23, 42, 0.6);
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .stage-btn:hover, .stage-btn.active {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.2);
+            color: #ffffff;
+            box-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
+        }
+    </style>
 </head>
-<body>
-<main id="stg">
- <header>
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
-   <a href="index.html" style="pointer-events:auto;color:#22d3ee;text-decoration:none;border:1px solid #17344c;padding:3px 8px;border-radius:4px;background:rgba(6,14,26,.85);font-size:11px;font-weight:600;">← Beranda</a>
-   <span style="font-size:10px;color:#6f8399;letter-spacing:1px;">GEN-OS VIRTUAL LAB</span>
-  </div>
-  <h1>GEN-OS // GAMETOGENESIS 3D</h1>
-  <p>Meiosis, pembuahan, dan pewarisan alel (AaBb x AaBb)</p>
- </header>
- <div id="zm"><button id="zi" aria-label="Perbesar">+</button><button id="zo" aria-label="Perkecil">-</button><button id="zr" aria-label="Reset tampilan">R</button></div>
-</main>
-<aside id="dk">
- <div><h2 id="ti"></h2><p id="ds"></p></div>
- <div>
-  <h3>Genetika</h3><p id="gm"></p><table id="pn"></table>
-  <p class="cap">Biru: kromosom ayah. Merah muda: kromosom ibu. Dua warna pada satu kromatid berarti hasil pindah silang. Kotak Punnett: baris = ovum, kolom = sperma. Pada model, pindah silang terjadi antara sentromer dan lokus gen, sehingga alel kromatid bertukar dan segregasi alel dapat terjadi pada meiosis II. Gen A dan B berada pada kromosom berbeda (asortasi bebas). Ukuran tidak berskala.</p>
- </div>
- <div id="cbar">
-  <div class="r" id="sb"></div>
-  <div class="r"><button id="pl">Putar</button><button id="sp">Kecepatan 1x</button><input id="sl" type="range" min="0" max="100" step=".1" value="0" aria-label="Linimasa"></div>
-  <div class="r"><button id="cxb" class="on">Pindah silang: aktif</button><button id="mb" class="on">Meiosis: aktif</button><button id="lbb" class="on">Label: tampil</button><button id="rsb">Acak ulang dan putar</button></div>
- </div>
-</aside>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-<script>
-const T=THREE,$=id=>document.getElementById(id),box=$('stg'),PI=Math.PI;
-const E=t=>t<=0?0:t>=1?1:t*t*(3-2*t),sg=(p,a,b)=>E((p-a)/(b-a)),L=(a,b,t)=>a+(b-a)*t,rb=()=>Math.random()<.5?1:0;
-// interpolasi keyframe: a = [[P,nilai...],...] dengan smoothstep antar kunci
-const K=(p,a)=>{if(p<=a[0][0])return a[0].slice(1);for(let i=1;i<a.length;i++)if(p<=a[i][0]){const u=a[i-1],v=a[i],t=E((p-u[0])/(v[0]-u[0]));return v.slice(1).map((x,j)=>L(u[j+1],x,t))}return a[a.length-1].slice(1)};
+<body class="flex flex-col h-screen overflow-hidden relative">
+    <div class="scanlines"></div>
 
-const RD=new T.WebGLRenderer({antialias:true,alpha:true}),SC=new T.Scene(),cam=new T.PerspectiveCamera(45,1,.1,300);
-RD.setPixelRatio(Math.min(devicePixelRatio||1,2));box.appendChild(RD.domElement);
-const ctl=new T.OrbitControls(cam,RD.domElement);ctl.enableDamping=true;ctl.minDistance=4;ctl.maxDistance=90;
-SC.add(new T.AmbientLight(0xffffff,.75));const dl=new T.DirectionalLight(0xffffff,.8);dl.position.set(6,10,16);SC.add(dl);
-const gr=new T.GridHelper(48,24,0x22d3ee,0x0a3a44);gr.position.y=-8.6;gr.material.transparent=true;gr.material.opacity=.3;SC.add(gr);
-// Kerangka: sel ayah di kiri atas, sel ibu di kiri bawah (lalu berpindah ke lokasi pembuahan di tengah kanan)
-const O0=[-8,4.2],O1=[-8,-3.6],OC=[3.5,-1],MG=new T.Group(),FG=new T.Group();
-MG.position.set(O0[0],O0[1],0);FG.position.set(O1[0],O1[1],0);SC.add(MG,FG);
+    <!-- ==================== TOP NAVIGATION HEADER ==================== -->
+    <header class="h-14 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-4 md:px-6 flex items-center justify-between gap-4 flex-shrink-0">
+        <!-- Left: Logo & Module Title -->
+        <div class="flex items-center gap-3">
+            <a href="index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-700/80 bg-slate-900/90 hover:border-indigo-400 hover:text-indigo-300 text-slate-300 text-xs font-mono transition group">
+                <span class="transform group-hover:-translate-x-1 transition-transform">←</span>
+                <span>BERANDA</span>
+            </a>
+            <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
+            <div class="flex items-center gap-2.5">
+                <div class="p-1 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-lg">
+                    🥚
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-sm md:text-base font-display font-bold text-white tracking-wider flex items-center gap-1.5">
+                            GAMETO-3D
+                        </h1>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-semibold tracking-wider">
+                            MODUL 11
+                        </span>
+                    </div>
+                    <p class="text-[10px] font-mono text-slate-400 hidden sm:block tracking-wide">MEIOSIS, CROSSING OVER & FERTILIZATION</p>
+                </div>
+            </div>
+        </div>
 
-const M=(c,o,e)=>new T.MeshStandardMaterial({color:c,transparent:true,opacity:o,emissive:c,emissiveIntensity:e,roughness:.4});
-function fade(g,a){g.visible=a>.01;g.traverse(o=>{if(o.material){if(o.userData.b==null)o.userData.b=o.material.opacity;o.material.opacity=o.userData.b*a}})}
-const TX={},lt=(t,c)=>{const k=t+c;if(!TX[k]){const e=document.createElement('canvas');e.width=256;e.height=128;const x=e.getContext('2d');x.font='bold '+(t.length>2?60:92)+'px monospace';x.textAlign='center';x.textBaseline='middle';x.fillStyle=c;x.shadowColor=c;x.shadowBlur=10;x.fillText(t,128,68);TX[k]=new T.CanvasTexture(e)}return TX[k]};
-const lab=(t,c,s)=>{const p=new T.Sprite(new T.SpriteMaterial({map:lt(t,c),transparent:true,depthTest:false}));p.scale.set(s*2,s,1);return p};
+        <!-- Right: Action Buttons (Tutorial, Literature, Sound) -->
+        <div class="flex items-center gap-2">
+            <!-- Audio Toggle -->
+            <button id="btn-sound" onclick="toggleSound()" class="px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 hover:border-indigo-400 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition" title="Toggle Efek Suara">
+                <span id="sound-icon">🔊</span>
+                <span class="hidden md:inline text-[11px]">AUDIO</span>
+            </button>
 
-const GCe=new T.SphereGeometry(1,28,20),GCw=new T.SphereGeometry(1.02,14,10),GCo=new T.SphereGeometry(.33,10,8),GRg=new T.TorusGeometry(.45,.025,6,24),
-GP=new T.CylinderGeometry(.13,.13,.3,10),GQ=[new T.CylinderGeometry(.13,.13,1,10),new T.CylinderGeometry(.13,.13,.7,10)],GS=new T.SphereGeometry(.13,10,8),GN=new T.CylinderGeometry(.07,.07,.08,8),
-GH=new T.SphereGeometry(.28,16,12),GA=new T.SphereGeometry(.3,14,10,0,2*PI,0,.95),GM=new T.CylinderGeometry(.08,.08,.55,8),
-GSP=new T.LatheGeometry([...Array(11).keys()].map(i=>new T.Vector2(.34*Math.sin(PI*i/10),-1+i/5)),12);
-function cell(c,o,w){const g=new T.Group();g.add(new T.Mesh(GCe,M(c,o,.1)),new T.Mesh(GCw,new T.MeshBasicMaterial({color:c,wireframe:true,transparent:true,opacity:w||.12})));return g}
-// kromatid: lengan p pendek (atas), sentromer (leher), lengan q panjang (bawah). Segmen distal berganti warna dan alel saat pindah silang
-function chrom(c,pc,dc,a){const g=new T.Group(),n=new T.Group(),lq=c?.7:1,pm=M(pc,1,.35),dm=M(dc,1,.35),cm=M(0xfff2a8,1,.5);
- const add=(geo,mt,y)=>{const o=new T.Mesh(geo,mt);o.position.y=y;n.add(o)};
- add(GP,pm,.15);add(GS,pm,.3);add(GN,cm,0);add(GQ[c],dm,-.04-lq/2);add(GS,dm,-.04-lq);
- const sp=lab(a,'#ffffff',.42);g.add(n,sp);g.userData={n,dm,sp,lq};return g}
-// spermatozoa: kepala (inti terkondensasi) + akrosom, bagian tengah (mitokondria), flagel
-function sperm(txt,big){const g=new T.Group(),k=big?1.25:1,tl=[];
- const h=new T.Mesh(GH,M(0x9fc4ff,1,.45));h.scale.set(1.4*k,.85*k,.6*k);
- const ac=new T.Mesh(GA,M(0xffd38a,1,.5));ac.rotation.z=-PI/2;ac.scale.set(.92*k,1.5*k,.65*k);
- const md=new T.Mesh(GM,M(0xff9a3c,1,.4));md.rotation.z=PI/2;md.position.x=-.67*k;g.add(h,ac,md);
- let p=g;for(let i=0;i<10;i++){const s=new T.Group();s.position.x=i?-.26:-.94*k;const r=.05-.0035*i,m=new T.Mesh(new T.CylinderGeometry(r,r,.26,6),M(0x5aa0ff,1,.4));m.rotation.z=PI/2;m.position.x=-.13;s.add(m);p.add(s);p=s;tl.push(s)}
- const l=lab(txt,'#ffffff',.5);l.position.set(0,.62,0);g.add(l);g.userData={tl,ac};return g}
+            <!-- Literature Modal -->
+            <button onclick="openLiteratureModal()" class="px-3 py-1.5 rounded-lg border border-purple-500/40 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-xs font-mono flex items-center gap-1.5 transition">
+                <span>📚</span>
+                <span class="hidden sm:inline text-[11px]">LITERATUR</span>
+            </button>
 
-const IP=[[-.8,.6,.3,.7],[.7,.7,-.3,-.5],[-.6,-.7,-.2,1.2],[.8,-.5,.4,-.9]];
-let P=0,PT=0,play=false,spd=1,sd=0,noM=false,cox=true,labOn=true,CF,ZG='',si='',T0=0,DM,DF,DW,CH=[],CE=[],SPN=[],SP=[],LB=[],PF,CG,CGm,ZN;
-const roll=()=>{CF={o:[rb(),rb()],h:[rb(),rb()],x:[0,1].map(()=>[0,1].map(()=>[rb(),rb()])),fl:[0,1].map(()=>[0,1].map(()=>[rb(),rb()])),f:Math.floor(Math.random()*4)}};
+            <!-- Tutorial Modal -->
+            <button onclick="openTutorialModal()" class="px-3 py-1.5 rounded-lg border border-indigo-500/50 bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 text-xs font-mono flex items-center gap-1.5 transition animate-pulse">
+                <span>📖</span>
+                <span class="text-[11px]">PANDUAN</span>
+            </button>
+        </div>
+    </header>
 
-// Keyframe tiap kromatid: [P, x, y, z, rotZ, ketebalan, skala, opasitas]
-function keys(q,d,m){
- const {c,h,s}=d,mal=!q,so=CF.h[1],oo=mal||d.side==so,sx=s?.1:-.1,y0=c?-.75:.75,o=IP[c*2+h],up=d.u?1:-1,dx=OC[0]-O0[0],dy=OC[1]-O0[1],k=[],pt=(...a)=>k.push(a);
- if(!m){ // tanpa meiosis: hanya satu kromatid per kromosom, tidak ada reduksi
-  const z=s?0:.9,hx=h?.35:-.35;pt(0,o[0],o[1],o[2],o[3],.4,.8,z);
-  if(mal){pt(54,o[0],o[1],o[2],o[3],.5,.8,z);pt(58,o[0],o[1],o[2],o[3],.5,.8,0);const px=-.95+hx+dx,py=(c?-.5:.5)+dy,zx=-.9+(h?.3:-.3)+dx,zy=(c?-.7:.7)+dy;
-   pt(88,px,py,0,0,.6,1,0);pt(92,px,py,0,0,.6,1,z);pt(94,px,py,0,0,.6,1,z);pt(98,zx,zy,0,0,1,1,z);pt(100,zx,zy,0,0,1,1,z)}
-  else{pt(84,o[0],o[1],o[2],o[3],.5,.8,z);const px=.95+hx,py=c?-.5:.5,zx=.9+(h?.3:-.3),zy=c?-.7:.7;pt(94,px,py,0,0,.6,1,z);pt(98,zx,zy,0,0,1,1,z);pt(100,zx,zy,0,0,1,1,z)}
-  return k}
- const pl=mal?[0,0]:[1.3,0],sc=oo?1:.45,pole=mal?(d.side?1.5:-1.5):(oo?.45:2.15),ctr=mal?[d.side?1.8:-1.8,0]:(oo?[0,0]:[2.35,0]),m2=mal?ctr:(oo?[0,1]:[2.35,0]),
- fin=mal?[ctr[0],up*1.4]:(oo?(d.u?[0,2.35]:[0,.45]):[2.35,d.u?.55:-.4]),cx=c?.55:-.55,bv=g=>[pl[0]+(h?g:-g)+sx,pl[1]+y0];
- pt(0,o[0],o[1],o[2],o[3],.35,.7,s?0:.9); // G1: kromatin menyebar, satu kromatid
- if(s){pt(6,o[0],o[1],o[2],o[3],.35,.7,0);pt(9,o[0],o[1],o[2],o[3],.35,.7,.9)}else pt(6,o[0],o[1],o[2],o[3],.35,.7,.9); // fase S: kromatid saudari muncul
- pt(14,o[0]+sx,o[1],o[2],o[3],.5,.85,.9);
- let b=bv(.18);pt(19,b[0],b[1],0,0,1,1,.95);pt(22,b[0],b[1],0,0,1,1,.95); // profase I: sinapsis, bivalen
- b=bv(.4);pt(26,b[0],b[1],0,0,1,1,1); // metafase I
- pt(32,pole+sx*sc,pl[1]+y0*sc,0,0,1,sc,1); // anafase I: homolog ke kutub, kromatid saudari tetap menyatu
- pt(38,ctr[0]+sx*sc,ctr[1]+y0*sc,0,0,1,sc,1);
- pt(44,m2[0]+cx*sc,m2[1]+up*.12*sc,0,PI/2,1,sc,1); // metafase II
- if(mal){const fx=ctr[0]+(c?.4:-.4);
-  pt(50,m2[0]+cx,fin[1],0,PI/2,1,1,1);pt(54,fx,fin[1],0,PI/2,.8,1,1);pt(58,fx,fin[1],0,PI/2,.8,1,0); // anafase II lalu kromatin sperma terpadatkan
-  if(d.tid==CF.f){const px=-.95+(c?.3:-.3)+dx,py=(c?-.45:.45)+dy,zx=-.4+dx,zy=y0+dy; // kromosom ayah muncul lagi di pronukleus jantan
-   pt(88,px,py,0,0,.6,1,0);pt(92,px,py,0,0,.6,1,1);pt(94,px,py,0,0,.6,1,1);pt(98,zx,zy,0,0,1,1,1);pt(100,zx,zy,0,0,1,1,1)}}
- else if(oo){pt(84,m2[0]+cx,m2[1]+up*.12,0,PI/2,1,1,1); // oosit tertahan di metafase II sampai pembuahan
-  const so2=d.u?.45:1;pt(90,fin[0]+cx*so2,fin[1],0,PI/2,1,so2,1);
-  if(!d.u){const px=.85+(c?.3:-.3),py=c?-.45:.45;pt(94,px,py,0,0,.6,1,1);pt(98,.4,y0,0,0,1,1,1);pt(100,.4,y0,0,0,1,1,1)}else pt(100,fin[0]+cx*so2,fin[1],0,PI/2,1,so2,1)}
- else{pt(46,m2[0]+cx*sc,m2[1]+up*.12*sc,0,PI/2,1,sc,1);pt(50,fin[0]+cx*sc,fin[1],0,PI/2,1,sc,1);pt(100,fin[0]+cx*sc,fin[1],0,PI/2,1,sc,1)}
- return k}
+    <!-- ==================== 3D INTERACTIVE STAGE ==================== -->
+    <main class="relative flex-grow min-h-0 overflow-hidden" id="stg">
+        <!-- Floating Stage Title & Ploidy HUD Overlay -->
+        <div class="absolute top-3 left-4 z-20 pointer-events-none space-y-1">
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+                <div class="px-3 py-1 rounded-lg bg-slate-950/80 backdrop-blur-md border border-cyan-500/30 text-cyan-300 font-mono text-xs font-bold tracking-wider shadow-lg">
+                    SIMULASI AKTIF
+                </div>
+            </div>
+            <p class="text-[11px] font-mono text-slate-400 drop-shadow-md">
+                Gunakan kursor mouse / layar sentuh untuk rotasi bebas 3D (360°)
+            </p>
+        </div>
 
-const ST=[
-[0,'Interfase G1 | 2n, 2C','Sel germinal ayah dan ibu diploid: dua pasang kromosom homolog (2n = 4). Kromatin menyebar, belum tampak sebagai batang. Kedua induk bergenotipe AaBb; gen A dan B terletak pada kromosom berbeda.'],
-[6,'Fase S | 2n, 4C','DNA bereplikasi: tiap kromosom kini terdiri atas dua kromatid saudari identik yang menyatu di sentromer. Jumlah kromosom tetap 4, jumlah DNA menjadi 4C.'],
-[14,'Profase I: sinapsis dan pindah silang','Kromosom memadat dan homolog berpasangan (bivalen atau tetrad). Kromatid non-saudari bertukar segmen di kiasma (pindah silang) sehingga alel ujung lengan berpindah: sumber rekombinasi. Selubung inti hancur di akhir profase I. Pada manusia, oosit berhenti di profase I sejak masa janin sampai pubertas.'],
-[22,'Metafase I','Bivalen berjajar di ekuator gelendong. Homolog menghadap kutub berlawanan, kromatid saudari menghadap kutub yang sama. Orientasi tiap bivalen acak: dasar asortasi bebas (hukum Mendel II).'],
-[28,'Anafase I: segregasi homolog','Kromosom homolog ditarik ke kutub berlawanan, sedangkan kromatid saudari tetap melekat (kohesin sentromer dilindungi shugoshin). Alel A dan a berpisah (hukum Mendel I). Inilah pembelahan reduksi: 2n menjadi n.'],
-[34,'Telofase I dan sitokinesis | n, 2C','Ayah: dua spermatosit sekunder sama besar. Ibu: pembelahan tak setara menghasilkan oosit sekunder besar dan badan kutub I yang kecil. Tidak ada replikasi DNA sebelum meiosis II (interkinesis).'],
-[40,'Metafase II','Kromosom berjajar lagi pada gelendong yang tegak lurus terhadap gelendong pertama. Ayah lanjut ke anafase II. Ibu: oosit sekunder berhenti di metafase II (diovulasikan) sampai terjadi pembuahan.'],
-[46,'Anafase II: kromatid saudari berpisah | n, C','Ayah: kromatid saudari berpisah menjadi empat spermatid haploid. Ibu: badan kutub I membelah menjadi dua, oosit tetap tertahan di metafase II.'],
-[54,'Spermiogenesis dan ovulasi','Spermatid menjadi spermatozoa: kromatin dipadatkan protamin, akrosom terbentuk dari aparatus Golgi, mitokondria melingkari bagian tengah, flagel tumbuh. Oosit sekunder, berselubung zona pelusida dan korona radiata, bergerak ke tempat pembuahan.'],
-[62,'Perjalanan sperma','Sperma berenang menuju oosit. Empat sperma ini mewakili empat produk satu meiosis; pada kenyataannya jutaan sperma dari banyak meiosis bersaing dan hanya sedikit yang sampai.'],
-[72,'Pengikatan zona dan reaksi akrosom','Sperma terkapasitasi mengikat zona pelusida, lalu melepas enzim akrosom (hialuronidase, akrosin) yang melubangi zona. Sperma menembus zona dan menyatu dengan membran oosit (Izumo1 pada sperma, Juno pada oosit).'],
-[82,'Fusi dan reaksi kortikal: blok polispermi','Fusi memicu gelombang Ca2+. Granula kortikal melepas isinya ke ruang perivitelin dan zona pelusida mengeras (ZP2 terbelah), sehingga sperma lain tidak dapat masuk.'],
-[86,'Penyelesaian meiosis II','Masuknya sperma melepas tahanan metafase II: kromatid saudari berpisah dan satu set dikeluarkan sebagai badan kutub II. Oosit kini menjadi ovum haploid (n).'],
-[90,'Pronukleus jantan dan betina | n + n','Kromatin sperma terdekondensasi (protamin diganti histon) membentuk pronukleus jantan; kromosom ovum membentuk pronukleus betina. Masing-masing haploid.'],
-[96,'Singami: zigot diploid (2n)','Selubung pronukleus hancur dan kromosom ayah dan ibu berkumpul pada gelendong mitosis pertama. Genotipe zigot ditentukan oleh sperma dan ovum yang bertemu. Selanjutnya zigot membelah (cleavage) menjadi embrio.']];
-const SN=[
-[0,'Sel germinal diploid (2n)','Mode kesalahan: meiosis dimatikan. Sel germinal ayah dan ibu (2n = 4) tidak mengalami pembelahan reduksi.'],
-[14,'Tanpa reduksi kromosom','Sel induk langsung berdiferensiasi menjadi gamet. Gamet tetap diploid (2n): sperma membawa AaBb dan ovum membawa AaBb.'],
-[62,'Perjalanan dan pembuahan','Sperma diploid menembus zona pelusida dan menyatu dengan oosit diploid.'],
-[90,'Pronukleus diploid','Tiap pronukleus membawa 4 kromosom (2n).'],
-[96,'Zigot tetraploid (4n)','Zigot membawa 8 kromosom (4n). Tetraploidi pada manusia umumnya letal; itu sebabnya reduksi kromosom lewat meiosis esensial.']];
-const mt=p=>noM?(p<54?'Sel germinal ayah (2n)':'Gamet ayah (2n)'):p<6?'Spermatogonium (2n)':p<34?'Spermatosit primer (2n, 4C)':p<48?'Spermatosit sekunder (n, 2C)':p<56?'Spermatid (n, C)':'Spermatozoa (n)';
-const ft=p=>noM?(p<84?'Oosit diploid (2n)':p<96?'Ovum diploid (2n)':'Zigot 4n: '+ZG):p<6?'Oogonium (2n)':p<36?'Oosit primer (2n, 4C)':p<86?'Oosit sekunder (n, 2C)':p<96?'Ovum (n)':'Zigot 2n: '+ZG;
+        <!-- Floating Camera Zoom & View Controls -->
+        <div class="absolute right-4 bottom-4 z-20 flex flex-col gap-2" id="zm">
+            <button id="zi" class="w-9 h-9 rounded-xl glass-panel text-cyan-300 font-mono font-bold text-base flex items-center justify-center hover:border-cyan-400 hover:text-white transition shadow-lg" aria-label="Perbesar">+</button>
+            <button id="zo" class="w-9 h-9 rounded-xl glass-panel text-cyan-300 font-mono font-bold text-base flex items-center justify-center hover:border-cyan-400 hover:text-white transition shadow-lg" aria-label="Perkecil">-</button>
+            <button id="zr" class="w-9 h-9 rounded-xl glass-panel text-cyan-300 font-mono font-bold text-xs flex items-center justify-center hover:border-cyan-400 hover:text-white transition shadow-lg" title="Reset Sudut Pandang">R</button>
+        </div>
+    </main>
 
-const GT=['AB','Ab','aB','ab'],gz=(a,b)=>[a[0],b[0]].sort().join('')+[a[1],b[1]].sort().join('');
-function pun(sp,ov,on){const t=$('pn');t.style.display=on?'table':'none';if(!on)return;
- t.innerHTML='<tr><th></th>'+GT.map(g=>'<th>'+g+'</th>').join('')+'</tr>'+GT.map(o=>'<tr><th>'+o+'</th>'+GT.map(s=>'<td'+(s==sp&&o==ov?' class="hl"':'')+'>'+gz(s,o)+'</td>').join('')+'</tr>').join('')}
+    <!-- ==================== COLLAPSIBLE CONTROL & NARRATIVE DOCK ==================== -->
+    <aside id="dk" class="z-30 bg-slate-950/95 backdrop-blur-md border-t border-slate-800/90 p-3 sm:p-4 flex flex-col gap-3 max-h-[46vh] overflow-y-auto flex-shrink-0 transition-all duration-300">
+        <!-- Stage Timeline Bookmarks -->
+        <div class="flex items-center justify-between gap-2 flex-wrap border-b border-slate-800/80 pb-2">
+            <div class="flex items-center gap-1.5 overflow-x-auto py-0.5" id="sb">
+                <!-- Bookmarks injected by JS -->
+            </div>
+            <div class="text-[10px] font-mono text-slate-500 hidden sm:block">
+                Model: AaBb &times; AaBb (Asortasi Bebas)
+            </div>
+        </div>
 
-function build(){
- [DM,DF,DW].forEach(g=>g&&g.parent&&g.parent.remove(g));
- DM=new T.Group();MG.add(DM);DF=new T.Group();FG.add(DF);DW=new T.Group();SC.add(DW);
- LB.forEach(l=>l.e.remove());LB=[];CH=[];CE=[];SPN=[];SP=[];si='';
- const m=!noM,D=[[],[]],AL=[['A','a'],['B','b']],HC=[[0x2f6bff,0x7fd8ff],[0xff3d8f,0xffa6cf]];
- // genotipe: kromosom 1 (gen A/a) dan kromosom 2 (gen B/b), tiap kromosom punya 2 homolog x 2 kromatid saudari
- for(let q=0;q<2;q++)for(let c=0;c<2;c++)for(let h=0;h<2;h++)for(let s=0;s<2;s++){const side=c?h^CF.o[q]:h,u=s^CF.fl[q][c][h];D[q].push({q,c,h,s,side,u,tid:side*2+u,pc:HC[q][h],dc:HC[q][h],a:AL[c][h],a2:AL[c][h]})}
- if(cox&&m)for(let q=0;q<2;q++)for(let c=0;c<2;c++){const p=CF.x[q][c],A=D[q][c*4+p[0]],B=D[q][c*4+2+p[1]],t=A.dc,u=A.a2;A.dc=B.dc;A.a2=B.a2;B.dc=t;B.a2=u}
- D.forEach((arr,q)=>arr.forEach(d=>{const g=chrom(d.c,d.pc,d.dc,d.a);(q?DF:DM).add(g);CH.push({g,d,cs:null,k:keys(q,d,m)})}));
- const cl=(par,col,o,k,w)=>{const g=cell(col,o,w);par.add(g);CE.push({g,k})};
- // sel ayah: spermatosit primer -> 2 spermatosit sekunder -> 4 spermatid (sama besar)
- cl(DM,0xffb347,.2,m?[[0,0,0,0,2.1,1],[34,0,0,0,2.1,1],[37,0,0,0,2.2,0]]:[[0,0,0,0,2.1,1],[54,0,0,0,2.1,1],[58,0,0,0,2.1,0]]);
- cl(DM,0xffd27a,.3,[[0,0,0,0,1.3,1],[20,0,0,0,1.3,1],[23,0,0,0,1.3,0]],.2);
- if(m)[-1,1].forEach(a=>{cl(DM,0xffb347,.2,[[34,a,0,0,.9,0],[38,a*1.8,0,0,1.4,1],[48,a*1.8,0,0,1.4,1],[50,a*1.8,0,0,1.4,0]]);
-  [-1,1].forEach(u=>cl(DM,0xffb347,.2,[[48,a*1.8,0,0,.7,0],[52,a*1.8,u*1.4,0,1,1],[56,a*1.8,u*1.4,0,1,1],[59,a*1.8,u*1.4,0,.8,0]]))});
- // sel ibu: oosit besar menetap, badan kutub kecil (pembelahan tak setara)
- cl(DF,0xff7aa8,.2,[[0,0,0,0,1.9,1]]);
- cl(DF,0xffc0d6,.3,[[0,0,0,0,1.1,1],[20,0,0,0,1.1,1],[23,0,0,0,1.1,0]],.2);
- if(m){cl(DF,0xffb09f,.35,[[32,1.95,0,0,.05,0],[37,2.35,0,0,.3,1],[46,2.35,0,0,.3,1],[48,2.35,0,0,.3,0]]);
-  cl(DF,0xffb09f,.35,[[46,2.35,0,0,.2,0],[50,2.35,.55,0,.24,1],[100,2.35,.55,0,.24,1]]);
-  cl(DF,0xffb09f,.35,[[46,2.35,0,0,.2,0],[50,2.35,-.4,0,.24,1],[100,2.35,-.4,0,.24,1]]);
-  cl(DF,0xffb09f,.35,[[84,0,1.95,0,.05,0],[90,0,2.35,0,.3,1],[100,0,2.35,0,.3,1]])}
- const pr=noM?1.05:.8;
- cl(DF,0xa5c8ff,.3,[[88,-.95,0,0,pr,0],[91,-.95,0,0,pr,1],[96,-.95,0,0,pr,1],[99,-.95,0,0,pr,0]],.2);
- cl(DF,0xffa6cf,.3,[[90,.9,0,0,pr,0],[93,.9,0,0,pr,1],[96,.9,0,0,pr,1],[99,.9,0,0,pr,0]],.2);
- // zona pelusida, korona radiata, granula kortikal
- ZN=new T.Mesh(new T.SphereGeometry(2.75,32,22),M(0x6ad6ff,.08,.15));DF.add(ZN,new T.Mesh(new T.SphereGeometry(2.76,16,12),new T.MeshBasicMaterial({color:0x6ad6ff,wireframe:true,transparent:true,opacity:.1})));
- const cm=M(0xffc08a,.5,.2);for(let i=0;i<14;i++){const y=1-2*(i+.5)/14,r=Math.sqrt(1-y*y),t=i*2.39996,s=new T.Mesh(GCo,cm);s.position.set(Math.cos(t)*r*3.1,y*3.1,Math.sin(t)*r*3.1);DF.add(s)}
- const gp=[];for(let i=0;i<48;i++){const y=1-2*(i+.5)/48,r=Math.sqrt(1-y*y),t=i*2.39996;gp.push(Math.cos(t)*r*1.65,y*1.65,Math.sin(t)*r*1.65)}
- const gg=new T.BufferGeometry();gg.setAttribute('position',new T.Float32BufferAttribute(gp,3));CGm=new T.PointsMaterial({color:0x7fe0ff,size:.1,transparent:true,opacity:.9});CG=new T.Points(gg,CGm);DF.add(CG);
- // gelendong (spindle) dan kiasma
- const spn=(par,x,y,hl,ax,k)=>{const o=new T.Mesh(GSP,new T.MeshBasicMaterial({color:0x9be7ff,wireframe:true,transparent:true,opacity:.35}));o.position.set(x,y,0);o.scale.set(hl*.7,hl,hl*.7);if(ax)o.rotation.z=PI/2;par.add(o);SPN.push({g:o,k})};
- if(m){spn(DM,0,0,1.6,1,[[20,0],[23,1],[33,1],[36,0]]);[-1.8,1.8].forEach(x=>spn(DM,x,0,1.25,0,[[39,0],[42,1],[48,1],[51,0]]));spn(DF,1.3,0,1,1,[[20,0],[23,1],[33,1],[36,0]]);spn(DF,0,1,.9,0,[[39,0],[43,1],[84,1],[90,0]])}
- if(m&&cox)[[DM,0],[DF,1.3]].forEach(a=>[.75,-.75].forEach(y=>{const o=new T.Mesh(GRg,new T.MeshBasicMaterial({color:0xffe066,transparent:true,opacity:.9}));o.rotation.x=PI/2;o.position.set(a[1],y-.5,0);a[0].add(o);SPN.push({g:o,k:[[18,0],[20,1],[24,1],[26,0]]})}));
- // genotipe gamet dan zigot
- const gm=m?[0,1,2,3].map(j=>D[0].filter(d=>d.tid==j).map(d=>d.a2).join('')):[D[0].filter(d=>!d.s).map(d=>d.a).join('')],
- ov=m?D[1].filter(d=>d.side==CF.h[1]&&!d.u).map(d=>d.a2).join(''):D[1].filter(d=>!d.s).map(d=>d.a).join(''),sel=m?CF.f:0,sp=gm[sel],
- zy=m?gz(sp,ov):[[...sp].slice(0,2).concat([...ov].slice(0,2)).sort().join(''),[...sp].slice(2).concat([...ov].slice(2)).sort().join('')].join('');
- ZG=zy;
- $('gm').innerHTML=m?'<b>Sperma</b> (ayah AaBb): '+gm.map((g,j)=>j==sel?'<u>'+g+'</u>':g).join(' ')+' (bergaris bawah = pembuah)<br><b>Ovum</b> (ibu AaBb): '+ov+'<br><b>Zigot</b>: '+zy+' | fenotip (dominansi penuh): '+(zy.includes('A')?'A_':'aa')+' '+(zy.includes('B')?'B_':'bb'):'<b>Gamet ayah</b>: '+sp+' (2n)<br><b>Gamet ibu</b>: '+ov+' (2n)<br><b>Zigot</b>: '+zy+' (4n, tidak viabel)';
- pun(sp,ov,m);
- // spermatozoa: top-level, bergerak bebas ke arah oosit
- const rest=[150,210,125];let ri=0;
- for(let j=0;j<(m?4:1);j++){const g=sperm(gm[j],!m),a=(j==sel?180:rest[ri++])*PI/180;DW.add(g);SP.push({g,j,a,sel:j==sel,tx:m?(j>>1?1.8:-1.8):0,ty:m?(j&1?1.4:-1.4):0,tl:g.userData.tl,ac:g.userData.ac})}
- PF=new T.Group();for(let i=0;i<8;i++){const s=new T.Mesh(new T.SphereGeometry(.07,6,5),M(0xffd38a,.9,.6)),a=i*2.4,b=i*.7;s.userData.v=[Math.cos(a)*Math.cos(b),Math.sin(a)*Math.cos(b),Math.sin(b)];PF.add(s)}DW.add(PF);
- // label struktur
- const an=(par,x,y)=>{const o=new T.Object3D();o.position.set(x,y,0);par.add(o);return o},
- aL=(a,col,left,w,f)=>{const e=document.createElement('div');e.className='lb'+(left?' l':'');e.style.color=e.style.borderColor=col;box.appendChild(e);LB.push({e,a,l:left,w,f})};
- aL(an(DM,0,3.3),'#ffb347',0,[0,59],mt);aL(an(DF,0,3.95),'#ff7aa8',0,[0,100],ft);
- aL(an(DF,-1.95,1.95),'#6ad6ff',1,[0,100],()=>'Zona pelusida');aL(an(DF,-2.95,-1.05),'#ffc08a',1,[0,100],()=>'Korona radiata');
- if(m){aL(an(DF,2.7,.1),'#ffb09f',0,[38,100],p=>p<47?'Badan kutub I':'Badan kutub I (2 sel)');aL(an(DF,.3,2.7),'#ffb09f',0,[90,100],()=>'Badan kutub II');
-  aL(an(DM,0,1.95),'#9be7ff',0,[24,33],()=>'Gelendong meiosis I');aL(an(DF,.4,1.05),'#9be7ff',0,[44,84],()=>'Gelendong meiosis II')}
- aL(an(DF,-.95,-1),'#a5c8ff',1,[92,98],()=>'Pronukleus jantan');aL(an(DF,.9,-1),'#ffa6cf',0,[93,98],()=>'Pronukleus betina');
- aL(an(SP[sel].g,.55,.3),'#ffd38a',0,[62,79],()=>'Akrosom')}
+        <!-- Middle Info Grid: Narrative on Left, Genetics on Right -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            <!-- Stage Explanation Narrative -->
+            <div class="lg:col-span-6 space-y-1.5">
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-bold uppercase tracking-wider">
+                        TAHAPAN SAAT INI
+                    </span>
+                    <h2 id="ti" class="text-sm sm:text-base font-bold text-white font-sans truncate">--</h2>
+                </div>
+                <p id="ds" class="text-xs text-slate-300 leading-relaxed font-sans">
+                    Memuat simulasi meiosis...
+                </p>
+            </div>
 
-const v3=new T.Vector3();
-function upd(){
- const fo=sg(P,54,66),cx=cox&&!noM&&P>=20;FG.position.set(L(O1[0],OC[0],fo),L(O1[1],OC[1],fo),0);
- CH.forEach(o=>{const g=o.g,u=g.userData,v=K(P,o.k);
-  g.position.set(v[0],v[1],v[2]);g.rotation.z=v[3];u.n.scale.set(v[4]*v[5],v[5],v[4]*v[5]);u.sp.position.y=-(u.lq+.35)*v[5];u.sp.scale.set(.84*v[5],.42*v[5],1);
-  if(o.cs!==cx){o.cs=cx;const col=cx?o.d.dc:o.d.pc;u.dm.color.set(col);u.dm.emissive.set(col);u.sp.material.map=lt(cx?o.d.a2:o.d.a,'#ffffff')}
-  fade(g,v[6])});
- CE.forEach(o=>{const v=K(P,o.k);o.g.position.set(v[0],v[1],v[2]);o.g.scale.setScalar(v[3]);fade(o.g,v[4])});
- SPN.forEach(o=>fade(o.g,K(P,o.k)[0]));
- const c=sg(P,82,88);CG.scale.setScalar(L(1,1.5,c));CGm.opacity=.9*(1-c);ZN.material.opacity=.08+.14*c;ZN.material.emissiveIntensity=.15+.5*c;
- SP.forEach(o=>{const g=o.g,j=o.j,sx=O0[0]+o.tx,sy=O0[1]+o.ty,ax=OC[0]+Math.cos(o.a)*4.1,ay=OC[1]+Math.sin(o.a)*4.1,s1=sg(P,58,72);
-  let x=L(sx,ax,s1),y=L(sy,ay,s1)+Math.sin(P*.9+j*1.7)*s1*(1-s1)*2.2,z=Math.sin(P*.6+j)*s1*(1-s1)*2,op=sg(P,54,58);
-  if(P>72){const d=(o.sel?K(P,[[72,4.1],[77,2.9],[80,2.75],[82,2],[86,.9]]):K(P,[[72,4.1],[78,3.4],[84,3.5],[92,6]]))[0];
-   x=OC[0]+Math.cos(o.a)*d;y=OC[1]+Math.sin(o.a)*d;z=0;op*=o.sel?1-sg(P,86,90):1-sg(P,86,92)}
-  g.position.set(x,y,z);g.rotation.z=Math.atan2(OC[1]-y,OC[0]-x);g.scale.setScalar(L(.35,1,sg(P,54,60))*(o.sel?L(1,.8,sg(P,82,86)):1));
-  fade(g,op);o.ac.material.opacity=o.ac.userData.b*op*(o.sel?1-sg(P,77,80):1);
-  o.tl.forEach((t,i)=>t.rotation.z=Math.sin(T0*10-i*.7+j)*.2*(.4+i*.12))});
- const s0=SP.find(o=>o.sel),r=sg(P,77,82),on=P>76.5&&P<82.5;
- PF.position.set(s0.g.position.x-Math.cos(s0.a)*.5,s0.g.position.y-Math.sin(s0.a)*.5,0);PF.children.forEach(s=>{const v=s.userData.v;s.position.set(v[0]*(.15+.9*r),v[1]*(.15+.9*r),v[2]*(.15+.9*r))});fade(PF,on?1-r:0)}
+            <!-- Genetics Breakdown & Punnett -->
+            <div class="lg:col-span-6 space-y-2 border-t lg:border-t-0 lg:border-l border-slate-800/80 pt-3 lg:pt-0 lg:pl-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-mono font-bold text-pink-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <span>🧬</span> MATRIKS GENETIKA & KOTAK PUNNETT
+                    </h3>
+                    <span class="text-[10px] font-mono text-slate-400">Sel Sperma &times; Ovum</span>
+                </div>
 
-function lblU(){const W=box.clientWidth,H=box.clientHeight;
- LB.forEach(l=>{const on=labOn&&P>=l.w[0]&&P<=l.w[1];l.e.style.display=on?'flex':'none';
-  if(on){const t=l.f(P);if(l.e.textContent!==t)l.e.textContent=t;l.a.getWorldPosition(v3);v3.project(cam);l.e.style.transform='translate('+((v3.x*.5+.5)*W)+'px,'+((-v3.y*.5+.5)*H)+'px) translate('+(l.l?'-100%':'0')+',-50%)'}})}
-function info(){const A=noM?SN:ST;let i=0;A.forEach((s,k)=>{if(P>=s[0])i=k});const key=(noM?'n':'m')+i;if(key!=si){si=key;$('ti').textContent=A[i][1];$('ds').textContent=A[i][2]}}
+                <div id="gm" class="text-[11px] font-mono text-slate-300 bg-slate-900/70 p-2.5 rounded-lg border border-slate-800 space-y-1">
+                    <!-- Injected by JS -->
+                </div>
 
-function stp(){play=false;$('pl').textContent='Putar'}
-function loop(n){const dt=Math.min((n-lastT)/1000,.1);lastT=n;T0+=dt;
- if(play){P=Math.min(100,P+dt*5*spd);PT=P;if(P>=100)stp()}else P+=(PT-P)*(1-Math.exp(-dt*5));
- if(!sd)$('sl').value=P;
- upd();ctl.update();RD.render(SC,cam);lblU();info();requestAnimationFrame(loop)}
-let lastT=performance.now(),fitted=0;
-function home(){const d=Math.max(15.5/.828,19.5/(.828*cam.aspect))*1.05;cam.position.set(-2.2+.1*d,.6+.08*d,d);ctl.target.set(-2.2,.2,0);ctl.update()}
-function rz(){const w=box.clientWidth,h=box.clientHeight;if(!w||!h)return;RD.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();if(!fitted){home();fitted=1}}
-const zoom=f=>cam.position.sub(ctl.target).multiplyScalar(f).add(ctl.target);
-$('zi').onclick=()=>zoom(.8);$('zo').onclick=()=>zoom(1.25);$('zr').onclick=home;
-[['Induk 2n',0],['Meiosis I',26],['Meiosis II',44],['Gamet',60],['Fertilisasi',82],['Zigot',100]].forEach(a=>{const b=document.createElement('button');b.textContent=a[0];b.onclick=()=>{PT=a[1];stp()};$('sb').appendChild(b)});
-const sl=$('sl');sl.onpointerdown=()=>sd=1;sl.onpointerup=sl.onpointercancel=()=>sd=0;sl.oninput=e=>{PT=+e.target.value;stp()};
-$('pl').onclick=()=>{if(play)return stp();if(P>=99.5)P=PT=0;play=true;$('pl').textContent='Jeda'};
-$('sp').onclick=e=>{spd=spd==1?.5:spd==.5?2:1;e.target.textContent='Kecepatan '+spd+'x'};
-$('cxb').onclick=e=>{cox=!cox;e.target.classList.toggle('on',cox);e.target.textContent='Pindah silang: '+(cox?'aktif':'mati');build()};
-$('mb').onclick=e=>{noM=!noM;e.target.classList.toggle('on',!noM);e.target.textContent='Meiosis: '+(noM?'mati (kesalahan)':'aktif');build()};
-$('lbb').onclick=e=>{labOn=!labOn;e.target.classList.toggle('on',labOn);e.target.textContent='Label: '+(labOn?'tampil':'sembunyi')};
-$('rsb').onclick=()=>{roll();build();P=PT=0;play=true;$('pl').textContent='Jeda'};
-new ResizeObserver(rz).observe(box);rz();roll();build();requestAnimationFrame(loop);
-</script>
+                <div class="overflow-x-auto py-1">
+                    <table id="pn" class="w-full max-w-sm"></table>
+                </div>
+
+                <p class="text-[10px] font-mono text-slate-500 leading-tight">
+                    <span class="text-cyan-400">Biru:</span> kromosom paternal (ayah). <span class="text-pink-400">Merah muda:</span> maternal (ibu). Dua warna pada kromatid menandakan rekombinasi pindah silang. Kotak berarsir terang menandakan gamet yang membuahi.
+                </p>
+            </div>
+        </div>
+
+        <!-- Bottom Playback & Parameters Toolbar -->
+        <div id="cbar" class="border-t border-slate-800/80 pt-2.5 flex flex-col gap-2.5">
+            <!-- Timeline Scrub Row -->
+            <div class="flex items-center gap-3 flex-wrap">
+                <button id="pl" class="dock-btn font-bold text-xs bg-indigo-600 hover:bg-indigo-500 text-white border-indigo-400/40 shadow-lg shadow-indigo-500/20">
+                    Putar
+                </button>
+                <button id="sp" class="dock-btn text-xs">
+                    Kecepatan 1x
+                </button>
+                <div class="flex items-center gap-2 flex-grow min-w-[160px]">
+                    <span class="text-[10px] font-mono text-slate-500">0%</span>
+                    <input id="sl" type="range" min="0" max="100" step="0.1" value="0" class="flex-grow cursor-pointer" aria-label="Linimasa Simulasi">
+                    <span class="text-[10px] font-mono text-slate-500">100%</span>
+                </div>
+            </div>
+
+            <!-- Simulation Parameters Row -->
+            <div class="flex items-center gap-2 flex-wrap">
+                <button id="cxb" class="dock-btn on text-xs">
+                    Pindah silang: aktif
+                </button>
+                <button id="mb" class="dock-btn on text-xs">
+                    Meiosis: aktif
+                </button>
+                <button id="lbb" class="dock-btn on text-xs">
+                    Label: tampil
+                </button>
+                <button id="rsb" class="dock-btn text-xs hover:border-amber-400 hover:text-amber-300">
+                    <span>🎲</span>
+                    <span>Acak ulang dan putar</span>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ==================== TUTORIAL MODAL ==================== -->
+    <div id="modal-tutorial" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden transition-opacity">
+        <div class="glass-panel rounded-2xl max-w-2xl w-full border border-indigo-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/30">📖</span>
+                    <div>
+                        <h3 class="text-lg font-display font-bold text-white tracking-wider">PANDUAN LENGKAP SIMULASI 3D</h3>
+                        <p class="text-xs font-mono text-indigo-400">MODUL 11: GAMETOGENESIS & FERTILISASI</p>
+                    </div>
+                </div>
+                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+            </div>
+
+            <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
+                <!-- Section 1 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-indigo-300 text-xs tracking-wider uppercase">1. Konsep Meiosis: Pembelahan Reduksi</h4>
+                    <p class="text-xs text-slate-300">
+                        Meiosis adalah proses pembelahan sel khusus yang membagi jumlah kromosom menjadi separuh (dari diploid <code class="font-mono text-cyan-300">2n</code> menjadi haploid <code class="font-mono text-cyan-300">n</code>). Ini esensial agar ketika terjadi fertilisasi (sperma + ovum), jumlah kromosom diploid spesies tetap konstan pada generasi berikutnya.
+                    </p>
+                </div>
+
+                <!-- Section 2 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-cyan-300 text-xs tracking-wider uppercase">2. Spermatogenesis vs Oogenesis</h4>
+                    <p class="text-xs text-slate-300">
+                        • <b>Spermatogenesis (Ayah):</b> Pembelahan sitoplasma setara menghasilkan <b>4 spermatozoa fungsional</b> motil berflagel.<br>
+                        • <b>Oogenesis (Ibu):</b> Pembelahan sitoplasma asimetris menghasilkan <b>1 ovum fungsional</b> kaya sitoplasma dan nutrisi, serta 3 badan kutub (polar bodies) yang mengalami degenerasi.
+                    </p>
+                </div>
+
+                <!-- Section 3 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-pink-300 text-xs tracking-wider uppercase">3. Pindah Silang (Crossing Over) & Rekombinasi</h4>
+                    <p class="text-xs text-slate-300">
+                        Pada <b>Profase I</b>, kromosom homolog saling berpasangan (bivalen) dan bertukar fragmen kromatid non-saudari di titik kiasma. Ini menghasilkan kombinasi alel baru yang menjadi sumber keanekaragaman genetik makhluk hidup.
+                    </p>
+                </div>
+
+                <!-- Section 4 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-emerald-300 text-xs tracking-wider uppercase">4. Fertilisasi & Blok Polispermi</h4>
+                    <p class="text-xs text-slate-300">
+                        Ketika sperma mencapai oosit, terjadi <b>Reaksi Akrosom</b> untuk menembus zona pelusida. Begitu fusi terjadi, terjadi <b>Reaksi Kortikal</b> yang mengeraskan zona pelusida sehingga mencegah polispermi (masuknya lebih dari satu sperma). Meiosis II oosit tuntas, dan kedua pronukleus melebur (singami) membentuk zigot diploid <code class="font-mono text-emerald-300">2n</code>.
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-right border-t border-slate-800 pt-4">
+                <button onclick="closeTutorialModal()" class="px-5 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-slate-950 font-display font-bold text-xs tracking-wider transition">
+                    MENGERTI, MULAI EKSPLORASI
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SCIENTIFIC LITERATURE MODAL ==================== -->
+    <div id="modal-literature" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden transition-opacity">
+        <div class="glass-panel rounded-2xl max-w-2xl w-full border border-purple-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">📚</span>
+                    <div>
+                        <h3 class="text-lg font-display font-bold text-white tracking-wider">DASAR TEORETIS & REFERENSI ILMIAH</h3>
+                        <p class="text-xs font-mono text-purple-400">HISTORI MEIOSIS & BIOLOGI MOLEKULER FERTILISASI</p>
+                    </div>
+                </div>
+                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
+                <!-- Ref 1 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-cyan-400 font-mono">1. Penemuan Seluler Fertilisasi & Singami</span>
+                        <span class="text-[10px] font-mono text-slate-500">1876</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Hertwig, Oscar (1876).</b> <i>Beiträge zur Kenntniss der Bildung, Befruchtung und Theilung des thierischen Eies.</i> Morphologisches Jahrbuch, 1: 347–434.
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Ilmuwan pertama yang mengamati langsung di bawah mikroskop bahwa fertilisasi adalah penyatuan materi inti sel telur dan sel sperma tunggal.
+                    </p>
+                </div>
+
+                <!-- Ref 2 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-indigo-400 font-mono">2. Teori Kromosom Sutton-Boveri & Meiosis</span>
+                        <span class="text-[10px] font-mono text-slate-500">1902–1903</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Boveri, Theodor (1902).</b> <i>Über mehrpolige Mitosen als Mittel zur Analyse des Zellkerns.</i> Verh. Phys. Med. Ges. Würzburg.<br>
+                        <b>Sutton, Walter S. (1903).</b> <i>The Chromosomes in Heredity.</i> Biological Bulletin, 4(5): 231–251.
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Menghubungkan perilaku kromosom selama pembelahan meiosis dengan Hukum Pemisahan Bebas (Mendel I) dan Asortasi Bebas (Mendel II).
+                    </p>
+                </div>
+
+                <!-- Ref 3 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-pink-400 font-mono">3. Mekanisme Pindah Silang (Crossing Over)</span>
+                        <span class="text-[10px] font-mono text-slate-500">1911</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Morgan, Thomas Hunt (1911).</b> <i>An Attempt to Analyze the Constitution of the Chromosomes on the Basis of Sex-Limited Inheritance in Drosophila.</i> J. Exp. Zool.
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Membuktikan bahwa rekombinasi fisik antar-kromatid terjadi di kiasma dan menyebabkan pertukaran alel terpaut.
+                    </p>
+                </div>
+
+                <!-- Ref 4 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-emerald-400 font-mono">4. Reseptor Molekuler Fusi Gamet (Izumo1 & Juno)</span>
+                        <span class="text-[10px] font-mono text-slate-500">2005 & 2014</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Inoue, N., et al. (2005).</b> <i>The immunoglobulin superfamily protein Izumo is required for sperm to fuse with eggs.</i> Nature, 434: 234–238.<br>
+                        <b>Bianchi, E., et al. (2014).</b> <i>Juno is the egg receptor for the sperm Izumo protein that is essential for mammalian fertilization.</i> Nature, 508: 483–487.
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-right border-t border-slate-800 pt-4">
+                <button onclick="closeLiteratureModal()" class="px-5 py-2 rounded-xl bg-purple-500 hover:bg-purple-400 text-slate-950 font-display font-bold text-xs tracking-wider transition">
+                    TUTUP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== THREE.JS 3D ENGINE SCRIPT ==================== -->
+    <script>
+        /* ==================== AUDIO SYNTHESIZER ==================== */
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) audioCtx = new AudioContext();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playBeep(freq = 440, type = 'sine', duration = 0.08, gainVal = 0.1) {
+            if (!soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            if (icon) icon.innerText = soundEnabled ? '🔊' : '🔇';
+            if (soundEnabled) playBeep(587, 'triangle', 0.1, 0.12);
+        }
+
+        /* ==================== MODAL CONTROLS ==================== */
+        function openTutorialModal() {
+            playBeep(520, 'sine', 0.08, 0.1);
+            const m = document.getElementById('modal-tutorial');
+            if (m) m.classList.remove('hidden');
+        }
+
+        function closeTutorialModal() {
+            playBeep(420, 'sine', 0.06, 0.08);
+            const m = document.getElementById('modal-tutorial');
+            if (m) m.classList.add('hidden');
+        }
+
+        function openLiteratureModal() {
+            playBeep(520, 'sine', 0.08, 0.1);
+            const m = document.getElementById('modal-literature');
+            if (m) m.classList.remove('hidden');
+        }
+
+        function closeLiteratureModal() {
+            playBeep(420, 'sine', 0.06, 0.08);
+            const m = document.getElementById('modal-literature');
+            if (m) m.classList.add('hidden');
+        }
+
+        window.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                closeTutorialModal();
+                closeLiteratureModal();
+            }
+        });
+
+        /* ==================== 3D GAMETOGENESIS CORE ==================== */
+        const T = THREE, $ = id => document.getElementById(id), box = $('stg'), PI = Math.PI;
+        const E = t => t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t), sg = (p, a, b) => E((p - a) / (b - a)), L = (a, b, t) => a + (b - a) * t, rb = () => Math.random() < .5 ? 1 : 0;
+        // Keyframe interpolation
+        const K = (p, a) => {
+            if (p <= a[0][0]) return a[0].slice(1);
+            for (let i = 1; i < a.length; i++) if (p <= a[i][0]) {
+                const u = a[i - 1], v = a[i], t = E((p - u[0]) / (v[0] - u[0]));
+                return v.slice(1).map((x, j) => L(u[j + 1], x, t));
+            }
+            return a[a.length - 1].slice(1);
+        };
+
+        const RD = new T.WebGLRenderer({ antialias: true, alpha: true }), SC = new T.Scene(), cam = new T.PerspectiveCamera(45, 1, .1, 300);
+        RD.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+        box.appendChild(RD.domElement);
+
+        const ctl = new T.OrbitControls(cam, RD.domElement);
+        ctl.enableDamping = true;
+        ctl.dampingFactor = 0.06;
+        ctl.minDistance = 4;
+        ctl.maxDistance = 90;
+
+        SC.add(new T.AmbientLight(0xffffff, .78));
+        const dl = new T.DirectionalLight(0xffffff, .85);
+        dl.position.set(6, 10, 16);
+        SC.add(dl);
+
+        // Futuristic grid floor
+        const gr = new T.GridHelper(52, 26, 0x6366f1, 0x0f172a);
+        gr.position.y = -8.6;
+        gr.material.transparent = true;
+        gr.material.opacity = .35;
+        SC.add(gr);
+
+        const O0 = [-8, 4.2], O1 = [-8, -3.6], OC = [3.5, -1], MG = new T.Group(), FG = new T.Group();
+        MG.position.set(O0[0], O0[1], 0);
+        FG.position.set(O1[0], O1[1], 0);
+        SC.add(MG, FG);
+
+        const M = (c, o, e) => new T.MeshStandardMaterial({ color: c, transparent: true, opacity: o, emissive: c, emissiveIntensity: e, roughness: .4 });
+        function fade(g, a) {
+            g.visible = a > .01;
+            g.traverse(o => {
+                if (o.material) {
+                    if (o.userData.b == null) o.userData.b = o.material.opacity;
+                    o.material.opacity = o.userData.b * a;
+                }
+            });
+        }
+
+        const TX = {}, lt = (t, c) => {
+            const k = t + c;
+            if (!TX[k]) {
+                const e = document.createElement('canvas');
+                e.width = 256; e.height = 128;
+                const x = e.getContext('2d');
+                x.font = 'bold ' + (t.length > 2 ? 60 : 92) + 'px monospace';
+                x.textAlign = 'center';
+                x.textBaseline = 'middle';
+                x.fillStyle = c;
+                x.shadowColor = c;
+                x.shadowBlur = 10;
+                x.fillText(t, 128, 68);
+                TX[k] = new T.CanvasTexture(e);
+            }
+            return TX[k];
+        };
+
+        const lab = (t, c, s) => {
+            const p = new T.Sprite(new T.SpriteMaterial({ map: lt(t, c), transparent: true, depthTest: false }));
+            p.scale.set(s * 2, s, 1);
+            return p;
+        };
+
+        const GCe = new T.SphereGeometry(1, 28, 20), GCw = new T.SphereGeometry(1.02, 14, 10), GCo = new T.SphereGeometry(.33, 10, 8), GRg = new T.TorusGeometry(.45, .025, 6, 24),
+            GP = new T.CylinderGeometry(.13, .13, .3, 10), GQ = [new T.CylinderGeometry(.13, .13, 1, 10), new T.CylinderGeometry(.13, .13, .7, 10)], GS = new T.SphereGeometry(.13, 10, 8), GN = new T.CylinderGeometry(.07, .07, .08, 8),
+            GH = new T.SphereGeometry(.28, 16, 12), GA = new T.SphereGeometry(.3, 14, 10, 0, 2 * PI, 0, .95), GM = new T.CylinderGeometry(.08, .08, .55, 8),
+            GSP = new T.LatheGeometry([...Array(11).keys()].map(i => new T.Vector2(.34 * Math.sin(PI * i / 10), -1 + i / 5)), 12);
+
+        function cell(c, o, w) {
+            const g = new T.Group();
+            g.add(new T.Mesh(GCe, M(c, o, .1)), new T.Mesh(GCw, new T.MeshBasicMaterial({ color: c, wireframe: true, transparent: true, opacity: w || .12 })));
+            return g;
+        }
+
+        function chrom(c, pc, dc, a) {
+            const g = new T.Group(), n = new T.Group(), lq = c ? .7 : 1, pm = M(pc, 1, .35), dm = M(dc, 1, .35), cm = M(0xfff2a8, 1, .5);
+            const add = (geo, mt, y) => { const o = new T.Mesh(geo, mt); o.position.y = y; n.add(o); };
+            add(GP, pm, .15); add(GS, pm, .3); add(GN, cm, 0); add(GQ[c], dm, -.04 - lq / 2); add(GS, dm, -.04 - lq);
+            const sp = lab(a, '#ffffff', .42);
+            g.add(n, sp);
+            g.userData = { n, dm, sp, lq };
+            return g;
+        }
+
+        function sperm(txt, big) {
+            const g = new T.Group(), k = big ? 1.25 : 1, tl = [];
+            const h = new T.Mesh(GH, M(0x9fc4ff, 1, .45));
+            h.scale.set(1.4 * k, .85 * k, .6 * k);
+            const ac = new T.Mesh(GA, M(0xffd38a, 1, .5));
+            ac.rotation.z = -PI / 2;
+            ac.scale.set(.92 * k, 1.5 * k, .65 * k);
+            const md = new T.Mesh(GM, M(0xff9a3c, 1, .4));
+            md.rotation.z = PI / 2;
+            md.position.x = -.67 * k;
+            g.add(h, ac, md);
+            let p = g;
+            for (let i = 0; i < 10; i++) {
+                const s = new T.Group();
+                s.position.x = i ? -.26 : -.94 * k;
+                const r = .05 - .0035 * i, m = new T.Mesh(new T.CylinderGeometry(r, r, .26, 6), M(0x5aa0ff, 1, .4));
+                m.rotation.z = PI / 2;
+                m.position.x = -.13;
+                s.add(m);
+                p.add(s);
+                p = s;
+                tl.push(s);
+            }
+            const l = lab(txt, '#ffffff', .5);
+            l.position.set(0, .62, 0);
+            g.add(l);
+            g.userData = { tl, ac };
+            return g;
+        }
+
+        const IP = [[-.8, .6, .3, .7], [.7, .7, -.3, -.5], [-.6, -.7, -.2, 1.2], [.8, -.5, .4, -.9]];
+        let P = 0, PT = 0, play = false, spd = 1, sd = 0, noM = false, cox = true, labOn = true, CF, ZG = '', si = '', T0 = 0, DM, DF, DW, CH = [], CE = [], SPN = [], SP = [], LB = [], PF, CG, CGm, ZN;
+        const roll = () => {
+            CF = {
+                o: [rb(), rb()],
+                h: [rb(), rb()],
+                x: [0, 1].map(() => [0, 1].map(() => [rb(), rb()])),
+                fl: [0, 1].map(() => [0, 1].map(() => [rb(), rb()])),
+                f: Math.floor(Math.random() * 4)
+            };
+        };
+
+        function keys(q, d, m) {
+            const { c, h, s } = d, mal = !q, so = CF.h[1], oo = mal || d.side == so, sx = s ? .1 : -.1, y0 = c ? -.75 : .75, o = IP[c * 2 + h], up = d.u ? 1 : -1, dx = OC[0] - O0[0], dy = OC[1] - O0[1], k = [], pt = (...a) => k.push(a);
+            if (!m) {
+                const z = s ? 0 : .9, hx = h ? .35 : -.35;
+                pt(0, o[0], o[1], o[2], o[3], .4, .8, z);
+                if (mal) {
+                    pt(54, o[0], o[1], o[2], o[3], .5, .8, z);
+                    pt(58, o[0], o[1], o[2], o[3], .5, .8, 0);
+                    const px = -.95 + hx + dx, py = (c ? -.5 : .5) + dy, zx = -.9 + (h ? .3 : -.3) + dx, zy = (c ? -.7 : .7) + dy;
+                    pt(88, px, py, 0, 0, .6, 1, 0);
+                    pt(92, px, py, 0, 0, .6, 1, z);
+                    pt(94, px, py, 0, 0, .6, 1, z);
+                    pt(98, zx, zy, 0, 0, 1, 1, z);
+                    pt(100, zx, zy, 0, 0, 1, 1, z);
+                } else {
+                    pt(84, o[0], o[1], o[2], o[3], .5, .8, z);
+                    const px = .95 + hx, py = c ? -.5 : .5, zx = .9 + (h ? .3 : -.3), zy = c ? -.7 : .7;
+                    pt(94, px, py, 0, 0, .6, 1, z);
+                    pt(98, zx, zy, 0, 0, 1, 1, z);
+                    pt(100, zx, zy, 0, 0, 1, 1, z);
+                }
+                return k;
+            }
+            const pl = mal ? [0, 0] : [1.3, 0], sc = oo ? 1 : .45, pole = mal ? (d.side ? 1.5 : -1.5) : (oo ? .45 : 2.15), ctr = mal ? [d.side ? 1.8 : -1.8, 0] : (oo ? [0, 0] : [2.35, 0]), m2 = mal ? ctr : (oo ? [0, 1] : [2.35, 0]),
+                fin = mal ? [ctr[0], up * 1.4] : (oo ? (d.u ? [0, 2.35] : [0, .45]) : [2.35, d.u ? .55 : -.4]), cx = c ? .55 : -.55, bv = g => [pl[0] + (h ? g : -g) + sx, pl[1] + y0];
+            pt(0, o[0], o[1], o[2], o[3], .35, .7, s ? 0 : .9);
+            if (s) {
+                pt(6, o[0], o[1], o[2], o[3], .35, .7, 0);
+                pt(9, o[0], o[1], o[2], o[3], .35, .7, .9);
+            } else pt(6, o[0], o[1], o[2], o[3], .35, .7, .9);
+            pt(14, o[0] + sx, o[1], o[2], o[3], .5, .85, .9);
+            let b = bv(.18);
+            pt(19, b[0], b[1], 0, 0, 1, 1, .95);
+            pt(22, b[0], b[1], 0, 0, 1, 1, .95);
+            b = bv(.4);
+            pt(26, b[0], b[1], 0, 0, 1, 1, 1);
+            pt(32, pole + sx * sc, pl[1] + y0 * sc, 0, 0, 1, sc, 1);
+            pt(38, ctr[0] + sx * sc, ctr[1] + y0 * sc, 0, 0, 1, sc, 1);
+            pt(44, m2[0] + cx * sc, m2[1] + up * .12 * sc, 0, PI / 2, 1, sc, 1);
+            if (mal) {
+                const fx = ctr[0] + (c ? .4 : -.4);
+                pt(50, m2[0] + cx, fin[1], 0, PI / 2, 1, 1, 1);
+                pt(54, fx, fin[1], 0, PI / 2, .8, 1, 1);
+                pt(58, fx, fin[1], 0, PI / 2, .8, 1, 0);
+                if (d.tid == CF.f) {
+                    const px = -.95 + (c ? .3 : -.3) + dx, py = (c ? -.45 : .45) + dy, zx = -.4 + dx, zy = y0 + dy;
+                    pt(88, px, py, 0, 0, .6, 1, 0);
+                    pt(92, px, py, 0, 0, .6, 1, 1);
+                    pt(94, px, py, 0, 0, .6, 1, 1);
+                    pt(98, zx, zy, 0, 0, 1, 1, 1);
+                    pt(100, zx, zy, 0, 0, 1, 1, 1);
+                }
+            } else if (oo) {
+                pt(84, m2[0] + cx, m2[1] + up * .12, 0, PI / 2, 1, 1, 1);
+                const so2 = d.u ? .45 : 1;
+                pt(90, fin[0] + cx * so2, fin[1], 0, PI / 2, 1, so2, 1);
+                if (!d.u) {
+                    const px = .85 + (c ? .3 : -.3), py = c ? -.45 : .45;
+                    pt(94, px, py, 0, 0, .6, 1, 1);
+                    pt(98, .4, y0, 0, 0, 1, 1, 1);
+                    pt(100, .4, y0, 0, 0, 1, 1, 1);
+                } else pt(100, fin[0] + cx * so2, fin[1], 0, PI / 2, 1, so2, 1);
+            } else {
+                pt(46, m2[0] + cx * sc, m2[1] + up * .12 * sc, 0, PI / 2, 1, sc, 1);
+                pt(50, fin[0] + cx * sc, fin[1], 0, PI / 2, 1, sc, 1);
+                pt(100, fin[0] + cx * sc, fin[1], 0, PI / 2, 1, sc, 1);
+            }
+            return k;
+        }
+
+        const ST = [
+            [0, 'Interfase G1 | 2n, 2C', 'Sel germinal ayah dan ibu diploid: dua pasang kromosom homolog (2n = 4). Kromatin menyebar, belum memadat. Kedua induk bergenotipe AaBb (gen A dan B berada pada kromosom berbeda).'],
+            [6, 'Fase S | 2n, 4C', 'Replikasi DNA: tiap kromosom kini memiliki dua kromatid saudari identik yang menyatu di sentromer. Jumlah kromosom tetap 4, jumlah DNA menjadi 4C.'],
+            [14, 'Profase I: Sinapsis & Pindah Silang (Crossing Over)', 'Kromosom memadat dan homolog berpasangan membentuk tetrad (bivalen). Kromatid non-saudari bertukar segmen di kiasma sehingga alel tertukar. Inilah sumber rekombinasi genetik terbesar.'],
+            [22, 'Metafase I', 'Bivalen berjajar di ekuator gelendong. Homolog menghadap kutub berlawanan secara acak (dasar Hukum Mendel II: Asortasi Bebas).'],
+            [28, 'Anafase I: Segregasi Kromosom Homolog', 'Kromosom homolog ditarik ke kutub berlawanan (kohesin sentromer dilindungi shugoshin). Alel A dan a berpisah (dasar Hukum Mendel I: Segregasi Bebas). Terjadi reduksi dari 2n menjadi n.'],
+            [34, 'Telofase I & Sitokinesis | n, 2C', 'Ayah: terbentuk dua spermatosit sekunder sama besar. Ibu: sitokinesis tidak setara menghasilkan 1 oosit sekunder besar dan 1 badan kutub I kecil.'],
+            [40, 'Metafase II', 'Kromosom berjajar lagi pada gelendong meiosis II. Ayah lanjut ke anafase II. Ibu: oosit sekunder tertahan di metafase II hingga pembuahan.'],
+            [46, 'Anafase II: Pemisahan Kromatid Saudari | n, C', 'Ayah: kromatid saudari berpisah menjadi 4 spermatid haploid. Ibu: badan kutub I membelah, sedangkan oosit sekunder tetap tertahan di metafase II.'],
+            [54, 'Spermiogenesis & Ovulasi', 'Spermatid mengalami diferensiasi: kromatin dipadatkan protamin, terbentuk akrosom & flagel (spermatozoa). Oosit sekunder berselubung zona pelusida & korona radiata siap dibuahi.'],
+            [62, 'Kemotaksis & Perjalanan Sperma', 'Spermatozoa berenang mendekati oosit sekunder. Jutaan sperma bersaing, hanya satu sperma yang berhasil menembus.'],
+            [72, 'Pengikatan Zona & Reaksi Akrosom', 'Sperma terkapasitasi mengikat zona pelusida, memicu pelepasan enzim akrosin & hialuronidase. Interaksi molekuler Izumo1 (sperma) dan Juno (oosit) memulai fusi membran.'],
+            [82, 'Fusi Seluler & Reaksi Kortikal (Blok Polispermi)', 'Fusi memicu gelombang kalsium (Ca²⁺). Granula kortikal melepas enzim yang mengeraskan zona pelusida, mencegah masuknya sperma lain (blok polispermi permanen).'],
+            [86, 'Penyelesaian Meiosis II Oosit', 'Masuknya sperma memicu oosit menuntaskan meiosis II: satu set kromatid dikeluarkan sebagai badan kutub II. Oosit kini resmi menjadi ovum haploid (n).'],
+            [90, 'Pronukleus Jantan & Betina | n + n', 'Kromatin sperma terdekondensasi membentuk pronukleus jantan; materi inti ovum membentuk pronukleus betina. Masing-masing haploid (n).'],
+            [96, 'Singami: Zigot Diploid (2n)', 'Selubung kedua pronukleus melebur (singami). Kromosom ayah dan ibu bersatu pada gelendong mitosis pertama membentuk zigot diploid (2n). Dimulailah pembelahan embrio!']
+        ];
+
+        const SN = [
+            [0, 'Sel Germinal Diploid (2n)', 'Mode Kesalahan: Meiosis dinonaktifkan. Sel induk ayah dan ibu (2n = 4) tidak mengalami pembelahan reduksi.'],
+            [14, 'Tanpa Reduksi Kromosom', 'Sel germinal langsung membentuk gamet tanpa reduksi kromosom. Gamet tetap bersifat diploid (2n): sperma membawa AaBb dan ovum membawa AaBb.'],
+            [62, 'Fertilisasi Abnormal', 'Sperma diploid (2n) membuahi oosit diploid (2n).'],
+            [90, 'Pronukleus Diploid (2n + 2n)', 'Masing-masing pronukleus membawa 4 kromosom (2n).'],
+            [96, 'Zigot Tetraploid (4n)', 'Peleburan menghasilkan zigot dengan 8 kromosom (4n). Kondisi poliploidi ini umumnya letal pada manusia, membuktikan bahwa meiosis mutlak esensial!']
+        ];
+
+        const mt = p => noM ? (p < 54 ? 'Sel germinal ayah (2n)' : 'Gamet ayah (2n)') : p < 6 ? 'Spermatogonium (2n)' : p < 34 ? 'Spermatosit primer (2n, 4C)' : p < 48 ? 'Spermatosit sekunder (n, 2C)' : p < 56 ? 'Spermatid (n, C)' : 'Spermatozoa (n)';
+        const ft = p => noM ? (p < 84 ? 'Oosit diploid (2n)' : p < 96 ? 'Ovum diploid (2n)' : 'Zigot 4n: ' + ZG) : p < 6 ? 'Oogonium (2n)' : p < 36 ? 'Oosit primer (2n, 4C)' : p < 86 ? 'Oosit sekunder (n, 2C)' : p < 96 ? 'Ovum (n)' : 'Zigot 2n: ' + ZG;
+
+        const GT = ['AB', 'Ab', 'aB', 'ab'], gz = (a, b) => [a[0], b[0]].sort().join('') + [a[1], b[1]].sort().join('');
+
+        function pun(sp, ov, on) {
+            const t = $('pn');
+            t.style.display = on ? 'table' : 'none';
+            if (!on) return;
+            t.innerHTML = '<tr><th>Ovum \\ Sperma</th>' + GT.map(g => '<th>' + g + '</th>').join('') + '</tr>' + GT.map(o => '<tr><th>' + o + '</th>' + GT.map(s => '<td' + (s == sp && o == ov ? ' class="hl"' : '') + '>' + gz(s, o) + '</td>').join('') + '</tr>').join('');
+        }
+
+        function build() {
+            [DM, DF, DW].forEach(g => g && g.parent && g.parent.remove(g));
+            DM = new T.Group(); MG.add(DM);
+            DF = new T.Group(); FG.add(DF);
+            DW = new T.Group(); SC.add(DW);
+
+            LB.forEach(l => l.e.remove());
+            LB = []; CH = []; CE = []; SPN = []; SP = []; si = '';
+
+            const m = !noM, D = [[], []], AL = [['A', 'a'], ['B', 'b']], HC = [[0x22d3ee, 0x7fd8ff], [0xec4899, 0xffa6cf]];
+            for (let q = 0; q < 2; q++) for (let c = 0; c < 2; c++) for (let h = 0; h < 2; h++) for (let s = 0; s < 2; s++) {
+                const side = c ? h ^ CF.o[q] : h, u = s ^ CF.fl[q][c][h];
+                D[q].push({ q, c, h, s, side, u, tid: side * 2 + u, pc: HC[q][h], dc: HC[q][h], a: AL[c][h], a2: AL[c][h] });
+            }
+            if (cox && m) for (let q = 0; q < 2; q++) for (let c = 0; c < 2; c++) {
+                const p = CF.x[q][c], A = D[q][c * 4 + p[0]], B = D[q][c * 4 + 2 + p[1]], t = A.dc, u = A.a2;
+                A.dc = B.dc; A.a2 = B.a2; B.dc = t; B.a2 = u;
+            }
+            D.forEach((arr, q) => arr.forEach(d => {
+                const g = chrom(d.c, d.pc, d.dc, d.a);
+                (q ? DF : DM).add(g);
+                CH.push({ g, d, cs: null, k: keys(q, d, m) });
+            }));
+
+            const cl = (par, col, o, k, w) => {
+                const g = cell(col, o, w);
+                par.add(g);
+                CE.push({ g, k });
+            };
+
+            cl(DM, 0x6366f1, .2, m ? [[0, 0, 0, 0, 2.1, 1], [34, 0, 0, 0, 2.1, 1], [37, 0, 0, 0, 2.2, 0]] : [[0, 0, 0, 0, 2.1, 1], [54, 0, 0, 0, 2.1, 1], [58, 0, 0, 0, 2.1, 0]]);
+            cl(DM, 0x818cf8, .3, [[0, 0, 0, 0, 1.3, 1], [20, 0, 0, 0, 1.3, 1], [23, 0, 0, 0, 1.3, 0]], .2);
+            if (m) [-1, 1].forEach(a => {
+                cl(DM, 0x6366f1, .2, [[34, a, 0, 0, .9, 0], [38, a * 1.8, 0, 0, 1.4, 1], [48, a * 1.8, 0, 0, 1.4, 1], [50, a * 1.8, 0, 0, 1.4, 0]]);
+                [-1, 1].forEach(u => cl(DM, 0x6366f1, .2, [[48, a * 1.8, 0, 0, .7, 0], [52, a * 1.8, u * 1.4, 0, 1, 1], [56, a * 1.8, u * 1.4, 0, 1, 1], [59, a * 1.8, u * 1.4, 0, .8, 0]]));
+            });
+
+            cl(DF, 0xec4899, .2, [[0, 0, 0, 0, 1.9, 1]]);
+            cl(DF, 0xf472b6, .3, [[0, 0, 0, 0, 1.1, 1], [20, 0, 0, 0, 1.1, 1], [23, 0, 0, 0, 1.1, 0]], .2);
+            if (m) {
+                cl(DF, 0xfb7185, .35, [[32, 1.95, 0, 0, .05, 0], [37, 2.35, 0, 0, .3, 1], [46, 2.35, 0, 0, .3, 1], [48, 2.35, 0, 0, .3, 0]]);
+                cl(DF, 0xfb7185, .35, [[46, 2.35, 0, 0, .2, 0], [50, 2.35, .55, 0, .24, 1], [100, 2.35, .55, 0, .24, 1]]);
+                cl(DF, 0xfb7185, .35, [[46, 2.35, 0, 0, .2, 0], [50, 2.35, -.4, 0, .24, 1], [100, 2.35, -.4, 0, .24, 1]]);
+                cl(DF, 0xfb7185, .35, [[84, 0, 1.95, 0, .05, 0], [90, 0, 2.35, 0, .3, 1], [100, 0, 2.35, 0, .3, 1]]);
+            }
+            const pr = noM ? 1.05 : .8;
+            cl(DF, 0x22d3ee, .3, [[88, -.95, 0, 0, pr, 0], [91, -.95, 0, 0, pr, 1], [96, -.95, 0, 0, pr, 1], [99, -.95, 0, 0, pr, 0]], .2);
+            cl(DF, 0xec4899, .3, [[90, .9, 0, 0, pr, 0], [93, .9, 0, 0, pr, 1], [96, .9, 0, 0, pr, 1], [99, .9, 0, 0, pr, 0]], .2);
+
+            ZN = new T.Mesh(new T.SphereGeometry(2.75, 32, 22), M(0x22d3ee, .08, .15));
+            DF.add(ZN, new T.Mesh(new T.SphereGeometry(2.76, 16, 12), new T.MeshBasicMaterial({ color: 0x22d3ee, wireframe: true, transparent: true, opacity: .1 })));
+
+            const cm = M(0xf59e0b, .5, .2);
+            for (let i = 0; i < 14; i++) {
+                const y = 1 - 2 * (i + .5) / 14, r = Math.sqrt(1 - y * y), t = i * 2.39996, s = new T.Mesh(GCo, cm);
+                s.position.set(Math.cos(t) * r * 3.1, y * 3.1, Math.sin(t) * r * 3.1);
+                DF.add(s);
+            }
+
+            const gp = [];
+            for (let i = 0; i < 48; i++) {
+                const y = 1 - 2 * (i + .5) / 48, r = Math.sqrt(1 - y * y), t = i * 2.39996;
+                gp.push(Math.cos(t) * r * 1.65, y * 1.65, Math.sin(t) * r * 1.65);
+            }
+            const gg = new T.BufferGeometry();
+            gg.setAttribute('position', new T.Float32BufferAttribute(gp, 3));
+            CGm = new T.PointsMaterial({ color: 0x22d3ee, size: .12, transparent: true, opacity: .9 });
+            CG = new T.Points(gg, CGm);
+            DF.add(CG);
+
+            const spn = (par, x, y, hl, ax, k) => {
+                const o = new T.Mesh(GSP, new T.MeshBasicMaterial({ color: 0x9be7ff, wireframe: true, transparent: true, opacity: .35 }));
+                o.position.set(x, y, 0);
+                o.scale.set(hl * .7, hl, hl * .7);
+                if (ax) o.rotation.z = PI / 2;
+                par.add(o);
+                SPN.push({ g: o, k });
+            };
+
+            if (m) {
+                spn(DM, 0, 0, 1.6, 1, [[20, 0], [23, 1], [33, 1], [36, 0]]);
+                [-1.8, 1.8].forEach(x => spn(DM, x, 0, 1.25, 0, [[39, 0], [42, 1], [48, 1], [51, 0]]));
+                spn(DF, 1.3, 0, 1, 1, [[20, 0], [23, 1], [33, 1], [36, 0]]);
+                spn(DF, 0, 1, .9, 0, [[39, 0], [43, 1], [84, 1], [90, 0]]);
+            }
+
+            if (m && cox) [[DM, 0], [DF, 1.3]].forEach(a => [.75, -.75].forEach(y => {
+                const o = new T.Mesh(GRg, new T.MeshBasicMaterial({ color: 0xffe066, transparent: true, opacity: .9 }));
+                o.rotation.x = PI / 2;
+                o.position.set(a[1], y - .5, 0);
+                a[0].add(o);
+                SPN.push({ g: o, k: [[18, 0], [20, 1], [24, 1], [26, 0]] });
+            }));
+
+            const gm = m ? [0, 1, 2, 3].map(j => D[0].filter(d => d.tid == j).map(d => d.a2).join('')) : [D[0].filter(d => !d.s).map(d => d.a).join('')],
+                ov = m ? D[1].filter(d => d.side == CF.h[1] && !d.u).map(d => d.a2).join('') : D[1].filter(d => !d.s).map(d => d.a).join(''),
+                sel = m ? CF.f : 0, sp = gm[sel],
+                zy = m ? gz(sp, ov) : [[...sp].slice(0, 2).concat([...ov].slice(0, 2)).sort().join(''), [...sp].slice(2).concat([...ov].slice(2)).sort().join('')].join('');
+            ZG = zy;
+
+            $('gm').innerHTML = m 
+                ? `<div><b>Sperma (Ayah AaBb):</b> ${gm.map((g, j) => j == sel ? `<u class="text-cyan-300 font-bold bg-cyan-500/20 px-1 py-0.5 rounded border border-cyan-500/40">${g}</u>` : `<span class="opacity-70">${g}</span>`).join(' ')} <span class="text-slate-500 text-[10px]">(bergaris bawah = fertilisator)</span></div>
+                   <div><b>Ovum (Ibu AaBb):</b> <span class="text-pink-300 font-bold">${ov}</span></div>
+                   <div class="mt-1 pt-1 border-t border-slate-800"><b>Genotipe Zigot (F1):</b> <span class="text-emerald-400 font-bold text-xs">${zy}</span> | Fenotipe: <span class="text-amber-300 font-semibold">${zy.includes('A') ? 'A_' : 'aa'} ${zy.includes('B') ? 'B_' : 'bb'}</span></div>`
+                : `<div><b>Gamet Ayah:</b> <span class="text-cyan-300 font-bold">${sp} (2n)</span> | <b>Gamet Ibu:</b> <span class="text-pink-300 font-bold">${ov} (2n)</span></div>
+                   <div class="mt-1 text-rose-400 font-bold">⚠️ Zigot Tetraploid: ${zy} (4n, Letal Tidak Viabel)</div>`;
+            
+            pun(sp, ov, m);
+
+            const rest = [150, 210, 125];
+            let ri = 0;
+            for (let j = 0; j < (m ? 4 : 1); j++) {
+                const g = sperm(gm[j], !m), a = (j == sel ? 180 : rest[ri++]) * PI / 180;
+                DW.add(g);
+                SP.push({ g, j, a, sel: j == sel, tx: m ? (j >> 1 ? 1.8 : -1.8) : 0, ty: m ? (j & 1 ? 1.4 : -1.4) : 0, tl: g.userData.tl, ac: g.userData.ac });
+            }
+
+            PF = new T.Group();
+            for (let i = 0; i < 8; i++) {
+                const s = new T.Mesh(new T.SphereGeometry(.07, 6, 5), M(0xffd38a, .9, .6)), a = i * 2.4, b = i * .7;
+                s.userData.v = [Math.cos(a) * Math.cos(b), Math.sin(a) * Math.cos(b), Math.sin(b)];
+                PF.add(s);
+            }
+            DW.add(PF);
+
+            const an = (par, x, y) => {
+                const o = new T.Object3D();
+                o.position.set(x, y, 0);
+                par.add(o);
+                return o;
+            },
+            aL = (a, col, left, w, f) => {
+                const e = document.createElement('div');
+                e.className = 'lb' + (left ? ' l' : '');
+                e.style.color = e.style.borderColor = col;
+                box.appendChild(e);
+                LB.push({ e, a, l: left, w, f });
+            };
+
+            aL(an(DM, 0, 3.3), '#6366f1', 0, [0, 59], mt);
+            aL(an(DF, 0, 3.95), '#ec4899', 0, [0, 100], ft);
+            aL(an(DF, -1.95, 1.95), '#22d3ee', 1, [0, 100], () => 'Zona pelusida');
+            aL(an(DF, -2.95, -1.05), '#f59e0b', 1, [0, 100], () => 'Korona radiata');
+
+            if (m) {
+                aL(an(DF, 2.7, .1), '#fb7185', 0, [38, 100], p => p < 47 ? 'Badan kutub I' : 'Badan kutub I (2 sel)');
+                aL(an(DF, .3, 2.7), '#fb7185', 0, [90, 100], () => 'Badan kutub II');
+                aL(an(DM, 0, 1.95), '#9be7ff', 0, [24, 33], () => 'Gelendong meiosis I');
+                aL(an(DF, .4, 1.05), '#9be7ff', 0, [44, 84], () => 'Gelendong meiosis II');
+            }
+            aL(an(DF, -.95, -1), '#22d3ee', 1, [92, 98], () => 'Pronukleus jantan');
+            aL(an(DF, .9, -1), '#ec4899', 0, [93, 98], () => 'Pronukleus betina');
+            aL(an(SP[sel].g, .55, .3), '#f59e0b', 0, [62, 79], () => 'Akrosom');
+        }
+
+        const v3 = new T.Vector3();
+        function upd() {
+            const fo = sg(P, 54, 66), cx = cox && !noM && P >= 20;
+            FG.position.set(L(O1[0], OC[0], fo), L(O1[1], OC[1], fo), 0);
+            CH.forEach(o => {
+                const g = o.g, u = g.userData, v = K(P, o.k);
+                g.position.set(v[0], v[1], v[2]);
+                g.rotation.z = v[3];
+                u.n.scale.set(v[4] * v[5], v[5], v[4] * v[5]);
+                u.sp.position.y = -(u.lq + .35) * v[5];
+                u.sp.scale.set(.84 * v[5], .42 * v[5], 1);
+                if (o.cs !== cx) {
+                    o.cs = cx;
+                    const col = cx ? o.d.dc : o.d.pc;
+                    u.dm.color.set(col);
+                    u.dm.emissive.set(col);
+                    u.sp.material.map = lt(cx ? o.d.a2 : o.d.a, '#ffffff');
+                }
+                fade(g, v[6]);
+            });
+            CE.forEach(o => {
+                const v = K(P, o.k);
+                o.g.position.set(v[0], v[1], v[2]);
+                o.g.scale.setScalar(v[3]);
+                fade(o.g, v[4]);
+            });
+            SPN.forEach(o => fade(o.g, K(P, o.k)[0]));
+            const c = sg(P, 82, 88);
+            CG.scale.setScalar(L(1, 1.5, c));
+            CGm.opacity = .9 * (1 - c);
+            ZN.material.opacity = .08 + .14 * c;
+            ZN.material.emissiveIntensity = .15 + .5 * c;
+
+            SP.forEach(o => {
+                const g = o.g, j = o.j, sx = O0[0] + o.tx, sy = O0[1] + o.ty, ax = OC[0] + Math.cos(o.a) * 4.1, ay = OC[1] + Math.sin(o.a) * 4.1, s1 = sg(P, 58, 72);
+                let x = L(sx, ax, s1), y = L(sy, ay, s1) + Math.sin(P * .9 + j * 1.7) * s1 * (1 - s1) * 2.2, z = Math.sin(P * .6 + j) * s1 * (1 - s1) * 2, op = sg(P, 54, 58);
+                if (P > 72) {
+                    const d = (o.sel ? K(P, [[72, 4.1], [77, 2.9], [80, 2.75], [82, 2], [86, .9]]) : K(P, [[72, 4.1], [78, 3.4], [84, 3.5], [92, 6]]))[0];
+                    x = OC[0] + Math.cos(o.a) * d; y = OC[1] + Math.sin(o.a) * d; z = 0;
+                    op *= o.sel ? 1 - sg(P, 86, 90) : 1 - sg(P, 86, 92);
+                }
+                g.position.set(x, y, z);
+                g.rotation.z = Math.atan2(OC[1] - y, OC[0] - x);
+                g.scale.setScalar(L(.35, 1, sg(P, 54, 60)) * (o.sel ? L(1, .8, sg(P, 82, 86)) : 1));
+                fade(g, op);
+                o.ac.material.opacity = o.ac.userData.b * op * (o.sel ? 1 - sg(P, 77, 80) : 1);
+                o.tl.forEach((t, i) => t.rotation.z = Math.sin(T0 * 10 - i * .7 + j) * .2 * (.4 + i * .12));
+            });
+
+            const s0 = SP.find(o => o.sel), r = sg(P, 77, 82), on = P > 76.5 && P < 82.5;
+            if (s0) {
+                PF.position.set(s0.g.position.x - Math.cos(s0.a) * .5, s0.g.position.y - Math.sin(s0.a) * .5, 0);
+                PF.children.forEach(s => {
+                    const v = s.userData.v;
+                    s.position.set(v[0] * (.15 + .9 * r), v[1] * (.15 + .9 * r), v[2] * (.15 + .9 * r));
+                });
+                fade(PF, on ? 1 - r : 0);
+            }
+        }
+
+        function lblU() {
+            const W = box.clientWidth, H = box.clientHeight;
+            LB.forEach(l => {
+                const on = labOn && P >= l.w[0] && P <= l.w[1];
+                l.e.style.display = on ? 'flex' : 'none';
+                if (on) {
+                    const t = l.f(P);
+                    if (l.e.textContent !== t) l.e.textContent = t;
+                    l.a.getWorldPosition(v3);
+                    v3.project(cam);
+                    l.e.style.transform = 'translate(' + ((v3.x * .5 + .5) * W) + 'px,' + ((-v3.y * .5 + .5) * H) + 'px) translate(' + (l.l ? '-100%' : '0') + ',-50%)';
+                }
+            });
+        }
+
+        function info() {
+            const A = noM ? SN : ST;
+            let i = 0;
+            A.forEach((s, k) => { if (P >= s[0]) i = k; });
+            const key = (noM ? 'n' : 'm') + i;
+            if (key != si) {
+                si = key;
+                $('ti').textContent = A[i][1];
+                $('ds').textContent = A[i][2];
+            }
+        }
+
+        function stp() {
+            play = false;
+            $('pl').textContent = 'Putar';
+            $('pl').classList.remove('bg-amber-600', 'hover:bg-amber-500');
+            $('pl').classList.add('bg-indigo-600', 'hover:bg-indigo-500');
+        }
+
+        function loop(n) {
+            const dt = Math.min((n - lastT) / 1000, .1);
+            lastT = n;
+            T0 += dt;
+
+            if (play) {
+                P = Math.min(100, P + dt * 5 * spd);
+                PT = P;
+                if (P >= 100) {
+                    stp();
+                    playBeep(784, 'triangle', 0.2, 0.15);
+                }
+            } else {
+                P += (PT - P) * (1 - Math.exp(-dt * 5));
+            }
+
+            if (!sd) $('sl').value = P;
+
+            upd();
+            ctl.update();
+            RD.render(SC, cam);
+            lblU();
+            info();
+            requestAnimationFrame(loop);
+        }
+
+        let lastT = performance.now(), fitted = 0;
+        function home() {
+            playBeep(440, 'sine', 0.05, 0.08);
+            const d = Math.max(15.5 / .828, 19.5 / (.828 * cam.aspect)) * 1.05;
+            cam.position.set(-2.2 + .1 * d, .6 + .08 * d, d);
+            ctl.target.set(-2.2, .2, 0);
+            ctl.update();
+        }
+
+        function rz() {
+            const w = box.clientWidth, h = box.clientHeight;
+            if (!w || !h) return;
+            RD.setSize(w, h, false);
+            cam.aspect = w / h;
+            cam.updateProjectionMatrix();
+            if (!fitted) { home(); fitted = 1; }
+        }
+
+        const zoom = f => {
+            playBeep(480, 'sine', 0.04, 0.08);
+            cam.position.sub(ctl.target).multiplyScalar(f).add(ctl.target);
+        };
+
+        $('zi').onclick = () => zoom(.8);
+        $('zo').onclick = () => zoom(1.25);
+        $('zr').onclick = home;
+
+        const stageBookmarks = [
+            ['Induk 2n', 0],
+            ['Meiosis I', 26],
+            ['Meiosis II', 44],
+            ['Gamet', 60],
+            ['Fertilisasi', 82],
+            ['Zigot 2n', 100]
+        ];
+
+        stageBookmarks.forEach(a => {
+            const b = document.createElement('button');
+            b.className = 'stage-btn';
+            b.textContent = a[0];
+            b.onclick = () => {
+                playBeep(520, 'sine', 0.06, 0.1);
+                PT = a[1];
+                stp();
+            };
+            $('sb').appendChild(b);
+        });
+
+        const sl = $('sl');
+        sl.onpointerdown = () => sd = 1;
+        sl.onpointerup = sl.onpointercancel = () => sd = 0;
+        sl.oninput = e => {
+            PT = +e.target.value;
+            stp();
+        };
+
+        $('pl').onclick = () => {
+            playBeep(600, 'square', 0.08, 0.12);
+            if (play) return stp();
+            if (P >= 99.5) P = PT = 0;
+            play = true;
+            $('pl').textContent = 'Jeda';
+            $('pl').classList.remove('bg-indigo-600', 'hover:bg-indigo-500');
+            $('pl').classList.add('bg-amber-600', 'hover:bg-amber-500');
+        };
+
+        $('sp').onclick = e => {
+            playBeep(450, 'sine', 0.06, 0.08);
+            spd = spd == 1 ? .5 : spd == .5 ? 2 : 1;
+            e.target.textContent = 'Kecepatan ' + spd + 'x';
+        };
+
+        $('cxb').onclick = e => {
+            playBeep(520, 'triangle', 0.08, 0.1);
+            cox = !cox;
+            e.target.classList.toggle('on', cox);
+            e.target.textContent = 'Pindah silang: ' + (cox ? 'aktif' : 'mati');
+            build();
+        };
+
+        $('mb').onclick = e => {
+            playBeep(520, 'triangle', 0.08, 0.1);
+            noM = !noM;
+            e.target.classList.toggle('on', !noM);
+            e.target.textContent = 'Meiosis: ' + (noM ? 'mati (kesalahan)' : 'aktif');
+            build();
+        };
+
+        $('lbb').onclick = e => {
+            playBeep(450, 'sine', 0.06, 0.08);
+            labOn = !labOn;
+            e.target.classList.toggle('on', labOn);
+            e.target.textContent = 'Label: ' + (labOn ? 'tampil' : 'sembunyi');
+        };
+
+        $('rsb').onclick = () => {
+            playBeep(700, 'triangle', 0.12, 0.15);
+            roll();
+            build();
+            P = PT = 0;
+            play = true;
+            $('pl').textContent = 'Jeda';
+            $('pl').classList.remove('bg-indigo-600', 'hover:bg-indigo-500');
+            $('pl').classList.add('bg-amber-600', 'hover:bg-amber-500');
+        };
+
+        new ResizeObserver(rz).observe(box);
+        rz();
+        roll();
+        build();
+        requestAnimationFrame(loop);
+    </script>
 </body>
+
 </html>

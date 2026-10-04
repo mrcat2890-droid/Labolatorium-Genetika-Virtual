@@ -6,6 +6,23 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📌 Refaktorisasi & Overhaul Desain: Modul GAMETO-3D (Simulasi 3D Gametogenesis & Fertilisasi)
+- **Harmonisasi Desain Sistem GEN-OS Futuristik (`gametogenesis.html`):**
+  - Menggantikan antarmuka lama berbasis CSS mentah (hasil buatan Claude) menjadi standar desain sistem futuristik GEN-OS menggunakan Tailwind CSS, dark mode `#030712`, glassmorphism (`glass-panel`), tipografi resmi (`Orbitron`, `Rajdhani`, dan `Fira Code`), serta palet warna selaras (aksen Indigo `#6366f1`, Cyan `#22d3ee`, Pink `#ec4899`, dan Emerald `#10b981` sesuai tema Modul 11 pada `index.html`).
+  - Menghubungkan modul secara utuh ke Beranda dengan tombol navigasi `← BERANDA` menuju `index.html`.
+- **Peningkatan Antarmuka 3D & HUD Biological Viewport:**
+  - Merapikan panggung WebGL Three.js dengan indikator status floating neon, badge tahapan meiosis real-time, serta tombol kontrol kamera melayang (Zoom In `+`, Zoom Out `-`, dan Reset View `R`).
+  - Merestrukturisasi label anotasi 3D (billboard labels) menjadi tag lencana kaca berlatar gelap dengan border neon bercahaya yang dinamis mengikuti proyeksi koordinat 3D.
+- **Penyempurnaan Panel Kontrol & Matriks Genetika (Kotak Punnett 4×4):**
+  - Mengorganisasi ulang dock navigasi bawah menjadi 2 seksi utama: (1) Narasi Tahapan Biologis Ilmiah dan (2) Analisis Genetika Gamet & Kotak Punnett interaktif yang menyorot gamet terpilih serta genotipe zigot hasil fertilisasi secara dinamis.
+  - Memperbaiki kontrol pemutaran: tombol Putar/Jeda dengan status aktif neon, pemilih kecepatan linimasa (`0.5x`, `1x`, `2x`), scrubber linimasa, serta tombol bookmark fase (`Induk 2n`, `Meiosis I`, `Meiosis II`, `Gamet`, `Fertilisasi`, `Zigot 2n`).
+  - Menyediakan toggle parameter: *Pindah Silang (Crossing Over)*, *Meiosis Normal vs Error Tetraploidi (4n)*, *Label 3D*, dan *Acak Ulang*.
+- **Penerapan Modal Panduan & Referensi Ilmiah (Kepatuhan Aturan #1 & #5):**
+  - Dialog modal **"📖 Panduan Lengkap Simulasi 3D"** yang merinci 4 materi esensial: Konsep Meiosis, Spermatogenesis vs Oogenesis, Pindah Silang (Crossing Over), serta Fertilisasi & Reaksi Kortikal (Blok Polispermi).
+  - Dialog modal **"📚 Literatur Ilmiah"** dengan rujukan biologi seluler & genetika: Oscar Hertwig (1876 - fusi inti fertilisasi), Sutton-Boveri (1902–1903 - teori kromosom meiosis), Thomas Hunt Morgan (1911 - crossing over), serta Inoue & Bianchi (2005 & 2014 - fusi molekuler Izumo1 dan Juno).
+  - Efek audio interaktif sintetis (Web Audio API) untuk interaksi kontrol dan pembentukan zigot.
+
+
 ### 📌 Refaktorisasi & Overhaul Desain: Modul GENO-PHENO (Simulasi Genotipe vs Fenotipe)
 - **Harmonisasi Desain Sistem GEN-OS Futuristik (`Simulasi Genotipe vs Fenotipe.html`):**
   - Menggantikan tampilan lama berbasis vanilla CSS (font Figtree buatan Claude) menjadi standar desain sistem futuristik GEN-OS menggunakan Tailwind CSS, dark mode `#030712`, glassmorphism (`glass-panel`), tipografi modern (`Orbitron`, `Rajdhani`, dan `Fira Code`), serta skema warna terpadu (aksen Sky `#38bdf8` dan Cyan `#00f3ff` sesuai tema Modul 06 pada `index.html`).
