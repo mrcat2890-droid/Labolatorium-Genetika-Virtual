@@ -6,6 +6,35 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📌 Refaktorisasi & Overhaul Desain: Modul TRANSCRIPTION (Simulasi Transkripsi DNA & Sintesis mRNA)
+- **Harmonisasi Desain Sistem GEN-OS Futuristik (`simulasi-transkripsi/index.html` & `style.css`):**
+  - Menggantikan antarmuka lama berbasis vanilla CSS (hasil buatan Claude yang tidak seragam) menjadi standar desain sistem futuristik GEN-OS menggunakan Tailwind CSS, latar belakang dark mode `#030712`, glassmorphism (`glass-panel`), tipografi resmi (`Orbitron`, `Rajdhani`, dan `Fira Code`), serta palet warna selaras (aksen Amber `#f59e0b` dan Orange `#f97316` sesuai tema Modul 09 pada `index.html`).
+  - Menghubungkan modul secara utuh ke Beranda dengan tombol navigasi `← BERANDA GEN-OS` menuju `../index.html`.
+- **Banner Ringkasan Ilmiah 3 Tahap Transkripsi:**
+  - Menyediakan 3 kartu ringkasan visual interaktif:
+    1. *Tahap 1: Inisiasi & Pembukaan Heliks* (pengenalan sekuens promoter/TATA Box oleh RNA Polimerase, pembukaan ikatan hidrogen DNA membentuk *transcription bubble*).
+    2. *Tahap 2: Elongasi Rantai mRNA* (pembacaan untai cetakan 3' &rarr; 5', polimerisasi rNTP menjadi rantai mRNA komplementer 5' &rarr; 3' dengan penggantian Timin menjadi Urasil).
+    3. *Tahap 3: Terminasi & Pelepasan* (pengenalan sekuens terminator, pelepasan untai mRNA lengkap, dan penutupan kembali heliks ganda DNA).
+- **Peningkatan Engine Canvas & Visualisasi Molekuler (`simulasi-transkripsi/script.js`):**
+  - Memperbaiki bug variabel global tidak terdefinisi (`startX`, `baseYCoding`, `baseYTemplate`, dll.) menjadi manajemen dimensi responsif terpadu dengan penskalaan Hi-DPI (Retina Canvas).
+  - Visualisasi perimeter membran inti sel (*nuclear envelope*) dan ruang matriks nukleus.
+  - Representasi anatomis enzim RNA Polimerase II dengan pendaran gradien amber-oranye, saluran masuk DNA, situs katalitik aktif pemanjangan rNTP, dan saluran keluar mRNA.
+  - Dinamika gelembung transkripsi (*transcription bubble*) realistis: peregangan dan pemisahan untai cetakan vs pengkode saat enzim bergerak, ikatan hidrogen putus-putus, serta hibridisasi sementara DNA-RNA di situs katalitik.
+  - Visualisasi pembebasan untai mRNA saat terminasi bergerak melayang (*floating*) menuju pori nukleus dengan ujung 5' cap dan 3' poly(A) teridentifikasi jelas.
+- **Sinkronisasi Matriks Komplementaritas Basa & Monitor Transkripsi Realtime:**
+  - Panel data realtime memantau basa DNA cetakan yang sedang dibaca, basa mRNA baru yang ditambahkan, status ikatan (2 ikatan H A=U vs 3 ikatan H G≡C), serta penghitung panjang nukleotida (0 hingga 27 Nt).
+  - Aliran sekuens mRNA (*mRNA Stream Visualizer*) yang merender badge warna nukleotida interaktif (A di sky, T di amber, G di emerald, C di rose, dan U di orange) lengkap dengan sekat pembatas triplet kodon.
+  - Penyorotan baris tabel aturan komplementaritas secara dinamis (*pairing-table highlight*) sesuai basa yang sedang diproses.
+  - Tombol pintas navigasi lompat tahap langsung (*quick jump buttons*) untuk kelima tahap transkripsi.
+- **Penerapan Modal Panduan & Referensi Ilmiah (Kepatuhan Aturan #1 & #5):**
+  - Dialog modal **"📖 Panduan Lengkap Simulasi Transkripsi"** yang menjelaskan dogma sentral biologi molekuler, perbedaan mendasar untai sense vs antisense, dan petunjuk operasional simulator.
+  - Dialog modal **"📚 Literatur Ilmiah"** dengan sitasi ilmiah primer:
+    - *Jacob & Monod (1961) / Brenner et al. (1961)* – Penemuan dan pembuktian konsep messenger RNA (mRNA).
+    - *Hurwitz et al. (1960) / Samuel B. Weiss (1960)* – Isolasi dan karakterisasi enzim RNA Polimerase bergantung-DNA.
+    - *Cramer, Bushnell, & Kornberg (2001 & Nobel Kimia 2006)* – Struktur kristalografi resolusi atomik RNA Polimerase II eukariota.
+  - Efek audio interaktif sintetis (Web Audio API) untuk umpan balik auditori pergantian tahap, polimerisasi nukleotida rNTP, dan penyelesaian sintesis mRNA.
+
+
 ### 📌 Refaktorisasi & Overhaul Desain: Modul TRANSLATION (Simulasi Translasi mRNA & Perakitan Protein)
 - **Harmonisasi Desain Sistem GEN-OS Futuristik (`simulasi-translasi/index.html` & `style.css`):**
   - Menggantikan antarmuka lama berbasis vanilla CSS (hasil buatan Claude yang tidak seragam) menjadi standar desain sistem futuristik GEN-OS menggunakan Tailwind CSS, dark mode `#030712`, glassmorphism (`glass-panel`), tipografi resmi (`Orbitron`, `Rajdhani`, dan `Fira Code`), serta palet warna selaras (aksen Emerald `#10b981` dan Cyan `#06b6d4` sesuai tema Modul 10 pada `index.html`).

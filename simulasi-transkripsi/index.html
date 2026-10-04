@@ -1,64 +1,496 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulasi Transkripsi DNA → mRNA | GEN-OS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>GEN-OS // TRANSCRIPTION: RNA Synthesis Lab</title>
+    <meta name="description" content="Simulasi interaktif biologi molekuler transkripsi DNA ke mRNA: inisiasi promoter, pembukaan gelembung transkripsi, elongasi RNA Polimerase, dan terminasi sintesis.">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        trans: {
+                            dark: '#030712',
+                            panel: 'rgba(15, 23, 42, 0.85)',
+                            border: 'rgba(245, 158, 11, 0.25)',
+                            amber: '#f59e0b',
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            rose: '#f43f5e',
+                            orange: '#f97316',
+                            indigo: '#6366f1'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['Fira Code', 'JetBrains Mono', 'Courier Prime', 'monospace'],
+                        display: ['Orbitron', 'sans-serif'],
+                        sans: ['Rajdhani', 'sans-serif']
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2.5s infinite ease-in-out',
+                        'float': 'float 3s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(245, 158, 11, 0.25)' },
+                            '50%': { boxShadow: '0 0 30px rgba(245, 158, 11, 0.6)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Orbitron:wght@600;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="app-container">
-        <header class="glass-panel header">
-            <div class="brand">
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <a href="../index.html" class="btn-back">← Beranda</a>
-                    <span class="badge">GEN-OS Bio-Core</span>
+
+<body class="flex flex-col min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-amber-500/30 selection:text-amber-200 relative overflow-x-hidden">
+    <div class="scanlines"></div>
+
+    <!-- ==================== TOP NAVIGATION HEADER ==================== -->
+    <header class="sticky top-0 z-40 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 px-4 md:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4 flex-shrink-0">
+        <div class="flex items-center gap-4">
+            <a href="../index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-700/80 bg-slate-900/90 hover:border-amber-400 hover:text-amber-300 text-slate-300 text-xs font-mono transition group">
+                <span class="transform group-hover:-translate-x-1 transition-transform">←</span>
+                <span>BERANDA GEN-OS</span>
+            </a>
+            <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
+            <div class="flex items-center gap-3">
+                <div class="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xl">
+                    📝
                 </div>
-                <h1>SIMULASI TRANSKRIPSI DNA &rarr; mRNA</h1>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-base md:text-lg font-display font-bold text-white tracking-wider flex items-center gap-2">
+                            TRANSCRIPTION
+                        </h1>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold tracking-wider">
+                            MODUL 09
+                        </span>
+                    </div>
+                    <p class="text-[11px] font-mono text-slate-400 tracking-wider">RNA SYNTHESIS & TRANSCRIPTION BUBBLE LAB</p>
+                </div>
             </div>
-            <div class="legend">
-                <div class="legend-item"><span class="color-box a-color"></span> A (Adenin)</div>
-                <div class="legend-item"><span class="color-box t-color"></span> T (Timin)</div>
-                <div class="legend-item"><span class="color-box g-color"></span> G (Guanin)</div>
-                <div class="legend-item"><span class="color-box c-color"></span> C (Sitosin)</div>
-                <div class="legend-item"><span class="color-box u-color"></span> U (Urasil)</div>
-            </div>
-        </header>
+        </div>
 
-        <main class="main-content">
-            <div class="canvas-container">
-                <canvas id="sim-canvas" width="1200" height="600"></canvas>
-            </div>
-        </main>
+        <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Audio Toggle -->
+            <button id="btn-sound" onclick="toggleSound()" class="px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 hover:border-amber-400 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition" title="Toggle Efek Suara">
+                <span id="sound-icon">🔊</span>
+                <span class="hidden md:inline">AUDIO</span>
+            </button>
 
-        <footer class="glass-panel controls-panel">
-            <div class="info-panel">
-                <h3 id="step-title">1. Inisiasi</h3>
-                <p id="step-desc">RNA Polimerase mengenali dan mengikat daerah promoter pada DNA.</p>
+            <!-- Literature Button -->
+            <button onclick="openLiteratureModal()" class="px-3 py-1.5 rounded-lg border border-purple-500/40 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-xs font-mono flex items-center gap-1.5 transition">
+                <span>📚</span>
+                <span class="hidden sm:inline">LITERATUR</span>
+            </button>
+
+            <!-- Tutorial Button -->
+            <button onclick="openTutorialModal()" class="px-3 py-1.5 rounded-lg border border-amber-500/50 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 text-xs font-mono flex items-center gap-1.5 transition animate-pulse">
+                <span>📖</span>
+                <span>PANDUAN</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 md:p-8 space-y-6">
+
+        <!-- Top Educational Banner: 3 Stages of Transcription -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Stage 1 Card: Inisiasi -->
+            <div class="glass-panel rounded-xl p-4 sm:p-5 border-l-4 border-l-amber-500 relative overflow-hidden group">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">TAHAP 1</span>
+                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">PROMOTOR & HELIKS</span>
+                        </div>
+                        <h2 class="text-sm md:text-base font-bold text-white font-sans">Inisiasi & Pembukaan Heliks</h2>
+                    </div>
+                    <span class="text-2xl text-amber-400 opacity-80 group-hover:scale-110 transition-transform">🎯</span>
+                </div>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                    <b>RNA Polimerase</b> mengenali sekuens spesifik pada daerah <b>Promoter</b> DNA. Enzim membuka pilinan heliks ganda membentuk <i>transcription bubble</i> agar untai cetakan dapat diakses.
+                </p>
             </div>
-            
-            <div class="controls">
-                <div class="progress-container">
-                    <span id="step-indicator">Langkah 1 / 5</span>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progress-fill"></div>
+
+            <!-- Stage 2 Card: Elongasi -->
+            <div class="glass-panel rounded-xl p-4 sm:p-5 border-l-4 border-l-cyan-500 relative overflow-hidden group">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold">TAHAP 2</span>
+                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">POLIMERISASI 5' &rarr; 3'</span>
+                        </div>
+                        <h2 class="text-sm md:text-base font-bold text-white font-sans">Elongasi Rantai mRNA</h2>
+                    </div>
+                    <span class="text-2xl text-cyan-400 opacity-80 group-hover:scale-110 transition-transform">⚡</span>
+                </div>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                    RNA Polimerase membaca untai cetakan (3' &rarr; 5') dan merangkai ribonukleotida komplementer menjadi untai <b>mRNA (5' &rarr; 3')</b>. Basa Adenin pada DNA dipasangkan dengan <b>Urasil (U)</b> pada mRNA.
+                </p>
+            </div>
+
+            <!-- Stage 3 Card: Terminasi -->
+            <div class="glass-panel rounded-xl p-4 sm:p-5 border-l-4 border-l-rose-500 relative overflow-hidden group">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold">TAHAP 3</span>
+                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">SINYAL STOP & PELEPASAN</span>
+                        </div>
+                        <h2 class="text-sm md:text-base font-bold text-white font-sans">Terminasi & Pelepasan</h2>
+                    </div>
+                    <span class="text-2xl text-rose-400 opacity-80 group-hover:scale-110 transition-transform">🛑</span>
+                </div>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                    Polimerase mencapai sekuens <b>Terminator</b>. Transkripsi berhenti, enzim melepaskan untai mRNA lengkap, dan pilinan heliks ganda DNA menutup kembali secara sempurna.
+                </p>
+            </div>
+        </section>
+
+        <!-- Main Simulation Area & Control Deck -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- Left Simulation & Controls Column -->
+            <div class="lg:col-span-8 space-y-4 flex flex-col">
+                <!-- Canvas Simulation Container -->
+                <div class="glass-panel rounded-2xl p-4 relative overflow-hidden flex-grow flex flex-col justify-between" id="sim-container" style="min-height: 480px;">
+                    <!-- Floating Viewport HUD Header -->
+                    <div class="flex items-center justify-between z-10 pointer-events-none mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+                            <span class="text-[11px] font-mono text-amber-300 font-bold tracking-widest bg-slate-950/80 px-2.5 py-1 rounded-md border border-amber-500/30">
+                                RNA POLIMERASE AKTIF // NUKLEUS
+                            </span>
+                        </div>
+                        <div class="text-[11px] font-mono text-slate-400 bg-slate-950/80 px-2.5 py-1 rounded-md border border-slate-800">
+                            Arah Sintesis: <span class="text-amber-400 font-bold">5' &rarr; 3'</span>
+                        </div>
+                    </div>
+
+                    <!-- Canvas -->
+                    <div class="relative w-full flex-grow flex items-center justify-center">
+                        <canvas id="sim-canvas" class="w-full h-full block rounded-xl"></canvas>
+                    </div>
+
+                    <!-- Legend Chips Overlay -->
+                    <div class="flex flex-wrap items-center justify-center gap-3 pt-3 border-t border-slate-800/80 text-[11px] font-mono text-slate-300">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3.5 h-3.5 rounded-sm bg-sky-400 text-slate-950 font-bold flex items-center justify-center text-[9px]">A</span>
+                            <span>Adenin</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3.5 h-3.5 rounded-sm bg-amber-400 text-slate-950 font-bold flex items-center justify-center text-[9px]">T</span>
+                            <span>Timin (DNA)</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3.5 h-3.5 rounded-sm bg-orange-500 text-white font-bold flex items-center justify-center text-[9px]">U</span>
+                            <span class="text-orange-300 font-semibold">Urasil (mRNA)</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3.5 h-3.5 rounded-sm bg-emerald-400 text-slate-950 font-bold flex items-center justify-center text-[9px]">G</span>
+                            <span>Guanin</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3.5 h-3.5 rounded-sm bg-rose-500 text-white font-bold flex items-center justify-center text-[9px]">C</span>
+                            <span>Sitosin</span>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="btn-group">
-                    <button id="btn-prev" class="btn" disabled>&#9664; Prev</button>
-                    <button id="btn-play" class="btn btn-primary">Play</button>
-                    <button id="btn-next" class="btn">Next &#9654;</button>
-                </div>
 
-                <div class="speed-control">
-                    <label for="speed-slider">Kecepatan:</label>
-                    <input type="range" id="speed-slider" min="0.5" max="2" step="0.1" value="1">
+                <!-- Simulation Controls Deck -->
+                <div class="glass-panel rounded-2xl p-4 sm:p-5 space-y-4">
+                    <!-- Stage Bookmark Shortcuts -->
+                    <div class="flex items-center justify-between gap-2 flex-wrap border-b border-slate-800/80 pb-3">
+                        <span class="text-[11px] font-mono text-slate-400 uppercase tracking-wider">Lompat ke Tahap:</span>
+                        <div class="flex items-center gap-1.5 flex-wrap" id="stage-buttons">
+                            <button onclick="jumpToStep(0)" class="quick-btn text-xs font-mono px-3 py-1 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:border-amber-400 hover:text-white transition">1. Inisiasi</button>
+                            <button onclick="jumpToStep(1)" class="quick-btn text-xs font-mono px-3 py-1 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:border-amber-400 hover:text-white transition">2. Pembukaan Heliks</button>
+                            <button onclick="jumpToStep(2)" class="quick-btn text-xs font-mono px-3 py-1 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:border-amber-400 hover:text-white transition">3. Elongasi mRNA</button>
+                            <button onclick="jumpToStep(3)" class="quick-btn text-xs font-mono px-3 py-1 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:border-amber-400 hover:text-white transition">4. Terminasi</button>
+                            <button onclick="jumpToStep(4)" class="quick-btn text-xs font-mono px-3 py-1 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:border-amber-400 hover:text-white transition">5. Hasil Akhir</button>
+                        </div>
+                    </div>
+
+                    <!-- Main Playback & Speed Controls -->
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <!-- Step Navigation -->
+                        <div class="flex items-center gap-2">
+                            <button id="btn-prev" class="px-4 py-2 rounded-xl border border-slate-700 bg-slate-900 text-slate-200 font-mono text-xs hover:border-amber-400 transition disabled:opacity-40 disabled:cursor-not-allowed">
+                                &laquo; Sebelumnya
+                            </button>
+                            <button id="btn-play" class="px-6 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-display font-bold text-xs tracking-wider transition shadow-lg shadow-amber-500/20 active:scale-95">
+                                &#9658; Mulai
+                            </button>
+                            <button id="btn-next" class="px-4 py-2 rounded-xl border border-slate-700 bg-slate-900 text-slate-200 font-mono text-xs hover:border-amber-400 transition disabled:opacity-40 disabled:cursor-not-allowed">
+                                Selanjutnya &raquo;
+                            </button>
+                        </div>
+
+                        <!-- Speed Controls -->
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-xs font-mono text-slate-400">Kecepatan:</span>
+                            <input type="range" id="speed-slider" min="0.5" max="2.5" step="0.1" value="1" class="w-28 cursor-pointer accent-amber-400">
+                            <span id="speed-label" class="text-xs font-mono font-bold text-amber-400 min-w-[32px]">1.0x</span>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar & Counter -->
+                    <div class="flex items-center gap-3 pt-1">
+                        <div class="flex-grow h-2.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800/80">
+                            <div id="progress-fill" class="h-full bg-gradient-to-r from-amber-500 to-orange-400 transition-all duration-300 w-0 shadow-sm shadow-amber-400"></div>
+                        </div>
+                        <span id="step-counter" class="text-xs font-mono font-bold text-amber-400 min-w-[100px] text-right">
+                            Langkah 1 / 5
+                        </span>
+                    </div>
                 </div>
             </div>
-        </footer>
+
+            <!-- Right Information & Molecular Monitor Column -->
+            <div class="lg:col-span-4 space-y-4">
+                <!-- Step Narrative Card -->
+                <div class="glass-panel rounded-2xl p-5 space-y-4 border-t-2 border-t-amber-400">
+                    <div class="border-b border-slate-800 pb-3">
+                        <span class="text-[10px] font-mono text-amber-400 uppercase tracking-widest block mb-1">// STATUS TRANSKRIPSI</span>
+                        <h3 id="step-title" class="text-base sm:text-lg font-display font-bold text-white tracking-wide">1. Inisiasi</h3>
+                    </div>
+
+                    <p id="step-description" class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+                        RNA Polimerase mengenali dan mengikat daerah promoter pada DNA.
+                    </p>
+
+                    <!-- Realtime Triple Data Grid -->
+                    <div class="grid grid-cols-3 gap-2 pt-1">
+                        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-center space-y-0.5">
+                            <span class="text-[10px] font-mono text-slate-400 block uppercase">DNA Cetakan</span>
+                            <span id="current-template-base" class="font-mono text-base font-bold text-cyan-400 block">-</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-center space-y-0.5">
+                            <span class="text-[10px] font-mono text-slate-400 block uppercase">mRNA Baru</span>
+                            <span id="current-mrna-base" class="font-mono text-base font-bold text-orange-400 block">-</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-center space-y-0.5">
+                            <span class="text-[10px] font-mono text-slate-400 block uppercase">Ikatan</span>
+                            <span id="current-bond-type" class="font-mono text-xs font-bold text-amber-300 block pt-1">-</span>
+                        </div>
+                    </div>
+
+                    <!-- mRNA Sequence Growing Visualizer -->
+                    <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                        <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+                            <span>mRNA Bertumbuh (5' &rarr; 3'):</span>
+                            <span id="mrna-length" class="text-amber-400 font-bold">0 / 27 Nt</span>
+                        </div>
+                        <div id="mrna-chain-stream" class="text-xs font-mono text-amber-300 p-2.5 rounded-lg bg-slate-950 border border-slate-800/80 min-h-[48px] flex items-center flex-wrap gap-1 font-semibold overflow-x-auto max-h-24">
+                            <span class="text-slate-500 italic">Belum ada nukleotida disintesis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Complementary Base-Pairing Rules Card -->
+                <div class="glass-panel rounded-2xl p-5 space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                        <h4 class="font-display font-bold text-xs uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
+                            <span>🧬</span> ATURAN KOMPLEMENTARITAS RNA
+                        </h4>
+                        <span class="text-[10px] font-mono text-amber-400 font-bold">Dogma Sentral</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-center text-xs font-mono border-collapse" id="pairing-table">
+                            <thead>
+                                <tr class="bg-slate-900 text-slate-300 border border-slate-800">
+                                    <th class="p-1.5 border border-slate-800">DNA Cetakan (3' &rarr; 5')</th>
+                                    <th class="p-1.5 border border-slate-800">Pasangan Komplementer</th>
+                                    <th class="p-1.5 border border-slate-800">mRNA (5' &rarr; 3')</th>
+                                    <th class="p-1.5 border border-slate-800">Ikatan H</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-300">
+                                <tr class="border border-slate-800 hover:bg-slate-900/50 transition" id="row-T">
+                                    <td class="p-1.5 font-bold text-amber-400">T (Timin)</td>
+                                    <td class="p-1.5 text-slate-500">&rarr;</td>
+                                    <td class="p-1.5 font-bold text-sky-400">A (Adenin)</td>
+                                    <td class="p-1.5 text-slate-400">2 H-Bonds</td>
+                                </tr>
+                                <tr class="border border-slate-800 hover:bg-slate-900/50 transition" id="row-A">
+                                    <td class="p-1.5 font-bold text-sky-400">A (Adenin)</td>
+                                    <td class="p-1.5 text-slate-500">&rarr;</td>
+                                    <td class="p-1.5 font-bold text-orange-400">U (Urasil)*</td>
+                                    <td class="p-1.5 text-slate-400">2 H-Bonds</td>
+                                </tr>
+                                <tr class="border border-slate-800 hover:bg-slate-900/50 transition" id="row-C">
+                                    <td class="p-1.5 font-bold text-rose-400">C (Sitosin)</td>
+                                    <td class="p-1.5 text-slate-500">&rarr;</td>
+                                    <td class="p-1.5 font-bold text-emerald-400">G (Guanin)</td>
+                                    <td class="p-1.5 text-slate-400">3 H-Bonds</td>
+                                </tr>
+                                <tr class="border border-slate-800 hover:bg-slate-900/50 transition" id="row-G">
+                                    <td class="p-1.5 font-bold text-emerald-400">G (Guanin)</td>
+                                    <td class="p-1.5 text-slate-500">&rarr;</td>
+                                    <td class="p-1.5 font-bold text-rose-400">C (Sitosin)</td>
+                                    <td class="p-1.5 text-slate-400">3 H-Bonds</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-[10px] font-mono text-slate-400 leading-tight">
+                        <span class="text-orange-400 font-bold">* Urasil (U)</span> menggantikan Timin (T) pada molekul RNA karena RNA disintesis menggunakan ribonukleotida (rNTP), bukan deoksiribonukleotida (dNTP).
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="mt-8 border-t border-slate-800/80 bg-slate-950/80 py-6 px-4 text-center text-xs font-mono text-slate-500">
+        <p>GEN-OS // BIO-CORE • Modul 09: Transkripsi DNA &rarr; mRNA</p>
+        <p class="mt-1 text-[11px] text-slate-600">Simulasi Dogma Sentral Biologi Molekuler berdasarkan struktur kristalografi RNA Polimerase II (Nobel Kimia 2006)</p>
+    </footer>
+
+    <!-- ==================== TUTORIAL MODAL ==================== -->
+    <div id="modal-tutorial" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden transition-opacity">
+        <div class="glass-panel rounded-2xl max-w-2xl w-full border border-amber-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl p-2 rounded-xl bg-amber-500/10 border border-amber-500/30">📖</span>
+                    <div>
+                        <h3 class="text-lg font-display font-bold text-white tracking-wider">PANDUAN LENGKAP SIMULASI TRANSKRIPSI</h3>
+                        <p class="text-xs font-mono text-amber-400">MODUL 09: TRANSKRIPSI DNA MENJADI mRNA</p>
+                    </div>
+                </div>
+                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+            </div>
+
+            <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-amber-300 text-xs tracking-wider uppercase">1. Apa Itu Transkripsi Genetik?</h4>
+                    <p class="text-xs text-slate-300">
+                        Transkripsi adalah langkah awal dari ekspresi gen di mana informasi genetik pada untai cetakan DNA disalin menjadi molekul perantara berupa <b>mRNA (messenger RNA)</b> oleh enzim <b>RNA Polimerase</b> di dalam nukleus.
+                    </p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-cyan-300 text-xs tracking-wider uppercase">2. Untai Pengkode (Sense) vs Untai Cetakan (Antisense)</h4>
+                    <ul class="list-disc list-inside text-xs space-y-1 text-slate-300">
+                        <li><b>Untai Cetakan (Template / Antisense):</b> Untai DNA yang dibaca oleh RNA Polimerase dengan orientasi 3' &rarr; 5'.</li>
+                        <li><b>Untai Pengkode (Coding / Sense):</b> Untai DNA komplementer pasangannya (5' &rarr; 3') yang urutan basanya identik dengan mRNA (kecuali T digantikan U).</li>
+                        <li><b>Untai mRNA:</b> Molekul untai tunggal yang disintesis dari ujung 5' menuju 3'.</li>
+                    </ul>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-emerald-300 text-xs tracking-wider uppercase">3. Cara Mengoperasikan Simulator</h4>
+                    <ol class="list-decimal list-inside text-xs space-y-1.5 text-slate-300">
+                        <li>Gunakan tombol <b>&#9658; Mulai</b> untuk menyaksikan alur animasi transkripsi kontinu dari Inisiasi hingga Selesai.</li>
+                        <li>Gunakan tombol <b>Selanjutnya &raquo;</b> atau <b>&laquo; Sebelumnya</b> untuk menelaah setiap tahapan secara cermat langkah demi langkah.</li>
+                        <li>Klik tombol <b>Lompat ke Tahap</b> untuk langsung menuju tahap tertentu seperti pembukaan heliks atau elongasi.</li>
+                        <li>Amati bagaimana gelembung transkripsi membuka heliks ganda dan bagaimana basa urasil (U) menggantikan timin (T).</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="text-right border-t border-slate-800 pt-4">
+                <button onclick="closeTutorialModal()" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-display font-bold text-xs tracking-wider transition">
+                    MENGERTI, MULAI SIMULASI
+                </button>
+            </div>
+        </div>
     </div>
+
+    <!-- ==================== SCIENTIFIC LITERATURE MODAL ==================== -->
+    <div id="modal-literature" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden transition-opacity">
+        <div class="glass-panel rounded-2xl max-w-2xl w-full border border-purple-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">📚</span>
+                    <div>
+                        <h3 class="text-lg font-display font-bold text-white tracking-wider">DASAR TEORETIS & REFERENSI ILMIAH</h3>
+                        <p class="text-xs font-mono text-purple-400">BIOLOGI MOLEKULER TRANSKRIPSI & MEKANISME POLIMERASE</p>
+                    </div>
+                </div>
+                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
+                <!-- Ref 1 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-amber-400 font-mono">1. Penemuan & Konseptualisasi Messenger RNA (mRNA)</span>
+                        <span class="text-[10px] font-mono text-slate-500">1961</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Jacob, François, & Monod, Jacques (1961).</b> <i>Genetic regulatory mechanisms in the synthesis of proteins.</i> Journal of Molecular Biology, 3(3): 318–356.<br>
+                        <b>Brenner, S., Jacob, F., & Meselson, M. (1961).</b> <i>An unstable intermediate carrying information from genes to ribosomes for protein synthesis.</i> Nature, 190: 576–581.
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Membuktikan secara eksperimental keberadaan molekul perantara tak stabil (mRNA) yang membawa cetak biru genetik dari DNA kromosom menuju ribosom.
+                    </p>
+                </div>
+
+                <!-- Ref 2 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-cyan-400 font-mono">2. Karakterisasi Enzim RNA Polimerase Bergantung-DNA</span>
+                        <span class="text-[10px] font-mono text-slate-500">1960</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Hurwitz, J., Bresler, A., & Diringer, R. (1960).</b> <i>The enzymic incorporation of ribonucleotides into polyribonucleotides and the effect of DNA.</i> Biochemical and Biophysical Research Communications, 3(1): 15–19.<br>
+                        <b>Weiss, Samuel B. (1960).</b> <i>Enzymatic synthesis of ribonucleic acid.</i> PNAS, 46(8): 1020–1030.
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Mengisolasi enzim yang mengkatalisis sintesis poliribonukleotida dari 4 rNTP dengan mensyaratkan DNA utuh sebagai cetakan.
+                    </p>
+                </div>
+
+                <!-- Ref 3 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-purple-400 font-mono">3. Struktur Kristalografi Resolusi Atomik RNA Polimerase II</span>
+                        <span class="text-[10px] font-mono text-slate-500">2001 & 2006</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Cramer, P., Bushnell, D. A., & Kornberg, R. D. (2001).</b> <i>Structural basis of transcription: RNA polymerase II at 2.8 ångstrom resolution.</i> Science, 292(5523): 1863–1876.<br>
+                        <b>Kornberg, Roger D. (2006).</b> <i>The Nobel Prize in Chemistry for his studies of the molecular basis of eukaryotic transcription.</i>
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Menyingkap mekanisme molekuler pembukaan gelembung transkripsi (*transcription bubble*), pemisahan untai DNA, penambahan rNTP ke ujung 3' RNA, serta translokasi enzim.
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-right border-t border-slate-800 pt-4">
+                <button onclick="closeLiteratureModal()" class="px-5 py-2 rounded-xl bg-purple-500 hover:bg-purple-400 text-slate-950 font-display font-bold text-xs tracking-wider transition">
+                    TUTUP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="script.js"></script>
 </body>
+
 </html>
