@@ -6,6 +6,24 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🧬 Perbaikan Tampilan Visual Huruf Alel Resesif pada Seluruh Modul Penyimpangan Semu Mendel
+- **Eliminasi Pemaksaan Huruf Kapital Visual (*Forced Uppercase Removal*):**
+  - Mengidentifikasi akar masalah di mana kolom input genotipe parental pada seluruh modul *Penyimpangan Semu Mendel* menggunakan kelas Tailwind `uppercase` atau aturan CSS `text-transform: uppercase;`. Hal ini menyebabkan alel resesif (seperti `r`, `p`, `w`, `y`, `b`, `e`, `a`) yang diketikkan pengguna atau dimasukkan via tombol *preset* secara visual dipaksa tampil sebagai huruf besar (`R`, `P`, `W`, `Y`, `B`, `E`, `A`), meskipun logika komputasi JavaScript (`output real`) berjalan normal.
+  - Menghilangkan kelas `uppercase` dan aturan `text-transform: uppercase;` pada input genotipe sehingga perbedaan huruf kapital (alel dominan) dan huruf kecil (alel resesif) terlihat jelas, akurat, dan sesuai dengan kaidah penulisan genetika Mendel.
+- **Modul-Modul yang Diperbaiki:**
+  - **Simulasi Atavisme (`Generator Penyimpangan Semu/Simulasi Atavisme.html`):** Menghapus kelas `uppercase` pada input `#p1` dan `#p2`. Preset seperti *Test Cross* (`RrPp × rrpp`) dan *Bilah* (`rrpp`) kini menampilkan alel `r` dan `p` secara visual dalam huruf kecil di kotak input dan pratinjau.
+  - **Simulasi Epistasis Dominan (`Generator Penyimpangan Semu/Simulasi Epistasis.html`):** Menghapus kelas `uppercase` pada input parental P1 dan P2 `#p1` serta `#p2`. Alel resesif labu kuning/hijau (`wwyy`, `Wwyy`) kini tampil dengan huruf kecil secara visual.
+  - **Simulasi Hipostasis / Epistasis Resesif (`Generator Penyimpangan Semu/Simulasi Hipostasis.html`):** Menghapus kelas `uppercase` pada `#p1-input` dan `#p2-input`. Genotipe bulu anjing Labrador cokelat/kuning (`bbEe`, `bbee`) kini mempertahankan huruf kecil visual.
+  - **Simulasi Kriptomeri (`Generator Penyimpangan Semu/Simulasi Kriptomeri.html`):** Menghapus `text-transform: uppercase;` pada kelas `.input-box`. Genotipe bunga *Linaria maroccana* merah/putih (`Aabb`, `aaBb`, `aabb`) kini secara visual tampil dengan huruf kecil yang tepat.
+- **Verifikasi Komprehensif Berbasis Browser Subagent:**
+  - Telah diverifikasi langsung melalui browser subagent bahwa input, pratinjau fenotipe, dan tabel Punnett menampilkan huruf kecil dengan benar tanpa merusak logika pewarisan genetik.
+- **Berkas yang Diperbarui:**
+  - `Generator Penyimpangan Semu/Simulasi Atavisme.html`
+  - `Generator Penyimpangan Semu/Simulasi Epistasis.html`
+  - `Generator Penyimpangan Semu/Simulasi Hipostasis.html`
+  - `Generator Penyimpangan Semu/Simulasi Kriptomeri.html`
+  - `CHANGELOG.md`
+
 ### 🌐 Audit Responsivitas Menyeluruh & Standardisasi Mobile Seluruh Modul Laboratorium Virtual
 - **Audit Komprehensif Satu per Satu Terhadap 19 Berkas Modul Simulasi:**
   - Melakukan pengujian sistematis pada rasio *mobile viewport* (390 x 844 px) untuk seluruh 19 berkas simulasi di repositori.
