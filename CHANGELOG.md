@@ -6,6 +6,18 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📌 Modul Baru: HEMATO-LAB (Simulasi Penggolongan Darah & Transfusi Interaktif)
+- **Pembuatan Modul Independen Baru (`Simulasi-Penggolongan-Darah.html`):**
+  - Mengembangkan modul ke-13 yang secara khusus dan komprehensif membahas genetika penggolongan darah sistem ABO dan Rhesus sesuai standar medis klinis (merujuk pada literatur Campbell Biology dan genetika medis Landsteiner).
+- **Fitur Simulasi & Kalkulasi Ilmiah pada HEMATO-LAB:**
+  - **Uji Aglutinasi Laboratorium (Canvas HTML5):** Menghadirkan simulasi interaktif mikroskopis (Forward Typing) menggunakan Partikel Sel Darah (RBCs) dan dinamika *fluid-friction* untuk meneteskan Reagen Serum Anti-A, Anti-B, dan Anti-D, guna mendemonstrasikan penggumpalan eritrosit.
+  - **Mesin Pewarisan Genetik Lengkap (ABO & Rh):** Simulasi papan Punnett ganda (2x2) untuk alel ganda kodominan (IA, IB, i) di kromosom 9 dan alel Rhesus (D, d) di kromosom 1, menghasilkan 16 kombinasi anak (F1).
+  - **Sistem Peringatan Medis (Eritroblastosis Fetalis):** Fitur pendeteksi bahaya klinis otomatis yang mensimulasikan risiko Hemolytic Disease of the Newborn apabila ibu memiliki genotipe Rh- dan disilangkan dengan genotipe ayah Rh+, lengkap dengan penjelasan pencegahan via injeksi RhoGAM.
+  - **Matriks Kompatibilitas Transfusi Medis (8x8 Grid):** Papan pemetaan klinis yang mengizinkan uji coba pendonoran (Packed RBC) antar 8 golongan darah, beserta penjelasan interaktif mengenai imunologis bentrok antigen-antibodi secara dinamis.
+- **Integrasi Navigasi & Tutorial (Aturan #5):**
+  - Modul telah dilengkapi dengan modal panduan/tutorial ilmu genetika darah step-by-step sebelum pengguna dapat mengakses *dashboard*, dan terhubung secara utuh pada `index.html` (kartu modul urutan ke-13).
+
+
 ### 📌 Peningkatan Responsivitas Mobile & Integrasi Penuh 12 Modul pada Beranda Klasik
 - **Optimasi Responsivitas Multi-Perangkat (Mobile/Tablet/Desktop):**
   - Menerapkan arsitektur flex-wrap dinamis (`flex-wrap gap-1`) pada seluruh panel statistik genotipe dan fenotipe di dalam modul untuk mencegah bentrok dan tumpang-tindih (overlap) rasio ketika dibuka pada perangkat berlayar sempit (seperti di HP).
