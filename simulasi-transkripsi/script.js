@@ -72,32 +72,52 @@ window.toggleSound = function() {
 
 window.openTutorialModal = function() {
     const modal = document.getElementById('modal-tutorial');
-    if (modal) modal.classList.remove('hidden');
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
     playSound('step');
 };
 
 window.closeTutorialModal = function() {
     const modal = document.getElementById('modal-tutorial');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
     playSound('step');
 };
 
 window.openLiteratureModal = function() {
     const modal = document.getElementById('modal-literature');
-    if (modal) modal.classList.remove('hidden');
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
     playSound('step');
 };
 
 window.closeLiteratureModal = function() {
     const modal = document.getElementById('modal-literature');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
     playSound('step');
 };
 
-// Keyboard listener for ESC to close modals
+// Keyboard listener for ESC and backdrop click to close modals
 window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         window.closeTutorialModal();
+        window.closeLiteratureModal();
+    }
+});
+
+document.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'modal-tutorial') {
+        window.closeTutorialModal();
+    } else if (e.target && e.target.id === 'modal-literature') {
         window.closeLiteratureModal();
     }
 });

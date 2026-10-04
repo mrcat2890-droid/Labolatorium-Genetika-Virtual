@@ -6,6 +6,24 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📖 Perbaikan Posisi Viewport Modal Panduan & Dasar Teoretis: Simulasi Transkripsi (`simulasi-transkripsi`)
+- **Penyelesaian Bug Ruang Kosong & Modal Tersembunyi di Luar Layar (*Containing Block Bug Fix*):**
+  - Mengidentifikasi akar masalah di mana selektor `[class*="bg-slate-950"]` pada `style.css` secara tidak sengaja mengenai elemen `<body>`, sehingga memberikan `backdrop-filter: blur(16px)` pada `body`.
+  - Berdasarkan spesifikasi CSS W3C, penerapan `backdrop-filter` pada `body` mengubahnya menjadi *containing block* bagi seluruh elemen turunan berstatus `position: fixed`. Akibatnya, wadah modal `#modal-tutorial` dan `#modal-literature` yang berstatus `fixed inset-0` merentang mengikuti tinggi penuh dokumen HTML (~2237px), bukan mengikuti tinggi *viewport* peramban.
+  - Hal ini menyebabkan kartu modal ditempatkan di tengah dokumen (~807px dari atas), sehingga saat pengguna mengklik tombol di bagian atas halaman, area layar hanya menampilkan latar belakang gelap kosong dan modal baru terlihat setelah pengguna menggulir ke bawah ~800px.
+- **Perbaikan CSS & Isolasi Viewport:**
+  - Mengecualikan `body` dari aturan `backdrop-filter` sub-panel (`:not(body)[class*="bg-slate-950"]`) dan menegaskan `body { backdrop-filter: none !important; }`.
+  - Mengunci wadah `#modal-tutorial` dan `#modal-literature` ke dimensi *viewport* absolut (`width: 100vw; height: 100vh; height: 100dvh; position: fixed; inset: 0;`).
+  - Mengoptimalkan proporsi dan bantalan kartu modal di perangkat seluler (`p-4 sm:p-6 md:p-8`, `max-height: 85vh sm:88vh`) sehingga modal langsung muncul di tengah layar seketika tombol diklik, baik saat halaman berada di paling atas maupun saat sedang digulir di area simulasi.
+  - Menambahkan penguncian gulir latar belakang (`overflow-hidden` pada `body`) saat modal aktif serta dukungan menutup modal dengan mengklik area luar (*backdrop click*).
+- **Berkas yang Diperbarui:**
+  - `simulasi-transkripsi/style.css`
+  - `simulasi-transkripsi/index.html`
+  - `simulasi-transkripsi/script.js`
+  - `CHANGELOG.md`
+
+
+
 ### 📱 Optimasi Responsivitas Mobile & Dynamic Camera Tracking: Simulasi Transkripsi (`simulasi-transkripsi`)
 - **Penerapan Sistem Kamera Dinamis Mengikuti RNA Polimerase (*Dynamic Camera Tracking*):**
   - Mengatasi kendala visual simulasi terpotong di layar HP di mana pemanjangan untai DNA (27 nukleotida) sebelumnya melampaui lebar layar seluler sehingga enzim RNA Polimerase II dan gelembung transkripsi (*transcription bubble*) menghilang ke luar layar.
