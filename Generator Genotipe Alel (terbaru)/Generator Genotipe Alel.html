@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id" class="dark">
 
 <head>
@@ -286,19 +286,15 @@
     
         /* Mobile Performance Optimizations */
         @media (max-width: 768px) {
-            * {
+            *, *::before, *::after {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
             }
-            .glass-card, .archive-panel, .glass-panel, .simulator-panel, .control-panel, .result-panel {
-                background: #0f172a !important;
+            .glass-panel {
+                background-color: rgba(15, 23, 42, 0.88) !important;
             }
-            header, aside, .glass-header {
-                background: #0f172a !important;
-            }
-            .ambient-biotech-vector, .ambient-plasmid-ring, .particle-layer, .scan-line, .scan-bar, .scan-overlay {
-                display: none !important;
-                animation: none !important;
+            .glass-panel-secondary {
+                background-color: rgba(15, 23, 42, 0.92) !important;
             }
         }
     </style>
@@ -309,9 +305,9 @@
     <!-- Signature Botanical Background & Animated Elements (Pisum Sativum) -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <!-- Ambient Neon Glow Core -->
-        <div class="absolute top-0 -left-12 w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-[100px] hidden md:block opacity-25 animate-blob"></div>
-        <div class="absolute top-1/4 -right-12 w-96 h-96 bg-pink-600 rounded-full mix-blend-screen filter blur-[100px] hidden md:block opacity-20 animate-blob animation-delay-2000"></div>
-        <div class="absolute -bottom-10 left-1/3 w-[30rem] h-80 bg-emerald-600 rounded-full mix-blend-screen filter blur-[110px] hidden md:block opacity-20 animate-blob animation-delay-4000"></div>
+        <div class="absolute top-0 -left-12 w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-[100px] opacity-25 animate-blob hidden md:block"></div>
+        <div class="absolute top-1/4 -right-12 w-96 h-96 bg-pink-600 rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-blob animation-delay-2000 hidden md:block"></div>
+        <div class="absolute -bottom-10 left-1/3 w-[30rem] h-80 bg-emerald-600 rounded-full mix-blend-screen filter blur-[110px] opacity-20 animate-blob animation-delay-4000 hidden md:block"></div>
 
         <!-- Floating Pollen Motes (Bioluminescent Mendel Spores) -->
         <div class="pollen-mote bg-amber-300 w-2 h-2 shadow-[0_0_8px_#fcd34d]" style="left: 12%; animation-duration: 14s; animation-delay: 0s;"></div>
@@ -362,7 +358,7 @@
         </div>
         <div class="flex items-center gap-3">
             <button onclick="togglePeaTutorialModal()" class="px-3.5 py-2 rounded-xl bg-purple-950/60 hover:bg-purple-900/80 text-purple-300 hover:text-white border border-purple-500/40 text-xs font-mono font-bold transition flex items-center gap-2 shadow-sm">
-                <span>ðŸ“–</span> Panduan Simulasi
+                <span>📖</span> Panduan Simulasi
             </button>
             <div class="hidden md:block text-right">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold mb-1">
@@ -380,26 +376,26 @@
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 pb-4 border-b border-white/10">
                 <div>
                     <h2 class="text-base font-bold text-white flex items-center gap-2">
-                        <span class="text-lg">ðŸŒ¿</span> Karakter Sifat Tanaman Ercis (<em>Pisum sativum</em>)
+                        <span class="text-lg">🌿</span> Karakter Sifat Tanaman Ercis (<em>Pisum sativum</em>)
                     </h2>
                     <p class="text-xs text-slate-400 mt-0.5">Pilih salah satu dari 7 karakter Mendel yang ingin dipelajari siswa:</p>
                 </div>
                 <div class="flex flex-wrap gap-2" id="trait-selector-buttons">
                     <button type="button" onclick="selectTrait('flower')" id="btn-trait-flower"
                         class="trait-btn px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition bg-cyan-600 text-white shadow-lg shadow-cyan-500/20 border border-cyan-400/50">
-                        <span>ðŸŒ¸</span> Warna Bunga (Ungu vs Putih)
+                        <span>🌸</span> Warna Bunga (Ungu vs Putih)
                     </button>
                     <button type="button" onclick="selectTrait('height')" id="btn-trait-height"
                         class="trait-btn px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition bg-slate-800 text-slate-300 hover:bg-slate-700 border border-white/10">
-                        <span>ðŸ“</span> Tinggi Batang (Tinggi vs Kerdil)
+                        <span>📏</span> Tinggi Batang (Tinggi vs Kerdil)
                     </button>
                     <button type="button" onclick="selectTrait('seed_shape')" id="btn-trait-seed_shape"
                         class="trait-btn px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition bg-slate-800 text-slate-300 hover:bg-slate-700 border border-white/10">
-                        <span>ðŸŸ¢</span> Bentuk Biji (Bulat vs Keriput)
+                        <span>🟢</span> Bentuk Biji (Bulat vs Keriput)
                     </button>
                     <button type="button" onclick="selectTrait('seed_color')" id="btn-trait-seed_color"
                         class="trait-btn px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition bg-slate-800 text-slate-300 hover:bg-slate-700 border border-white/10">
-                        <span>ðŸŸ¡</span> Warna Biji (Kuning vs Hijau)
+                        <span>🟡</span> Warna Biji (Kuning vs Hijau)
                     </button>
                 </div>
             </div>
@@ -412,16 +408,16 @@
                     </svg> Preset Cepat:
                 </span>
                 <button type="button" onclick="applyPreset('Aa', 'Aa')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 transition font-mono">
-                    Heterozigot Ã— Heterozigot (Aa Ã— Aa â†’ 3:1)
+                    Heterozigot × Heterozigot (Aa × Aa → 3:1)
                 </button>
                 <button type="button" onclick="applyPreset('AA', 'aa')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 transition font-mono">
-                    Galur Murni (AA Ã— aa â†’ 100% Dominan)
+                    Galur Murni (AA × aa → 100% Dominan)
                 </button>
                 <button type="button" onclick="applyPreset('Aa', 'aa')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-teal-600/30 text-teal-300 border border-teal-500/30 transition font-mono">
-                    Uji Silang / Test Cross (Aa Ã— aa â†’ 1:1)
+                    Uji Silang / Test Cross (Aa × aa → 1:1)
                 </button>
                 <button type="button" onclick="applyPreset('aa', 'aa')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-slate-600/30 text-slate-300 border border-slate-500/30 transition font-mono">
-                    Resesif Murni (aa Ã— aa â†’ 100% Resesif)
+                    Resesif Murni (aa × aa → 100% Resesif)
                 </button>
             </div>
         </div>
@@ -433,11 +429,11 @@
             <form onsubmit="event.preventDefault(); startSimulation();" class="relative z-10">
                 <div class="grid grid-cols-1 md:grid-cols-11 gap-6 items-center">
 
-                    <!-- PARENTAL 1 (â™‚) AYAH / BENANG SARI -->
+                    <!-- PARENTAL 1 (♂) AYAH / BENANG SARI -->
                     <div class="md:col-span-5 bg-slate-900/60 rounded-2xl p-5 border border-cyan-500/30 flex flex-col items-center">
                         <div class="w-full flex justify-between items-center mb-3">
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
-                                <span>â™‚</span> PARENTAL 1 (JANTAN)
+                                <span>♂</span> PARENTAL 1 (JANTAN)
                             </span>
                             <span class="text-[11px] font-mono text-cyan-400/80">Penghasil Serbuk Sari</span>
                         </div>
@@ -459,22 +455,22 @@
                         </div>
                     </div>
 
-                    <!-- CROSS ICON (Ã—) -->
+                    <!-- CROSS ICON (×) -->
                     <div class="md:col-span-1 flex flex-col items-center justify-center">
                         <div class="relative w-14 h-14 flex items-center justify-center">
                             <div class="absolute inset-0 bg-purple-500/20 rounded-full animate-ping"></div>
                             <div class="relative w-12 h-12 rounded-full bg-slate-800 border border-white/20 flex items-center justify-center shadow-lg">
-                                <span class="text-2xl font-bold text-white font-mono">Ã—</span>
+                                <span class="text-2xl font-bold text-white font-mono">×</span>
                             </div>
                         </div>
                         <span class="text-[10px] font-mono text-slate-400 mt-2">PERSILANGAN</span>
                     </div>
 
-                    <!-- PARENTAL 2 (â™€) IBU / PUTIK -->
+                    <!-- PARENTAL 2 (♀) IBU / PUTIK -->
                     <div class="md:col-span-5 bg-slate-900/60 rounded-2xl p-5 border border-pink-500/30 flex flex-col items-center">
                         <div class="w-full flex justify-between items-center mb-3">
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-pink-500/20 text-pink-300 border border-pink-500/40">
-                                <span>â™€</span> PARENTAL 2 (BETINA)
+                                <span>♀</span> PARENTAL 2 (BETINA)
                             </span>
                             <span class="text-[11px] font-mono text-pink-400/80">Penghasil Bakal Biji</span>
                         </div>
@@ -502,7 +498,7 @@
                 <div class="mt-8 flex justify-center">
                     <button type="button" onclick="startSimulation()"
                         class="w-full md:w-auto bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold py-4 px-12 rounded-2xl shadow-xl shadow-cyan-500/25 transition-all transform hover:scale-105 active:scale-95 group text-sm md:text-base flex items-center justify-center gap-3">
-                        <span>ðŸŒ¿</span>
+                        <span>🌿</span>
                         <span>SILANGKAN & GENERASIKAN TANAMAN ERCIS F1</span>
                         <svg class="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
@@ -518,7 +514,7 @@
                 <div class="absolute inset-0 bg-gradient-to-r from-cyan-400 via-emerald-400 to-purple-500 animate-[scan_1.2s_ease-in-out_infinite] w-1/2 mx-auto rounded-full"></div>
             </div>
             <div class="flex items-center gap-2 text-cyan-400 font-mono text-sm font-bold tracking-wider animate-pulse">
-                <span>ðŸŒ±</span> MENSINTESIS GAMET & TUMBUHAN ERCIS...
+                <span>🌱</span> MENSINTESIS GAMET & TUMBUHAN ERCIS...
             </div>
             <p class="text-xs text-slate-400 mt-2 font-mono">Menerapkan Hukum Segregasi Bebas Mendel (Hukum I)</p>
         </div>
@@ -538,21 +534,21 @@
                                 Visualisasi Gamet & Keturunan Tanaman Ercis (F1)
                             </h3>
                             <p class="text-xs text-slate-400 mt-1">
-                                Peleburan Gamet Serbuk Sari (â™‚) & Bakal Biji (â™€) menjadi tanaman ercis utuh
+                                Peleburan Gamet Serbuk Sari (♂) & Bakal Biji (♀) menjadi tanaman ercis utuh
                             </p>
                         </div>
                         <span class="text-xs font-mono px-2.5 py-1 rounded bg-slate-800 text-cyan-300 border border-slate-700 self-start">
-                            Papan Punnett 2Ã—2
+                            Papan Punnett 2×2
                         </span>
                     </div>
 
                     <!-- Legend Gamet -->
                     <div class="flex items-center gap-4 text-xs font-mono mb-4 p-2.5 bg-slate-900/60 rounded-xl border border-white/5">
                         <span class="flex items-center gap-1.5 text-cyan-400">
-                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span> Gamet Jantan (â™‚ Serbuk Sari)
+                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span> Gamet Jantan (♂ Serbuk Sari)
                         </span>
                         <span class="flex items-center gap-1.5 text-pink-400">
-                            <span class="w-2.5 h-2.5 rounded-full bg-pink-400"></span> Gamet Betina (â™€ Bakal Biji)
+                            <span class="w-2.5 h-2.5 rounded-full bg-pink-400"></span> Gamet Betina (♀ Bakal Biji)
                         </span>
                     </div>
 
@@ -562,22 +558,22 @@
 
                             <!-- Sudut Kiri Atas (Label Sumbu) -->
                             <div class="flex flex-col items-center justify-center p-3 bg-slate-900/80 rounded-2xl border border-white/10">
-                                <span class="text-[10px] font-mono text-pink-400 font-bold">â™€ IBU (Kolom)</span>
+                                <span class="text-[10px] font-mono text-pink-400 font-bold">♀ IBU (Kolom)</span>
                                 <div class="w-full h-px bg-white/10 my-1"></div>
-                                <span class="text-[10px] font-mono text-cyan-400 font-bold">â™‚ AYAH (Baris)</span>
+                                <span class="text-[10px] font-mono text-cyan-400 font-bold">♂ AYAH (Baris)</span>
                             </div>
 
-                            <!-- Header Gamet Ibu 1 (â™€) -->
+                            <!-- Header Gamet Ibu 1 (♀) -->
                             <div class="p-3 bg-pink-950/30 rounded-2xl border border-pink-500/30 flex flex-col items-center justify-center" id="header-p2-1-box">
                                 <div id="header-p2-1">?</div>
                             </div>
 
-                            <!-- Header Gamet Ibu 2 (â™€) -->
+                            <!-- Header Gamet Ibu 2 (♀) -->
                             <div class="p-3 bg-pink-950/30 rounded-2xl border border-pink-500/30 flex flex-col items-center justify-center" id="header-p2-2-box">
                                 <div id="header-p2-2">?</div>
                             </div>
 
-                            <!-- Baris 1: Header Gamet Ayah 1 (â™‚) -->
+                            <!-- Baris 1: Header Gamet Ayah 1 (♂) -->
                             <div class="p-3 bg-cyan-950/30 rounded-2xl border border-cyan-500/30 flex flex-col items-center justify-center" id="header-p1-1-box">
                                 <div id="header-p1-1">?</div>
                             </div>
@@ -592,7 +588,7 @@
                                 <!-- Injected -->
                             </div>
 
-                            <!-- Baris 2: Header Gamet Ayah 2 (â™‚) -->
+                            <!-- Baris 2: Header Gamet Ayah 2 (♂) -->
                             <div class="p-3 bg-cyan-950/30 rounded-2xl border border-cyan-500/30 flex flex-col items-center justify-center" id="header-p1-2-box">
                                 <div id="header-p1-2">?</div>
                             </div>
@@ -609,10 +605,10 @@
 
                         </div>
                     </div>
-                    <p class="sm:hidden text-center text-[10px] text-pink-400/80 font-mono pt-1">ðŸ‘‰ Geser tabel jika diperlukan untuk melihat sel lengkap ðŸ‘ˆ</p>
+                    <p class="sm:hidden text-center text-[10px] text-pink-400/80 font-mono pt-1">👉 Geser tabel jika diperlukan untuk melihat sel lengkap 👈</p>
 
                     <div class="mt-4 flex items-center justify-between text-[11px] text-slate-400 font-mono">
-                        <span>ðŸ’¡ Klik tombol pada tanaman untuk inspeksi morfologi mendalam</span>
+                        <span>💡 Klik tombol pada tanaman untuk inspeksi morfologi mendalam</span>
                         <span class="text-cyan-400">Total: 4 Kombinasi Zigot</span>
                     </div>
                 </div>
@@ -625,7 +621,7 @@
                         <div class="flex items-center justify-between mb-4">
                             <div>
                                 <h3 class="font-bold text-lg text-white flex items-center gap-2">
-                                    <span>ðŸŒ±</span> Galeri Hasil Panen F1
+                                    <span>🌱</span> Galeri Hasil Panen F1
                                 </h3>
                                 <p class="text-xs text-slate-400">Wujud nyata fenotipe tanaman yang tumbuh</p>
                             </div>
@@ -648,7 +644,7 @@
                     <div class="glass-card p-6 rounded-3xl flex flex-col justify-between">
                         <div>
                             <h3 class="font-bold text-lg mb-1 text-white flex items-center gap-2">
-                                <span>ðŸ“Š</span> Statistik Pewarisan
+                                <span>📊</span> Statistik Pewarisan
                             </h3>
                             <p class="text-xs text-slate-400 mb-6">Probabilitas matematis fenotipe keturunan F1.</p>
 
@@ -656,7 +652,7 @@
                                 <div>
                                     <div class="flex justify-between text-xs font-semibold mb-2">
                                         <span class="text-purple-400 font-bold flex items-center gap-1.5" id="label-stat-dom">
-                                            <span>ðŸŒ¸</span> Dominan
+                                            <span>🌸</span> Dominan
                                         </span>
                                         <span class="text-white font-mono text-sm" id="stat-dom-num">0%</span>
                                     </div>
@@ -670,7 +666,7 @@
                                 <div>
                                     <div class="flex justify-between text-xs font-semibold mb-2">
                                         <span class="text-teal-400 font-bold flex items-center gap-1.5" id="label-stat-res">
-                                            <span>ðŸ¤</span> Resesif
+                                            <span>🤍</span> Resesif
                                         </span>
                                         <span class="text-white font-mono text-sm" id="stat-res-num">0%</span>
                                     </div>
@@ -730,7 +726,7 @@
 
                 <div class="mt-8 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-2 text-[10px] text-slate-500 font-mono">
                     <div>
-                        REFERENSI ILMIAH: MENDEL, G. (1866) <em>Versuche Ã¼ber Pflanzen-Hybriden</em>; CAMPBELL BIOLOGY (12TH ED), GENETICS: A CONCEPTUAL APPROACH (PIERCE, 2020).
+                        REFERENSI ILMIAH: MENDEL, G. (1866) <em>Versuche über Pflanzen-Hybriden</em>; CAMPBELL BIOLOGY (12TH ED), GENETICS: A CONCEPTUAL APPROACH (PIERCE, 2020).
                     </div>
                     <div class="text-cyan-400">GEN-LAB PISUM SYSTEM v8.5</div>
                 </div>
@@ -741,7 +737,7 @@
                 <div class="mb-6">
                     <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest">INFOGRAFIS ILMIAH</span>
                     <h3 class="text-xl font-bold text-white mt-0.5 flex items-center gap-2">
-                        <span>ðŸ§¬</span> Alur Biologis Hukum Segregasi Mendel I pada Tanaman Ercis
+                        <span>🧬</span> Alur Biologis Hukum Segregasi Mendel I pada Tanaman Ercis
                     </h3>
                     <p class="text-xs text-slate-400 mt-1">
                         Bagaimana pasangan alel pada sel induk memisah menjadi gamet haploid dan menyatu kembali saat pembuahan
@@ -766,7 +762,7 @@
                         <div class="w-10 h-10 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center font-bold text-sm mb-3 border border-purple-500/30">2</div>
                         <h4 class="text-sm font-bold text-white mb-1">Meiosis & Segregasi</h4>
                         <p class="text-xs text-slate-400 leading-relaxed">
-                            Saat pembentukan serbuk sari (â™‚) dan bakal biji (â™€), pasangan alel memisah secara bebas ke gamet berlainan.
+                            Saat pembentukan serbuk sari (♂) dan bakal biji (♀), pasangan alel memisah secara bebas ke gamet berlainan.
                         </p>
                         <div class="mt-3 px-2 py-1 rounded bg-slate-800 text-[11px] font-mono text-purple-300">
                             Hukum I Mendel (1 : 1)
@@ -781,7 +777,7 @@
                             Serbuk sari membuahi sel telur secara acak, memulihkan status diploid (2n) pada embrio biji.
                         </p>
                         <div class="mt-3 px-2 py-1 rounded bg-slate-800 text-[11px] font-mono text-pink-300">
-                            Papan Punnett 2Ã—2
+                            Papan Punnett 2×2
                         </div>
                     </div>
 
@@ -856,10 +852,10 @@
     <div id="pea-tutorial-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-card max-w-xl w-full rounded-2xl p-6 md:p-8 border border-purple-500/40 shadow-2xl relative text-left">
             <button onclick="togglePeaTutorialModal()" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition">
-                âœ•
+                ✕
             </button>
             <div class="flex items-center gap-3 mb-4 border-b border-white/10 pb-3">
-                <span class="text-3xl">ðŸ“–</span>
+                <span class="text-3xl">📖</span>
                 <div>
                     <h3 class="text-lg font-bold text-white">Panduan Simulasi Monohibrid Tanaman Ercis</h3>
                     <p class="text-xs text-purple-400 font-mono">HUKUM SEGREGASI BEBAS (HUKUM I MENDEL)</p>
@@ -878,8 +874,8 @@
                 </div>
 
                 <div class="p-3 bg-slate-900/60 rounded-xl border border-white/10">
-                    <h4 class="font-bold text-pink-400 mb-1">3. Amati Segregasi Gamet & Papan Punnett 2Ã—2</h4>
-                    <p>Perhatikan pembentukan sel gamet haploid: serbuk sari (â™‚) dan bakal biji (â™€). Papan Punnett menampilkan 4 kombinasi diploid F1 lengkap dengan ilustrasi morfologi tanaman ercis yang nyata.</p>
+                    <h4 class="font-bold text-pink-400 mb-1">3. Amati Segregasi Gamet & Papan Punnett 2×2</h4>
+                    <p>Perhatikan pembentukan sel gamet haploid: serbuk sari (♂) dan bakal biji (♀). Papan Punnett menampilkan 4 kombinasi diploid F1 lengkap dengan ilustrasi morfologi tanaman ercis yang nyata.</p>
                 </div>
 
                 <div class="p-3 bg-slate-900/60 rounded-xl border border-white/10">
@@ -906,12 +902,12 @@
             flower: {
                 key: 'flower',
                 name: 'Warna Bunga',
-                symbol: 'ðŸŒ¸',
+                symbol: '🌸',
                 domName: 'Bunga Ungu',
-                domIcon: 'ðŸŒ¸',
+                domIcon: '🌸',
                 domBadge: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
                 resName: 'Bunga Putih',
-                resIcon: 'ðŸ¤',
+                resIcon: '🤍',
                 resBadge: 'bg-slate-700/50 text-slate-200 border-slate-500/40',
                 defaultDom: 'A',
                 defaultRes: 'a',
@@ -921,12 +917,12 @@
             height: {
                 key: 'height',
                 name: 'Tinggi Batang',
-                symbol: 'ðŸ“',
+                symbol: '📏',
                 domName: 'Batang Tinggi',
-                domIcon: 'ðŸŒ±',
+                domIcon: '🌱',
                 domBadge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
                 resName: 'Batang Kerdil',
-                resIcon: 'ðŸŒ¿',
+                resIcon: '🌿',
                 resBadge: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
                 defaultDom: 'T',
                 defaultRes: 't',
@@ -936,12 +932,12 @@
             seed_shape: {
                 key: 'seed_shape',
                 name: 'Bentuk Biji',
-                symbol: 'ðŸŸ¢',
+                symbol: '🟢',
                 domName: 'Biji Bulat Licin',
-                domIcon: 'ðŸŸ¢',
+                domIcon: '🟢',
                 domBadge: 'bg-green-500/20 text-green-300 border-green-500/40',
                 resName: 'Biji Keriput',
-                resIcon: 'ðŸ«’',
+                resIcon: '🫒',
                 resBadge: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/40',
                 defaultDom: 'B',
                 defaultRes: 'b',
@@ -951,12 +947,12 @@
             seed_color: {
                 key: 'seed_color',
                 name: 'Warna Biji',
-                symbol: 'ðŸŸ¡',
+                symbol: '🟡',
                 domName: 'Biji Kuning',
-                domIcon: 'ðŸŸ¡',
+                domIcon: '🟡',
                 domBadge: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/40',
                 resName: 'Biji Hijau',
-                resIcon: 'ðŸŸ¢',
+                resIcon: '🟢',
                 resBadge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
                 defaultDom: 'K',
                 defaultRes: 'k',
@@ -1124,7 +1120,7 @@
                         <circle cx="35" cy="35" r="24" fill="url(#pollenGrad_${allele})" stroke="#ca8a04" stroke-width="2"/>
                         <circle cx="35" cy="35" r="18" fill="rgba(2, 6, 23, 0.75)"/>
                     </g>
-                    <text x="54" y="20" font-size="12" fill="#06b6d4" font-weight="bold">â™‚</text>
+                    <text x="54" y="20" font-size="12" fill="#06b6d4" font-weight="bold">♂</text>
                     <text x="35" y="42" text-anchor="middle" font-size="22" font-family="'Fira Code', monospace" font-weight="bold" fill="${isDom ? '#38bdf8' : '#a7f3d0'}">${allele}</text>
                 </svg>
                 <span class="text-[10px] font-mono text-cyan-400 font-bold mt-1">Serbuk Sari (${allele})</span>
@@ -1152,7 +1148,7 @@
                         <!-- Mikrofil -->
                         <circle cx="12" cy="35" r="3" fill="#fb7185"/>
                     </g>
-                    <text x="54" y="20" font-size="12" fill="#f43f5e" font-weight="bold">â™€</text>
+                    <text x="54" y="20" font-size="12" fill="#f43f5e" font-weight="bold">♀</text>
                     <text x="35" y="42" text-anchor="middle" font-size="22" font-family="'Fira Code', monospace" font-weight="bold" fill="${isDom ? '#f472b6' : '#fbcfe8'}">${allele}</text>
                 </svg>
                 <span class="text-[10px] font-mono text-pink-400 font-bold mt-1">Bakal Biji (${allele})</span>
@@ -1241,7 +1237,7 @@
             const p2a = document.getElementById('p2a').value.trim() || trait.defaultDom;
             const p2b = document.getElementById('p2b').value.trim() || trait.defaultRes;
 
-            // Induk 1 (â™‚)
+            // Induk 1 (♂)
             const p1IsDom = (p1a === p1a.toUpperCase() && p1a.match(/[a-zA-Z]/)) || (p1b === p1b.toUpperCase() && p1b.match(/[a-zA-Z]/));
             const p1Pheno = p1IsDom ? trait.domName : trait.resName;
             const p1Icon = p1IsDom ? trait.domIcon : trait.resIcon;
@@ -1257,14 +1253,14 @@
                         <span class="text-xs text-white font-semibold flex items-center gap-1">${p1Icon} ${p1Pheno}</span>
                         <span class="text-[10px] text-slate-400 block">${p1Zygo}</span>
                         <div class="flex items-center gap-2 mt-1">
-                            <span class="text-[10px] px-1.5 py-0.2 rounded bg-cyan-900/60 text-cyan-200 border border-cyan-700/50 font-mono">â™‚ ${p1a}</span>
-                            <span class="text-[10px] px-1.5 py-0.2 rounded bg-cyan-900/60 text-cyan-200 border border-cyan-700/50 font-mono">â™‚ ${p1b}</span>
+                            <span class="text-[10px] px-1.5 py-0.2 rounded bg-cyan-900/60 text-cyan-200 border border-cyan-700/50 font-mono">♂ ${p1a}</span>
+                            <span class="text-[10px] px-1.5 py-0.2 rounded bg-cyan-900/60 text-cyan-200 border border-cyan-700/50 font-mono">♂ ${p1b}</span>
                         </div>
                     </div>
                 </div>
             `;
 
-            // Induk 2 (â™€)
+            // Induk 2 (♀)
             const p2IsDom = (p2a === p2a.toUpperCase() && p2a.match(/[a-zA-Z]/)) || (p2b === p2b.toUpperCase() && p2b.match(/[a-zA-Z]/));
             const p2Pheno = p2IsDom ? trait.domName : trait.resName;
             const p2Icon = p2IsDom ? trait.domIcon : trait.resIcon;
@@ -1280,8 +1276,8 @@
                         <span class="text-xs text-white font-semibold flex items-center gap-1">${p2Icon} ${p2Pheno}</span>
                         <span class="text-[10px] text-slate-400 block">${p2Zygo}</span>
                         <div class="flex items-center gap-2 mt-1">
-                            <span class="text-[10px] px-1.5 py-0.2 rounded bg-pink-900/60 text-pink-200 border border-pink-700/50 font-mono">â™€ ${p2a}</span>
-                            <span class="text-[10px] px-1.5 py-0.2 rounded bg-pink-900/60 text-pink-200 border border-pink-700/50 font-mono">â™€ ${p2b}</span>
+                            <span class="text-[10px] px-1.5 py-0.2 rounded bg-pink-900/60 text-pink-200 border border-pink-700/50 font-mono">♀ ${p2a}</span>
+                            <span class="text-[10px] px-1.5 py-0.2 rounded bg-pink-900/60 text-pink-200 border border-pink-700/50 font-mono">♀ ${p2b}</span>
                         </div>
                     </div>
                 </div>
@@ -1340,8 +1336,8 @@
             let cellIndex = 0;
             for (let i = 0; i < 2; i++) {
                 for (let j = 0; j < 2; j++) {
-                    const allele1 = p1[i]; // Ayah (â™‚)
-                    const allele2 = p2[j]; // Ibu (â™€)
+                    const allele1 = p1[i]; // Ayah (♂)
+                    const allele2 = p2[j]; // Ibu (♀)
 
                     // Aturan Urutan: Huruf kapital selalu di depan jika satu besar satu kecil
                     let combined = "";
@@ -1382,9 +1378,9 @@
                     cell.innerHTML = `
                         <!-- Gamet Fusion Badge -->
                         <div class="w-full flex items-center justify-between text-[10px] font-mono px-2 py-0.5 rounded bg-black/40 border border-white/5 mb-1">
-                            <span class="text-cyan-400">â™‚ ${allele1}</span>
+                            <span class="text-cyan-400">♂ ${allele1}</span>
                             <span class="text-slate-500 font-bold">+</span>
-                            <span class="text-pink-400">â™€ ${allele2}</span>
+                            <span class="text-pink-400">♀ ${allele2}</span>
                         </div>
 
                         <!-- Gambar Tanaman Ercis SVG -->
@@ -1409,7 +1405,7 @@
                             <!-- Tombol Inspeksi Morfologi -->
                             <button onclick="openPeaModal('${combined}', ${hasDominant}, '${allele1}', '${allele2}', '${zygoName}', '${phenoName}')" 
                                 class="mt-2 w-full text-[10px] font-mono bg-slate-900/80 hover:bg-cyan-900/50 text-slate-300 hover:text-cyan-200 py-1 px-2 rounded-lg border border-white/10 hover:border-cyan-500/40 transition flex items-center justify-center gap-1">
-                                <span>ðŸ”</span> Telaah Morfologi
+                                <span>🔍</span> Telaah Morfologi
                             </button>
                         </div>
                     `;
@@ -1502,15 +1498,15 @@
             // Deskripsi Naratif Panen
             let narrative = "";
             if (domCount === 4) {
-                narrative = `ðŸŒ¿ <strong>Keseragaman F1 (100%):</strong> Seluruh 4 biji hasil persilangan tumbuh menjadi <strong>tanaman ercis ${trait.domName.toLowerCase()}</strong>. Sifat resesif tertutupi seutuhnya karena kehadiran alel dominan.`;
+                narrative = `🌿 <strong>Keseragaman F1 (100%):</strong> Seluruh 4 biji hasil persilangan tumbuh menjadi <strong>tanaman ercis ${trait.domName.toLowerCase()}</strong>. Sifat resesif tertutupi seutuhnya karena kehadiran alel dominan.`;
             } else if (domCount === 3) {
-                narrative = `ðŸŒ¿ <strong>Rasio Klasik 3:1:</strong> Dari 4 tanaman yang berkecambah, rata-rata <strong>3 tanaman berfenotipe ${trait.domName.toLowerCase()}</strong> dan <strong>1 tanaman berfenotipe ${trait.resName.toLowerCase()}</strong>. Sifat resesif muncul kembali pada keturunan homozigot.`;
+                narrative = `🌿 <strong>Rasio Klasik 3:1:</strong> Dari 4 tanaman yang berkecambah, rata-rata <strong>3 tanaman berfenotipe ${trait.domName.toLowerCase()}</strong> dan <strong>1 tanaman berfenotipe ${trait.resName.toLowerCase()}</strong>. Sifat resesif muncul kembali pada keturunan homozigot.`;
             } else if (domCount === 2) {
-                narrative = `ðŸŒ¿ <strong>Rasio Uji Silang 1:1 (50% : 50%):</strong> Menghasilkan proporsi seimbang yaitu <strong>2 tanaman ${trait.domName.toLowerCase()}</strong> dan <strong>2 tanaman ${trait.resName.toLowerCase()}</strong>.`;
+                narrative = `🌿 <strong>Rasio Uji Silang 1:1 (50% : 50%):</strong> Menghasilkan proporsi seimbang yaitu <strong>2 tanaman ${trait.domName.toLowerCase()}</strong> dan <strong>2 tanaman ${trait.resName.toLowerCase()}</strong>.`;
             } else if (domCount === 1) {
-                narrative = `ðŸŒ¿ <strong>Pewarisan Resesif Dominan (1:3):</strong> Hanya <strong>1 tanaman ${trait.domName.toLowerCase()}</strong> dan <strong>3 tanaman ${trait.resName.toLowerCase()}</strong>.`;
+                narrative = `🌿 <strong>Pewarisan Resesif Dominan (1:3):</strong> Hanya <strong>1 tanaman ${trait.domName.toLowerCase()}</strong> dan <strong>3 tanaman ${trait.resName.toLowerCase()}</strong>.`;
             } else {
-                narrative = `ðŸŒ¿ <strong>Galur Murni Resesif (100%):</strong> Semua 4 tanaman yang tumbuh berfenotipe <strong>${trait.resName.toLowerCase()}</strong> karena tidak ada alel dominan sama sekali.`;
+                narrative = `🌿 <strong>Galur Murni Resesif (100%):</strong> Semua 4 tanaman yang tumbuh berfenotipe <strong>${trait.resName.toLowerCase()}</strong> karena tidak ada alel dominan sama sekali.`;
             }
             document.getElementById('harvest-summary-text').innerHTML = narrative;
 
@@ -1527,12 +1523,12 @@
 
             let analysis = "";
 
-            analysis += `<p><strong class="text-cyan-400 font-mono">[STATUS EKSPERIMEN MENDEL]:</strong> Persilangan terkontrol tanaman ercis (<em>Pisum sativum</em> L.) dilakukan antara galur induk Parental 1 (â™‚ <strong>${p1Gen}</strong>) dan Parental 2 (â™€ <strong>${p2Gen}</strong>) untuk menyelidiki pewarisan karakter <strong>${trait.name}</strong>. Eksperimen ini mengonfirmasi berlakunya <span class="citation-link" data-ref="Hukum I Mendel: Pasangan alel memisah secara bebas pada saat meiosis/gametogenesis">Hukum Segregasi Bebas (Hukum I Mendel)</span>.</p>`;
+            analysis += `<p><strong class="text-cyan-400 font-mono">[STATUS EKSPERIMEN MENDEL]:</strong> Persilangan terkontrol tanaman ercis (<em>Pisum sativum</em> L.) dilakukan antara galur induk Parental 1 (♂ <strong>${p1Gen}</strong>) dan Parental 2 (♀ <strong>${p2Gen}</strong>) untuk menyelidiki pewarisan karakter <strong>${trait.name}</strong>. Eksperimen ini mengonfirmasi berlakunya <span class="citation-link" data-ref="Hukum I Mendel: Pasangan alel memisah secara bebas pada saat meiosis/gametogenesis">Hukum Segregasi Bebas (Hukum I Mendel)</span>.</p>`;
 
             analysis += `<p>Berdasarkan simulasi papan Punnett, peluang ekspresi fenotipe <strong>${trait.domName}</strong> pada generasi Filial 1 (F1) adalah <strong>${domPct}%</strong>, sedangkan fenotipe <strong>${trait.resName}</strong> memiliki probabilitas <strong>${100 - domPct}%</strong>. Distribusi rasio genotipe yang terbentuk adalah <strong>${genoRatioStr}</strong>.</p>`;
 
             if (domPct === 75) {
-                analysis += `<p><strong class="text-purple-400">ANALISIS PERSILANGAN MONOHIBRID F1:</strong> Rasio fenotipe 3:1 ini adalah proporsi khas persilangan antar-individu heterozigot (Aa Ã— Aa). Kedua tanaman induk bertindak sebagai pembawa sifat resesif tersembunyi (<em>carrier</em>). Pemisahan alel secara acak saat pembentukan serbuk sari dan sel telur memungkinkan alel resesif bertemu kembali dengan probabilitas 25% (homozigot resesif), memunculkan kembali sifat ${trait.resName.toLowerCase()} yang sempat tersembunyi <span class="citation-link" data-ref="Campbell Biology 12th Ed, Bab 14">(Urry et al., 2020)</span>.</p>`;
+                analysis += `<p><strong class="text-purple-400">ANALISIS PERSILANGAN MONOHIBRID F1:</strong> Rasio fenotipe 3:1 ini adalah proporsi khas persilangan antar-individu heterozigot (Aa × Aa). Kedua tanaman induk bertindak sebagai pembawa sifat resesif tersembunyi (<em>carrier</em>). Pemisahan alel secara acak saat pembentukan serbuk sari dan sel telur memungkinkan alel resesif bertemu kembali dengan probabilitas 25% (homozigot resesif), memunculkan kembali sifat ${trait.resName.toLowerCase()} yang sempat tersembunyi <span class="citation-link" data-ref="Campbell Biology 12th Ed, Bab 14">(Urry et al., 2020)</span>.</p>`;
             } else if (domPct === 50) {
                 analysis += `<p><strong class="text-cyan-400">ANALISIS UJI SILANG (TEST CROSS):</strong> Pola segregasi 1:1 (50% dominan : 50% resesif) adalah ciri khas uji silang (<em>test cross</em>). Salah satu induk membawa genotipe heterozigot sementara pasangannya adalah homozigot resesif. Metode ini secara historis dirancang Gregor Mendel untuk membuktikan bahwa individu berfenotipe dominan dapat membawa alel resesif yang tersembunyi.</p>`;
             } else if (domPct === 100) {
@@ -1555,7 +1551,7 @@
             document.getElementById('modal-geno').innerText = genotype;
             document.getElementById('modal-zygo').innerText = zygoName;
             document.getElementById('modal-pheno').innerHTML = `${hasDominant ? trait.domIcon : trait.resIcon} ${phenoName}`;
-            document.getElementById('modal-gametes').innerText = `Gamet Jantan Serbuk Sari (â™‚ ${a1}) + Gamet Betina Bakal Biji (â™€ ${a2})`;
+            document.getElementById('modal-gametes').innerText = `Gamet Jantan Serbuk Sari (♂ ${a1}) + Gamet Betina Bakal Biji (♀ ${a2})`;
             document.getElementById('modal-bio').innerText = trait.bioExplanation;
 
             modal.classList.remove('hidden');
@@ -1582,4 +1578,3 @@
 </body>
 
 </html>
-

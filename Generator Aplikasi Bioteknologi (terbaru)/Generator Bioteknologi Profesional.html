@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id" class="dark">
 
 <head>
@@ -348,19 +348,15 @@
     
         /* Mobile Performance Optimizations */
         @media (max-width: 768px) {
-            * {
+            *, *::before, *::after {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
             }
-            .glass-card, .archive-panel, .glass-panel, .simulator-panel, .control-panel, .result-panel {
-                background: #0f172a !important;
+            .glass-panel {
+                background-color: rgba(15, 23, 42, 0.88) !important;
             }
-            header, aside, .glass-header {
-                background: #0f172a !important;
-            }
-            .ambient-biotech-vector, .ambient-plasmid-ring, .particle-layer, .scan-line, .scan-bar, .scan-overlay {
-                display: none !important;
-                animation: none !important;
+            .glass-panel-secondary {
+                background-color: rgba(15, 23, 42, 0.92) !important;
             }
         }
     </style>
@@ -371,9 +367,9 @@
     <!-- Signature Biotechnology Animated Background Layer (Plasmid Vectors & Telemetry) -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <!-- Ambient Neon Glow Core -->
-        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-blue-600/15 rounded-full filter blur-[100px] hidden md:block pointer-events-none"></div>
-        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-cyan-500/15 rounded-full filter blur-[110px] hidden md:block pointer-events-none"></div>
-        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-indigo-700/10 rounded-full filter blur-[120px] hidden md:block pointer-events-none"></div>
+        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-blue-600/15 rounded-full filter blur-[100px] pointer-events-none hidden md:block"></div>
+        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-cyan-500/15 rounded-full filter blur-[110px] pointer-events-none hidden md:block"></div>
+        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-indigo-700/10 rounded-full filter blur-[120px] pointer-events-none hidden md:block"></div>
 
         <!-- Rotating Circular Bacterial Plasmid Vector (Double Circular DNA + Restriction Sites) -->
         <div class="absolute top-1/4 right-[12%] w-64 h-64 opacity-25">
@@ -426,11 +422,11 @@
         <div class="flex items-center gap-2 sm:gap-3">
             <!-- Panduan / Tutorial Button -->
             <button id="btn-open-tutorial" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 hover:text-white border border-blue-500/40 text-xs font-mono transition flex items-center gap-1.5 shadow-sm active:scale-95">
-                <span>ðŸ’¡</span> <span class="hidden sm:inline">Panduan</span>
+                <span>💡</span> <span class="hidden sm:inline">Panduan</span>
             </button>
 
             <a href="../index.html" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-mono transition flex items-center gap-1.5 active:scale-95">
-                <span>â†</span> <span class="hidden sm:inline">Beranda</span>
+                <span>←</span> <span class="hidden sm:inline">Beranda</span>
             </a>
 
             <div class="text-[10px] font-mono text-blue-400 hidden lg:block">
@@ -450,7 +446,7 @@
             <!-- Mobile Drawer Top Bar with Close Button (Visible on mobile only) -->
             <div class="flex items-center justify-between p-3.5 border-b border-slate-800/80 md:hidden bg-slate-900/80 shrink-0">
                 <div class="flex items-center gap-2">
-                    <span class="text-blue-400 font-mono text-xs font-bold tracking-wider">ðŸ§¬ INDEKS TOPIK</span>
+                    <span class="text-blue-400 font-mono text-xs font-bold tracking-wider">🧬 INDEKS TOPIK</span>
                     <span id="topic-count-badge" class="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-[10px] font-mono border border-blue-500/30">16 Modul</span>
                 </div>
                 <button id="btn-close-drawer" class="p-1.5 rounded-lg bg-slate-800/80 text-slate-400 hover:text-white hover:bg-slate-700 transition" aria-label="Tutup Indeks">
@@ -461,7 +457,7 @@
             <!-- Search & Filter Controls -->
             <div class="p-3 sm:p-4 border-b border-slate-800/80 shrink-0 bg-slate-950/30">
                 <div class="relative mb-2.5">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-slate-500 text-xs">ðŸ”</span>
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-slate-500 text-xs">🔍</span>
                     <input type="text" id="topic-search" placeholder="Cari topik bioteknologi..." class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700 text-slate-200 placeholder-slate-500 text-xs font-mono focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
                 </div>
 
@@ -483,7 +479,7 @@
             <div class="p-3 border-t border-slate-800/80 shrink-0 bg-slate-950/40">
                 <div class="bg-blue-900/20 border border-blue-900/50 p-2.5 rounded text-[11px] text-blue-300 font-mono flex items-center justify-between">
                     <div>
-                        <span class="animate-pulse text-emerald-400">â—</span> 16 TOPIK ILMIAH
+                        <span class="animate-pulse text-emerald-400">●</span> 16 TOPIK ILMIAH
                     </div>
                     <button id="sidebar-btn-tutorial" class="text-xs text-blue-400 hover:text-white underline">Panduan</button>
                 </div>
@@ -499,7 +495,7 @@
                 <div class="archive-panel rounded-2xl overflow-hidden mb-6 sm:mb-8 max-w-4xl mx-auto">
                     <div class="holo-container h-36 sm:h-44 md:h-52">
                         <div class="scan-line"></div>
-                        <div class="holo-icon text-4xl sm:text-5xl md:text-6xl" id="display-icon">ðŸ§¬</div>
+                        <div class="holo-icon text-4xl sm:text-5xl md:text-6xl" id="display-icon">🧬</div>
                         <div class="absolute bottom-2 right-3 sm:right-4 text-[9px] sm:text-[10px] font-mono text-blue-400/80 tracking-wider">VISUALIZATION RENDER</div>
                     </div>
                     <div class="p-4 sm:p-6 border-t border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950">
@@ -575,7 +571,7 @@
                 <!-- Chapter Navigation Footer (Prev / Next Topic) -->
                 <div id="article-nav-footer" class="max-w-4xl mx-auto mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
                     <button id="btn-prev-topic" class="w-full sm:w-1/2 p-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 text-left text-xs font-mono transition flex items-center gap-3 group active:scale-95">
-                        <span class="text-blue-400 text-base group-hover:-translate-x-1 transition-transform">â†</span>
+                        <span class="text-blue-400 text-base group-hover:-translate-x-1 transition-transform">←</span>
                         <div class="min-w-0">
                             <div class="text-[10px] text-slate-500 uppercase tracking-wider">Topik Sebelumnya</div>
                             <div id="prev-topic-title" class="font-bold text-slate-200 group-hover:text-white truncate">-</div>
@@ -586,7 +582,7 @@
                             <div class="text-[10px] text-slate-500 uppercase tracking-wider">Topik Selanjutnya</div>
                             <div id="next-topic-title" class="font-bold text-slate-200 group-hover:text-white truncate">-</div>
                         </div>
-                        <span class="text-blue-400 text-base group-hover:translate-x-1 transition-transform">â†’</span>
+                        <span class="text-blue-400 text-base group-hover:translate-x-1 transition-transform">→</span>
                     </button>
                 </div>
 
@@ -603,7 +599,7 @@
                 cat: 'BIOTEKNOLOGI MODERN (KESEHATAN)',
                 title: 'Insulin Rekombinan',
                 subtitle: 'Produksi hormon insulin manusia menggunakan bakteri E. coli.',
-                icon: 'ðŸ’‰',
+                icon: '💉',
                 content: `
                     <h3>1. Definisi & Latar Belakang</h3>
                     <p>Insulin rekombinan adalah bentuk sintetis dari hormon insulin manusia yang diproduksi menggunakan teknologi DNA rekombinan. Sebelum teknologi ini ditemukan pada tahun 1978, penderita diabetes bergantung pada insulin yang diekstraksi dari pankreas sapi (bovine) atau babi (porcine). Meskipun efektif, insulin hewan sering menyebabkan reaksi alergi karena perbedaan struktur asam amino <a href="#" class="innote" data-ref="Campbell, N. A., et al. (2020). Biology: A Global Approach. 12th Ed. Pearson. Hal 435.">(Campbell et al., 2020)</a>.</p>
@@ -629,7 +625,7 @@
                 cat: 'BIOTEKNOLOGI PANGAN (PERTANIAN)',
                 title: 'Golden Rice',
                 subtitle: 'Padi transgenik penghasil Beta-Karoten (Provitamin A).',
-                icon: 'ðŸŒ¾',
+                icon: '🌾',
                 content: `
                     <h3>1. Definisi & Tujuan</h3>
                     <p>Golden Rice adalah varietas padi transgenik (Genetically Modified Organism/GMO) yang direkayasa untuk menghasilkan beta-karoten di dalam bijinya (endosperma). Proyek ini bertujuan mengatasi defisiensi Vitamin A (VAD) yang menyebabkan kebutaan dan kematian pada anak-anak di negara berkembang yang makanan pokoknya adalah nasi <a href="#" class="innote" data-ref="Ye, X., et al. (2000). Engineering the provitamin A pathway into rice endosperm. Science, 287(5451), 303-305.">(Ye et al., 2000)</a>.</p>
@@ -653,7 +649,7 @@
                 cat: 'BIOTEKNOLOGI LINGKUNGAN',
                 title: 'Bioremediasi',
                 subtitle: 'Penggunaan mikroorganisme untuk membersihkan polutan.',
-                icon: 'ðŸ›¢ï¸',
+                icon: '🛢️',
                 content: `
                     <h3>1. Konsep Dasar</h3>
                     <p>Bioremediasi adalah teknologi pengelolaan limbah yang menggunakan organisme hidup (terutama bakteri dan jamur) untuk menetralkan atau menghilangkan zat berbahaya dari lingkungan terkontaminasi. Ini adalah metode yang lebih ramah lingkungan dibandingkan metode fisik atau kimia.</p>
@@ -676,7 +672,7 @@
                 cat: 'BIOTEKNOLOGI FORENSIK',
                 title: 'DNA Profiling (PCR)',
                 subtitle: 'Identifikasi individu berdasarkan sidik jari genetik.',
-                icon: 'ðŸ”',
+                icon: '🔍',
                 content: `
                     <h3>1. Prinsip Dasar</h3>
                     <p>DNA Profiling (Fingerprinting) adalah teknik untuk mengidentifikasi individu berdasarkan profil DNA unik mereka. Metode ini sangat krusial dalam forensik (kriminalitas) dan tes paternitas. Metode modern menggunakan analisis STR (Short Tandem Repeats) pada bagian DNA non-coding yang sangat bervariasi antar individu.</p>
@@ -684,22 +680,22 @@
                     <h3>2. Peran PCR (Polymerase Chain Reaction)</h3>
                     <p>Seringkali sampel DNA di TKP sangat sedikit (tetesan darah kering, akar rambut). PCR digunakan untuk melipatgandakan (amplifikasi) segmen DNA tersebut jutaan kali lipat dalam waktu singkat secara in-vitro. PCR melibatkan siklus suhu:</p>
                     <ul>
-                        <li><strong>Denaturasi (95Â°C):</strong> Memisahkan untai ganda DNA.</li>
-                        <li><strong>Annealing (50-60Â°C):</strong> Penempelan primer.</li>
-                        <li><strong>Ekstensi (72Â°C):</strong> Enzim Taq Polymerase membentuk untai DNA baru.</li>
+                        <li><strong>Denaturasi (95°C):</strong> Memisahkan untai ganda DNA.</li>
+                        <li><strong>Annealing (50-60°C):</strong> Penempelan primer.</li>
+                        <li><strong>Ekstensi (72°C):</strong> Enzim Taq Polymerase membentuk untai DNA baru.</li>
                     </ul>
                     <p>Teknik ini ditemukan oleh Kary Mullis pada tahun 1983 dan memenangkan Hadiah Nobel <a href="#" class="innote" data-ref="Mullis, K., et al. (1986). Specific enzymatic amplification of DNA in vitro. Cold Spring Harbor Symposia.">(Mullis et al., 1986)</a>.</p>
                 `,
                 stats: { eco: 60, sus: 50, eth: 40 },
                 tags: ['PCR', 'STR', 'Forensik', 'Elektroforesis', 'Taq Polymerase']
             },
-            // ===== TOPIK BARU #05 â€” CRISPR-Cas9 =====
+            // ===== TOPIK BARU #05 — CRISPR-Cas9 =====
             {
                 id: '05',
                 cat: 'BIOTEKNOLOGI MODERN (GENOME EDITING)',
                 title: 'CRISPR-Cas9',
                 subtitle: 'Sistem pengeditan genom presisi tinggi berbasis imun adaptif bakteri.',
-                icon: 'âœ‚ï¸',
+                icon: '✂️',
                 content: `
                     <h3>1. Asal Usul &amp; Definisi</h3>
                     <p>CRISPR-Cas9 (Clustered Regularly Interspaced Short Palindromic Repeats) adalah teknologi pengeditan genom yang berasal dari sistem imun adaptif bakteri dan archaea. Bakteri menggunakan sistem ini secara alami untuk mempertahankan diri terhadap infeksi bakteriofag (virus bakteri) dengan memotong DNA asing yang masuk <a href="#" class="innote" data-ref="Jinek, M., et al. (2012). A programmable dual-RNA-guided DNA endonuclease in adaptive bacterial immunity. Science, 337(6096), 816-821.">(Jinek et al., 2012)</a>. Penemuan ini mengantarkan Jennifer Doudna dan Emmanuelle Charpentier meraih Nobel Kimia 2020.</p>
@@ -730,13 +726,13 @@
                 stats: { eco: 90, sus: 80, eth: 75 },
                 tags: ['CRISPR', 'Cas9', 'gRNA', 'Genome Editing', 'Nobel 2020', 'Off-Target']
             },
-            // ===== TOPIK BARU #06 â€” Terapi Gen =====
+            // ===== TOPIK BARU #06 — Terapi Gen =====
             {
                 id: '06',
                 cat: 'BIOTEKNOLOGI KESEHATAN',
                 title: 'Terapi Gen (Gene Therapy)',
                 subtitle: 'Penyisipan gen fungsional untuk menyembuhkan penyakit genetik.',
-                icon: 'ðŸ§ª',
+                icon: '🧪',
                 content: `
                     <h3>1. Konsep Dasar</h3>
                     <p>Terapi gen adalah pendekatan medis yang bertujuan mengobati atau mencegah penyakit dengan cara memodifikasi materi genetik pasien. Alih-alih menggunakan obat atau operasi konvensional, terapi gen mengoreksi akar penyebab penyakit pada level DNA. Konsep ini pertama kali berhasil diterapkan pada pasien manusia tahun 1990 untuk ADA-SCID (defisiensi imun berat) <a href="#" class="innote" data-ref="Blaese, R. M., et al. (1995). T lymphocyte-directed gene therapy for ADA-SCID. Science, 270(5235), 475-480.">(Blaese et al., 1995)</a>.</p>
@@ -767,13 +763,13 @@
                 stats: { eco: 85, sus: 70, eth: 65 },
                 tags: ['Gene Therapy', 'AAV', 'Lentivirus', 'Ex Vivo', 'In Vivo', 'Vektor']
             },
-            // ===== TOPIK BARU #07 â€” Sel Punca & iPSC =====
+            // ===== TOPIK BARU #07 — Sel Punca & iPSC =====
             {
                 id: '07',
                 cat: 'BIOTEKNOLOGI BIOMEDIS',
                 title: 'Sel Punca &amp; iPSC',
                 subtitle: 'Sel pluripoten terinduksi untuk kedokteran regeneratif.',
-                icon: 'ðŸ”¬',
+                icon: '🔬',
                 content: `
                     <h3>1. Apa Itu Sel Punca (Stem Cells)?</h3>
                     <p>Sel punca adalah sel yang memiliki dua kemampuan unik: <strong>self-renewal</strong> (memperbarui diri tanpa batas) dan <strong>diferensiasi</strong> (berubah menjadi berbagai tipe sel spesifik seperti sel saraf, otot jantung, sel darah, dll). Berdasarkan potensinya, sel punca dikategorikan menjadi:</p>
@@ -791,7 +787,7 @@
                     <ul>
                         <li><strong>Model Penyakit:</strong> iPSC dari pasien dapat didiferensiasi menjadi sel yang terdampak penyakit untuk mempelajari mekanisme patologi secara in vitro, seperti pada penyakit Parkinson dan ALS.</li>
                         <li><strong>Uji Obat:</strong> Pengujian efektivitas dan toksisitas kandidat obat pada sel manusia spesifik tanpa menggunakan hewan percobaan.</li>
-                        <li><strong>Terapi Sel:</strong> Memproduksi sel pengganti yang kompatibel secara imunologis untuk transplantasi, misalnya sel retina untuk degenerasi makula <a href="#" class="innote" data-ref="Yamanaka, S. (2020). Pluripotent stem cell-based cell therapy â€” promise and challenges. Cell Stem Cell, 27(4), 523-531.">(Yamanaka, 2020)</a>.</li>
+                        <li><strong>Terapi Sel:</strong> Memproduksi sel pengganti yang kompatibel secara imunologis untuk transplantasi, misalnya sel retina untuk degenerasi makula <a href="#" class="innote" data-ref="Yamanaka, S. (2020). Pluripotent stem cell-based cell therapy — promise and challenges. Cell Stem Cell, 27(4), 523-531.">(Yamanaka, 2020)</a>.</li>
                     </ul>
 
                     <h3>4. Tantangan Saat Ini</h3>
@@ -800,13 +796,13 @@
                 stats: { eco: 80, sus: 75, eth: 70 },
                 tags: ['iPSC', 'Sel Punca', 'Yamanaka', 'Pluripoten', 'Nobel 2012', 'Regeneratif']
             },
-            // ===== TOPIK BARU #08 â€” Elektroforesis Gel =====
+            // ===== TOPIK BARU #08 — Elektroforesis Gel =====
             {
                 id: '08',
                 cat: 'BIOTEKNOLOGI LABORATORIUM',
                 title: 'Elektroforesis Gel',
                 subtitle: 'Teknik pemisahan fragmen DNA berdasarkan ukuran molekul.',
-                icon: 'âš¡',
+                icon: '⚡',
                 content: `
                     <h3>1. Prinsip Dasar</h3>
                     <p>Elektroforesis gel adalah teknik laboratorium fundamental dalam biologi molekuler yang digunakan untuk memisahkan, mengidentifikasi, dan memurnikan fragmen DNA (atau RNA dan protein) berdasarkan ukuran dan muatan listriknya. Teknik ini menjadi prasyarat mutlak dalam hampir semua eksperimen bioteknologi modern <a href="#" class="innote" data-ref="Sambrook, J. &amp; Russell, D. W. (2001). Molecular Cloning: A Laboratory Manual. 3rd Ed. Cold Spring Harbor Laboratory Press.">(Sambrook &amp; Russell, 2001)</a>.</p>
@@ -814,15 +810,15 @@
                     <h3>2. Cara Kerja</h3>
                     <p>Prinsip kerjanya memanfaatkan sifat muatan listrik negatif yang dimiliki molekul DNA (karena gugus fosfat pada backbone-nya):</p>
                     <ul>
-                        <li><strong>Persiapan Gel:</strong> Matriks gel agarosa (untuk fragmen DNA standar 100 bpâ€“25 kb) atau poliakrilamid (untuk resolusi tinggi, perbedaan 1 nukleotida) disiapkan dalam cetakan dengan sisir pembentuk sumur (well).</li>
+                        <li><strong>Persiapan Gel:</strong> Matriks gel agarosa (untuk fragmen DNA standar 100 bp–25 kb) atau poliakrilamid (untuk resolusi tinggi, perbedaan 1 nukleotida) disiapkan dalam cetakan dengan sisir pembentuk sumur (well).</li>
                         <li><strong>Pemuatan Sampel:</strong> Sampel DNA dicampur dengan loading dye (pewarna pelacak + gliserol untuk pembobotan) lalu dimasukkan ke dalam sumur gel.</li>
-                        <li><strong>Migrasi:</strong> Ketika arus listrik dialirkan, DNA bermigrasi dari kutub negatif (katoda) menuju kutub positif (anoda). Gel bertindak sebagai saringan molekuler â€” fragmen kecil bergerak lebih cepat, fragmen besar tertahan dan bergerak lebih lambat.</li>
+                        <li><strong>Migrasi:</strong> Ketika arus listrik dialirkan, DNA bermigrasi dari kutub negatif (katoda) menuju kutub positif (anoda). Gel bertindak sebagai saringan molekuler — fragmen kecil bergerak lebih cepat, fragmen besar tertahan dan bergerak lebih lambat.</li>
                         <li><strong>Visualisasi:</strong> Pita-pita DNA divisualisasikan menggunakan pewarna interkalasi (ethidium bromide atau SYBR Green/Safe) di bawah sinar ultraviolet (UV) <a href="#" class="innote" data-ref="Lee, P. Y., et al. (2012). Agarose gel electrophoresis for the separation of DNA fragments. Journal of Visualized Experiments, (62), e3923.">(Lee et al., 2012)</a>.</li>
                     </ul>
 
                     <h3>3. Faktor yang Mempengaruhi</h3>
                     <ul>
-                        <li><strong>Konsentrasi Gel:</strong> Konsentrasi agarosa tinggi (2â€“3%) untuk fragmen kecil; rendah (0.5â€“0.8%) untuk fragmen besar.</li>
+                        <li><strong>Konsentrasi Gel:</strong> Konsentrasi agarosa tinggi (2–3%) untuk fragmen kecil; rendah (0.5–0.8%) untuk fragmen besar.</li>
                         <li><strong>Tegangan Listrik:</strong> Tegangan terlalu tinggi mempercepat migrasi namun menurunkan resolusi dan dapat merusak gel akibat pemanasan.</li>
                         <li><strong>Konformasi DNA:</strong> DNA superkoil, linier, dan sirkular terbuka memiliki laju migrasi berbeda meskipun ukurannya sama.</li>
                         <li><strong>Buffer:</strong> TAE (Tris-Asetat-EDTA) atau TBE (Tris-Borat-EDTA) menjaga pH dan konduktivitas listrik selama proses.</li>
@@ -839,16 +835,16 @@
                 stats: { eco: 50, sus: 60, eth: 5 },
                 tags: ['Agarosa', 'Elektroforesis', 'Gel', 'UV', 'Loading Dye', 'Laboratorium']
             },
-            // ===== TOPIK BARU #09 â€” Antibodi Monoklonal =====
+            // ===== TOPIK BARU #09 — Antibodi Monoklonal =====
             {
                 id: '09',
                 cat: 'BIOTEKNOLOGI IMUNOLOGI',
                 title: 'Antibodi Monoklonal',
                 subtitle: 'Produksi antibodi identik melalui teknologi hibridoma.',
-                icon: 'ðŸ›¡ï¸',
+                icon: '🛡️',
                 content: `
                     <h3>1. Definisi &amp; Sejarah</h3>
-                    <p>Antibodi monoklonal (mAb) adalah antibodi yang diproduksi oleh klon sel identik tunggal, sehingga memiliki spesifisitas tinggi terhadap satu epitop (bagian antigen) tertentu. Teknologi ini dipelopori oleh Georges KÃ¶hler dan CÃ©sar Milstein pada tahun 1975 melalui pengembangan teknik hibridoma, yang memenangkan Nobel Kedokteran 1984 <a href="#" class="innote" data-ref="KÃ¶hler, G. &amp; Milstein, C. (1975). Continuous cultures of fused cells secreting antibody of predefined specificity. Nature, 256(5517), 495-497.">(KÃ¶hler &amp; Milstein, 1975)</a>.</p>
+                    <p>Antibodi monoklonal (mAb) adalah antibodi yang diproduksi oleh klon sel identik tunggal, sehingga memiliki spesifisitas tinggi terhadap satu epitop (bagian antigen) tertentu. Teknologi ini dipelopori oleh Georges Köhler dan César Milstein pada tahun 1975 melalui pengembangan teknik hibridoma, yang memenangkan Nobel Kedokteran 1984 <a href="#" class="innote" data-ref="Köhler, G. &amp; Milstein, C. (1975). Continuous cultures of fused cells secreting antibody of predefined specificity. Nature, 256(5517), 495-497.">(Köhler &amp; Milstein, 1975)</a>.</p>
 
                     <h3>2. Pembuatan dengan Teknologi Hibridoma</h3>
                     <p>Proses produksi antibodi monoklonal melalui hibridoma melibatkan langkah-langkah berikut:</p>
@@ -856,7 +852,7 @@
                         <li><strong>Imunisasi:</strong> Hewan percobaan (biasanya mencit) diinjeksi dengan antigen target untuk merangsang respons imun dan produksi antibodi oleh sel B limfosit di limpa.</li>
                         <li><strong>Isolasi Sel B:</strong> Sel B penghasil antibodi diisolasi dari limpa mencit yang telah diimunisasi.</li>
                         <li><strong>Fusi Sel (Hibridisasi):</strong> Sel B difusikan dengan sel mieloma (sel kanker yang mampu membelah tanpa batas) menggunakan agen fusi seperti PEG (polyethylene glycol), menghasilkan sel hibridoma.</li>
-                        <li><strong>Seleksi HAT:</strong> Sel hibridoma diseleksi menggunakan medium HAT (Hypoxanthine-Aminopterin-Thymidine) â€” hanya sel hibridoma yang bertahan hidup.</li>
+                        <li><strong>Seleksi HAT:</strong> Sel hibridoma diseleksi menggunakan medium HAT (Hypoxanthine-Aminopterin-Thymidine) — hanya sel hibridoma yang bertahan hidup.</li>
                         <li><strong>Skrining &amp; Kloning:</strong> Sel hibridoma yang menghasilkan antibodi dengan spesifisitas yang diinginkan diidentifikasi melalui ELISA, lalu diklon untuk produksi massal <a href="#" class="innote" data-ref="Nelson, A. L., Dhimolea, E., &amp; Reichert, J. M. (2010). Development trends for human monoclonal antibody therapeutics. Nature Reviews Drug Discovery, 9(10), 767-774.">(Nelson et al., 2010)</a>.</li>
                     </ul>
 
@@ -879,13 +875,13 @@
                 stats: { eco: 95, sus: 85, eth: 30 },
                 tags: ['Hibridoma', 'Antibodi', 'Monoklonal', 'ELISA', 'Nobel 1984', 'Imunoterapi']
             },
-            // ===== TOPIK BARU #10 â€” Kloning Hewan (Dolly) =====
+            // ===== TOPIK BARU #10 — Kloning Hewan (Dolly) =====
             {
                 id: '10',
                 cat: 'BIOTEKNOLOGI REPRODUKSI',
                 title: 'Kloning Hewan (Domba Dolly)',
                 subtitle: 'Kloning mamalia pertama melalui Somatic Cell Nuclear Transfer.',
-                icon: 'ðŸ‘',
+                icon: '🐑',
                 content: `
                     <h3>1. Latar Belakang Bersejarah</h3>
                     <p>Domba Dolly, lahir pada 5 Juli 1996 di Roslin Institute, Skotlandia, merupakan mamalia pertama yang berhasil dikloning dari sel somatik dewasa. Kelahirannya membuktikan bahwa sel yang telah terdiferensiasi penuh (sel kelenjar susu) dapat "diprogram ulang" menjadi sel totipoten yang mampu membentuk organisme utuh <a href="#" class="innote" data-ref="Wilmut, I., et al. (1997). Viable offspring derived from fetal and adult mammalian cells. Nature, 385(6619), 810-813.">(Wilmut et al., 1997)</a>. Penemuan ini mengguncang dogma biologi bahwa diferensiasi sel bersifat ireversibel.</p>
@@ -898,7 +894,7 @@
                         <li><strong>Transfer Nukleus:</strong> Nukleus dari sel donor difusikan dengan oosit yang telah dienukleasi menggunakan pulsa elektrik.</li>
                         <li><strong>Aktivasi &amp; Implantasi:</strong> Embrio hasil fusi diaktivasi secara elektrik untuk memulai pembelahan sel, lalu ditanamkan ke dalam uterus ibu pengganti (surrogate mother) domba Scottish Blackface.</li>
                     </ul>
-                    <p>Dari 277 percobaan fusi sel, hanya 29 yang berkembang menjadi embrio, dan hanya <strong>satu</strong> yang berhasil lahir hidup â€” Dolly <a href="#" class="innote" data-ref="Campbell, K. H. S., et al. (1996). Sheep cloned by nuclear transfer from a cultured cell line. Nature, 380(6569), 64-66.">(Campbell et al., 1996)</a>.</p>
+                    <p>Dari 277 percobaan fusi sel, hanya 29 yang berkembang menjadi embrio, dan hanya <strong>satu</strong> yang berhasil lahir hidup — Dolly <a href="#" class="innote" data-ref="Campbell, K. H. S., et al. (1996). Sheep cloned by nuclear transfer from a cultured cell line. Nature, 380(6569), 64-66.">(Campbell et al., 1996)</a>.</p>
 
                     <h3>3. Dampak &amp; Warisan Ilmiah</h3>
                     <ul>
@@ -913,16 +909,16 @@
                 stats: { eco: 55, sus: 40, eth: 90 },
                 tags: ['SCNT', 'Dolly', 'Kloning', 'Enukleasi', 'Reprogramming', 'Bioetika']
             },
-            // ===== TOPIK BARU #11 â€” Vaksin mRNA =====
+            // ===== TOPIK BARU #11 — Vaksin mRNA =====
             {
                 id: '11',
                 cat: 'BIOTEKNOLOGI VAKSIN',
                 title: 'Vaksin mRNA',
                 subtitle: 'Teknologi vaksin generasi baru berbasis messenger RNA.',
-                icon: 'ðŸ’Š',
+                icon: '💊',
                 content: `
                     <h3>1. Revolusi Teknologi Vaksin</h3>
-                    <p>Vaksin mRNA merupakan terobosan bioteknologi yang menjadi sorotan global saat pandemi COVID-19. Berbeda dari vaksin konvensional yang menggunakan virus yang dilemahkan atau dimatikan, vaksin mRNA mengirimkan instruksi genetik berupa messenger RNA sintetis ke dalam sel tubuh agar sel tersebut memproduksi protein antigen virus secara mandiri <a href="#" class="innote" data-ref="Pardi, N., et al. (2018). mRNA vaccines â€” a new era in vaccinology. Nature Reviews Drug Discovery, 17(4), 261-279.">(Pardi et al., 2018)</a>. Riset ini dirintis oleh Katalin KarikÃ³ dan Drew Weissman (Nobel Kedokteran 2023) yang menemukan bahwa modifikasi nukleosida (pseudouridine) dapat mengurangi respon inflamasi terhadap mRNA sintetis.</p>
+                    <p>Vaksin mRNA merupakan terobosan bioteknologi yang menjadi sorotan global saat pandemi COVID-19. Berbeda dari vaksin konvensional yang menggunakan virus yang dilemahkan atau dimatikan, vaksin mRNA mengirimkan instruksi genetik berupa messenger RNA sintetis ke dalam sel tubuh agar sel tersebut memproduksi protein antigen virus secara mandiri <a href="#" class="innote" data-ref="Pardi, N., et al. (2018). mRNA vaccines — a new era in vaccinology. Nature Reviews Drug Discovery, 17(4), 261-279.">(Pardi et al., 2018)</a>. Riset ini dirintis oleh Katalin Karikó dan Drew Weissman (Nobel Kedokteran 2023) yang menemukan bahwa modifikasi nukleosida (pseudouridine) dapat mengurangi respon inflamasi terhadap mRNA sintetis.</p>
 
                     <h3>2. Komponen Kunci: Lipid Nanoparticle (LNP)</h3>
                     <p>mRNA adalah molekul yang sangat rapuh dan mudah didegradasi oleh enzim RNase. Untuk melindungi dan menghantarkannya ke dalam sel, digunakan sistem penghantaran Lipid Nanoparticle yang terdiri dari:</p>
@@ -946,20 +942,20 @@
                     <h3>4. Keunggulan &amp; Masa Depan</h3>
                     <ul>
                         <li>Pengembangan sangat cepat (sekuens mRNA Moderna dirancang dalam <strong>2 hari</strong> setelah genom virus dipublikasikan).</li>
-                        <li>Platform yang fleksibel â€” dapat diadaptasi untuk berbagai penyakit infeksi, kanker, dan penyakit autoimun.</li>
+                        <li>Platform yang fleksibel — dapat diadaptasi untuk berbagai penyakit infeksi, kanker, dan penyakit autoimun.</li>
                         <li>Tantangan: stabilitas termal (memerlukan penyimpanan suhu ultra-rendah) dan optimasi formulasi LNP generasi baru.</li>
                     </ul>
                 `,
                 stats: { eco: 95, sus: 85, eth: 25 },
                 tags: ['mRNA', 'LNP', 'Vaksin', 'COVID-19', 'Nobel 2023', 'Protein Spike']
             },
-            // ===== TOPIK BARU #12 â€” Tanaman Bt =====
+            // ===== TOPIK BARU #12 — Tanaman Bt =====
             {
                 id: '12',
                 cat: 'BIOTEKNOLOGI PERTANIAN',
                 title: 'Tanaman Bt (Transgenik)',
                 subtitle: 'Tanaman tahan hama dengan gen insektisidal Bacillus thuringiensis.',
-                icon: 'ðŸŒ±',
+                icon: '🌱',
                 content: `
                     <h3>1. Definisi &amp; Prinsip</h3>
                     <p>Tanaman Bt adalah tanaman transgenik yang direkayasa secara genetik dengan menyisipkan gen cry dari bakteri tanah <em>Bacillus thuringiensis</em> (Bt). Gen ini mengkode protein kristal insektisidal yang bersifat toksik secara spesifik terhadap larva serangga hama tertentu, namun aman bagi manusia, hewan, dan serangga non-target <a href="#" class="innote" data-ref="Schnepf, E., et al. (1998). Bacillus thuringiensis and its pesticidal crystal proteins. Microbiology and Molecular Biology Reviews, 62(3), 775-806.">(Schnepf et al., 1998)</a>.</p>
@@ -968,10 +964,10 @@
                     <p>Protein Cry bekerja melalui mekanisme unik yang membuatnya sangat selektif:</p>
                     <ul>
                         <li><strong>Ingesti:</strong> Larva serangga (misalnya penggerek batang jagung) memakan jaringan tanaman Bt yang mengandung protein Cry dalam bentuk pro-toksin inaktif.</li>
-                        <li><strong>Solubilisasi:</strong> Di dalam usus tengah (midgut) serangga yang bersifat basa (pH 9â€“12), kristal protein Cry terlarut.</li>
+                        <li><strong>Solubilisasi:</strong> Di dalam usus tengah (midgut) serangga yang bersifat basa (pH 9–12), kristal protein Cry terlarut.</li>
                         <li><strong>Aktivasi Proteolitik:</strong> Enzim protease spesifik serangga memotong pro-toksin menjadi fragmen toksin aktif (~65 kDa).</li>
-                        <li><strong>Pengikatan Reseptor:</strong> Toksin aktif berikatan dengan reseptor spesifik (cadherin, aminopeptidase N) di membran epitel usus â€” reseptor ini <em>tidak ada</em> pada mamalia, sehingga tidak toksik bagi manusia.</li>
-                        <li><strong>Pembentukan Pori:</strong> Toksin menyisip ke membran sel dan membentuk pori-pori, menyebabkan kebocoran osmotik, lisis sel, sepsis, dan kematian serangga dalam 24â€“72 jam <a href="#" class="innote" data-ref="Bravo, A., Gill, S. S., &amp; SoberÃ³n, M. (2007). Mode of action of Bacillus thuringiensis Cry and Cyt toxins. Toxicon, 49(4), 423-435.">(Bravo et al., 2007)</a>.</li>
+                        <li><strong>Pengikatan Reseptor:</strong> Toksin aktif berikatan dengan reseptor spesifik (cadherin, aminopeptidase N) di membran epitel usus — reseptor ini <em>tidak ada</em> pada mamalia, sehingga tidak toksik bagi manusia.</li>
+                        <li><strong>Pembentukan Pori:</strong> Toksin menyisip ke membran sel dan membentuk pori-pori, menyebabkan kebocoran osmotik, lisis sel, sepsis, dan kematian serangga dalam 24–72 jam <a href="#" class="innote" data-ref="Bravo, A., Gill, S. S., &amp; Soberón, M. (2007). Mode of action of Bacillus thuringiensis Cry and Cyt toxins. Toxicon, 49(4), 423-435.">(Bravo et al., 2007)</a>.</li>
                     </ul>
 
                     <h3>3. Contoh Produk Komersial</h3>
@@ -990,16 +986,16 @@
                 stats: { eco: 85, sus: 75, eth: 55 },
                 tags: ['Bt', 'Transgenik', 'Cry Protein', 'Insektisidal', 'Resistensi', 'Pertanian']
             },
-            // ===== TOPIK BARU #13 â€” Fermentasi & Bioteknologi Tradisional =====
+            // ===== TOPIK BARU #13 — Fermentasi & Bioteknologi Tradisional =====
             {
                 id: '13',
                 cat: 'BIOTEKNOLOGI KONVENSIONAL',
                 title: 'Fermentasi &amp; Bioteknologi Tradisional',
                 subtitle: 'Pemanfaatan mikroorganisme alami dalam industri pangan dan farmasi.',
-                icon: 'ðŸ§«',
+                icon: '🧫',
                 content: `
                     <h3>1. Definisi Bioteknologi Konvensional</h3>
-                    <p>Bioteknologi konvensional (tradisional) adalah pemanfaatan organisme hidup atau bagiannya secara utuh, tanpa rekayasa genetika, untuk menghasilkan produk yang bermanfaat bagi manusia. Praktik ini telah dilakukan selama ribuan tahun, jauh sebelum istilah "bioteknologi" dicetuskan. Prinsip utamanya adalah <strong>fermentasi</strong> â€” proses metabolisme anaerobik (atau aerobik terbatas) oleh mikroorganisme yang mengubah substrat organik menjadi produk bernilai <a href="#" class="innote" data-ref="Thieman, W. J. &amp; Palladino, M. A. (2013). Introduction to Biotechnology. 3rd Ed. Pearson. Chapter 1.">(Thieman &amp; Palladino, 2013)</a>.</p>
+                    <p>Bioteknologi konvensional (tradisional) adalah pemanfaatan organisme hidup atau bagiannya secara utuh, tanpa rekayasa genetika, untuk menghasilkan produk yang bermanfaat bagi manusia. Praktik ini telah dilakukan selama ribuan tahun, jauh sebelum istilah "bioteknologi" dicetuskan. Prinsip utamanya adalah <strong>fermentasi</strong> — proses metabolisme anaerobik (atau aerobik terbatas) oleh mikroorganisme yang mengubah substrat organik menjadi produk bernilai <a href="#" class="innote" data-ref="Thieman, W. J. &amp; Palladino, M. A. (2013). Introduction to Biotechnology. 3rd Ed. Pearson. Chapter 1.">(Thieman &amp; Palladino, 2013)</a>.</p>
 
                     <h3>2. Jenis-Jenis Fermentasi</h3>
                     <ul>
@@ -1028,19 +1024,19 @@
                 stats: { eco: 75, sus: 95, eth: 5 },
                 tags: ['Fermentasi', 'Tempe', 'Penisilin', 'Ragi', 'Tradisional', 'Metabolit']
             },
-            // ===== TOPIK BARU #14 â€” Bioinformatika & Genomik =====
+            // ===== TOPIK BARU #14 — Bioinformatika & Genomik =====
             {
                 id: '14',
                 cat: 'BIOTEKNOLOGI KOMPUTASIONAL',
                 title: 'Bioinformatika &amp; Genomik',
                 subtitle: 'Analisis data genom berskala besar dengan komputasi dan AI.',
-                icon: 'ðŸ’»',
+                icon: '💻',
                 content: `
                     <h3>1. Definisi Bioinformatika</h3>
                     <p>Bioinformatika adalah bidang interdisipliner yang menggabungkan biologi, ilmu komputer, matematika, dan statistika untuk mengelola, menganalisis, dan menginterpretasi data biologi berskala besar (Big Data). Bidang ini menjadi tulang punggung bioteknologi modern karena kemajuan teknologi sekuensing yang menghasilkan data genomik dalam jumlah masif <a href="#" class="innote" data-ref="Luscombe, N. M., Greenbaum, D., &amp; Gerstein, M. (2001). What is bioinformatics? A proposed definition and overview of the field. Methods of Information in Medicine, 40(4), 346-358.">(Luscombe et al., 2001)</a>.</p>
 
                     <h3>2. Proyek Genom Manusia (Human Genome Project)</h3>
-                    <p>Proyek monumental yang berlangsung tahun 1990â€“2003 ini berhasil memetakan seluruh ~3,2 miliar pasangan basa DNA manusia. Proyek ini mengidentifikasi sekitar 20.000â€“25.000 gen pengkode protein dan mengungkap bahwa hanya ~1,5% genom yang mengkode protein â€” sisanya merupakan sekuens regulatori, intron, dan DNA non-coding <a href="#" class="innote" data-ref="International Human Genome Sequencing Consortium. (2004). Finishing the euchromatic sequence of the human genome. Nature, 431(7011), 931-945.">(IHGSC, 2004)</a>.</p>
+                    <p>Proyek monumental yang berlangsung tahun 1990–2003 ini berhasil memetakan seluruh ~3,2 miliar pasangan basa DNA manusia. Proyek ini mengidentifikasi sekitar 20.000–25.000 gen pengkode protein dan mengungkap bahwa hanya ~1,5% genom yang mengkode protein — sisanya merupakan sekuens regulatori, intron, dan DNA non-coding <a href="#" class="innote" data-ref="International Human Genome Sequencing Consortium. (2004). Finishing the euchromatic sequence of the human genome. Nature, 431(7011), 931-945.">(IHGSC, 2004)</a>.</p>
 
                     <h3>3. Next-Generation Sequencing (NGS)</h3>
                     <p>NGS merevolusi bioteknologi dengan memungkinkan sekuensing paralel masif (millions of reads simultan) dengan kecepatan tinggi dan biaya yang turun drastis:</p>
@@ -1050,7 +1046,7 @@
                     </ul>
                     <p>Platform NGS populer meliputi:</p>
                     <ul>
-                        <li><strong>Illumina (Short-Read):</strong> Sequencing-by-synthesis, akurasi tinggi (lebih dari 99,9%), read pendek (150â€“300 bp). Dominan di pasar.</li>
+                        <li><strong>Illumina (Short-Read):</strong> Sequencing-by-synthesis, akurasi tinggi (lebih dari 99,9%), read pendek (150–300 bp). Dominan di pasar.</li>
                         <li><strong>Oxford Nanopore (Long-Read):</strong> Sekuensing berbasis nanopore, read sangat panjang (lebih dari 100 kb), portable (MinION seukuran USB), cocok untuk analisis struktural dan epigenetik.</li>
                         <li><strong>PacBio HiFi:</strong> Kombinasi read panjang dengan akurasi tinggi melalui circular consensus sequencing <a href="#" class="innote" data-ref="Goodwin, S., McPherson, J. D., &amp; McCombie, W. R. (2016). Coming of age: ten years of next-generation sequencing technologies. Nature Reviews Genetics, 17(6), 333-351.">(Goodwin et al., 2016)</a>.</li>
                     </ul>
@@ -1070,13 +1066,13 @@
                 stats: { eco: 90, sus: 90, eth: 15 },
                 tags: ['NGS', 'Genomik', 'Bioinformatika', 'AlphaFold', 'Proteomik', 'Big Data']
             },
-            // ===== TOPIK BARU #15 â€” Terapi Gen Anemia Sel Sabit =====
+            // ===== TOPIK BARU #15 — Terapi Gen Anemia Sel Sabit =====
             {
                 id: '15',
                 cat: 'BIOTEKNOLOGI KESEHATAN (STUDI KASUS)',
                 title: 'Terapi Gen Anemia Sel Sabit',
                 subtitle: 'Penyembuhan penyakit genetik monogenik melalui CRISPR dan vektor viral.',
-                icon: 'ðŸ©¸',
+                icon: '🩸',
                 content: `
                     <h3>1. Tentang Anemia Sel Sabit (Sickle Cell Disease)</h3>
                     <p>Anemia sel sabit (SCD) adalah penyakit genetik autosomal resesif yang disebabkan oleh mutasi titik tunggal pada gen <em>HBB</em> (kromosom 11). Mutasi ini mengubah asam amino ke-6 rantai beta-globin dari glutamic acid (GAG) menjadi valine (GTG), menghasilkan hemoglobin abnormal yang disebut HbS. Dalam kondisi kadar oksigen rendah, HbS berpolimerisasi membentuk serat kaku yang mendeformasi eritrosit menjadi bentuk sabit (sickle) <a href="#" class="innote" data-ref="Rees, D. C., Williams, T. N., &amp; Gladwin, M. T. (2010). Sickle-cell disease. The Lancet, 376(9757), 2018-2031.">(Rees et al., 2010)</a>.</p>
@@ -1086,15 +1082,15 @@
                     <p>Pendekatan pertama menggunakan strategi penambahan gen fungsional:</p>
                     <ul>
                         <li>Sel punca hematopoietik (CD34+) pasien diambil melalui leukapheresis.</li>
-                        <li>Vektor lentiviral (turunan HIV yang dimodifikasi) membawa gen beta-A-T87Q-globin â€” versi termodifikasi beta-globin yang memiliki sifat anti-sickling.</li>
+                        <li>Vektor lentiviral (turunan HIV yang dimodifikasi) membawa gen beta-A-T87Q-globin — versi termodifikasi beta-globin yang memiliki sifat anti-sickling.</li>
                         <li>Gen terintegrasi ke genom sel punca dan diekspresikan setelah sel diinfuskan kembali ke pasien.</li>
                         <li>Sel punca yang telah dimodifikasi memproduksi hemoglobin fungsional (HbAT87Q) yang mencegah polimerisasi HbS <a href="#" class="innote" data-ref="Kanter, J., et al. (2022). Biologic and clinical efficacy of LentiGlobin for sickle cell disease. New England Journal of Medicine, 386(7), 617-628.">(Kanter et al., 2022)</a>.</li>
                     </ul>
 
-                    <h3>3. Pendekatan Terapi Gen: Gene Editing â€” CRISPR (Casgevy)</h3>
+                    <h3>3. Pendekatan Terapi Gen: Gene Editing — CRISPR (Casgevy)</h3>
                     <p>Pendekatan kedua yang lebih inovatif menggunakan CRISPR-Cas9:</p>
                     <ul>
-                        <li>Target: enhancer eritroid gen <em>BCL11A</em> â€” faktor transkripsi represor yang membungkam ekspresi hemoglobin fetal (HbF) setelah kelahiran.</li>
+                        <li>Target: enhancer eritroid gen <em>BCL11A</em> — faktor transkripsi represor yang membungkam ekspresi hemoglobin fetal (HbF) setelah kelahiran.</li>
                         <li>CRISPR-Cas9 memotong dan mendisrupsi enhancer <em>BCL11A</em> di sel punca hematopoietik pasien secara ex vivo.</li>
                         <li>Dengan <em>BCL11A</em> yang dibungkam, gen gamma-globin diaktifkan kembali, menghasilkan peningkatan kadar HbF.</li>
                         <li>HbF secara alami menghambat polimerisasi HbS, mencegah pembentukan sel sabit dan gejala klinis SCD.</li>
@@ -1115,21 +1111,21 @@
                 stats: { eco: 70, sus: 65, eth: 60 },
                 tags: ['Sickle Cell', 'CRISPR', 'Casgevy', 'HbF', 'BCL11A', 'Lentivirus']
             },
-            // ===== TOPIK BARU #16 â€” Bioetika Rekayasa Genetika =====
+            // ===== TOPIK BARU #16 — Bioetika Rekayasa Genetika =====
             {
                 id: '16',
                 cat: 'BIOETIKA &amp; REGULASI',
                 title: 'Bioetika Rekayasa Genetika',
                 subtitle: 'Dilema moral, regulasi, dan masa depan modifikasi genetik manusia.',
-                icon: 'âš–ï¸',
+                icon: '⚖️',
                 content: `
                     <h3>1. Mengapa Bioetika Penting?</h3>
-                    <p>Kemajuan pesat bioteknologi genetika â€” dari CRISPR, terapi gen, hingga kloning â€” membawa pertanyaan etis fundamental yang tidak dapat dijawab oleh sains semata. Bioetika menjadi jembatan antara kemampuan teknologi dan tanggung jawab moral masyarakat. Empat prinsip bioetika klasik yang relevan meliputi: <strong>autonomy</strong> (hak individu), <strong>beneficence</strong> (kebaikan), <strong>non-maleficence</strong> (tidak merugikan), dan <strong>justice</strong> (keadilan) <a href="#" class="innote" data-ref="Beauchamp, T. L. &amp; Childress, J. F. (2019). Principles of Biomedical Ethics. 8th Ed. Oxford University Press.">(Beauchamp &amp; Childress, 2019)</a>.</p>
+                    <p>Kemajuan pesat bioteknologi genetika — dari CRISPR, terapi gen, hingga kloning — membawa pertanyaan etis fundamental yang tidak dapat dijawab oleh sains semata. Bioetika menjadi jembatan antara kemampuan teknologi dan tanggung jawab moral masyarakat. Empat prinsip bioetika klasik yang relevan meliputi: <strong>autonomy</strong> (hak individu), <strong>beneficence</strong> (kebaikan), <strong>non-maleficence</strong> (tidak merugikan), dan <strong>justice</strong> (keadilan) <a href="#" class="innote" data-ref="Beauchamp, T. L. &amp; Childress, J. F. (2019). Principles of Biomedical Ethics. 8th Ed. Oxford University Press.">(Beauchamp &amp; Childress, 2019)</a>.</p>
 
-                    <h3>2. Kasus "Bayi CRISPR" â€” He Jiankui (2018)</h3>
+                    <h3>2. Kasus "Bayi CRISPR" — He Jiankui (2018)</h3>
                     <p>Pada November 2018, ilmuwan China He Jiankui mengejutkan dunia dengan mengklaim telah mengedit gen CCR5 pada embrio manusia menggunakan CRISPR-Cas9, menghasilkan kelahiran bayi kembar (Lulu dan Nana) yang diklaim tahan terhadap infeksi HIV. Eksperimen ini dikecam keras oleh komunitas ilmiah global karena:</p>
                     <ul>
-                        <li><strong>Pengeditan Germline:</strong> Perubahan dilakukan pada embrio, sehingga modifikasi genetik akan diwariskan ke semua generasi berikutnya â€” konsekuensi yang tidak dapat diprediksi.</li>
+                        <li><strong>Pengeditan Germline:</strong> Perubahan dilakukan pada embrio, sehingga modifikasi genetik akan diwariskan ke semua generasi berikutnya — konsekuensi yang tidak dapat diprediksi.</li>
                         <li><strong>Prematur Secara Ilmiah:</strong> Risiko mosaicism (pengeditan tidak merata) dan efek off-target belum dapat dieliminasi secara memadai.</li>
                         <li><strong>Pelanggaran Informed Consent:</strong> Orang tua calon bayi tidak mendapat informasi risiko yang memadai.</li>
                         <li><strong>Tidak Diperlukan Secara Medis:</strong> Tersedia metode pencegahan HIV yang lebih aman dan efektif.</li>
@@ -1138,12 +1134,12 @@
 
                     <h3>3. Pengeditan Somatik vs Germline</h3>
                     <ul>
-                        <li><strong>Somatik (Diizinkan dengan regulasi):</strong> Modifikasi gen pada sel tubuh non-reproduktif pasien. Perubahan tidak diwariskan. Contoh: terapi Casgevy untuk anemia sel sabit â€” diterima secara luas karena manfaatnya jelas dan risikonya terbatas pada individu.</li>
+                        <li><strong>Somatik (Diizinkan dengan regulasi):</strong> Modifikasi gen pada sel tubuh non-reproduktif pasien. Perubahan tidak diwariskan. Contoh: terapi Casgevy untuk anemia sel sabit — diterima secara luas karena manfaatnya jelas dan risikonya terbatas pada individu.</li>
                         <li><strong>Germline (Moratorium global):</strong> Modifikasi gen pada sel reproduktif (sperma, ovum) atau embrio. Perubahan diwariskan ke generasi berikutnya. Saat ini, konsensus ilmiah dan regulasi internasional melarang pengeditan germline untuk tujuan reproduksi karena ketidakpastian dampak jangka panjang.</li>
                     </ul>
 
                     <h3>4. Kekhawatiran "Designer Babies"</h3>
-                    <p>Kemampuan pengeditan genom membuka kemungkinan "enhancement" â€” modifikasi genetik bukan untuk menyembuhkan penyakit tetapi untuk meningkatkan sifat (kecerdasan, penampilan fisik, kekuatan). Ini menimbulkan kekhawatiran:</p>
+                    <p>Kemampuan pengeditan genom membuka kemungkinan "enhancement" — modifikasi genetik bukan untuk menyembuhkan penyakit tetapi untuk meningkatkan sifat (kecerdasan, penampilan fisik, kekuatan). Ini menimbulkan kekhawatiran:</p>
                     <ul>
                         <li><strong>Ketidakadilan Sosial:</strong> Jika hanya orang kaya yang mampu mengakses, akan tercipta kesenjangan biologis permanen antarkelas sosial.</li>
                         <li><strong>Erosi Keberagaman:</strong> Standarisasi sifat manusia dapat mengurangi keberagaman genetik yang merupakan kekuatan adaptif spesies.</li>
@@ -1225,7 +1221,7 @@
             if (filteredData.length === 0) {
                 const emptyMsg = document.createElement('div');
                 emptyMsg.className = 'p-4 text-center text-xs font-mono text-slate-500 bg-slate-900/40 rounded-xl border border-slate-800/80 my-2';
-                emptyMsg.innerHTML = '<span>ðŸ” Tidak ada topik yang cocok.<br><button id="btn-reset-filters" class="mt-2 px-2.5 py-1 rounded bg-blue-600/30 text-blue-300 hover:bg-blue-600/50 text-[11px] transition">Reset Filter</button></span>';
+                emptyMsg.innerHTML = '<span>🔍 Tidak ada topik yang cocok.<br><button id="btn-reset-filters" class="mt-2 px-2.5 py-1 rounded bg-blue-600/30 text-blue-300 hover:bg-blue-600/50 text-[11px] transition">Reset Filter</button></span>';
                 menu.appendChild(emptyMsg);
                 document.getElementById('btn-reset-filters')?.addEventListener('click', () => {
                     document.getElementById('topic-search').value = '';
@@ -1576,17 +1572,17 @@
     <!-- Floating Mobile Quick Action Bar (Visible on mobile only) -->
     <div id="mobile-quick-bar" class="md:hidden fixed bottom-3 inset-x-3 z-30 flex items-center justify-between p-2 rounded-2xl bg-slate-950/90 backdrop-blur-xl border border-blue-500/30 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
         <button id="floating-btn-topics" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 border border-blue-500/40 text-xs font-mono font-semibold transition active:scale-95">
-            <span>ðŸ“š</span> <span>Topik (<span id="quick-current-idx">01</span>/16)</span>
+            <span>📚</span> <span>Topik (<span id="quick-current-idx">01</span>/16)</span>
         </button>
         <div class="flex items-center gap-1.5">
             <button id="floating-btn-prev" class="p-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-mono transition active:scale-95" aria-label="Topik Sebelumnya">
-                <span>â—€</span>
+                <span>◀</span>
             </button>
             <button id="floating-btn-next" class="p-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-mono transition active:scale-95" aria-label="Topik Berikutnya">
-                <span>â–¶</span>
+                <span>▶</span>
             </button>
             <button id="floating-btn-guide" class="p-2 px-2.5 rounded-xl bg-emerald-600/25 hover:bg-emerald-600/40 text-emerald-300 border border-emerald-500/40 text-xs font-mono transition active:scale-95" title="Buka Panduan Pengguna">
-                <span>ðŸ’¡</span>
+                <span>💡</span>
             </button>
         </div>
     </div>
@@ -1596,15 +1592,15 @@
         <div id="citation-dialog-card" class="w-full max-w-lg rounded-2xl bg-slate-900 border border-blue-500/40 p-5 shadow-[0_20px_50px_rgba(0,0,0,0.9)] transform transition-transform duration-200 translate-y-6 sm:translate-y-0">
             <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
                 <div class="flex items-center gap-2 text-blue-400 font-mono text-xs font-bold">
-                    <span>ðŸ“–</span> <span>RUJUKAN ILMIAH &amp; SITASI</span>
+                    <span>📖</span> <span>RUJUKAN ILMIAH &amp; SITASI</span>
                 </div>
-                <button id="btn-close-citation" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">âœ•</button>
+                <button id="btn-close-citation" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">✕</button>
             </div>
             <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800/80 mb-4">
                 <p id="citation-modal-text" class="text-sm text-slate-200 leading-relaxed font-sans italic"></p>
             </div>
             <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
-                <span class="text-emerald-400 flex items-center gap-1">âœ“ Peer-Reviewed Literature</span>
+                <span class="text-emerald-400 flex items-center gap-1">✓ Peer-Reviewed Literature</span>
                 <button id="btn-dismiss-citation" class="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold transition active:scale-95">Tutup</button>
             </div>
         </div>
@@ -1616,13 +1612,13 @@
             <!-- Header -->
             <div class="flex items-center justify-between px-5 py-4 border-b border-slate-800 bg-slate-950/60 shrink-0">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-blue-600/30 border border-blue-400/40 flex items-center justify-center text-base">ðŸ’¡</div>
+                    <div class="w-8 h-8 rounded-lg bg-blue-600/30 border border-blue-400/40 flex items-center justify-center text-base">💡</div>
                     <div>
                         <h3 class="text-base font-bold text-white font-display tracking-wide">PANDUAN EKSPLORASI BIO-ARCHIVE</h3>
                         <p class="text-[11px] font-mono text-blue-400">Database Pengetahuan Bioteknologi Profesional</p>
                     </div>
                 </div>
-                <button id="btn-close-tutorial" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">âœ•</button>
+                <button id="btn-close-tutorial" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">✕</button>
             </div>
             <!-- Content Steps -->
             <div class="p-4 sm:p-6 space-y-3.5 overflow-y-auto text-xs sm:text-sm text-slate-300">
@@ -1630,7 +1626,7 @@
                     <div class="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-400 font-mono font-bold flex items-center justify-center shrink-0 border border-blue-500/30 text-xs">01</div>
                     <div>
                         <h4 class="font-bold text-white mb-1">Navigasi Indeks &amp; Filter Topik</h4>
-                        <p class="text-slate-400 leading-relaxed text-xs">Pada perangkat seluler (HP), sentuh tombol <strong>â˜° TOPIK</strong> di pojok kiri atas atau bilah navigasi bawah untuk membuka laci 16 modul bioteknologi. Saring berdasarkan kategori (Kesehatan, Pertanian, Lingkungan, Forensik, Bioetika) atau ketik pada kolom pencarian.</p>
+                        <p class="text-slate-400 leading-relaxed text-xs">Pada perangkat seluler (HP), sentuh tombol <strong>☰ TOPIK</strong> di pojok kiri atas atau bilah navigasi bawah untuk membuka laci 16 modul bioteknologi. Saring berdasarkan kategori (Kesehatan, Pertanian, Lingkungan, Forensik, Bioetika) atau ketik pada kolom pencarian.</p>
                     </div>
                 </div>
                 <div class="flex gap-3.5 items-start p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80">
@@ -1658,11 +1654,10 @@
             <!-- Footer -->
             <div class="px-5 py-4 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between shrink-0">
                 <span class="text-[11px] font-mono text-slate-500">Materi Edukasi Biologi Modern</span>
-                <button id="btn-start-explore" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs font-mono shadow-[0_0_15px_rgba(59,130,246,0.5)] transition active:scale-95">Mulai Eksplorasi â†’</button>
+                <button id="btn-start-explore" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs font-mono shadow-[0_0_15px_rgba(59,130,246,0.5)] transition active:scale-95">Mulai Eksplorasi →</button>
             </div>
         </div>
     </div>
 </body>
 
 </html>
-

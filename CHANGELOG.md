@@ -6,6 +6,22 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🛠️ Pemulihan Karakter Unicode/Emoji (Mojibake Fix) & Penyempurnaan Efisiensi Mobile
+- **Restorasi Total Karakter Unicode & Emotikon (UTF-8 Restoration):**
+  - Mengidentifikasi dan memperbaiki anomali di mana karakter non-ASCII (emotikon 🧬, 🌸, 🩸, 🔬, 🧩, 🧪, 📝, 🥚, 📂, 💡, 📖, simbol matematika `×`, `→`, `•`, serta simbol gender `♂` dan `♀`) berubah menjadi karakter aneh (*mojibake* seperti `ðŸ©¸`, `Ã—`, `â†’`, `â™‚`) akibat pembacaan enkripsi ANSI pada berkas HTML di optimalisasi sebelumnya.
+  - Memulihkan seluruh 21 berkas HTML modul ke kondisi karakter UTF-8 murni tanpa BOM (*Byte Order Mark* `\ufeff`).
+- **Penyempurnaan Selektif CSS Mobile Performance:**
+  - Mengeliminasi aturan blanket CSS lama `.backdrop-blur { background-color: rgba(15, 23, 42, 0.94) !important; }` yang sebelumnya menyebabkan tombol aksi (*pills*), *badge*, dan *chip* berwarna (seperti biru, zamrud, kuning amber, dan ungu) kehilangan warna aslinya dan berubah menjadi kotak gelap polos pada layar ponsel.
+  - Membatasi penyesuaian latar belakang hanya pada kelas kontainer `.glass-panel` dan `.glass-panel-secondary` saat `backdrop-filter: none !important;` aktif di perangkat seluler (`@media (max-width: 768px)`), sehingga estetika tombol dan aksen warna tetap hidup (*vibrant*) dan mewah.
+  - Mempertahankan penyembunyian ornamen latar belakang raksasa (`hidden md:block` pada lingkaran blur ambient 100px+) dan pemangkasan partikel kanvas di `index.html` (25 partikel di mobile vs 70 di desktop) demi kelancaran 60 FPS di ponsel.
+  - Mengintegrasikan media query mobile secara rapi ke berkas CSS eksternal (`simulasi-transkripsi/style.css` dan `simulasi-translasi/style.css`).
+- **Verifikasi Browser Subagent Mandiri:**
+  - Berhasil memverifikasi secara visual lewat browser subagent pada Beranda `index.html` (13 kartu modul), `Generator Bioteknologi Profesional.html` (16 topik dan drawer laci mobile), serta `Simulasi Atavisme.html` (simbol parental, tombol *preset*, kalkulasi Punnett 4×4) dengan 0 galat konsol (*zero console errors*).
+- **Berkas yang Diperbaiki & Diperbarui:**
+  - `Seluruh 21 berkas .html modul dan beranda`
+  - `simulasi-transkripsi/style.css` & `simulasi-translasi/style.css`
+  - `CHANGELOG.md`
+
 ### ⚡ Optimalisasi Performa Mobile Besar-besaran (Mobile GPU & CPU Optimization)
 - **Penonaktifan Efek Kaca Berat pada Peramban Seluler (`backdrop-filter: blur`):**
   - Mengidentifikasi bahwa penggunaan properti CSS `backdrop-filter: blur(24px)` pada elemen antarmuka utama menyebabkan beban GPU (Graphics Processing Unit) yang sangat berat pada perangkat mobile/ponsel (memicu lag dan penurunan *frame rate*).

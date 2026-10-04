@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id" class="dark">
 
 <head>
@@ -66,9 +66,9 @@
     <!-- Signature Transcription Animated Background (mRNA Transcript Wave & Free Ribonucleotides) -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <!-- Ambient Neon Glow Core -->
-        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-orange-500/20 rounded-full filter blur-[100px] hidden md:block pointer-events-none"></div>
-        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-cyan-500/18 rounded-full filter blur-[110px] hidden md:block pointer-events-none"></div>
-        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-rose-500/15 rounded-full filter blur-[120px] hidden md:block pointer-events-none"></div>
+        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-orange-500/20 rounded-full filter blur-[100px] pointer-events-none hidden md:block"></div>
+        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-cyan-500/18 rounded-full filter blur-[110px] pointer-events-none hidden md:block"></div>
+        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-rose-500/15 rounded-full filter blur-[120px] pointer-events-none hidden md:block"></div>
 
         <!-- Ambient Horizontal Flowing mRNA Transcript Ribbon (Single-Stranded RNA Ribbon) -->
         <div class="absolute top-[38%] left-0 w-[200%] h-12 opacity-35 pointer-events-none ambient-mrna-strand">
@@ -77,7 +77,7 @@
             </svg>
         </div>
 
-        <!-- Floating Free Ribonucleotides (rUTP, rATP, rGTP, rCTP â€” Uracil is distinctive to RNA!) -->
+        <!-- Floating Free Ribonucleotides (rUTP, rATP, rGTP, rCTP — Uracil is distinctive to RNA!) -->
         <div class="ambient-rntp" style="left: 10%; animation-duration: 22s; animation-delay: 0s;">
             <div class="px-3 py-1 rounded-lg bg-orange-950/80 border border-orange-400 text-orange-300 font-mono font-bold text-sm shadow-[0_0_16px_rgba(255,87,34,0.7)]">rUTP (U)</div>
         </div>
@@ -92,21 +92,21 @@
         </div>
 
         <!-- Ambient Promoter / Transcription Bubble Tags -->
-        <div class="absolute top-[24%] left-[6%] font-mono text-[10px] text-orange-400/40 tracking-widest font-bold">[PROMOTER TATA-BOX âž” RNA POL II]</div>
-        <div class="absolute bottom-[28%] right-[7%] font-mono text-[10px] text-cyan-400/40 tracking-widest font-bold">[ELONGATION: 5' âž” 3' DIRECTION]</div>
+        <div class="absolute top-[24%] left-[6%] font-mono text-[10px] text-orange-400/40 tracking-widest font-bold">[PROMOTER TATA-BOX ➔ RNA POL II]</div>
+        <div class="absolute bottom-[28%] right-[7%] font-mono text-[10px] text-cyan-400/40 tracking-widest font-bold">[ELONGATION: 5' ➔ 3' DIRECTION]</div>
     </div>
 
     <!-- ==================== TOP NAVIGATION HEADER ==================== -->
     <header class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-orange-500/25 px-4 md:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4 flex-shrink-0">
         <div class="flex items-center gap-4">
             <a href="../index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-700/80 bg-slate-900/90 hover:border-orange-400 hover:text-orange-300 text-slate-200 text-xs font-mono transition group">
-                <span class="transform group-hover:-translate-x-1 transition-transform">â†</span>
+                <span class="transform group-hover:-translate-x-1 transition-transform">←</span>
                 <span>BERANDA GEN-OS</span>
             </a>
             <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
             <div class="flex items-center gap-3">
                 <div class="p-1.5 rounded-lg bg-orange-500/20 border border-orange-500/40 text-orange-400 text-xl shadow-sm">
-                    ðŸ“
+                    📝
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
@@ -125,19 +125,19 @@
         <div class="flex items-center gap-2 sm:gap-3">
             <!-- Audio Toggle -->
             <button id="btn-sound" onclick="toggleSound()" class="px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 hover:border-amber-400 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition" title="Toggle Efek Suara">
-                <span id="sound-icon">ðŸ”Š</span>
+                <span id="sound-icon">🔊</span>
                 <span class="hidden md:inline">AUDIO</span>
             </button>
 
             <!-- Literature Button -->
             <button onclick="openLiteratureModal()" class="px-3 py-1.5 rounded-lg border border-purple-500/40 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-xs font-mono flex items-center gap-1.5 transition">
-                <span>ðŸ“š</span>
+                <span>📚</span>
                 <span class="hidden sm:inline">LITERATUR</span>
             </button>
 
             <!-- Tutorial Button -->
             <button onclick="openTutorialModal()" class="px-3 py-1.5 rounded-lg border border-amber-500/50 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 text-xs font-mono flex items-center gap-1.5 transition animate-pulse">
-                <span>ðŸ“–</span>
+                <span>📖</span>
                 <span>PANDUAN</span>
             </button>
         </div>
@@ -158,7 +158,7 @@
                         </div>
                         <h2 class="text-sm md:text-base font-bold text-white font-sans">Inisiasi & Pembukaan Heliks</h2>
                     </div>
-                    <span class="text-2xl text-amber-400 opacity-80 group-hover:scale-110 transition-transform">ðŸŽ¯</span>
+                    <span class="text-2xl text-amber-400 opacity-80 group-hover:scale-110 transition-transform">🎯</span>
                 </div>
                 <p class="text-xs text-slate-300 mt-2 leading-relaxed">
                     <b>RNA Polimerase</b> mengenali sekuens spesifik pada daerah <b>Promoter</b> DNA. Enzim membuka pilinan heliks ganda membentuk <i>transcription bubble</i> agar untai cetakan dapat diakses.
@@ -175,7 +175,7 @@
                         </div>
                         <h2 class="text-sm md:text-base font-bold text-white font-sans">Elongasi Rantai mRNA</h2>
                     </div>
-                    <span class="text-2xl text-cyan-400 opacity-80 group-hover:scale-110 transition-transform">âš¡</span>
+                    <span class="text-2xl text-cyan-400 opacity-80 group-hover:scale-110 transition-transform">⚡</span>
                 </div>
                 <p class="text-xs text-slate-300 mt-2 leading-relaxed">
                     RNA Polimerase membaca untai cetakan (3' &rarr; 5') dan merangkai ribonukleotida komplementer menjadi untai <b>mRNA (5' &rarr; 3')</b>. Basa Adenin pada DNA dipasangkan dengan <b>Urasil (U)</b> pada mRNA.
@@ -192,7 +192,7 @@
                         </div>
                         <h2 class="text-sm md:text-base font-bold text-white font-sans">Terminasi & Pelepasan</h2>
                     </div>
-                    <span class="text-2xl text-rose-400 opacity-80 group-hover:scale-110 transition-transform">ðŸ›‘</span>
+                    <span class="text-2xl text-rose-400 opacity-80 group-hover:scale-110 transition-transform">🛑</span>
                 </div>
                 <p class="text-xs text-slate-300 mt-2 leading-relaxed">
                     Polimerase mencapai sekuens <b>Terminator</b>. Transkripsi berhenti, enzim melepaskan untai mRNA lengkap, dan pilinan heliks ganda DNA menutup kembali secara sempurna.
@@ -217,7 +217,7 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <span id="camera-badge" class="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono text-cyan-300 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/40">
-                                <span class="animate-pulse">ðŸŽ¥</span> AUTO-TRACK
+                                <span class="animate-pulse">🎥</span> AUTO-TRACK
                             </span>
                             <div class="text-[10px] sm:text-[11px] font-mono text-slate-400 bg-slate-950/80 px-2 sm:px-2.5 py-1 rounded-md border border-slate-800">
                                 Arah: <span class="text-amber-400 font-bold">5' &rarr; 3'</span>
@@ -230,7 +230,7 @@
                         <canvas id="sim-canvas" class="w-full h-full block rounded-xl cursor-grab active:cursor-grabbing" style="touch-action: pan-y;"></canvas>
                         <!-- Mobile Swipe Guide Indicator -->
                         <div id="swipe-hint" class="absolute top-2 right-2 text-[9px] font-mono text-cyan-300/90 bg-slate-950/85 px-2 py-0.5 rounded border border-cyan-500/30 pointer-events-none transition-opacity duration-500 sm:hidden">
-                            ðŸ‘† Geser layar untuk melihat untai DNA
+                            👆 Geser layar untuk melihat untai DNA
                         </div>
                     </div>
 
@@ -353,7 +353,7 @@
                 <div class="glass-panel rounded-2xl p-5 space-y-3">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
                         <h4 class="font-display font-bold text-xs uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
-                            <span>ðŸ§¬</span> ATURAN KOMPLEMENTARITAS RNA
+                            <span>🧬</span> ATURAN KOMPLEMENTARITAS RNA
                         </h4>
                         <span class="text-[10px] font-mono text-amber-400 font-bold">Dogma Sentral</span>
                     </div>
@@ -408,7 +408,7 @@
 
     <!-- ==================== FOOTER ==================== -->
     <footer class="mt-8 border-t border-slate-800/80 bg-slate-950/80 py-6 px-4 text-center text-xs font-mono text-slate-500">
-        <p>GEN-OS // BIO-CORE â€¢ Modul 09: Transkripsi DNA &rarr; mRNA</p>
+        <p>GEN-OS // BIO-CORE • Modul 09: Transkripsi DNA &rarr; mRNA</p>
         <p class="mt-1 text-[11px] text-slate-600">Simulasi Dogma Sentral Biologi Molekuler berdasarkan struktur kristalografi RNA Polimerase II (Nobel Kimia 2006)</p>
     </footer>
 
@@ -417,13 +417,13 @@
         <div class="glass-panel rounded-2xl max-w-2xl w-full border border-amber-500/30 p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 max-h-[85vh] sm:max-h-[88vh] overflow-y-auto my-auto shadow-2xl">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3 sm:pb-4">
                 <div class="flex items-center gap-2.5 sm:gap-3">
-                    <span class="text-xl sm:text-2xl p-1.5 sm:p-2 rounded-xl bg-amber-500/10 border border-amber-500/30">ðŸ“–</span>
+                    <span class="text-xl sm:text-2xl p-1.5 sm:p-2 rounded-xl bg-amber-500/10 border border-amber-500/30">📖</span>
                     <div>
                         <h3 class="text-base sm:text-lg font-display font-bold text-white tracking-wider">PANDUAN LENGKAP SIMULASI TRANSKRIPSI</h3>
                         <p class="text-[11px] sm:text-xs font-mono text-amber-400">MODUL 09: TRANSKRIPSI DNA MENJADI mRNA</p>
                     </div>
                 </div>
-                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">âœ•</button>
+                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
             </div>
 
             <div class="space-y-3 sm:space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -467,13 +467,13 @@
         <div class="glass-panel rounded-2xl max-w-2xl w-full border border-purple-500/30 p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 max-h-[85vh] sm:max-h-[88vh] overflow-y-auto my-auto shadow-2xl">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3 sm:pb-4">
                 <div class="flex items-center gap-2.5 sm:gap-3">
-                    <span class="text-xl sm:text-2xl p-1.5 sm:p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">ðŸ“š</span>
+                    <span class="text-xl sm:text-2xl p-1.5 sm:p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">📚</span>
                     <div>
                         <h3 class="text-base sm:text-lg font-display font-bold text-white tracking-wider">DASAR TEORETIS & REFERENSI ILMIAH</h3>
                         <p class="text-[11px] sm:text-xs font-mono text-purple-400">BIOLOGI MOLEKULER TRANSKRIPSI & MEKANISME POLIMERASE</p>
                     </div>
                 </div>
-                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">âœ•</button>
+                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
             </div>
 
             <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
@@ -484,11 +484,11 @@
                         <span class="text-[10px] font-mono text-slate-500">1961</span>
                     </div>
                     <p class="text-slate-300">
-                        <b>Jacob, FranÃ§ois, & Monod, Jacques (1961).</b> <i>Genetic regulatory mechanisms in the synthesis of proteins.</i> Journal of Molecular Biology, 3(3): 318â€“356.<br>
-                        <b>Brenner, S., Jacob, F., & Meselson, M. (1961).</b> <i>An unstable intermediate carrying information from genes to ribosomes for protein synthesis.</i> Nature, 190: 576â€“581.
+                        <b>Jacob, François, & Monod, Jacques (1961).</b> <i>Genetic regulatory mechanisms in the synthesis of proteins.</i> Journal of Molecular Biology, 3(3): 318–356.<br>
+                        <b>Brenner, S., Jacob, F., & Meselson, M. (1961).</b> <i>An unstable intermediate carrying information from genes to ribosomes for protein synthesis.</i> Nature, 190: 576–581.
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        â†’ Membuktikan secara eksperimental keberadaan molekul perantara tak stabil (mRNA) yang membawa cetak biru genetik dari DNA kromosom menuju ribosom.
+                        → Membuktikan secara eksperimental keberadaan molekul perantara tak stabil (mRNA) yang membawa cetak biru genetik dari DNA kromosom menuju ribosom.
                     </p>
                 </div>
 
@@ -499,11 +499,11 @@
                         <span class="text-[10px] font-mono text-slate-500">1960</span>
                     </div>
                     <p class="text-slate-300">
-                        <b>Hurwitz, J., Bresler, A., & Diringer, R. (1960).</b> <i>The enzymic incorporation of ribonucleotides into polyribonucleotides and the effect of DNA.</i> Biochemical and Biophysical Research Communications, 3(1): 15â€“19.<br>
-                        <b>Weiss, Samuel B. (1960).</b> <i>Enzymatic synthesis of ribonucleic acid.</i> PNAS, 46(8): 1020â€“1030.
+                        <b>Hurwitz, J., Bresler, A., & Diringer, R. (1960).</b> <i>The enzymic incorporation of ribonucleotides into polyribonucleotides and the effect of DNA.</i> Biochemical and Biophysical Research Communications, 3(1): 15–19.<br>
+                        <b>Weiss, Samuel B. (1960).</b> <i>Enzymatic synthesis of ribonucleic acid.</i> PNAS, 46(8): 1020–1030.
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        â†’ Mengisolasi enzim yang mengkatalisis sintesis poliribonukleotida dari 4 rNTP dengan mensyaratkan DNA utuh sebagai cetakan.
+                        → Mengisolasi enzim yang mengkatalisis sintesis poliribonukleotida dari 4 rNTP dengan mensyaratkan DNA utuh sebagai cetakan.
                     </p>
                 </div>
 
@@ -514,11 +514,11 @@
                         <span class="text-[10px] font-mono text-slate-500">2001 & 2006</span>
                     </div>
                     <p class="text-slate-300">
-                        <b>Cramer, P., Bushnell, D. A., & Kornberg, R. D. (2001).</b> <i>Structural basis of transcription: RNA polymerase II at 2.8 Ã¥ngstrom resolution.</i> Science, 292(5523): 1863â€“1876.<br>
+                        <b>Cramer, P., Bushnell, D. A., & Kornberg, R. D. (2001).</b> <i>Structural basis of transcription: RNA polymerase II at 2.8 ångstrom resolution.</i> Science, 292(5523): 1863–1876.<br>
                         <b>Kornberg, Roger D. (2006).</b> <i>The Nobel Prize in Chemistry for his studies of the molecular basis of eukaryotic transcription.</i>
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        â†’ Menyingkap mekanisme molekuler pembukaan gelembung transkripsi (*transcription bubble*), pemisahan untai DNA, penambahan rNTP ke ujung 3' RNA, serta translokasi enzim.
+                        → Menyingkap mekanisme molekuler pembukaan gelembung transkripsi (*transcription bubble*), pemisahan untai DNA, penambahan rNTP ke ujung 3' RNA, serta translokasi enzim.
                     </p>
                 </div>
             </div>
@@ -536,5 +536,3 @@
 </body>
 
 </html>
-
-

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html><html lang="id"><head><meta charset="utf-8">
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>GEN-OS // Simulasi 3D Gametogenesis & Fertilisasi</title>
 <style>
@@ -24,27 +24,23 @@ input[type=range]{flex:1;min-width:120px;accent-color:var(--cy);height:28px}
 
         /* Mobile Performance Optimizations */
         @media (max-width: 768px) {
-            * {
+            *, *::before, *::after {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
             }
-            .glass-card, .archive-panel, .glass-panel, .simulator-panel, .control-panel, .result-panel {
-                background: #0f172a !important;
+            .glass-panel {
+                background-color: rgba(15, 23, 42, 0.88) !important;
             }
-            header, aside, .glass-header {
-                background: #0f172a !important;
-            }
-            .ambient-biotech-vector, .ambient-plasmid-ring, .particle-layer, .scan-line, .scan-bar, .scan-overlay {
-                display: none !important;
-                animation: none !important;
+            .glass-panel-secondary {
+                background-color: rgba(15, 23, 42, 0.92) !important;
             }
         }
     </style></head><body>
 <main id="st"><canvas id="c"></canvas>
-<header><h1>GEN-OS // PEMINDAHAN GENOTIP<small>Seret: putar Â· Cubit/scroll: zoom Â· Dua jari/Shift+seret: geser</small></h1></header>
-<div id="z"><button id="zi" aria-label="Zoom in">+</button><button id="zo" aria-label="Zoom out">âˆ’</button><button id="zr" aria-label="Reset tampilan">âŸ²</button></div></main>
+<header><h1>GEN-OS // PEMINDAHAN GENOTIP<small>Seret: putar · Cubit/scroll: zoom · Dua jari/Shift+seret: geser</small></h1></header>
+<div id="z"><button id="zi" aria-label="Zoom in">+</button><button id="zo" aria-label="Zoom out">−</button><button id="zr" aria-label="Reset tampilan">⟲</button></div></main>
 <aside id="p"><div id="i"></div>
-<div class="r"><button id="b0">1 Induk 2n</button><button id="b1">2 Meiosis</button><button id="b2">3 Fertilisasi</button><button id="pl">â–¶ Putar</button><button id="sp">Kecepatan 1Ã—</button></div>
+<div class="r"><button id="b0">1 Induk 2n</button><button id="b1">2 Meiosis</button><button id="b2">3 Fertilisasi</button><button id="pl">▶ Putar</button><button id="sp">Kecepatan 1×</button></div>
 <div class="r"><input id="s" type="range" min="0" max="100" step=".1" value="0" aria-label="Linimasa"></div>
 <div class="r"><button id="m" class="on">Meiosis: ON</button><button id="rs">Acak sperma pembuahi</button><span class="lg"><i style="background:#3aa0ff"></i>Kromosom ayah<i style="background:#ff4fa3"></i>Kromosom ibu<i style="background:#ff3b3b"></i>4n (salah)</span></div></aside>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -83,12 +79,12 @@ function upd(){const m=sg(P,10,45),a=sg(P,55,75),b=sg(P,75,100),F=G,pf=1-sg(m,.3
  let ox=L(-10,0,mv),oy=L(-3.5,-3.5,mv);ox=L(ox,10,b);oy=L(oy,0,b);F.ov.position.set(ox,oy,0);F.ov.scale.setScalar(Math.max(.001,(.4+.6*gm)*(1-b*.9)*(1+.03*Math.sin(T0*3))));fade(F.ov,gm);
  F.po.forEach(g=>{g.position.set(L(-10,g.userData.x,mv),L(-3.5,g.userData.y+Math.sin(T0*1.5+g.userData.x)*.12*gm,mv),0);g.scale.setScalar(Math.max(.001,.3+.7*gm));fade(g,gm*(1-b))});
  fade(F.z,b);F.z.scale.setScalar(Math.max(.001,b));F.z.rotation.y=Math.sin(T0*.8)*.6;
- let s;if(P<10)s=['1 Â· INDUK DIPLOID (2n)','Ayah bergenotip Aa, ibu Bb. Tiap sel somatik membawa sepasang alel (dua kopi gen).'];
- else if(P<55)s=noM?['2 Â· TANPA MEIOSIS','Kromosom tidak direduksi. Gamet tetap diploid (2n): sperma Aa dan ovum Bb.']:['2 Â· MEIOSIS (GAMETOGENESIS)','Segregasi: pasangan alel dipisah. Ayah menghasilkan 4 sperma haploid (A, A, a, a). Ibu menghasilkan 1 ovum (B) dan polar body kecil (b, b, B). Tiap gamet hanya punya satu alel (n).'];
- else if(P<75)s=['3 Â· FERTILISASI','Satu sperma ('+(noM?'Aa':AL[sel])+') menembus ovum. Sperma lain tidak ikut membuahi.'];
- else s=noM?['HASIL Â· 2n + 2n = 4n','Embrio tetraploid (4n) tidak viable. Itulah sebabnya reduksi kromosom lewat meiosis esensial.']:['HASIL Â· EMBRIO 2n','Penyatuan gamet (n + n) memulihkan diploid: alel dari ayah ('+AL[sel]+') dan dari ibu (B) menjadi pasangan alel utuh.'];
+ let s;if(P<10)s=['1 · INDUK DIPLOID (2n)','Ayah bergenotip Aa, ibu Bb. Tiap sel somatik membawa sepasang alel (dua kopi gen).'];
+ else if(P<55)s=noM?['2 · TANPA MEIOSIS','Kromosom tidak direduksi. Gamet tetap diploid (2n): sperma Aa dan ovum Bb.']:['2 · MEIOSIS (GAMETOGENESIS)','Segregasi: pasangan alel dipisah. Ayah menghasilkan 4 sperma haploid (A, A, a, a). Ibu menghasilkan 1 ovum (B) dan polar body kecil (b, b, B). Tiap gamet hanya punya satu alel (n).'];
+ else if(P<75)s=['3 · FERTILISASI','Satu sperma ('+(noM?'Aa':AL[sel])+') menembus ovum. Sperma lain tidak ikut membuahi.'];
+ else s=noM?['HASIL · 2n + 2n = 4n','Embrio tetraploid (4n) tidak viable. Itulah sebabnya reduksi kromosom lewat meiosis esensial.']:['HASIL · EMBRIO 2n','Penyatuan gamet (n + n) memulihkan diploid: alel dari ayah ('+AL[sel]+') dan dari ibu (B) menjadi pasangan alel utuh.'];
  if(s[0]!=ck){ck=s[0];$('i').innerHTML='<b>'+s[0]+'</b><br>'+s[1]}}
-function stop(){play=false;$('pl').textContent='â–¶ Putar'}
+function stop(){play=false;$('pl').textContent='▶ Putar'}
 function loop(n){const dt=Math.min((n-last)/1000,.1);last=n;T0+=dt;
  if(play){P=Math.min(100,P+dt*7*spd);PT=P;if(P>=100)stop()}else P+=(PT-P)*(1-Math.exp(-dt*5));
  if(!sd)$('s').value=P;
@@ -110,10 +106,9 @@ cv.addEventListener('wheel',e=>{e.preventDefault();zt=cl(zt*Math.exp(-e.deltaY*.
 $('zi').onclick=()=>zt=cl(zt*1.3);$('zo').onclick=()=>zt=cl(zt/1.3);$('zr').onclick=()=>{zt=1;tx=ty=0;rxT=-.12;ryT=0;vel=0};
 const sl=$('s');sl.onpointerdown=()=>sd=1;sl.onpointerup=sl.onpointercancel=()=>sd=0;sl.oninput=e=>go(+e.target.value);
 $('b0').onclick=()=>go(0);$('b1').onclick=()=>go(45);$('b2').onclick=()=>go(100);
-$('pl').onclick=()=>{if(play)return stop();if(P>=99.5)P=PT=0;play=true;$('pl').textContent='âšâš Jeda'};
-$('sp').onclick=e=>{spd=spd==1?.5:spd==.5?2:1;e.target.textContent='Kecepatan '+spd+'Ã—'};
+$('pl').onclick=()=>{if(play)return stop();if(P>=99.5)P=PT=0;play=true;$('pl').textContent='❚❚ Jeda'};
+$('sp').onclick=e=>{spd=spd==1?.5:spd==.5?2:1;e.target.textContent='Kecepatan '+spd+'×'};
 $('m').onclick=e=>{noM=!noM;e.target.classList.toggle('on',!noM);e.target.textContent='Meiosis: '+(noM?'OFF':'ON');ck='';build()};
-$('rs').onclick=()=>{sel=Math.floor(Math.random()*4);build();P=PT=46;play=true;$('pl').textContent='âšâš Jeda'};
+$('rs').onclick=()=>{sel=Math.floor(Math.random()*4);build();P=PT=46;play=true;$('pl').textContent='❚❚ Jeda'};
 new ResizeObserver(rz).observe(st);rz();build();requestAnimationFrame(loop);
 </script></body></html>
-
