@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -50,7 +50,25 @@ dl.sp{display:grid;grid-template-columns:auto 1fr;gap:3px 12px}
 .panel.open{transform:none}
 #hint{display:none}}
 @media(prefers-reduced-motion:reduce){.panel{transition:none}}
-</style>
+
+        /* Mobile Performance Optimizations */
+        @media (max-width: 768px) {
+            * {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            .glass-card, .archive-panel, .glass-panel, .simulator-panel, .control-panel, .result-panel {
+                background: #0f172a !important;
+            }
+            header, aside, .glass-header {
+                background: #0f172a !important;
+            }
+            .ambient-biotech-vector, .ambient-plasmid-ring, .particle-layer, .scan-line, .scan-bar, .scan-overlay {
+                display: none !important;
+                animation: none !important;
+            }
+        }
+    </style>
 </head>
 <body>
 <div id="cv"></div>
@@ -76,9 +94,9 @@ dl.sp{display:grid;grid-template-columns:auto 1fr;gap:3px 12px}
   <button id="bc">Reset sudut pandang</button>
  </div>
  <h3>Parameter model</h3>
- <dl class="sp"><dt>Kromatid</dt><dd>2 (identik)</dd><dt>Tipe sentromer</dt><dd>Submetasentrik</dd><dt>Rasio q/p</dt><dd>≈ 2,0</dd><dt>Manusia diploid</dt><dd>2n = 46</dd><dt>Kandungan DNA</dt><dd>4C (G2/M)</dd></dl>
+ <dl class="sp"><dt>Kromatid</dt><dd>2 (identik)</dd><dt>Tipe sentromer</dt><dd>Submetasentrik</dd><dt>Rasio q/p</dt><dd>â‰ˆ 2,0</dd><dt>Manusia diploid</dt><dd>2n = 46</dd><dt>Kandungan DNA</dt><dd>4C (G2/M)</dd></dl>
  <h3>Hierarki pemadatan DNA</h3>
- <dl class="sp"><dt>Heliks ganda DNA</dt><dd>2 nm</dd><dt>Nukleosom (147 pb)</dt><dd>11 nm</dd><dt>Serat kromatin</dt><dd>≈ 30 nm</dd><dt>Gelung terjangkar</dt><dd>≈ 300 nm</dd><dt>Kromatid</dt><dd>≈ 700 nm</dd><dt>Kromosom metafase</dt><dd>≈ 1.400 nm</dd></dl>
+ <dl class="sp"><dt>Heliks ganda DNA</dt><dd>2 nm</dd><dt>Nukleosom (147 pb)</dt><dd>11 nm</dd><dt>Serat kromatin</dt><dd>â‰ˆ 30 nm</dd><dt>Gelung terjangkar</dt><dd>â‰ˆ 300 nm</dd><dt>Kromatid</dt><dd>â‰ˆ 700 nm</dd><dt>Kromosom metafase</dt><dd>â‰ˆ 1.400 nm</dd></dl>
  <p class="cap">Skala menurut bagan buku teks. Keberadaan serat 30 nm in vivo masih diperdebatkan. Tekstur kromatin pada model bersifat skematis. Nama pita (p11 sampai q32) bersifat ilustratif, bukan kromosom manusia tertentu.</p>
 </aside>
 
@@ -237,3 +255,4 @@ addEventListener('resize',rs);rs();home();
 </script>
 </body>
 </html>
+

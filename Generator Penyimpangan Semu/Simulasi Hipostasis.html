@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -99,14 +99,32 @@
             pointer-events: none;
             animation: epistasisResDrift linear infinite;
         }
+    
+        /* Mobile Performance Optimizations */
+        @media (max-width: 768px) {
+            * {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            .glass-card, .archive-panel, .glass-panel, .simulator-panel, .control-panel, .result-panel {
+                background: #0f172a !important;
+            }
+            header, aside, .glass-header {
+                background: #0f172a !important;
+            }
+            .ambient-biotech-vector, .ambient-plasmid-ring, .particle-layer, .scan-line, .scan-bar, .scan-overlay {
+                display: none !important;
+                animation: none !important;
+            }
+        }
     </style>
 </head>
 <body class="p-4 md:p-8 relative overflow-x-hidden">
 
     <!-- Signature Epistasis Resesif Background Elements -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-        <div class="absolute -top-16 -left-16 w-96 h-96 bg-indigo-600/15 rounded-full filter blur-[100px]"></div>
-        <div class="absolute top-1/2 -right-20 w-[30rem] h-[30rem] bg-amber-600/15 rounded-full filter blur-[120px]"></div>
+        <div class="absolute -top-16 -left-16 w-96 h-96 bg-indigo-600/15 rounded-full filter blur-[100px] hidden md:block"></div>
+        <div class="absolute top-1/2 -right-20 w-[30rem] h-[30rem] bg-amber-600/15 rounded-full filter blur-[120px] hidden md:block"></div>
 
         <!-- Floating Labrador Coat Spheres / Silhouettes (Hitam 9, Cokelat 3, Kuning 4) -->
         <div class="lab-particle" style="left: 10%; animation-duration: 23s; animation-delay: 0s;">
@@ -132,7 +150,7 @@
                 </div>
                 <div>
                     <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-indigo-300">SIMULASI HIPOSTASIS</h1>
-                    <p class="text-indigo-400 text-sm mt-1">Epistasis Resesif • Warna Bulu Labrador • Rasio 9:3:4</p>
+                    <p class="text-indigo-400 text-sm mt-1">Epistasis Resesif â€¢ Warna Bulu Labrador â€¢ Rasio 9:3:4</p>
                 </div>
             </div>
             <a href="Generator Penyimpangan Semu.html" class="px-6 py-2.5 rounded-xl border border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/10 hover:border-indigo-400 transition-all font-medium flex items-center gap-2">
@@ -161,8 +179,8 @@
                 <div class="space-y-4">
                     <p>
                         <strong class="text-indigo-200 text-base">Mekanisme Genetik pada Labrador Retriever:</strong><br>
-                        • <strong>Gen B</strong> mengatur sintesis eumelanin: <strong>B_</strong> (hitam) atau <strong>bb</strong> (cokelat/chocolate).<br>
-                        • <strong>Gen E</strong> mengatur <em>deposisi</em> (peletakan) pigmen ke rambut: <strong>E_</strong> (pigmen terdeposit) atau <strong>ee</strong> (pigmen tidak terdeposit).<br>
+                        â€¢ <strong>Gen B</strong> mengatur sintesis eumelanin: <strong>B_</strong> (hitam) atau <strong>bb</strong> (cokelat/chocolate).<br>
+                        â€¢ <strong>Gen E</strong> mengatur <em>deposisi</em> (peletakan) pigmen ke rambut: <strong>E_</strong> (pigmen terdeposit) atau <strong>ee</strong> (pigmen tidak terdeposit).<br>
                         Jika anjing memiliki genotipe <strong>ee</strong>, eumelanin gagal disalurkan ke bulu, sehingga bulu tetap kuning terlepas dari gen B yang dimilikinya (BB, Bb, atau bb). Gen B bersifat <em>hipostatis</em> terhadap <em>ee</em>.
                     </p>
                     <p class="text-xs text-slate-500 mt-4 italic">
@@ -199,7 +217,7 @@
                     <div class="space-y-5">
                         <!-- P1 Input -->
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">Induk Jantan (♂) P1</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Induk Jantan (â™‚) P1</label>
                             <div class="flex gap-2 items-center">
                                 <input type="text" id="p1-input" value="BbEe" maxlength="4" 
                                     class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-center font-mono text-lg tracking-widest text-white focus:outline-none focus:border-indigo-500 transition-colors">
@@ -210,7 +228,7 @@
 
                         <!-- P2 Input -->
                         <div>
-                            <label class="block text-sm font-medium text-slate-400 mb-2">Induk Betina (♀) P2</label>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Induk Betina (â™€) P2</label>
                             <div class="flex gap-2 items-center">
                                 <input type="text" id="p2-input" value="BbEe" maxlength="4" 
                                     class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-center font-mono text-lg tracking-widest text-white focus:outline-none focus:border-indigo-500 transition-colors">
@@ -225,7 +243,7 @@
                         
                         <div class="pt-3 border-t border-slate-700/50">
                             <button id="btn-reset" class="w-full py-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded-lg text-sm text-slate-300 transition-colors">
-                                Reset ke BbEe × BbEe
+                                Reset ke BbEe Ã— BbEe
                             </button>
                         </div>
                     </div>
@@ -251,7 +269,7 @@
                             <!-- Grid generated via JS -->
                         </div>
                     </div>
-                    <p class="sm:hidden text-center text-[10px] text-indigo-400 font-mono mt-2">👉 Geser tabel ke samping untuk melihat 16 kotak lengkap 👈</p>
+                    <p class="sm:hidden text-center text-[10px] text-indigo-400 font-mono mt-2">ðŸ‘‰ Geser tabel ke samping untuk melihat 16 kotak lengkap ðŸ‘ˆ</p>
                 </section>
 
                 <!-- Academic Report -->
@@ -275,7 +293,7 @@
                         <div class="mt-6">
                             <h4 class="text-sm font-semibold text-slate-400 mb-2">Penjelasan Hasil Persilangan:</h4>
                             <p class="text-slate-300 text-sm leading-relaxed bg-slate-900/50 p-4 rounded-lg border border-slate-700" id="report-explanation">
-                                Persilangan dihibrid heterozigot (BbEe × BbEe) menghasilkan 16 variasi genotipe. Karena keberadaan alel resesif 'ee' menghalangi deposisi pigmen (epistasis resesif), genotipe B_ee dan bbee akan memunculkan fenotipe Kuning, mengubah rasio mendel normal 9:3:3:1 menjadi 9:3:4.
+                                Persilangan dihibrid heterozigot (BbEe Ã— BbEe) menghasilkan 16 variasi genotipe. Karena keberadaan alel resesif 'ee' menghalangi deposisi pigmen (epistasis resesif), genotipe B_ee dan bbee akan memunculkan fenotipe Kuning, mengubah rasio mendel normal 9:3:3:1 menjadi 9:3:4.
                             </p>
                         </div>
                     </div>
@@ -459,7 +477,7 @@
             // Top-left empty cell
             let headerEmpty = document.createElement('div');
             headerEmpty.className = 'p-2 flex items-center justify-center bg-slate-800 rounded-tl-lg font-bold text-slate-500 text-sm border border-slate-700';
-            headerEmpty.innerHTML = '♀ \\ ♂';
+            headerEmpty.innerHTML = 'â™€ \\ â™‚';
             grid.appendChild(headerEmpty);
 
             // Column headers (Male Gametes)
@@ -566,3 +584,5 @@
     </script>
 </body>
 </html>
+
+

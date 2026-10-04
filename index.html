@@ -301,6 +301,24 @@
         .logo-glow {
             filter: drop-shadow(0 0 10px #00f3ff) drop-shadow(0 0 20px rgba(0, 243, 255, 0.5));
         }
+    
+        /* Mobile Performance Optimizations */
+        @media (max-width: 768px) {
+            * {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            .glass-card, .archive-panel, .glass-panel, .simulator-panel, .control-panel, .result-panel {
+                background: #0f172a !important;
+            }
+            header, aside, .glass-header {
+                background: #0f172a !important;
+            }
+            .ambient-biotech-vector, .ambient-plasmid-ring, .particle-layer, .scan-line, .scan-bar, .scan-overlay {
+                display: none !important;
+                animation: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -332,7 +350,7 @@
             class="px-6 py-5 md:px-10 md:py-6 flex justify-between items-center border-b border-white/10 bg-black/40 backdrop-blur-xl sticky top-0 z-50 shadow-2xl">
             <div class="flex items-center gap-5">
                 <div class="logo-glow transform hover:scale-110 transition-transform duration-500">
-                    <span class="text-4xl md:text-5xl">🧬</span>
+                    <span class="text-4xl md:text-5xl">ðŸ§¬</span>
                 </div>
                 <div>
                     <h1 class="text-2xl md:text-4xl font-display font-bold text-white tracking-widest">
@@ -345,7 +363,7 @@
                 <div>
                     <div class="text-xs font-mono text-gen-green font-bold flex items-center justify-end gap-1.5">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block"></span>
-                        <span>● SYSTEM SECURE</span>
+                        <span>â— SYSTEM SECURE</span>
                     </div>
                     <div class="text-[10px] font-mono text-slate-400" id="clock">00:00:00</div>
                 </div>
@@ -370,7 +388,7 @@
                     <span class="card-number">01</span>
                     <div>
                         <div class="card-icon-glass">
-                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🌸</span>
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">ðŸŒ¸</span>
                         </div>
                         <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">GEN-LAB</h3>
                         <p class="text-xs text-purple-400 font-mono mb-4 tracking-wider">MONOHYBRID SIMULATION</p>
@@ -384,7 +402,7 @@
                     <span class="card-number">02</span>
                     <div>
                         <div class="card-icon-glass">
-                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🌿</span>
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">ðŸŒ¿</span>
                         </div>
                         <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">BIO-SEQUENCER</h3>
                         <p class="text-xs text-emerald-300 font-mono mb-4 tracking-wider font-semibold">DIHYBRID CROSS ENGINE</p>
@@ -398,7 +416,7 @@
                     <span class="card-number">03</span>
                     <div>
                         <div class="card-icon-glass">
-                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🌺</span>
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">ðŸŒº</span>
                         </div>
                         <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">EPI-GENETICS</h3>
                         <p class="text-xs text-purple-400 font-mono mb-4 tracking-wider">NON-MENDELIAN ENGINE</p>
@@ -412,7 +430,7 @@
                     <span class="card-number">04</span>
                     <div>
                         <div class="card-icon-glass">
-                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🩸</span>
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">ðŸ©¸</span>
                         </div>
                         <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">GEN-X</h3>
                         <p class="text-xs text-pink-300 font-mono mb-4 tracking-wider font-semibold">SEX-LINKED ANALYZER</p>
@@ -426,7 +444,7 @@
                     <span class="card-number">05</span>
                     <div>
                         <div class="card-icon-glass">
-                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🔬</span>
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">ðŸ”¬</span>
                         </div>
                         <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">GEN-K</h3>
                         <p class="text-xs text-cyan-300 font-mono mb-4 tracking-wider font-semibold">KARYOTYPE SCANNER</p>
@@ -440,7 +458,7 @@
                     <span class="card-number">06</span>
                     <div>
                         <div class="card-icon-glass">
-                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🧩</span>
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">ðŸ§©</span>
                         </div>
                         <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">GENO-PHENO</h3>
                         <p class="text-xs text-sky-400 font-mono mb-4 tracking-wider">TRAIT EXPLORER</p>
@@ -454,7 +472,7 @@
                     <span class="card-number">07</span>
                     <div>
                         <div class="card-icon-glass">
-                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🧬</span>
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">ðŸ§¬</span>
                         </div>
                         <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">HELIX-3D</h3>
                         <p class="text-xs text-cyan-300 font-mono mb-4 tracking-wider">DNA STRUCTURE MAPPER</p>
@@ -468,7 +486,7 @@
                     <span class="card-number">08</span>
                     <div>
                         <div class="card-icon-glass">
-                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🧪</span>
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">ðŸ§ª</span>
                         </div>
                         <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">CHROMA-3D</h3>
                         <p class="text-xs text-fuchsia-400 font-mono mb-4 tracking-wider">CHROMOSOME MODELER</p>
@@ -482,7 +500,7 @@
                     <span class="card-number">09</span>
                     <div>
                         <div class="card-icon-glass">
-                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">📝</span>
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">ðŸ“</span>
                         </div>
                         <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">TRANSCRIPTION</h3>
                         <p class="text-xs text-orange-400 font-mono mb-4 tracking-wider font-semibold">RNA SYNTHESIS LAB</p>
@@ -496,7 +514,7 @@
                     <span class="card-number">10</span>
                     <div>
                         <div class="card-icon-glass">
-                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🧬</span>
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">ðŸ§¬</span>
                         </div>
                         <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">TRANSLATION</h3>
                         <p class="text-xs text-purple-300 font-mono mb-4 tracking-wider font-semibold">PROTEIN ASSEMBLY</p>
@@ -510,7 +528,7 @@
                     <span class="card-number">11</span>
                     <div>
                         <div class="card-icon-glass">
-                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🥚</span>
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">ðŸ¥š</span>
                         </div>
                         <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">GAMETO-3D</h3>
                         <p class="text-xs text-indigo-400 font-mono mb-4 tracking-wider">MEIOSIS ENGINE</p>
@@ -524,7 +542,7 @@
                     <span class="card-number">12</span>
                     <div>
                         <div class="card-icon-glass">
-                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">📂</span>
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">ðŸ“‚</span>
                         </div>
                         <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">BIO-ARCHIVE</h3>
                         <p class="text-xs text-amber-400 font-mono mb-4 tracking-wider">CLASSIFIED DATABASE</p>
@@ -538,7 +556,7 @@
                     <span class="card-number">13</span>
                     <div>
                         <div class="card-icon-glass">
-                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">🩸</span>
+                            <span class="text-3xl grayscale group-hover:grayscale-0 transition duration-500 filter drop-shadow">ðŸ©¸</span>
                         </div>
                         <h3 class="text-xl font-bold text-white font-display mb-1 tracking-wide">HEMATO-LAB</h3>
                         <p class="text-xs text-red-400 font-mono mb-4 tracking-wider">BLOOD TYPE ANALYZER</p>
@@ -551,7 +569,7 @@
         </main>
 
         <footer class="p-6 text-center border-t border-white/10 bg-black/50 backdrop-blur-xl z-40">
-            <p class="text-[10px] font-mono text-slate-400 tracking-widest">GENETIC LABORATORY PROJECT • Developed by
+            <p class="text-[10px] font-mono text-slate-400 tracking-widest">GENETIC LABORATORY PROJECT â€¢ Developed by
                 Muhammad Ikhwannor
             </p>
         </footer>
@@ -639,7 +657,8 @@
 
         function initParticles() {
             particles = [];
-            for (let i = 0; i < 70; i++) particles.push(new Particle());
+            const particleCount = window.innerWidth < 768 ? 25 : 70;
+            for (let i = 0; i < particleCount; i++) particles.push(new Particle());
         }
 
         function animateParticles() {

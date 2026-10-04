@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id" class="dark">
 
 <head>
@@ -270,6 +270,24 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #34d399;
         }
+    
+        /* Mobile Performance Optimizations */
+        @media (max-width: 768px) {
+            * {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            .glass-card, .archive-panel, .glass-panel, .simulator-panel, .control-panel, .result-panel {
+                background: #0f172a !important;
+            }
+            header, aside, .glass-header {
+                background: #0f172a !important;
+            }
+            .ambient-biotech-vector, .ambient-plasmid-ring, .particle-layer, .scan-line, .scan-bar, .scan-overlay {
+                display: none !important;
+                animation: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -279,9 +297,9 @@
     <!-- Signature Dihybrid Animated Background (Seeds & Gametes) -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <!-- Ambient Neon Glow Core -->
-        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-emerald-600/15 rounded-full filter blur-[100px] pointer-events-none"></div>
-        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-amber-500/15 rounded-full filter blur-[110px] pointer-events-none"></div>
-        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-teal-600/10 rounded-full filter blur-[120px] pointer-events-none"></div>
+        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-emerald-600/15 rounded-full filter blur-[100px] hidden md:block pointer-events-none"></div>
+        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-amber-500/15 rounded-full filter blur-[110px] hidden md:block pointer-events-none"></div>
+        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-teal-600/10 rounded-full filter blur-[120px] hidden md:block pointer-events-none"></div>
 
         <!-- Floating Dihybrid Seeds (9:3:3:1 Phenotypes: Round Yellow, Round Green, Wrinkled Yellow, Wrinkled Green) -->
         <!-- Round Yellow Seed (Biji Bulat Kuning) -->
@@ -316,13 +334,13 @@
     <header class="sticky top-0 z-40 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 px-4 md:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4 flex-shrink-0">
         <div class="flex items-center gap-4">
             <a href="../index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-700/80 bg-slate-900/90 hover:border-emerald-400 hover:text-emerald-300 text-slate-300 text-xs font-mono transition group">
-                <span class="transform group-hover:-translate-x-1 transition-transform">←</span>
+                <span class="transform group-hover:-translate-x-1 transition-transform">â†</span>
                 <span>BERANDA GEN-OS</span>
             </a>
             <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
             <div class="flex items-center gap-3">
                 <div class="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xl">
-                    🌿
+                    ðŸŒ¿
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
@@ -341,19 +359,19 @@
         <div class="flex items-center gap-2 sm:gap-3">
             <!-- Audio Toggle -->
             <button id="btn-sound" onclick="toggleSound()" class="px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 hover:border-emerald-400 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition" title="Toggle Efek Suara">
-                <span id="sound-icon">🔊</span>
+                <span id="sound-icon">ðŸ”Š</span>
                 <span class="hidden md:inline">AUDIO</span>
             </button>
 
             <!-- Literature Button -->
             <button onclick="openLiteratureModal()" class="px-3 py-1.5 rounded-lg border border-purple-500/40 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-xs font-mono flex items-center gap-1.5 transition">
-                <span>📚</span>
+                <span>ðŸ“š</span>
                 <span class="hidden sm:inline">LITERATUR</span>
             </button>
 
             <!-- Tutorial Button -->
             <button onclick="openTutorialModal()" class="px-3 py-1.5 rounded-lg border border-emerald-500/50 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 text-xs font-mono flex items-center gap-1.5 transition animate-pulse">
-                <span>📖</span>
+                <span>ðŸ“–</span>
                 <span>PANDUAN</span>
             </button>
         </div>
@@ -374,7 +392,7 @@
                         </div>
                         <h2 class="text-sm md:text-base font-bold text-white font-sans">Asortasi Bebas Gen Independen</h2>
                     </div>
-                    <span class="text-2xl text-emerald-400 opacity-80 group-hover:scale-110 transition-transform">🔀</span>
+                    <span class="text-2xl text-emerald-400 opacity-80 group-hover:scale-110 transition-transform">ðŸ”€</span>
                 </div>
                 <p class="text-xs text-slate-300 mt-2 leading-relaxed">
                     Alel dari dua lokus gen yang berbeda memisah secara independen saat meiosis. Pewarisan sifat bentuk biji (<i>B/b</i>) tidak mempengaruhi pewarisan warna biji (<i>K/k</i>).
@@ -391,7 +409,7 @@
                         </div>
                         <h2 class="text-sm md:text-base font-bold text-white font-sans">Proporsi Fenotipe 9:3:3:1</h2>
                     </div>
-                    <span class="text-2xl text-amber-400 opacity-80 group-hover:scale-110 transition-transform">⚖️</span>
+                    <span class="text-2xl text-amber-400 opacity-80 group-hover:scale-110 transition-transform">âš–ï¸</span>
                 </div>
                 <p class="text-xs text-slate-300 mt-2 leading-relaxed">
                     Persilangan heterozigot ganda (<i>BbKk</i> &times; <i>BbKk</i>) menghasilkan 4 kombinasi fenotipe F2: <b>9 Bulat Kuning</b>, <b>3 Bulat Hijau</b>, <b>3 Kisut Kuning</b>, dan <b>1 Kisut Hijau</b> dari 16 kotak kombinasi.
@@ -408,7 +426,7 @@
                         </div>
                         <h2 class="text-sm md:text-base font-bold text-white font-sans">Deteksi Genotipe Test Cross</h2>
                     </div>
-                    <span class="text-2xl text-cyan-400 opacity-80 group-hover:scale-110 transition-transform">🎯</span>
+                    <span class="text-2xl text-cyan-400 opacity-80 group-hover:scale-110 transition-transform">ðŸŽ¯</span>
                 </div>
                 <p class="text-xs text-slate-300 mt-2 leading-relaxed">
                     Menyilangkan individu heterozigot dengan homozigot resesif murni (<i>BbKk</i> &times; <i>bbkk</i>) menghasilkan rasio setara <b>1:1:1:1</b>, membuktikan bahwa 4 jenis gamet diproduksi dengan frekuensi seimbang (25%).
@@ -438,19 +456,19 @@
                 <label class="text-[10px] text-slate-400 font-mono mb-2 block uppercase tracking-wider">Pintas Skenario Cepat 1-Klik:</label>
                 <div class="flex flex-wrap gap-2">
                     <button type="button" onclick="setPreset('BbKk', 'BbKk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 hover:border-emerald-400 font-mono transition">
-                        🔹 Heterozigot Dihibrid (BbKk × BbKk &rarr; 9:3:3:1)
+                        ðŸ”¹ Heterozigot Dihibrid (BbKk Ã— BbKk &rarr; 9:3:3:1)
                     </button>
                     <button type="button" onclick="setPreset('BBKK', 'bbkk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 hover:border-emerald-400 font-mono transition">
-                        🟢 Galur Murni (BBKK × bbkk &rarr; 100% Bulat Kuning)
+                        ðŸŸ¢ Galur Murni (BBKK Ã— bbkk &rarr; 100% Bulat Kuning)
                     </button>
                     <button type="button" onclick="setPreset('BbKk', 'bbkk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 hover:border-emerald-400 font-mono transition">
-                        🔸 Test Cross (BbKk × bbkk &rarr; 1:1:1:1)
+                        ðŸ”¸ Test Cross (BbKk Ã— bbkk &rarr; 1:1:1:1)
                     </button>
                     <button type="button" onclick="setPreset('BbKK', 'BbKK')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 hover:border-emerald-400 font-mono transition">
-                        🟡 Monohibrid Sifat B (BbKK × BbKK &rarr; 3:1)
+                        ðŸŸ¡ Monohibrid Sifat B (BbKK Ã— BbKK &rarr; 3:1)
                     </button>
                     <button type="button" onclick="setPreset('bbkk', 'bbkk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 hover:border-emerald-400 font-mono transition">
-                        ⚪ Resesif Murni (bbkk × bbkk)
+                        âšª Resesif Murni (bbkk Ã— bbkk)
                     </button>
                 </div>
             </div>
@@ -460,7 +478,7 @@
                 <!-- Parental 1 (Male) -->
                 <div class="glass-panel p-5 rounded-2xl w-full max-w-xs flex flex-col items-center text-center space-y-3 border-l-4 border-l-emerald-500">
                     <label class="text-xs font-bold text-emerald-400 tracking-widest font-mono uppercase">
-                        ♂ PARENTAL 1 (JANTAN)
+                        â™‚ PARENTAL 1 (JANTAN)
                     </label>
                     <input type="text" id="p1" maxlength="4" value="BbKk" class="input-gen w-44 h-14 rounded-xl shadow-inner">
                     <div id="p1-preview" class="h-16 flex justify-center items-center"></div>
@@ -474,7 +492,7 @@
                 <!-- Parental 2 (Female) -->
                 <div class="glass-panel p-5 rounded-2xl w-full max-w-xs flex flex-col items-center text-center space-y-3 border-l-4 border-l-amber-500">
                     <label class="text-xs font-bold text-amber-400 tracking-widest font-mono uppercase">
-                        ♀ PARENTAL 2 (BETINA)
+                        â™€ PARENTAL 2 (BETINA)
                     </label>
                     <input type="text" id="p2" maxlength="4" value="BbKk" class="input-gen w-44 h-14 rounded-xl shadow-inner">
                     <div id="p2-preview" class="h-16 flex justify-center items-center"></div>
@@ -484,7 +502,7 @@
             <!-- Action Button -->
             <div class="flex justify-center pt-2">
                 <button onclick="startAnalysis()" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-display font-bold text-sm tracking-widest transition shadow-lg shadow-emerald-500/25 active:scale-95 flex items-center gap-2">
-                    <span>⚡</span>
+                    <span>âš¡</span>
                     <span>MULAI PERSILANGAN & ASORTASI</span>
                 </button>
             </div>
@@ -516,7 +534,7 @@
                 <div class="lg:col-span-8 glass-panel p-5 sm:p-6 rounded-2xl border-t-2 border-t-emerald-400 space-y-4">
                     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
                         <div>
-                            <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block">// PAPAN PUNNETT 4×4</span>
+                            <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block">// PAPAN PUNNETT 4Ã—4</span>
                             <h3 class="text-base sm:text-lg font-display font-bold text-white tracking-wide">
                                 Matriks Fertilisasi 16 Kombinasi
                             </h3>
@@ -531,7 +549,7 @@
                             <!-- Populated dynamically via JS -->
                         </div>
                     </div>
-                    <p class="sm:hidden text-center text-[10px] text-emerald-400/90 font-mono py-1">👉 Geser tabel ke samping untuk melihat 16 kotak lengkap 👈</p>
+                    <p class="sm:hidden text-center text-[10px] text-emerald-400/90 font-mono py-1">ðŸ‘‰ Geser tabel ke samping untuk melihat 16 kotak lengkap ðŸ‘ˆ</p>
 
                     <!-- Seed Phenotype Legend -->
                     <div class="flex flex-wrap items-center justify-center gap-4 pt-3 border-t border-slate-800/80 text-[11px] font-mono text-slate-300">
@@ -584,7 +602,7 @@
             <div class="glass-panel p-6 sm:p-7 rounded-2xl space-y-4 border-t-2 border-t-amber-400">
                 <div class="border-b border-slate-800 pb-3 flex items-center justify-between">
                     <h4 class="font-display font-bold text-sm tracking-wide text-amber-300 flex items-center gap-2">
-                        <span>📋</span> LAPORAN ANALISIS HUKUM MENDEL II
+                        <span>ðŸ“‹</span> LAPORAN ANALISIS HUKUM MENDEL II
                     </h4>
                     <span class="text-[10px] font-mono text-slate-400">DIHYBRID SEQUENCING v4.0</span>
                 </div>
@@ -605,7 +623,7 @@
 
     <!-- ==================== FOOTER ==================== -->
     <footer class="mt-8 border-t border-slate-800/80 bg-slate-950/80 py-6 px-4 text-center text-xs font-mono text-slate-500">
-        <p>GEN-OS // BIO-CORE • Modul 02: Generator Rasio Dihibrid Mendel (BIO-SEQUENCER)</p>
+        <p>GEN-OS // BIO-CORE â€¢ Modul 02: Generator Rasio Dihibrid Mendel (BIO-SEQUENCER)</p>
         <p class="mt-1 text-[11px] text-slate-600">Simulasi Dogma Sentral Hukum Asortasi Bebas Mendel (Independent Assortment)</p>
     </footer>
 
@@ -614,13 +632,13 @@
         <div class="glass-panel rounded-2xl max-w-2xl w-full border border-emerald-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30">📖</span>
+                    <span class="text-2xl p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30">ðŸ“–</span>
                     <div>
                         <h3 class="text-lg font-display font-bold text-white tracking-wider">PANDUAN LENGKAP SIMULASI DIHIBRID</h3>
                         <p class="text-xs font-mono text-emerald-400">MODUL 02: PERSILANGAN DUA SIFAT BEDA (HUKUM II MENDEL)</p>
                     </div>
                 </div>
-                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">âœ•</button>
             </div>
 
             <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
@@ -638,12 +656,12 @@
                 <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
                     <h4 class="font-display font-bold text-amber-300 text-xs tracking-wider uppercase">2. Menentukan Genotipe Induk (Parental)</h4>
                     <p class="text-xs text-slate-300">
-                        Masukkan 4 huruf genotipe untuk Induk 1 (♂) dan Induk 2 (♀), misalnya <code class="text-emerald-300 font-mono bg-slate-950 px-1 py-0.5 rounded border border-slate-700">BbKk</code>. Anda juga dapat memilih <b>Pintas Skenario Cepat 1-Klik</b> untuk memuat variasi persilangan klasik seperti F1 &times; F1 (9:3:3:1) atau Uji Silang / Test Cross (1:1:1:1).
+                        Masukkan 4 huruf genotipe untuk Induk 1 (â™‚) dan Induk 2 (â™€), misalnya <code class="text-emerald-300 font-mono bg-slate-950 px-1 py-0.5 rounded border border-slate-700">BbKk</code>. Anda juga dapat memilih <b>Pintas Skenario Cepat 1-Klik</b> untuk memuat variasi persilangan klasik seperti F1 &times; F1 (9:3:3:1) atau Uji Silang / Test Cross (1:1:1:1).
                     </p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
-                    <h4 class="font-display font-bold text-cyan-300 text-xs tracking-wider uppercase">3. Menelaah Papan Punnett 4×4 & Laporan</h4>
+                    <h4 class="font-display font-bold text-cyan-300 text-xs tracking-wider uppercase">3. Menelaah Papan Punnett 4Ã—4 & Laporan</h4>
                     <p class="text-xs text-slate-300">
                         Klik tombol <b>MULAI PERSILANGAN & ASORTASI</b>. Sistem akan membentuk 4 macam gamet dari masing-masing induk (<i>BK, Bk, bK, bk</i>) dan menggabungkannya ke dalam 16 kotak kombinasi F2 beserta visualisasi ilustrasi biji ercis, diagram batang persentase, dan rasio penyederhanaan otomatis (GCD).
                     </p>
@@ -663,13 +681,13 @@
         <div class="glass-panel rounded-2xl max-w-2xl w-full border border-purple-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">📚</span>
+                    <span class="text-2xl p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">ðŸ“š</span>
                     <div>
                         <h3 class="text-lg font-display font-bold text-white tracking-wider">DASAR TEORETIS & REFERENSI ILMIAH</h3>
                         <p class="text-xs font-mono text-purple-400">HUKUM ASORTASI BEBAS MENDEL & GENETIKA MOLEKULER ERCIS</p>
                     </div>
                 </div>
-                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">âœ•</button>
             </div>
 
             <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
@@ -680,10 +698,10 @@
                         <span class="text-[10px] font-mono text-slate-500">1866</span>
                     </div>
                     <p class="text-slate-300">
-                        <b>Mendel, Gregor (1866).</b> <i>Versuche über Pflanzen-Hybriden.</i> Verhandlungen des naturforschenden Vereines in Brünn, Bd. IV für das Jahr 1865: 3–47.
+                        <b>Mendel, Gregor (1866).</b> <i>Versuche Ã¼ber Pflanzen-Hybriden.</i> Verhandlungen des naturforschenden Vereines in BrÃ¼nn, Bd. IV fÃ¼r das Jahr 1865: 3â€“47.
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        → Melaporkan persilangan dihibrid biji ercis kuning-bulat dengan hijau-kisut dan merumuskan Hukum Asortasi Bebas (*Law of Independent Assortment*).
+                        â†’ Melaporkan persilangan dihibrid biji ercis kuning-bulat dengan hijau-kisut dan merumuskan Hukum Asortasi Bebas (*Law of Independent Assortment*).
                     </p>
                 </div>
 
@@ -694,10 +712,10 @@
                         <span class="text-[10px] font-mono text-slate-500">1990</span>
                     </div>
                     <p class="text-slate-300">
-                        <b>Bhattacharyya, M. K., Smith, A. M., Ellis, T. H. N., Hedley, C., & Martin, C. (1990).</b> <i>The wrinkled-seed character of pea described by Mendel is caused by a transposon insertion in a gene encoding starch-branching enzyme.</i> Cell, 60(1): 115–122.
+                        <b>Bhattacharyya, M. K., Smith, A. M., Ellis, T. H. N., Hedley, C., & Martin, C. (1990).</b> <i>The wrinkled-seed character of pea described by Mendel is caused by a transposon insertion in a gene encoding starch-branching enzyme.</i> Cell, 60(1): 115â€“122.
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        → Menemukan bahwa fenotipe kisut/berkerut (*wrinkled*) disebabkan oleh insersi transposon pada gen pengkode enzim percabangan pati SBEI.
+                        â†’ Menemukan bahwa fenotipe kisut/berkerut (*wrinkled*) disebabkan oleh insersi transposon pada gen pengkode enzim percabangan pati SBEI.
                     </p>
                 </div>
 
@@ -712,7 +730,7 @@
                         <b>Sato, Y., et al. (2007).</b> <i>Stay-green enzyme mediates chlorophyll degradation in pea cotyledons.</i>
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        → Mengidentifikasi lokus warna biji Mendel (*I locus*) sebagai gen *Stay-Green* (SGR) pengatur pemecahan klorofil selama pematangan biji.
+                        â†’ Mengidentifikasi lokus warna biji Mendel (*I locus*) sebagai gen *Stay-Green* (SGR) pengatur pemecahan klorofil selama pematangan biji.
                     </p>
                 </div>
 
@@ -726,7 +744,7 @@
                         <b>Punnett, Reginald Crundall (1905).</b> <i>Mendelism.</i> Cambridge: Bowes & Bowes.
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        → Memperkenalkan diagram visual matriks silang (2 &times; 2 dan 4 &times; 4) yang kini digunakan secara universal di seluruh dunia untuk memvisualisasikan rekombinasi alel.
+                        â†’ Memperkenalkan diagram visual matriks silang (2 &times; 2 dan 4 &times; 4) yang kini digunakan secara universal di seluruh dunia untuk memvisualisasikan rekombinasi alel.
                     </p>
                 </div>
             </div>
@@ -792,7 +810,7 @@
         window.toggleSound = function() {
             soundEnabled = !soundEnabled;
             const icon = document.getElementById('sound-icon');
-            if (icon) icon.textContent = soundEnabled ? '🔊' : '🔇';
+            if (icon) icon.textContent = soundEnabled ? 'ðŸ”Š' : 'ðŸ”‡';
             const btn = document.getElementById('btn-sound');
             if (btn) {
                 if (!soundEnabled) btn.classList.add('opacity-60');
@@ -996,7 +1014,7 @@
             const g2 = getGametes(p2);
 
             const grid = document.getElementById('punnett-grid');
-            grid.innerHTML = '<div class="p-2 border border-slate-800 bg-slate-900/60 text-slate-500 font-mono text-[10px] rounded-lg flex items-center justify-center">♀ \\ ♂</div>';
+            grid.innerHTML = '<div class="p-2 border border-slate-800 bg-slate-900/60 text-slate-500 font-mono text-[10px] rounded-lg flex items-center justify-center">â™€ \\ â™‚</div>';
 
             // Top Gamete Headers (P2 Sperm / Male Gametes)
             g2.forEach(g => {
@@ -1067,7 +1085,7 @@
                     <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-700/80 space-y-1.5 shadow-sm">
                         <div class="flex justify-between items-center text-xs">
                             <span class="font-bold ${textCol} flex items-center gap-1.5 font-sans">
-                                <span>●</span> ${key}
+                                <span>â—</span> ${key}
                             </span>
                             <span class="font-mono font-bold text-white">${val}/16 (${pct.toFixed(1)}%)</span>
                         </div>
@@ -1116,7 +1134,7 @@
                 report += `
                     <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 space-y-1.5">
                         <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider block font-bold">
-                            ✅ 2. Konfirmasi Teoretis Hukum II Mendel (Asortasi Bebas)
+                            âœ… 2. Konfirmasi Teoretis Hukum II Mendel (Asortasi Bebas)
                         </span>
                         <p class="text-xs text-slate-300">
                             Terdeteksi rasio klasik <b>9:3:3:1</b>. Hasil ini membuktikan secara empiris bahwa kedua pasang alel (Bentuk Biji dan Warna Biji) terletak pada pasangan kromosom homolog yang berbeda dan memilah secara independen saat anafase I meiosis tanpa pautan genetik (*linkage*).
@@ -1127,7 +1145,7 @@
                 report += `
                     <div class="p-3.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 space-y-1.5">
                         <span class="text-[10px] font-mono text-cyan-300 uppercase tracking-wider block font-bold">
-                            🎯 2. Konfirmasi Uji Silang (Test Cross Dihibrid)
+                            ðŸŽ¯ 2. Konfirmasi Uji Silang (Test Cross Dihibrid)
                         </span>
                         <p class="text-xs text-slate-300">
                             Terdeteksi rasio setara <b>1:1:1:1</b>. Ini adalah tanda tangan diagnostik dari <b>Test Cross Dihibrid</b> ($BbKk \times bbkk$), membuktikan bahwa individu heterozigot menghasilkan 4 jenis gamet ($BK, Bk, bK, bk$) dengan frekuensi probabilitas yang persis sama besar (25% tiap jenis gamet).
@@ -1138,7 +1156,7 @@
                 report += `
                     <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-1.5">
                         <span class="text-[10px] font-mono text-amber-400 uppercase tracking-wider block font-bold">
-                            🔸 2. Monohibrid Semu pada Salah Satu Lokus
+                            ðŸ”¸ 2. Monohibrid Semu pada Salah Satu Lokus
                         </span>
                         <p class="text-xs text-slate-300">
                             Terdeteksi rasio monohibrid <b>3:1</b> (${rawRatio}). Fenomena ini terjadi karena salah satu lokus gen bersifat homozigot seragam pada kedua induk, sehingga segregasi aktif hanya berlangsung pada satu pasang lokus gen saja.
@@ -1149,7 +1167,7 @@
                 report += `
                     <div class="p-3.5 rounded-xl bg-purple-500/10 border border-purple-500/30 space-y-1.5">
                         <span class="text-[10px] font-mono text-purple-400 uppercase tracking-wider block font-bold">
-                            🌟 2. Keseragaman Fenotipe 100% (Uniformitas F1)
+                            ðŸŒŸ 2. Keseragaman Fenotipe 100% (Uniformitas F1)
                         </span>
                         <p class="text-xs text-slate-300">
                             Seluruh 16 kombinasi keturunan (100%) memiliki fenotipe seragam. Ini sesuai dengan Hukum Dominansi Mendel di mana alel dominan sepenuhnya menutupi ekspresi alel resesif pada keturunan generasi pertama galur murni.
@@ -1183,3 +1201,4 @@
 </body>
 
 </html>
+

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -46,7 +46,25 @@ pre{font:inherit;font-size:11px;color:#fff;overflow-x:auto;padding:5px 7px;borde
 .panel.open{transform:none}
 #hint{display:none}}
 @media(prefers-reduced-motion:reduce){.panel{transition:none}}
-</style>
+
+        /* Mobile Performance Optimizations */
+        @media (max-width: 768px) {
+            * {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            .glass-card, .archive-panel, .glass-panel, .simulator-panel, .control-panel, .result-panel {
+                background: #0f172a !important;
+            }
+            header, aside, .glass-header {
+                background: #0f172a !important;
+            }
+            .ambient-biotech-vector, .ambient-plasmid-ring, .particle-layer, .scan-line, .scan-bar, .scan-overlay {
+                display: none !important;
+                animation: none !important;
+            }
+        }
+    </style>
 </head>
 <body>
 <div id="cv"></div>
@@ -145,7 +163,7 @@ for(let i=0;i<N;i++){
   if(s==1&&i>0)ph[1][i]=P(RP,t-TW/2,y-RISE/2);
   if(ph[s][i])add(g,GE.ph,M.p,ph[s][i],2,{type:'phos',i,s});
  });
- // ikatan hidrogen: A=T (2), G≡C (3), di celah antara ujung dua basa
+ // ikatan hidrogen: A=T (2), Gâ‰¡C (3), di celah antara ujung dua basa
  const st=LEN[PUR[b[0]]?1:0],en=D-LEN[PUR[b[1]]?1:0],n=UP.clone().cross(d),mid=c[0].clone().add(d.clone().multiplyScalar((st+en)/2));
  (PUR[b[0]]&&b[0]=='A'||b[0]=='T'?[-.05,.05]:[-.1,0,.1]).forEach(o=>{
   const m=add(gh,GE.hb,M.h,mid.clone().add(n.clone().multiplyScalar(o)),1,{type:'hb',i});
@@ -229,3 +247,4 @@ addEventListener('resize',rs);rs();home();
 </script>
 </body>
 </html>
+

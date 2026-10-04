@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -46,7 +46,7 @@
         <div class="header-content">
             <div class="header-left">
                 <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                    <a href="../index.html" class="header-back-link" title="Kembali ke Beranda GEN-OS">← Beranda</a>
+                    <a href="../index.html" class="header-back-link" title="Kembali ke Beranda GEN-OS">â† Beranda</a>
                     <div class="logo-badge" style="margin-bottom:0;">
                         <span class="pulse-dot"></span>
                         <span class="badge-text">GEN-OS 3D BIO-CORE</span>
@@ -58,11 +58,11 @@
             <!-- Tombol Toggle Cepat di Header untuk Layar Tablet / HP -->
             <div class="header-actions">
                 <button id="btn-toggle-controls-panel" class="header-btn" title="Buka Panel Kontrol">
-                    <span class="header-btn-icon">⚙️</span>
+                    <span class="header-btn-icon">âš™ï¸</span>
                     <span class="header-btn-text">Menu</span>
                 </button>
                 <button id="btn-toggle-inspector-panel" class="header-btn" title="Buka Detail Kromosom">
-                    <span class="header-btn-icon">🔬</span>
+                    <span class="header-btn-icon">ðŸ”¬</span>
                     <span class="header-btn-text">Detail</span>
                 </button>
             </div>
@@ -79,7 +79,7 @@
 
         <div class="panel-header-flex">
             <div class="panel-section-title">
-                <span class="icon">⚡</span> KONTROL PEMISAHAN & MITOSIS
+                <span class="icon">âš¡</span> KONTROL PEMISAHAN & MITOSIS
             </div>
             <button id="btn-close-controls" class="btn-icon-close" title="Tutup Menu">&times;</button>
         </div>
@@ -87,15 +87,15 @@
         <!-- Tombol Aksi Utama Pemisahan Kromosom -->
         <div class="btn-group-primary">
             <button id="btn-anaphase" class="action-btn btn-neon-blue">
-                <span class="btn-icon">⚡</span>
+                <span class="btn-icon">âš¡</span>
                 <span class="btn-text">Pisahkan Kromatid Saudara (Anafase)</span>
             </button>
             <button id="btn-explode" class="action-btn btn-neon-purple">
-                <span class="btn-icon">💥</span>
+                <span class="btn-icon">ðŸ’¥</span>
                 <span class="btn-text">Uraikan Per Bagian (Exploded View)</span>
             </button>
             <button id="btn-reset-assembly" class="action-btn btn-neon-green hidden">
-                <span class="btn-icon">🔄</span>
+                <span class="btn-icon">ðŸ”„</span>
                 <span class="btn-text">Gabungkan Kembali Kromosom Utuh</span>
             </button>
         </div>
@@ -104,11 +104,11 @@
 
         <!-- Anotasi Ilmiah 3D -->
         <div class="panel-section-title">
-            <span class="icon">🏷️</span> ANOTASI & LABEL ANATOMI
+            <span class="icon">ðŸ·ï¸</span> ANOTASI & LABEL ANATOMI
         </div>
         <div class="toggle-group">
             <button id="btn-toggle-labels" class="ctrl-btn active">
-                <span id="label-status-icon">👁️</span> Label Anatomi 3D: <b id="label-status-text">TAMPIL</b>
+                <span id="label-status-icon">ðŸ‘ï¸</span> Label Anatomi 3D: <b id="label-status-text">TAMPIL</b>
             </button>
         </div>
 
@@ -116,7 +116,7 @@
 
         <!-- Filter / Isolasi Bagian Kromosom -->
         <div class="panel-section-title">
-            <span class="icon">🔬</span> ISOLASI KOMPONEN
+            <span class="icon">ðŸ”¬</span> ISOLASI KOMPONEN
         </div>
         <p class="section-hint">Ketuk untuk menonjolkan bagian tertentu:</p>
         
@@ -136,14 +136,14 @@
 
         <!-- Kontrol Navigasi & Rotasi -->
         <div class="panel-section-title">
-            <span class="icon">🎥</span> NAVIGASI KAMERA 3D
+            <span class="icon">ðŸŽ¥</span> NAVIGASI KAMERA 3D
         </div>
         <div class="camera-controls">
             <button id="btn-toggle-rotate" class="ctrl-btn active">
-                <span id="rotate-status-icon">🔄</span> Rotasi Otomatis: <b id="rotate-status-label">AKTIF</b>
+                <span id="rotate-status-icon">ðŸ”„</span> Rotasi Otomatis: <b id="rotate-status-label">AKTIF</b>
             </button>
             <button id="btn-reset-camera" class="ctrl-btn">
-                <span>🎯</span> Reset Sudut Pandang Awal
+                <span>ðŸŽ¯</span> Reset Sudut Pandang Awal
             </button>
         </div>
 
@@ -171,7 +171,7 @@
         </div>
 
         <div id="inspector-placeholder" class="inspector-empty">
-            <div class="microscope-icon">🔬</div>
+            <div class="microscope-icon">ðŸ”¬</div>
             <h3>PILIH BAGIAN KROMOSOM</h3>
             <p>Ketuk salah satu bagian kromosom (Sentromer, Kinetokor, Telomer, Lengan p/q, atau Pita Banding) untuk menginspeksi struktur mikroskopis dan fungsi biologisnya.</p>
         </div>
@@ -243,23 +243,23 @@
     <!-- Mobile Floating Quick Action Dock (Bawah) -->
     <nav id="mobile-dock" class="mobile-dock-container">
         <button id="dock-btn-anaphase" class="dock-btn">
-            <span class="dock-icon">⚡</span>
+            <span class="dock-icon">âš¡</span>
             <span class="dock-label">Pisahkan</span>
         </button>
         <button id="dock-btn-explode" class="dock-btn">
-            <span class="dock-icon">💥</span>
+            <span class="dock-icon">ðŸ’¥</span>
             <span class="dock-label">Uraikan</span>
         </button>
         <button id="dock-btn-reset" class="dock-btn hidden">
-            <span class="dock-icon">🔄</span>
+            <span class="dock-icon">ðŸ”„</span>
             <span class="dock-label">Satukan</span>
         </button>
         <button id="dock-btn-menu" class="dock-btn dock-btn-primary">
-            <span class="dock-icon">⚙️</span>
+            <span class="dock-icon">âš™ï¸</span>
             <span class="dock-label">Menu</span>
         </button>
         <button id="dock-btn-inspect" class="dock-btn">
-            <span class="dock-icon">🔬</span>
+            <span class="dock-icon">ðŸ”¬</span>
             <span class="dock-label">Detail</span>
         </button>
     </nav>
@@ -267,8 +267,8 @@
     <!-- Petunjuk Navigasi Desktop -->
     <footer id="interaction-hint">
         <div class="hint-pill">
-            <span class="hint-icon">🖱️</span>
-            <span><b>Klik / Sentuh & Geser:</b> Rotasi 360°</span>
+            <span class="hint-icon">ðŸ–±ï¸</span>
+            <span><b>Klik / Sentuh & Geser:</b> Rotasi 360Â°</span>
             <span class="hint-divider">|</span>
             <span><b>Pinch / Scroll:</b> Zoom</span>
             <span class="hint-divider">|</span>
@@ -284,3 +284,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+

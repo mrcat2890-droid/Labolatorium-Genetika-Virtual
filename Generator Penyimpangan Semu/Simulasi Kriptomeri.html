@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -132,14 +132,32 @@
             pointer-events: none;
             animation: linariaDrift linear infinite;
         }
+    
+        /* Mobile Performance Optimizations */
+        @media (max-width: 768px) {
+            * {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            .glass-card, .archive-panel, .glass-panel, .simulator-panel, .control-panel, .result-panel {
+                background: #0f172a !important;
+            }
+            header, aside, .glass-header {
+                background: #0f172a !important;
+            }
+            .ambient-biotech-vector, .ambient-plasmid-ring, .particle-layer, .scan-line, .scan-bar, .scan-overlay {
+                display: none !important;
+                animation: none !important;
+            }
+        }
     </style>
 </head>
 <body class="p-4 md:p-8 relative overflow-x-hidden">
 
     <!-- Signature Kriptomeri Background Elements (Linaria maroccana: Ungu 9, Merah 3, Putih 4) -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-        <div class="absolute -top-16 -left-16 w-96 h-96 bg-purple-600/15 rounded-full filter blur-[100px]"></div>
-        <div class="absolute top-1/2 -right-20 w-[30rem] h-[30rem] bg-pink-600/15 rounded-full filter blur-[120px]"></div>
+        <div class="absolute -top-16 -left-16 w-96 h-96 bg-purple-600/15 rounded-full filter blur-[100px] hidden md:block"></div>
+        <div class="absolute top-1/2 -right-20 w-[30rem] h-[30rem] bg-pink-600/15 rounded-full filter blur-[120px] hidden md:block"></div>
 
         <!-- Floating Linaria Flower Silhouettes -->
         <svg class="linaria-particle w-12 h-12 text-purple-400/25 fill-current" style="left: 10%; animation-duration: 22s; animation-delay: 0s;" viewBox="0 0 100 100">
@@ -169,7 +187,7 @@
                     </div>
                     <div>
                         <h1 class="text-2xl md:text-3xl font-bold text-white tracking-tight">SIMULASI KRIPTOMERI</h1>
-                        <p class="text-purple-400 font-medium">Bunga <i class="font-serif">Linaria maroccana</i> • Rasio 9:3:4</p>
+                        <p class="text-purple-400 font-medium">Bunga <i class="font-serif">Linaria maroccana</i> â€¢ Rasio 9:3:4</p>
                     </div>
                 </div>
             </div>
@@ -233,7 +251,7 @@
                 <!-- P1 -->
                 <div class="flex flex-col items-center">
                     <div class="text-slate-400 mb-2 flex items-center gap-2">
-                        <span>P1 (♂)</span>
+                        <span>P1 (â™‚)</span>
                     </div>
                     <div class="w-24 h-24 mb-4 flex items-center justify-center bg-slate-800/50 rounded-full border border-slate-700" id="p1-preview"></div>
                     <input type="text" id="p1-input" value="AaBb" maxlength="4" class="input-box w-32 h-12 rounded-lg" oninput="handleInput(this, 'p1-preview')">
@@ -241,12 +259,12 @@
                 </div>
 
                 <!-- Cross Icon -->
-                <div class="text-4xl text-slate-500 font-light">×</div>
+                <div class="text-4xl text-slate-500 font-light">Ã—</div>
 
                 <!-- P2 -->
                 <div class="flex flex-col items-center">
                     <div class="text-slate-400 mb-2 flex items-center gap-2">
-                        <span>P2 (♀)</span>
+                        <span>P2 (â™€)</span>
                     </div>
                     <div class="w-24 h-24 mb-4 flex items-center justify-center bg-slate-800/50 rounded-full border border-slate-700" id="p2-preview"></div>
                     <input type="text" id="p2-input" value="AaBb" maxlength="4" class="input-box w-32 h-12 rounded-lg" oninput="handleInput(this, 'p2-preview')">
@@ -274,7 +292,7 @@
                             <!-- Grid injected via JS -->
                         </div>
                     </div>
-                    <p class="sm:hidden text-center text-[10px] text-purple-400 font-mono mt-2">👉 Geser tabel ke samping untuk melihat 16 kotak lengkap 👈</p>
+                    <p class="sm:hidden text-center text-[10px] text-purple-400 font-mono mt-2">ðŸ‘‰ Geser tabel ke samping untuk melihat 16 kotak lengkap ðŸ‘ˆ</p>
                 </section>
 
                 <!-- Stats & Genotypes -->
@@ -472,7 +490,7 @@
             let gridHtml = `<table class="w-full border-collapse border border-slate-700 text-center mono">`;
             
             // Header row (P1 gametes)
-            gridHtml += `<tr><th class="border border-slate-700 p-2 bg-slate-800/50 text-slate-400">♀ \\ ♂</th>`;
+            gridHtml += `<tr><th class="border border-slate-700 p-2 bg-slate-800/50 text-slate-400">â™€ \\ â™‚</th>`;
             for (let g of g1) {
                 gridHtml += `<th class="border border-slate-700 p-2 bg-slate-800/50 text-purple-300 text-lg">${g}</th>`;
             }
@@ -585,7 +603,7 @@
                 report += `
                     <div class="p-4 bg-purple-900/20 border border-purple-500/30 rounded-lg mt-4">
                         <strong class="text-purple-400 block mb-2">Kesimpulan Rasio Mendel:</strong>
-                        <p>Persilangan dihibrida heterozigot sempurna (AaBb × AaBb) menghasilkan rasio fenotipe klasik Kriptomeri yaitu <strong>9 (Ungu) : 3 (Merah) : 4 (Putih)</strong>.</p>
+                        <p>Persilangan dihibrida heterozigot sempurna (AaBb Ã— AaBb) menghasilkan rasio fenotipe klasik Kriptomeri yaitu <strong>9 (Ungu) : 3 (Merah) : 4 (Putih)</strong>.</p>
                         <p class="mt-2 text-xs text-slate-400">Penyimpangan semu ini terjadi karena fenotipe "Putih" gabungan dari kelompok genotipe aaB_ (3) dan aabb (1) yang keduanya tidak mampu memproduksi antosianin, sehingga efek gen pengubah pH (B/b) tidak bermanifestasi (tersembunyi/kriptos).</p>
                     </div>
                 `;
@@ -610,3 +628,5 @@
     </script>
 </body>
 </html>
+
+

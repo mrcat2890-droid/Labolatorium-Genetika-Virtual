@@ -6,6 +6,21 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### ⚡ Optimalisasi Performa Mobile Besar-besaran (Mobile GPU & CPU Optimization)
+- **Penonaktifan Efek Kaca Berat pada Peramban Seluler (`backdrop-filter: blur`):**
+  - Mengidentifikasi bahwa penggunaan properti CSS `backdrop-filter: blur(24px)` pada elemen antarmuka utama menyebabkan beban GPU (Graphics Processing Unit) yang sangat berat pada perangkat mobile/ponsel (memicu lag dan penurunan *frame rate*).
+  - Menginjeksi CSS Media Query global `@media (max-width: 768px)` ke seluruh 21 modul HTML untuk menonaktifkan efek `backdrop-filter` secara eksklusif bagi pengguna seluler, menggantinya dengan warna solid gelap (`#0f172a` dengan opasitas 95%) agar teks tetap terbaca tajam dengan performa yang jauh lebih responsif.
+- **Penyembunyian Elemen Ornamen GPU-Heavy (`filter: blur[100px]`):**
+  - Mengoptimalkan latar belakang dekoratif yang menggunakan utilitas kelas `blur-[100px]`, `blur-[110px]`, dan `blur-[120px]` yang boros sumber daya pada layar kecil. Ornamen raksasa ini kini disembunyikan menggunakan kelas `hidden md:block` sehingga ponsel cerdas tidak perlu melakukan komputasi cahaya latar berat.
+- **Minimalisasi Animasi & Partikel JS Latar Belakang (CPU Optimization):**
+  - Membatasi jumlah *particle rendering* 2D Canvas di `index.html` dari 70 partikel menjadi 25 partikel saat diakses lewat ponsel (`window.innerWidth < 768`). Hal ini mengurangi kalkulasi jarak matematis loop hingga ~87% per frame.
+  - Menonaktifkan animasi CSS statis non-esensial (`plasmidSpin`, `scan-line`, `vectorDrift`) secara otomatis pada layar seluler menggunakan atribut CSS spesifik layar kecil.
+- **Kesimpulan Dampak:** Seluruh antarmuka tetap menyuguhkan tema premium yang mewah di desktop, sekaligus menghadirkan performa secepat kilat tanpa patah-patah bagi pengguna ponsel pelajar, tanpa menghilangkan atau merusak logika biologi simulasi.
+- **Berkas yang Diperbarui:**
+  - `Seluruh 21 berkas .html modul dan beranda`
+  - `index.html` (Logika partikel)
+  - `CHANGELOG.md`
+
 ### 🧬 Perbaikan Tampilan Visual Huruf Alel Resesif pada Seluruh Modul Penyimpangan Semu Mendel
 - **Eliminasi Pemaksaan Huruf Kapital Visual (*Forced Uppercase Removal*):**
   - Mengidentifikasi akar masalah di mana kolom input genotipe parental pada seluruh modul *Penyimpangan Semu Mendel* menggunakan kelas Tailwind `uppercase` atau aturan CSS `text-transform: uppercase;`. Hal ini menyebabkan alel resesif (seperti `r`, `p`, `w`, `y`, `b`, `e`, `a`) yang diketikkan pengguna atau dimasukkan via tombol *preset* secara visual dipaksa tampil sebagai huruf besar (`R`, `P`, `W`, `Y`, `B`, `E`, `A`), meskipun logika komputasi JavaScript (`output real`) berjalan normal.

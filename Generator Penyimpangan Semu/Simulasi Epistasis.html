@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -88,13 +88,31 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+    
+        /* Mobile Performance Optimizations */
+        @media (max-width: 768px) {
+            * {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            .glass-card, .archive-panel, .glass-panel, .simulator-panel, .control-panel, .result-panel {
+                background: #0f172a !important;
+            }
+            header, aside, .glass-header {
+                background: #0f172a !important;
+            }
+            .ambient-biotech-vector, .ambient-plasmid-ring, .particle-layer, .scan-line, .scan-bar, .scan-overlay {
+                display: none !important;
+                animation: none !important;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8 font-sans relative overflow-x-hidden">
     <!-- Signature Epistasis Dominan Background Elements (Cucurbita pepo) -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-        <div class="absolute -top-16 -left-16 w-96 h-96 bg-emerald-600/15 rounded-full filter blur-[100px]"></div>
-        <div class="absolute top-1/2 -right-20 w-[30rem] h-[30rem] bg-amber-500/15 rounded-full filter blur-[120px]"></div>
+        <div class="absolute -top-16 -left-16 w-96 h-96 bg-emerald-600/15 rounded-full filter blur-[100px] hidden md:block"></div>
+        <div class="absolute top-1/2 -right-20 w-[30rem] h-[30rem] bg-amber-500/15 rounded-full filter blur-[120px] hidden md:block"></div>
 
         <!-- Floating Squash Silhouettes (Putih 12, Kuning 3, Hijau 1) -->
         <svg class="squash-particle w-12 h-12 text-slate-200/20 fill-current" style="left: 8%; animation-duration: 25s; animation-delay: 0s;" viewBox="0 0 100 100">
@@ -122,7 +140,7 @@
                     <span class="px-3 py-1 bg-emerald-500/10 text-emerald-400 font-mono font-bold rounded-md border border-emerald-500/20">E</span>
                     <h1 class="text-3xl font-bold gradient-text">SIMULASI EPISTASIS DOMINAN</h1>
                 </div>
-                <p class="text-slate-400 text-lg">Warna Buah Labu (<i>Cucurbita pepo</i>) • Rasio F2 12:3:1</p>
+                <p class="text-slate-400 text-lg">Warna Buah Labu (<i>Cucurbita pepo</i>) â€¢ Rasio F2 12:3:1</p>
             </div>
         </div>
 
@@ -183,7 +201,7 @@
                 <!-- Parent 1 -->
                 <div class="space-y-4">
                     <div class="flex justify-between items-center">
-                        <label class="text-sm font-medium text-emerald-400">Genotipe Induk 1 (♂)</label>
+                        <label class="text-sm font-medium text-emerald-400">Genotipe Induk 1 (â™‚)</label>
                         <span class="text-xs text-slate-400 font-mono">P1</span>
                     </div>
                     <input type="text" id="p1" value="WwYy" class="w-full bg-slate-900 border border-emerald-500/30 rounded-lg px-4 py-3 text-white font-mono text-center tracking-[0.2em] focus:outline-none focus:border-emerald-400 transition-colors" maxlength="4">
@@ -196,7 +214,7 @@
                 <!-- Parent 2 -->
                 <div class="space-y-4">
                     <div class="flex justify-between items-center">
-                        <label class="text-sm font-medium text-emerald-400">Genotipe Induk 2 (♀)</label>
+                        <label class="text-sm font-medium text-emerald-400">Genotipe Induk 2 (â™€)</label>
                         <span class="text-xs text-slate-400 font-mono">P2</span>
                     </div>
                     <input type="text" id="p2" value="WwYy" class="w-full bg-slate-900 border border-emerald-500/30 rounded-lg px-4 py-3 text-white font-mono text-center tracking-[0.2em] focus:outline-none focus:border-emerald-400 transition-colors" maxlength="4">
@@ -218,7 +236,7 @@
                 <div class="overflow-x-auto pb-2 -mx-2 px-2">
                     <div id="punnett-grid" class="min-w-[420px]"></div>
                 </div>
-                <p class="sm:hidden text-center text-[10px] text-emerald-400 font-mono mt-2">👉 Geser tabel ke samping untuk melihat 16 kotak lengkap 👈</p>
+                <p class="sm:hidden text-center text-[10px] text-emerald-400 font-mono mt-2">ðŸ‘‰ Geser tabel ke samping untuk melihat 16 kotak lengkap ðŸ‘ˆ</p>
             </div>
 
             <!-- Statistics -->
@@ -424,7 +442,7 @@
                 <table class="w-full border-collapse">
                     <thead>
                         <tr>
-                            <th class="p-3 border border-emerald-500/30 bg-slate-900/80 text-emerald-400 font-mono">♂ \\ ♀</th>
+                            <th class="p-3 border border-emerald-500/30 bg-slate-900/80 text-emerald-400 font-mono">â™‚ \\ â™€</th>
                             ${g2.map(g => `<th class="p-3 border border-emerald-500/30 bg-slate-900/50 text-emerald-300 font-mono text-lg">${g}</th>`).join('')}
                         </tr>
                     </thead>
@@ -487,7 +505,25 @@
                 .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); border-radius: 4px; }
                 .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(16, 185, 129, 0.3); border-radius: 4px; }
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(16, 185, 129, 0.5); }
-            </style>
+            
+        /* Mobile Performance Optimizations */
+        @media (max-width: 768px) {
+            * {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            .glass-card, .archive-panel, .glass-panel, .simulator-panel, .control-panel, .result-panel {
+                background: #0f172a !important;
+            }
+            header, aside, .glass-header {
+                background: #0f172a !important;
+            }
+            .ambient-biotech-vector, .ambient-plasmid-ring, .particle-layer, .scan-line, .scan-bar, .scan-overlay {
+                display: none !important;
+                animation: none !important;
+            }
+        }
+    </style>
         `);
 
         // Initial calculation
@@ -495,3 +531,5 @@
     </script>
 </body>
 </html>
+
+

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id" class="dark">
 
 <head>
@@ -323,6 +323,24 @@
             color: #ffffff;
             box-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
         }
+    
+        /* Mobile Performance Optimizations */
+        @media (max-width: 768px) {
+            * {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            .glass-card, .archive-panel, .glass-panel, .simulator-panel, .control-panel, .result-panel {
+                background: #0f172a !important;
+            }
+            header, aside, .glass-header {
+                background: #0f172a !important;
+            }
+            .ambient-biotech-vector, .ambient-plasmid-ring, .particle-layer, .scan-line, .scan-bar, .scan-overlay {
+                display: none !important;
+                animation: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -332,9 +350,9 @@
     <!-- Signature Meiosis & Fertilization Animated Background Layer -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <!-- Ambient Neon Glow Core -->
-        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-indigo-600/15 rounded-full filter blur-[100px] pointer-events-none"></div>
-        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-pink-600/15 rounded-full filter blur-[110px] pointer-events-none"></div>
-        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-purple-700/10 rounded-full filter blur-[120px] pointer-events-none"></div>
+        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-indigo-600/15 rounded-full filter blur-[100px] hidden md:block pointer-events-none"></div>
+        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-pink-600/15 rounded-full filter blur-[110px] hidden md:block pointer-events-none"></div>
+        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-purple-700/10 rounded-full filter blur-[120px] hidden md:block pointer-events-none"></div>
 
         <!-- Swimming Micro-Sperm Cells (Cyan Head + Wavy Sinusoidal Flagellum Tail) -->
         <div class="ambient-sperm-cell" style="left: 12%; animation-duration: 22s; animation-delay: 0s;">
@@ -372,8 +390,8 @@
         </div>
 
         <!-- Ambient Meiosis & Fertilization Genetic Badges -->
-        <div class="absolute top-[22%] left-[6%] font-mono text-[10px] text-indigo-400/25 tracking-widest">[MEIOSIS I ➔ CROSSING OVER ➔ MEIOSIS II]</div>
-        <div class="absolute bottom-[28%] right-[7%] font-mono text-[10px] text-pink-400/25 tracking-widest">[GAMETES (n=23) + SPERM (n=23) ➔ ZYGOTE (2n=46)]</div>
+        <div class="absolute top-[22%] left-[6%] font-mono text-[10px] text-indigo-400/25 tracking-widest">[MEIOSIS I âž” CROSSING OVER âž” MEIOSIS II]</div>
+        <div class="absolute bottom-[28%] right-[7%] font-mono text-[10px] text-pink-400/25 tracking-widest">[GAMETES (n=23) + SPERM (n=23) âž” ZYGOTE (2n=46)]</div>
     </div>
 
     <!-- ==================== TOP NAVIGATION HEADER ==================== -->
@@ -381,13 +399,13 @@
         <!-- Left: Logo & Module Title -->
         <div class="flex items-center gap-3">
             <a href="index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-700/80 bg-slate-900/90 hover:border-indigo-400 hover:text-indigo-300 text-slate-300 text-xs font-mono transition group">
-                <span class="transform group-hover:-translate-x-1 transition-transform">←</span>
+                <span class="transform group-hover:-translate-x-1 transition-transform">â†</span>
                 <span>BERANDA</span>
             </a>
             <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
             <div class="flex items-center gap-2.5">
                 <div class="p-1 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-lg">
-                    🥚
+                    ðŸ¥š
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
@@ -407,19 +425,19 @@
         <div class="flex items-center gap-2">
             <!-- Audio Toggle -->
             <button id="btn-sound" onclick="toggleSound()" class="px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 hover:border-indigo-400 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition" title="Toggle Efek Suara">
-                <span id="sound-icon">🔊</span>
+                <span id="sound-icon">ðŸ”Š</span>
                 <span class="hidden md:inline text-[11px]">AUDIO</span>
             </button>
 
             <!-- Literature Modal -->
             <button onclick="openLiteratureModal()" class="px-3 py-1.5 rounded-lg border border-purple-500/40 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-xs font-mono flex items-center gap-1.5 transition">
-                <span>📚</span>
+                <span>ðŸ“š</span>
                 <span class="hidden sm:inline text-[11px]">LITERATUR</span>
             </button>
 
             <!-- Tutorial Modal -->
             <button onclick="openTutorialModal()" class="px-3 py-1.5 rounded-lg border border-indigo-500/50 bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 text-xs font-mono flex items-center gap-1.5 transition animate-pulse">
-                <span>📖</span>
+                <span>ðŸ“–</span>
                 <span class="text-[11px]">PANDUAN</span>
             </button>
         </div>
@@ -436,7 +454,7 @@
                 </div>
             </div>
             <p class="text-[11px] font-mono text-slate-400 drop-shadow-md">
-                Gunakan kursor mouse / layar sentuh untuk rotasi bebas 3D (360°)
+                Gunakan kursor mouse / layar sentuh untuk rotasi bebas 3D (360Â°)
             </p>
         </div>
 
@@ -479,7 +497,7 @@
             <div class="lg:col-span-6 space-y-2 border-t lg:border-t-0 lg:border-l border-slate-800/80 pt-3 lg:pt-0 lg:pl-4">
                 <div class="flex items-center justify-between">
                     <h3 class="text-xs font-mono font-bold text-pink-400 uppercase tracking-wider flex items-center gap-1.5">
-                        <span>🧬</span> MATRIKS GENETIKA & KOTAK PUNNETT
+                        <span>ðŸ§¬</span> MATRIKS GENETIKA & KOTAK PUNNETT
                     </h3>
                     <span class="text-[10px] font-mono text-slate-400">Sel Sperma &times; Ovum</span>
                 </div>
@@ -527,7 +545,7 @@
                     Label: tampil
                 </button>
                 <button id="rsb" class="dock-btn text-xs hover:border-amber-400 hover:text-amber-300">
-                    <span>🎲</span>
+                    <span>ðŸŽ²</span>
                     <span>Acak ulang dan putar</span>
                 </button>
             </div>
@@ -539,13 +557,13 @@
         <div class="glass-panel rounded-2xl max-w-2xl w-full border border-indigo-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/30">📖</span>
+                    <span class="text-2xl p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/30">ðŸ“–</span>
                     <div>
                         <h3 class="text-lg font-display font-bold text-white tracking-wider">PANDUAN LENGKAP SIMULASI 3D</h3>
                         <p class="text-xs font-mono text-indigo-400">MODUL 11: GAMETOGENESIS & FERTILISASI</p>
                     </div>
                 </div>
-                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">âœ•</button>
             </div>
 
             <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
@@ -561,8 +579,8 @@
                 <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
                     <h4 class="font-display font-bold text-cyan-300 text-xs tracking-wider uppercase">2. Spermatogenesis vs Oogenesis</h4>
                     <p class="text-xs text-slate-300">
-                        • <b>Spermatogenesis (Ayah):</b> Pembelahan sitoplasma setara menghasilkan <b>4 spermatozoa fungsional</b> motil berflagel.<br>
-                        • <b>Oogenesis (Ibu):</b> Pembelahan sitoplasma asimetris menghasilkan <b>1 ovum fungsional</b> kaya sitoplasma dan nutrisi, serta 3 badan kutub (polar bodies) yang mengalami degenerasi.
+                        â€¢ <b>Spermatogenesis (Ayah):</b> Pembelahan sitoplasma setara menghasilkan <b>4 spermatozoa fungsional</b> motil berflagel.<br>
+                        â€¢ <b>Oogenesis (Ibu):</b> Pembelahan sitoplasma asimetris menghasilkan <b>1 ovum fungsional</b> kaya sitoplasma dan nutrisi, serta 3 badan kutub (polar bodies) yang mengalami degenerasi.
                     </p>
                 </div>
 
@@ -596,13 +614,13 @@
         <div class="glass-panel rounded-2xl max-w-2xl w-full border border-purple-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">📚</span>
+                    <span class="text-2xl p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">ðŸ“š</span>
                     <div>
                         <h3 class="text-lg font-display font-bold text-white tracking-wider">DASAR TEORETIS & REFERENSI ILMIAH</h3>
                         <p class="text-xs font-mono text-purple-400">HISTORI MEIOSIS & BIOLOGI MOLEKULER FERTILISASI</p>
                     </div>
                 </div>
-                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">âœ•</button>
             </div>
 
             <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
@@ -613,10 +631,10 @@
                         <span class="text-[10px] font-mono text-slate-500">1876</span>
                     </div>
                     <p class="text-slate-300">
-                        <b>Hertwig, Oscar (1876).</b> <i>Beiträge zur Kenntniss der Bildung, Befruchtung und Theilung des thierischen Eies.</i> Morphologisches Jahrbuch, 1: 347–434.
+                        <b>Hertwig, Oscar (1876).</b> <i>BeitrÃ¤ge zur Kenntniss der Bildung, Befruchtung und Theilung des thierischen Eies.</i> Morphologisches Jahrbuch, 1: 347â€“434.
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        → Ilmuwan pertama yang mengamati langsung di bawah mikroskop bahwa fertilisasi adalah penyatuan materi inti sel telur dan sel sperma tunggal.
+                        â†’ Ilmuwan pertama yang mengamati langsung di bawah mikroskop bahwa fertilisasi adalah penyatuan materi inti sel telur dan sel sperma tunggal.
                     </p>
                 </div>
 
@@ -624,14 +642,14 @@
                 <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
                     <div class="flex items-center justify-between">
                         <span class="font-bold text-indigo-400 font-mono">2. Teori Kromosom Sutton-Boveri & Meiosis</span>
-                        <span class="text-[10px] font-mono text-slate-500">1902–1903</span>
+                        <span class="text-[10px] font-mono text-slate-500">1902â€“1903</span>
                     </div>
                     <p class="text-slate-300">
-                        <b>Boveri, Theodor (1902).</b> <i>Über mehrpolige Mitosen als Mittel zur Analyse des Zellkerns.</i> Verh. Phys. Med. Ges. Würzburg.<br>
-                        <b>Sutton, Walter S. (1903).</b> <i>The Chromosomes in Heredity.</i> Biological Bulletin, 4(5): 231–251.
+                        <b>Boveri, Theodor (1902).</b> <i>Ãœber mehrpolige Mitosen als Mittel zur Analyse des Zellkerns.</i> Verh. Phys. Med. Ges. WÃ¼rzburg.<br>
+                        <b>Sutton, Walter S. (1903).</b> <i>The Chromosomes in Heredity.</i> Biological Bulletin, 4(5): 231â€“251.
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        → Menghubungkan perilaku kromosom selama pembelahan meiosis dengan Hukum Pemisahan Bebas (Mendel I) dan Asortasi Bebas (Mendel II).
+                        â†’ Menghubungkan perilaku kromosom selama pembelahan meiosis dengan Hukum Pemisahan Bebas (Mendel I) dan Asortasi Bebas (Mendel II).
                     </p>
                 </div>
 
@@ -645,7 +663,7 @@
                         <b>Morgan, Thomas Hunt (1911).</b> <i>An Attempt to Analyze the Constitution of the Chromosomes on the Basis of Sex-Limited Inheritance in Drosophila.</i> J. Exp. Zool.
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        → Membuktikan bahwa rekombinasi fisik antar-kromatid terjadi di kiasma dan menyebabkan pertukaran alel terpaut.
+                        â†’ Membuktikan bahwa rekombinasi fisik antar-kromatid terjadi di kiasma dan menyebabkan pertukaran alel terpaut.
                     </p>
                 </div>
 
@@ -656,8 +674,8 @@
                         <span class="text-[10px] font-mono text-slate-500">2005 & 2014</span>
                     </div>
                     <p class="text-slate-300">
-                        <b>Inoue, N., et al. (2005).</b> <i>The immunoglobulin superfamily protein Izumo is required for sperm to fuse with eggs.</i> Nature, 434: 234–238.<br>
-                        <b>Bianchi, E., et al. (2014).</b> <i>Juno is the egg receptor for the sperm Izumo protein that is essential for mammalian fertilization.</i> Nature, 508: 483–487.
+                        <b>Inoue, N., et al. (2005).</b> <i>The immunoglobulin superfamily protein Izumo is required for sperm to fuse with eggs.</i> Nature, 434: 234â€“238.<br>
+                        <b>Bianchi, E., et al. (2014).</b> <i>Juno is the egg receptor for the sperm Izumo protein that is essential for mammalian fertilization.</i> Nature, 508: 483â€“487.
                     </p>
                 </div>
             </div>
@@ -708,7 +726,7 @@
         function toggleSound() {
             soundEnabled = !soundEnabled;
             const icon = document.getElementById('sound-icon');
-            if (icon) icon.innerText = soundEnabled ? '🔊' : '🔇';
+            if (icon) icon.innerText = soundEnabled ? 'ðŸ”Š' : 'ðŸ”‡';
             if (soundEnabled) playBeep(587, 'triangle', 0.1, 0.12);
         }
 
@@ -964,7 +982,7 @@
             [54, 'Spermiogenesis & Ovulasi', 'Spermatid mengalami diferensiasi: kromatin dipadatkan protamin, terbentuk akrosom & flagel (spermatozoa). Oosit sekunder berselubung zona pelusida & korona radiata siap dibuahi.'],
             [62, 'Kemotaksis & Perjalanan Sperma', 'Spermatozoa berenang mendekati oosit sekunder. Jutaan sperma bersaing, hanya satu sperma yang berhasil menembus.'],
             [72, 'Pengikatan Zona & Reaksi Akrosom', 'Sperma terkapasitasi mengikat zona pelusida, memicu pelepasan enzim akrosin & hialuronidase. Interaksi molekuler Izumo1 (sperma) dan Juno (oosit) memulai fusi membran.'],
-            [82, 'Fusi Seluler & Reaksi Kortikal (Blok Polispermi)', 'Fusi memicu gelombang kalsium (Ca²⁺). Granula kortikal melepas enzim yang mengeraskan zona pelusida, mencegah masuknya sperma lain (blok polispermi permanen).'],
+            [82, 'Fusi Seluler & Reaksi Kortikal (Blok Polispermi)', 'Fusi memicu gelombang kalsium (CaÂ²âº). Granula kortikal melepas enzim yang mengeraskan zona pelusida, mencegah masuknya sperma lain (blok polispermi permanen).'],
             [86, 'Penyelesaian Meiosis II Oosit', 'Masuknya sperma memicu oosit menuntaskan meiosis II: satu set kromatid dikeluarkan sebagai badan kutub II. Oosit kini resmi menjadi ovum haploid (n).'],
             [90, 'Pronukleus Jantan & Betina | n + n', 'Kromatin sperma terdekondensasi membentuk pronukleus jantan; materi inti ovum membentuk pronukleus betina. Masing-masing haploid (n).'],
             [96, 'Singami: Zigot Diploid (2n)', 'Selubung kedua pronukleus melebur (singami). Kromosom ayah dan ibu bersatu pada gelendong mitosis pertama membentuk zigot diploid (2n). Dimulailah pembelahan embrio!']
@@ -1095,7 +1113,7 @@
                    <div><b>Ovum (Ibu AaBb):</b> <span class="text-pink-300 font-bold">${ov}</span></div>
                    <div class="mt-1 pt-1 border-t border-slate-800"><b>Genotipe Zigot (F1):</b> <span class="text-emerald-400 font-bold text-xs">${zy}</span> | Fenotipe: <span class="text-amber-300 font-semibold">${zy.includes('A') ? 'A_' : 'aa'} ${zy.includes('B') ? 'B_' : 'bb'}</span></div>`
                 : `<div><b>Gamet Ayah:</b> <span class="text-cyan-300 font-bold">${sp} (2n)</span> | <b>Gamet Ibu:</b> <span class="text-pink-300 font-bold">${ov} (2n)</span></div>
-                   <div class="mt-1 text-rose-400 font-bold">⚠️ Zigot Tetraploid: ${zy} (4n, Letal Tidak Viabel)</div>`;
+                   <div class="mt-1 text-rose-400 font-bold">âš ï¸ Zigot Tetraploid: ${zy} (4n, Letal Tidak Viabel)</div>`;
             
             pun(sp, ov, m);
 
@@ -1380,3 +1398,5 @@
 </body>
 
 </html>
+
+

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id" class="dark">
 
 <head>
@@ -215,6 +215,24 @@
         .bar-glow {
             transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+    
+        /* Mobile Performance Optimizations */
+        @media (max-width: 768px) {
+            * {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            .glass-card, .archive-panel, .glass-panel, .simulator-panel, .control-panel, .result-panel {
+                background: #0f172a !important;
+            }
+            header, aside, .glass-header {
+                background: #0f172a !important;
+            }
+            .ambient-biotech-vector, .ambient-plasmid-ring, .particle-layer, .scan-line, .scan-bar, .scan-overlay {
+                display: none !important;
+                animation: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -224,22 +242,22 @@
     <!-- Signature Genotype-Phenotype Duality Background Elements -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <!-- Ambient Neon Glow Core -->
-        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-sky-600/15 rounded-full filter blur-[100px] pointer-events-none"></div>
-        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-indigo-500/15 rounded-full filter blur-[110px] pointer-events-none"></div>
-        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-purple-600/10 rounded-full filter blur-[120px] pointer-events-none"></div>
+        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-sky-600/15 rounded-full filter blur-[100px] hidden md:block pointer-events-none"></div>
+        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-indigo-500/15 rounded-full filter blur-[110px] hidden md:block pointer-events-none"></div>
+        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-purple-600/10 rounded-full filter blur-[120px] hidden md:block pointer-events-none"></div>
 
         <!-- Floating Duality Pair: Genotype Code (BB) -> Phenotypic Flower Trait -->
         <div class="duality-particle flex items-center gap-3" style="left: 10%; animation-duration: 23s; animation-delay: 0s;">
             <div class="px-2.5 py-1 rounded bg-indigo-950/60 border border-indigo-400/40 text-indigo-300 font-mono text-xs font-bold shadow-[0_0_10px_rgba(99,102,241,0.4)]">AA (Genotipe)</div>
-            <span class="text-sky-400/40 text-xs">➔</span>
-            <div class="w-7 h-7 rounded-full bg-purple-500/30 border border-purple-400 flex items-center justify-center text-xs shadow-[0_0_12px_rgba(168,85,247,0.5)]">🌸</div>
+            <span class="text-sky-400/40 text-xs">âž”</span>
+            <div class="w-7 h-7 rounded-full bg-purple-500/30 border border-purple-400 flex items-center justify-center text-xs shadow-[0_0_12px_rgba(168,85,247,0.5)]">ðŸŒ¸</div>
         </div>
 
         <!-- Floating Duality Pair: Genotype Code (bb) -> White Trait -->
         <div class="duality-particle flex items-center gap-3" style="left: 75%; animation-duration: 26s; animation-delay: 5s;">
             <div class="px-2.5 py-1 rounded bg-slate-900/60 border border-slate-500/40 text-slate-300 font-mono text-xs font-bold">aa (Genotipe)</div>
-            <span class="text-slate-400/40 text-xs">➔</span>
-            <div class="w-6 h-6 rounded-full bg-slate-200/30 border border-slate-200 flex items-center justify-center text-xs shadow-[0_0_10px_rgba(255,255,255,0.4)]">⚪</div>
+            <span class="text-slate-400/40 text-xs">âž”</span>
+            <div class="w-6 h-6 rounded-full bg-slate-200/30 border border-slate-200 flex items-center justify-center text-xs shadow-[0_0_10px_rgba(255,255,255,0.4)]">âšª</div>
         </div>
 
         <!-- Floating Morphology Nodes -->
@@ -248,7 +266,7 @@
         </div>
 
         <!-- Ambient Genetic Loci Tags -->
-        <div class="ambient-trait-node absolute top-[26%] left-[6%] font-mono text-[11px] text-sky-400/25 tracking-widest">[DNA SEQUENCE ➔ EXPRESSION]</div>
+        <div class="ambient-trait-node absolute top-[26%] left-[6%] font-mono text-[11px] text-sky-400/25 tracking-widest">[DNA SEQUENCE âž” EXPRESSION]</div>
         <div class="ambient-trait-node absolute bottom-[30%] right-[7%] font-mono text-[11px] text-indigo-400/25 tracking-widest">[PHENOTYPE = GENOTYPE + ENVIRONMENT]</div>
     </div>
 
@@ -256,13 +274,13 @@
     <header class="sticky top-0 z-40 bg-slate-950/85 backdrop-blur-md border-b border-slate-800/80 px-4 md:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4">
         <div class="flex items-center gap-4">
             <a href="index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-700/80 bg-slate-900/90 hover:border-sky-400 hover:text-sky-300 text-slate-300 text-xs font-mono transition group">
-                <span class="transform group-hover:-translate-x-1 transition-transform">←</span>
+                <span class="transform group-hover:-translate-x-1 transition-transform">â†</span>
                 <span>BERANDA GEN-OS</span>
             </a>
             <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
             <div class="flex items-center gap-3">
                 <div class="p-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-400 text-xl">
-                    🧩
+                    ðŸ§©
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
@@ -281,19 +299,19 @@
         <div class="flex items-center gap-2 sm:gap-3">
             <!-- Audio Toggle -->
             <button id="btn-sound" onclick="toggleSound()" class="px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 hover:border-sky-400 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition" title="Toggle Efek Suara">
-                <span id="sound-icon">🔊</span>
+                <span id="sound-icon">ðŸ”Š</span>
                 <span class="hidden md:inline">AUDIO</span>
             </button>
 
             <!-- Scientific Literature Button -->
             <button onclick="openLiteratureModal()" class="px-3 py-1.5 rounded-lg border border-purple-500/40 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-xs font-mono flex items-center gap-1.5 transition">
-                <span>📚</span>
+                <span>ðŸ“š</span>
                 <span class="hidden sm:inline">LITERATUR</span>
             </button>
 
             <!-- Tutorial Button -->
             <button onclick="openTutorialModal()" class="px-3 py-1.5 rounded-lg border border-sky-500/50 bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 text-xs font-mono flex items-center gap-1.5 transition animate-pulse">
-                <span>📖</span>
+                <span>ðŸ“–</span>
                 <span>PANDUAN</span>
             </button>
         </div>
@@ -314,10 +332,10 @@
                         </div>
                         <h2 class="text-sm md:text-base font-bold text-white font-sans">Susunan Genetik Makhluk Hidup</h2>
                     </div>
-                    <span class="text-2xl text-indigo-400 opacity-80 group-hover:scale-110 transition-transform">🧬</span>
+                    <span class="text-2xl text-indigo-400 opacity-80 group-hover:scale-110 transition-transform">ðŸ§¬</span>
                 </div>
                 <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-                    Kombinasi alel berpasangan pada lokus kromosom homolog (mis. <span class="font-mono text-indigo-300 font-semibold">PP, Pp, pp</span> atau <span class="font-mono text-indigo-300 font-semibold">IᴬIᴮ</span>). Bersifat laten dan <i>tidak dapat diamati langsung</i> tanpa analisis molekuler atau uji silang.
+                    Kombinasi alel berpasangan pada lokus kromosom homolog (mis. <span class="font-mono text-indigo-300 font-semibold">PP, Pp, pp</span> atau <span class="font-mono text-indigo-300 font-semibold">Iá´¬Iá´®</span>). Bersifat laten dan <i>tidak dapat diamati langsung</i> tanpa analisis molekuler atau uji silang.
                 </p>
             </div>
 
@@ -331,7 +349,7 @@
                         </div>
                         <h2 class="text-sm md:text-base font-bold text-white font-sans">Sifat Morfologis & Fisiologis Teramati</h2>
                     </div>
-                    <span class="text-2xl text-amber-400 opacity-80 group-hover:scale-110 transition-transform">👁️</span>
+                    <span class="text-2xl text-amber-400 opacity-80 group-hover:scale-110 transition-transform">ðŸ‘ï¸</span>
                 </div>
                 <p class="text-xs text-slate-300 mt-2 leading-relaxed">
                     Wujud fisik, fisiologis, atau biokimiawi dari suatu organisme (mis. <span class="text-amber-300 font-semibold">Bunga Ungu</span>, <span class="text-amber-300 font-semibold">Golongan Darah A</span>). Merupakan hasil interaksi antara genotipe dengan faktor lingkungan.
@@ -344,14 +362,14 @@
                     <div>
                         <div class="flex items-center gap-2 mb-1.5">
                             <span class="text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">HUKUM PELUANG</span>
-                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">PROBABILITAS & UJI χ²</span>
+                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">PROBABILITAS & UJI Ï‡Â²</span>
                         </div>
                         <h2 class="text-sm md:text-base font-bold text-white font-sans">Hukum Bilangan Besar (Mendel)</h2>
                     </div>
-                    <span class="text-2xl text-emerald-400 opacity-80 group-hover:scale-110 transition-transform">⚖️</span>
+                    <span class="text-2xl text-emerald-400 opacity-80 group-hover:scale-110 transition-transform">âš–ï¸</span>
                 </div>
                 <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-                    Pemisahan alel (Segregasi Mendel) terjadi secara acak. Rasio teoretis (mis. 3:1) hanya tercapai sempurna pada <b>sampel keturunan dalam jumlah besar</b>, yang dibuktikan dengan uji statistik Chi-Square (<span class="font-mono text-emerald-300">χ²</span>).
+                    Pemisahan alel (Segregasi Mendel) terjadi secara acak. Rasio teoretis (mis. 3:1) hanya tercapai sempurna pada <b>sampel keturunan dalam jumlah besar</b>, yang dibuktikan dengan uji statistik Chi-Square (<span class="font-mono text-emerald-300">Ï‡Â²</span>).
                 </p>
             </div>
         </section>
@@ -359,13 +377,13 @@
         <!-- Main Mode Tabs -->
         <div class="flex border-b border-slate-800 gap-2">
             <button id="tab-sim-btn" onclick="switchMainTab('simulator')" class="nav-tab active px-5 py-3 rounded-t-xl font-display text-sm tracking-wider flex items-center gap-2 border-t border-l border-r border-transparent">
-                <span>🔬</span>
+                <span>ðŸ”¬</span>
                 <span>SIMULATOR PERSILANGAN</span>
             </button>
             <button id="tab-quiz-btn" onclick="switchMainTab('quiz')" class="nav-tab px-5 py-3 rounded-t-xl font-display text-sm tracking-wider flex items-center gap-2 border-t border-l border-r border-transparent text-slate-400 hover:text-slate-200">
-                <span>🧠</span>
+                <span>ðŸ§ </span>
                 <span>KUIS EVALUASI MANDIRI</span>
-                <span id="quiz-streak-badge" class="hidden ml-1 px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-mono">🔥 0</span>
+                <span id="quiz-streak-badge" class="hidden ml-1 px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-mono">ðŸ”¥ 0</span>
             </button>
         </div>
 
@@ -395,7 +413,7 @@
 
                 <!-- System Rule Explanation Box -->
                 <div id="system-rule-box" class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs sm:text-sm text-slate-300 flex items-start gap-3">
-                    <span class="text-sky-400 text-lg flex-shrink-0">💡</span>
+                    <span class="text-sky-400 text-lg flex-shrink-0">ðŸ’¡</span>
                     <div id="system-rule-text" class="leading-relaxed">
                         <!-- Populated by JS -->
                     </div>
@@ -410,14 +428,14 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2.5">
                             <div class="w-8 h-8 rounded-lg bg-sky-500/20 border border-sky-400/40 flex items-center justify-center font-display font-bold text-sky-300 text-sm">
-                                P₁
+                                Pâ‚
                             </div>
                             <div>
                                 <h3 class="font-display font-bold text-white text-base">INDUK 1 (PARENTAL 1)</h3>
                                 <p class="text-[11px] font-mono text-slate-400">PILIH GENOTIPE ALEL INDUK PERTAMA</p>
                             </div>
                         </div>
-                        <span class="text-xs font-mono text-slate-400">♀ / ♂</span>
+                        <span class="text-xs font-mono text-slate-400">â™€ / â™‚</span>
                     </div>
 
                     <!-- Allele Selector Pills -->
@@ -469,14 +487,14 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2.5">
                             <div class="w-8 h-8 rounded-lg bg-purple-500/20 border border-purple-400/40 flex items-center justify-center font-display font-bold text-purple-300 text-sm">
-                                P₂
+                                Pâ‚‚
                             </div>
                             <div>
                                 <h3 class="font-display font-bold text-white text-base">INDUK 2 (PARENTAL 2)</h3>
                                 <p class="text-[11px] font-mono text-slate-400">PILIH GENOTIPE ALEL INDUK KEDUA</p>
                             </div>
                         </div>
-                        <span class="text-xs font-mono text-slate-400">♂ / ♀</span>
+                        <span class="text-xs font-mono text-slate-400">â™‚ / â™€</span>
                     </div>
 
                     <!-- Allele Selector Pills -->
@@ -544,7 +562,7 @@
                             <!-- Injected Punnett Table -->
                         </div>
                         <p class="text-[11px] font-mono text-slate-500 mt-2 text-center">
-                            Baris: Gamet Induk 1 (P₁) × Kolom: Gamet Induk 2 (P₂)
+                            Baris: Gamet Induk 1 (Pâ‚) Ã— Kolom: Gamet Induk 2 (Pâ‚‚)
                         </p>
                     </div>
 
@@ -554,7 +572,7 @@
                         <div class="p-4 rounded-xl bg-slate-900/90 border border-indigo-500/30 space-y-2">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-mono text-indigo-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                                    <span>🧬</span> RASIO GENOTIPE TEORETIS
+                                    <span>ðŸ§¬</span> RASIO GENOTIPE TEORETIS
                                 </span>
                                 <span id="gen-ratio-simplified" class="text-xs font-mono font-bold text-white px-2 py-0.5 rounded bg-indigo-500/20 border border-indigo-500/40">
                                     --
@@ -569,7 +587,7 @@
                         <div class="p-4 rounded-xl bg-slate-900/90 border border-amber-500/30 space-y-2">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-mono text-amber-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                                    <span>👁️</span> RASIO FENOTIPE TEORETIS
+                                    <span>ðŸ‘ï¸</span> RASIO FENOTIPE TEORETIS
                                 </span>
                                 <span id="phe-ratio-simplified" class="text-xs font-mono font-bold text-white px-2 py-0.5 rounded bg-amber-500/20 border border-amber-500/40">
                                     --
@@ -589,7 +607,7 @@
                     <div>
                         <span class="text-[11px] font-mono text-sky-400 uppercase tracking-widest block mb-1">// LANGKAH 3</span>
                         <h2 class="text-lg md:text-xl font-display font-bold text-white tracking-wide flex items-center gap-2">
-                            SIMULASI FERTILISASI ACAK & UJI CHI-SQUARE (χ²)
+                            SIMULASI FERTILISASI ACAK & UJI CHI-SQUARE (Ï‡Â²)
                         </h2>
                     </div>
                     <div class="text-xs font-mono text-slate-400">
@@ -611,7 +629,7 @@
 
                     <div class="flex items-center gap-3">
                         <button id="btn-run-sim" onclick="runSimulation()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-display text-xs md:text-sm font-bold tracking-wider shadow-lg shadow-sky-500/20 hover:shadow-sky-500/40 active:scale-95 transition flex items-center gap-2">
-                            <span>⚡</span>
+                            <span>âš¡</span>
                             <span>SILANGKAN GENERASI</span>
                         </button>
                     </div>
@@ -650,7 +668,7 @@
                         <div class="text-right">
                             <div class="text-[10px] font-mono text-slate-400">STREAK</div>
                             <div class="text-base font-mono font-bold text-amber-400 flex items-center gap-1">
-                                <span>🔥</span> <span id="quiz-streak">0</span>
+                                <span>ðŸ”¥</span> <span id="quiz-streak">0</span>
                             </div>
                         </div>
                     </div>
@@ -667,7 +685,7 @@
 
     <!-- ==================== FOOTER ==================== -->
     <footer class="mt-12 border-t border-slate-800/80 bg-slate-950/80 py-6 px-4 text-center text-xs font-mono text-slate-500">
-        <p>GEN-OS // VIRTUAL GENETICS LABORATORY • Modul 06: Genotipe vs Fenotipe</p>
+        <p>GEN-OS // VIRTUAL GENETICS LABORATORY â€¢ Modul 06: Genotipe vs Fenotipe</p>
         <p class="mt-1 text-[11px] text-slate-600">Dikembangkan berdasarkan prinsip genetika Gregor Mendel (1866) & Sistem Alel Ganda Karl Landsteiner (1900)</p>
     </footer>
 
@@ -676,21 +694,21 @@
         <div class="glass-panel rounded-2xl max-w-2xl w-full border border-sky-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl p-2 rounded-xl bg-sky-500/10 border border-sky-500/30">📖</span>
+                    <span class="text-2xl p-2 rounded-xl bg-sky-500/10 border border-sky-500/30">ðŸ“–</span>
                     <div>
                         <h3 class="text-lg font-display font-bold text-white tracking-wider">PANDUAN LENGKAP SIMULASI</h3>
                         <p class="text-xs font-mono text-sky-400">MODUL 06: GENOTIPE VS FENOTIPE</p>
                     </div>
                 </div>
-                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">âœ•</button>
             </div>
 
             <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
                 <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
                     <h4 class="font-display font-bold text-sky-300 text-xs tracking-wider uppercase">1. Apa Perbedaan Genotipe dan Fenotipe?</h4>
                     <p class="text-xs text-slate-300">
-                        • <b>Genotipe</b> adalah informasi genetik tersandi di dalam DNA (misal alel <code class="font-mono text-indigo-300">PP</code>, <code class="font-mono text-indigo-300">Pp</code>, atau <code class="font-mono text-indigo-300">pp</code>). Genotipe tidak bisa dilihat secara kasat mata.<br>
-                        • <b>Fenotipe</b> adalah karakteristik fisik, morfologis, atau fisiologis yang teramati (misal warna bunga ungu atau putih). Fenotipe adalah hasil dari ekspresi genotipe yang dipengaruhi oleh lingkungan.
+                        â€¢ <b>Genotipe</b> adalah informasi genetik tersandi di dalam DNA (misal alel <code class="font-mono text-indigo-300">PP</code>, <code class="font-mono text-indigo-300">Pp</code>, atau <code class="font-mono text-indigo-300">pp</code>). Genotipe tidak bisa dilihat secara kasat mata.<br>
+                        â€¢ <b>Fenotipe</b> adalah karakteristik fisik, morfologis, atau fisiologis yang teramati (misal warna bunga ungu atau putih). Fenotipe adalah hasil dari ekspresi genotipe yang dipengaruhi oleh lingkungan.
                     </p>
                 </div>
 
@@ -701,7 +719,7 @@
                         <li><b>Tentukan Genotipe Induk 1 & 2:</b> Klik tombol alel untuk mengubah genotipe masing-masing induk. Amati bagaimana fenotipe dan lokus kromosom berubah seketika.</li>
                         <li><b>Pelajari Papan Punnett:</b> Cermati kombinasi gamet dan rasio teoretis yang terbentuk.</li>
                         <li><b>Uji Fertilisasi Acak (Simulasi):</b> Pilih jumlah keturunan (4, 20, 100, 1000) dan klik <i>Silangkan Generasi</i>. Bandingkan data frekuensi teramati (<span class="font-mono text-sky-300">O</span>) dengan harapan teoretis (<span class="font-mono text-emerald-300">E</span>).</li>
-                        <li><b>Uji Chi-Square (χ²):</b> Amati nilai hitung χ² untuk membuktikan apakah perbedaan teramati murni karena faktor kebetulan (peluang) atau menyimpang secara signifikan.</li>
+                        <li><b>Uji Chi-Square (Ï‡Â²):</b> Amati nilai hitung Ï‡Â² untuk membuktikan apakah perbedaan teramati murni karena faktor kebetulan (peluang) atau menyimpang secara signifikan.</li>
                     </ol>
                 </div>
 
@@ -726,13 +744,13 @@
         <div class="glass-panel rounded-2xl max-w-2xl w-full border border-purple-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">📚</span>
+                    <span class="text-2xl p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">ðŸ“š</span>
                     <div>
                         <h3 class="text-lg font-display font-bold text-white tracking-wider">DASAR TEORETIS & REFERENSI ILMIAH</h3>
                         <p class="text-xs font-mono text-purple-400">LANDASAN HISTORIS & SAINS GENETIKA</p>
                     </div>
                 </div>
-                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">âœ•</button>
             </div>
 
             <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
@@ -743,10 +761,10 @@
                         <span class="text-[10px] font-mono text-slate-500">1866</span>
                     </div>
                     <p class="text-slate-300">
-                        <b>Mendel, Gregor Johann (1866).</b> <i>"Versuche über Pflanzen-Hybriden"</i> (Percobaan Mengenai Hibridisasi Tumbuhan). Verhandlungen des naturforschenden Vereines in Brünn, Bd. IV für das Jahr 1865, Abhandlungen: 3–47.
+                        <b>Mendel, Gregor Johann (1866).</b> <i>"Versuche Ã¼ber Pflanzen-Hybriden"</i> (Percobaan Mengenai Hibridisasi Tumbuhan). Verhandlungen des naturforschenden Vereines in BrÃ¼nn, Bd. IV fÃ¼r das Jahr 1865, Abhandlungen: 3â€“47.
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        → Mendalilkan bahwa setiap alel dari pasangan gen terpisah secara bebas selama pembentukan gamet (meiosis), sehingga setiap gamet hanya menerima satu salinan alel.
+                        â†’ Mendalilkan bahwa setiap alel dari pasangan gen terpisah secara bebas selama pembentukan gamet (meiosis), sehingga setiap gamet hanya menerima satu salinan alel.
                     </p>
                 </div>
 
@@ -757,11 +775,11 @@
                         <span class="text-[10px] font-mono text-slate-500">1900 & 1924</span>
                     </div>
                     <p class="text-slate-300">
-                        <b>Landsteiner, K. (1900).</b> <i>Zur Kenntnis der antifermentativen, lytischen und agglutinierenden Wirkungen des Blutserums.</i> Zentralblatt für Bakteriologie, 27: 357–362.<br>
-                        <b>Bernstein, Felix (1924).</b> <i>Ergebnisse einer biostatistischen zusammenfassenden Untersuchung über die erblichen Blutstrukturen des Menschen.</i> Klinische Wochenschrift, 3: 1495–1497.
+                        <b>Landsteiner, K. (1900).</b> <i>Zur Kenntnis der antifermentativen, lytischen und agglutinierenden Wirkungen des Blutserums.</i> Zentralblatt fÃ¼r Bakteriologie, 27: 357â€“362.<br>
+                        <b>Bernstein, Felix (1924).</b> <i>Ergebnisse einer biostatistischen zusammenfassenden Untersuchung Ã¼ber die erblichen Blutstrukturen des Menschen.</i> Klinische Wochenschrift, 3: 1495â€“1497.
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        → Membuktikan bahwa pewarisan golongan darah ABO diatur oleh lokus alel ganda tunggal pada kromosom 9q34, dengan alel Iᴬ dan Iᴮ bersifat kodominan, dan keduanya dominan terhadap alel resesif i.
+                        â†’ Membuktikan bahwa pewarisan golongan darah ABO diatur oleh lokus alel ganda tunggal pada kromosom 9q34, dengan alel Iá´¬ dan Iá´® bersifat kodominan, dan keduanya dominan terhadap alel resesif i.
                     </p>
                 </div>
 
@@ -772,10 +790,10 @@
                         <span class="text-[10px] font-mono text-slate-500">1900</span>
                     </div>
                     <p class="text-slate-300">
-                        <b>Pearson, Karl (1900).</b> <i>On the criterion that a given system of deviations from the probable in the case of a correlated system of variables is such that it can be reasonably supposed to have arisen from random sampling.</i> Philosophical Magazine, 50(302): 157–175.
+                        <b>Pearson, Karl (1900).</b> <i>On the criterion that a given system of deviations from the probable in the case of a correlated system of variables is such that it can be reasonably supposed to have arisen from random sampling.</i> Philosophical Magazine, 50(302): 157â€“175.
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        → Rumus: $\chi^2 = \sum \frac{(O - E)^2}{E}$. Pada derajat kebebasan $df = k - 1$ dan taraf signifikansi $\alpha = 0.05$, jika $\chi^2 \le \chi^2_{tabel}$, maka selisih teramati dianggap variasi acak (sesuai hukum Mendel).
+                        â†’ Rumus: $\chi^2 = \sum \frac{(O - E)^2}{E}$. Pada derajat kebebasan $df = k - 1$ dan taraf signifikansi $\alpha = 0.05$, jika $\chi^2 \le \chi^2_{tabel}$, maka selisih teramati dianggap variasi acak (sesuai hukum Mendel).
                     </p>
                 </div>
             </div>
@@ -830,7 +848,7 @@
         function toggleSound() {
             soundEnabled = !soundEnabled;
             const icon = document.getElementById('sound-icon');
-            if (icon) icon.innerText = soundEnabled ? '🔊' : '🔇';
+            if (icon) icon.innerText = soundEnabled ? 'ðŸ”Š' : 'ðŸ”‡';
             if (soundEnabled) playBeep(587, 'triangle', 0.1, 0.12);
         }
 
@@ -851,7 +869,7 @@
         const SYSTEMS = {
             mono: {
                 id: 'mono',
-                title: '🌸 Ercis: Warna Bunga',
+                title: 'ðŸŒ¸ Ercis: Warna Bunga',
                 sub: 'Monohibrid Dominansi Penuh (P / p)',
                 badge: 'HUKUM I MENDEL: DOMINANSI PENUH',
                 order: 'Pp',
@@ -863,12 +881,12 @@
                 lab: f => 'Bunga ' + f,
                 phr: f => 'berbunga ' + f.toLowerCase(),
                 noun: 'Tanaman ercis',
-                icon: '🌸',
+                icon: 'ðŸŒ¸',
                 renderSvg: (f, s = 80) => renderFlowerSvg(COLOR_PALETTE[f] || '#a855f7', s)
             },
             seed: {
                 id: 'seed',
-                title: '🌿 Ercis: Bentuk Biji',
+                title: 'ðŸŒ¿ Ercis: Bentuk Biji',
                 sub: 'Monohibrid Dominansi Penuh (R / r)',
                 badge: 'HUKUM I MENDEL: BENTUK BIJI',
                 order: 'Rr',
@@ -880,29 +898,29 @@
                 lab: f => 'Biji ' + f,
                 phr: f => 'berbiji ' + f.toLowerCase(),
                 noun: 'Tanaman ercis',
-                icon: '🌿',
+                icon: 'ðŸŒ¿',
                 renderSvg: (f, s = 80) => renderSeedSvg(f === 'Bulat', s)
             },
             abo: {
                 id: 'abo',
-                title: '🩸 Golongan Darah ABO',
-                sub: 'Alel Ganda & Kodominansi (Iᴬ, Iᴮ, i)',
+                title: 'ðŸ©¸ Golongan Darah ABO',
+                sub: 'Alel Ganda & Kodominansi (Iá´¬, Iá´®, i)',
                 badge: 'ALEL GANDA & KODOMINANSI',
                 order: 'ABi',
                 gts: ['AA', 'Ai', 'BB', 'Bi', 'AB', 'ii'],
                 phs: ['A', 'B', 'AB', 'O'],
                 def: ['Ai', 'Bi'],
                 ph: g => (g.includes('A') && g.includes('B')) ? 'AB' : g.includes('A') ? 'A' : g.includes('B') ? 'B' : 'O',
-                rule: 'Pewarisan diatur oleh 3 alel: <b>Iᴬ</b>, <b>Iᴮ</b>, dan <b>i</b>. Alel Iᴬ dan Iᴮ bersifat <b>kodominan</b> (keduanya terekspresi membentuk antigen A dan B pada golongan AB), serta keduanya dominan terhadap alel resesif i.',
+                rule: 'Pewarisan diatur oleh 3 alel: <b>Iá´¬</b>, <b>Iá´®</b>, dan <b>i</b>. Alel Iá´¬ dan Iá´® bersifat <b>kodominan</b> (keduanya terekspresi membentuk antigen A dan B pada golongan AB), serta keduanya dominan terhadap alel resesif i.',
                 lab: f => 'Golongan Darah ' + f,
                 phr: f => 'bergolongan darah ' + f,
                 noun: 'Seseorang',
-                icon: '🩸',
+                icon: 'ðŸ©¸',
                 renderSvg: (f, s = 80) => renderBloodDropSvg(f, COLOR_PALETTE[f] || '#f43f5e', s)
             },
             mirabilis: {
                 id: 'mirabilis',
-                title: '🌺 Mirabilis: Bunga Pukul 4',
+                title: 'ðŸŒº Mirabilis: Bunga Pukul 4',
                 sub: 'Dominansi Tidak Lengkap / Intermediet',
                 badge: 'INTERMEDIET (INCOMPLETE DOMINANCE)',
                 order: 'Mm',
@@ -914,7 +932,7 @@
                 lab: f => 'Bunga ' + f,
                 phr: f => 'berbunga ' + f.toLowerCase(),
                 noun: 'Tanaman Mirabilis jalapa',
-                icon: '🌺',
+                icon: 'ðŸŒº',
                 renderSvg: (f, s = 80) => renderMirabilisSvg(COLOR_PALETTE[f] || '#ef4444', s)
             }
         };
@@ -1008,11 +1026,11 @@
 
         const zygosity = (k, g) => {
             if (k === 'abo') {
-                if (g === 'AA') return 'Homozigot Dominan (IᴬIᴬ)';
-                if (g === 'Ai') return 'Heterozigot (Iᴬi)';
-                if (g === 'BB') return 'Homozigot Dominan (IᴮIᴮ)';
-                if (g === 'Bi') return 'Heterozigot (Iᴮi)';
-                if (g === 'AB') return 'Heterozigot Kodominan (IᴬIᴮ)';
+                if (g === 'AA') return 'Homozigot Dominan (Iá´¬Iá´¬)';
+                if (g === 'Ai') return 'Heterozigot (Iá´¬i)';
+                if (g === 'BB') return 'Homozigot Dominan (Iá´®Iá´®)';
+                if (g === 'Bi') return 'Heterozigot (Iá´®i)';
+                if (g === 'AB') return 'Heterozigot Kodominan (Iá´¬Iá´®)';
                 if (g === 'ii') return 'Homozigot Resesif (ii)';
             }
             if (g[0] === g[1]) {
@@ -1078,7 +1096,7 @@
                             <p class="text-[11px] font-mono text-slate-400 mt-0.5">${sys.sub}</p>
                         </div>
                         <div class="mt-3 text-[10px] font-mono ${active ? 'text-sky-400' : 'text-slate-500'}">
-                            ${active ? '● AKTIF' : 'PILIH SISTEM'}
+                            ${active ? 'â— AKTIF' : 'PILIH SISTEM'}
                         </div>
                     </button>
                 `;
@@ -1202,7 +1220,7 @@
             // Chromosome locus visualization
             const locusEl = document.getElementById(`p${parentIdx}-locus-visual`);
             if (locusEl) {
-                locusEl.innerHTML = `[ ║ ${gl(k, gametes[0])} ] · [ ║ ${gl(k, gametes[1])} ]`;
+                locusEl.innerHTML = `[ â•‘ ${gl(k, gametes[0])} ] Â· [ â•‘ ${gl(k, gametes[1])} ]`;
             }
         }
 
@@ -1219,7 +1237,7 @@
                 
                 // Header Row (P2 Gametes)
                 html += `<tr>`;
-                html += `<th class="p-2 text-xs font-mono text-slate-500">P₁ \\ P₂</th>`;
+                html += `<th class="p-2 text-xs font-mono text-slate-500">Pâ‚ \\ Pâ‚‚</th>`;
                 p2Gametes.forEach(g2 => {
                     html += `<th class="p-2.5 text-center font-mono font-bold text-purple-400 text-sm bg-purple-500/10 border border-purple-500/30 rounded-xl">${gl(k, g2)}</th>`;
                 });
@@ -1340,7 +1358,7 @@
             if (!STATE.simResult) {
                 container.innerHTML = `
                     <div class="p-8 rounded-xl bg-slate-900/60 border border-slate-800 text-center space-y-3">
-                        <div class="text-3xl">🧪</div>
+                        <div class="text-3xl">ðŸ§ª</div>
                         <h4 class="font-display font-bold text-white text-base">Belum Ada Data Simulasi</h4>
                         <p class="text-xs text-slate-400 max-w-md mx-auto">
                             Tentukan genotipe kedua induk di atas, pilih ukuran sampel generasi, lalu klik tombol <b class="text-sky-400">"Silangkan Generasi"</b> untuk memicu proses fertilisasi acak secara Monte Carlo.
@@ -1360,7 +1378,7 @@
                     <div class="p-4 sm:p-5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
                         <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                             <h4 class="font-display font-bold text-xs uppercase tracking-wider text-indigo-300 flex items-center gap-1.5">
-                                <span>🧬</span> DISTRIBUSI GENOTIPE (TERAMATI VS TEORI)
+                                <span>ðŸ§¬</span> DISTRIBUSI GENOTIPE (TERAMATI VS TEORI)
                             </h4>
                             <span class="text-[10px] font-mono text-slate-400">N = ${r.n}</span>
                         </div>
@@ -1373,7 +1391,7 @@
                     <div class="p-4 sm:p-5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
                         <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                             <h4 class="font-display font-bold text-xs uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
-                                <span>👁️</span> DISTRIBUSI FENOTIPE (TERAMATI VS TEORI)
+                                <span>ðŸ‘ï¸</span> DISTRIBUSI FENOTIPE (TERAMATI VS TEORI)
                             </h4>
                             <span class="text-[10px] font-mono text-slate-400">N = ${r.n}</span>
                         </div>
@@ -1391,7 +1409,7 @@
                     <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-2.5">
                         <div>
                             <h4 class="font-display font-bold text-sm text-white flex items-center gap-2">
-                                <span>🌱</span> SAMPEL ${r.kids.length} KETURUNAN PERTAMA
+                                <span>ðŸŒ±</span> SAMPEL ${r.kids.length} KETURUNAN PERTAMA
                             </h4>
                             <p class="text-[11px] font-mono text-slate-400">
                                 Di alam nyata, yang tampak hanyalah fenotipe luar.
@@ -1472,9 +1490,9 @@
                 <div class="p-4 sm:p-5 rounded-xl bg-slate-950 border ${isFit ? 'border-emerald-500/40' : 'border-rose-500/40'} space-y-3">
                     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2">
                         <div class="flex items-center gap-2">
-                            <span class="text-lg">${isFit ? '✅' : '⚠️'}</span>
+                            <span class="text-lg">${isFit ? 'âœ…' : 'âš ï¸'}</span>
                             <h4 class="font-display font-bold text-xs uppercase tracking-wider text-white">
-                                UJI STATISTIK KESESUAIAN CHI-SQUARE (χ² GOODNESS-OF-FIT)
+                                UJI STATISTIK KESESUAIAN CHI-SQUARE (Ï‡Â² GOODNESS-OF-FIT)
                             </h4>
                         </div>
                         <span class="text-xs font-mono px-2.5 py-0.5 rounded font-bold ${isFit ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'}">
@@ -1484,7 +1502,7 @@
 
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
                         <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
-                            <div class="text-[10px] font-mono text-slate-400">NILAI HITUNG χ²</div>
+                            <div class="text-[10px] font-mono text-slate-400">NILAI HITUNG Ï‡Â²</div>
                             <div class="text-base font-mono font-bold ${isFit ? 'text-emerald-400' : 'text-rose-400'}">
                                 ${chiSquare.toFixed(3)}
                             </div>
@@ -1494,13 +1512,13 @@
                             <div class="text-base font-mono font-bold text-white">${df}</div>
                         </div>
                         <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
-                            <div class="text-[10px] font-mono text-slate-400">NILAI KRITIS (α = 5%)</div>
+                            <div class="text-[10px] font-mono text-slate-400">NILAI KRITIS (Î± = 5%)</div>
                             <div class="text-base font-mono font-bold text-sky-400">${criticalVal.toFixed(3)}</div>
                         </div>
                         <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
                             <div class="text-[10px] font-mono text-slate-400">KESIMPULAN HIPOTESIS</div>
                             <div class="text-xs font-mono font-bold ${isFit ? 'text-emerald-300' : 'text-rose-300'} mt-0.5">
-                                ${isFit ? 'Terima H₀' : 'Tolak H₀'}
+                                ${isFit ? 'Terima Hâ‚€' : 'Tolak Hâ‚€'}
                             </div>
                         </div>
                     </div>
@@ -1510,7 +1528,7 @@
                             ? `Karena nilai $\\chi^2$ hitung (<b>${chiSquare.toFixed(2)}</b>) &le; $\\chi^2$ kritis (<b>${criticalVal}</b>), deviasi antara data teramati dengan rasio teoretis murni disebabkan oleh <b>peluang acak</b> dalam fertilisasi, membuktikan hukum Mendel berlaku secara valid.`
                             : `Karena $\\chi^2$ hitung (<b>${chiSquare.toFixed(2)}</b>) > $\\chi^2$ kritis (<b>${criticalVal}</b>), data teramati menyimpang secara signifikan dari rasio teoretis Mendel pada taraf signifikansi 5%.`
                         }
-                        ${hasLowExpected ? `<br><span class="text-amber-400 font-mono text-[11px]">⚠️ Peringatan Cochran: Ada frekuensi harapan &lt; 5. Uji Chi-Square membutuhkan sampel lebih besar untuk reliabilitas penuh (disarankan N &ge; 100).</span>` : ''}
+                        ${hasLowExpected ? `<br><span class="text-amber-400 font-mono text-[11px]">âš ï¸ Peringatan Cochran: Ada frekuensi harapan &lt; 5. Uji Chi-Square membutuhkan sampel lebih besar untuk reliabilitas penuh (disarankan N &ge; 100).</span>` : ''}
                     </p>
                 </div>
             `;
@@ -1628,7 +1646,7 @@
                     ...chosenFalse.map(p => ({ text: `${p}%`, ok: false }))
                 ]);
 
-                explanation = `Gamet P₁: ${[...p1].map(x => gl(k, x)).join(', ')}; Gamet P₂: ${[...p2].map(x => gl(k, x)).join(', ')}. Dari 4 kemungkinan papan Punnett, terbentuk ${correctCount} sel fenotipe ${targetPhe}, sehingga peluangnya adalah <b>${correctCount}/4 = ${correctPct}%</b>.`;
+                explanation = `Gamet Pâ‚: ${[...p1].map(x => gl(k, x)).join(', ')}; Gamet Pâ‚‚: ${[...p2].map(x => gl(k, x)).join(', ')}. Dari 4 kemungkinan papan Punnett, terbentuk ${correctCount} sel fenotipe ${targetPhe}, sehingga peluangnya adalah <b>${correctCount}/4 = ${correctPct}%</b>.`;
             }
 
             QUIZ.currentQ = {
@@ -1678,7 +1696,7 @@
             if (streakBadge) {
                 if (QUIZ.streak > 1) {
                     streakBadge.classList.remove('hidden');
-                    streakBadge.innerText = `🔥 ${QUIZ.streak}`;
+                    streakBadge.innerText = `ðŸ”¥ ${QUIZ.streak}`;
                 } else {
                     streakBadge.classList.add('hidden');
                 }
@@ -1716,10 +1734,10 @@
                             if (answered) {
                                 if (opt.ok) {
                                     btnStyle = 'bg-emerald-500/20 border-emerald-500 text-emerald-200 shadow-lg shadow-emerald-500/10 font-bold';
-                                    icon = '✓ ';
+                                    icon = 'âœ“ ';
                                 } else if (idx === QUIZ.picked) {
                                     btnStyle = 'bg-rose-500/20 border-rose-500 text-rose-200 font-bold';
-                                    icon = '✗ ';
+                                    icon = 'âœ— ';
                                 } else {
                                     btnStyle = 'bg-slate-950/50 border-slate-900 text-slate-600 opacity-60';
                                 }
@@ -1738,7 +1756,7 @@
                     ${answered ? `
                         <div class="p-4 sm:p-5 rounded-xl ${q.options[QUIZ.picked].ok ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-200' : 'bg-rose-950/30 border-rose-500/40 text-rose-200'} border space-y-2 animate-fadeIn">
                             <div class="flex items-center gap-2 font-display font-bold text-sm">
-                                <span>${q.options[QUIZ.picked].ok ? '🎉 JAWABAN TEPAT!' : '❌ BELUM TEPAT'}</span>
+                                <span>${q.options[QUIZ.picked].ok ? 'ðŸŽ‰ JAWABAN TEPAT!' : 'âŒ BELUM TEPAT'}</span>
                             </div>
                             <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
                                 ${q.explanation}
@@ -1748,7 +1766,7 @@
                         <div class="text-right pt-2">
                             <button onclick="nextQuizQuestion()" class="px-6 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-display font-bold text-xs tracking-wider transition shadow-lg shadow-sky-500/20 flex items-center gap-2 ml-auto">
                                 <span>SOAL BERIKUTNYA</span>
-                                <span>→</span>
+                                <span>â†’</span>
                             </button>
                         </div>
                     ` : ''}
@@ -1836,3 +1854,5 @@
 </body>
 
 </html>
+
+

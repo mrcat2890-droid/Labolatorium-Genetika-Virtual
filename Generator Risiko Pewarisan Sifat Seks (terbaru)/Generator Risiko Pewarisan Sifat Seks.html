@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id" class="dark">
 
 <head>
@@ -306,6 +306,24 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #ff007f;
         }
+    
+        /* Mobile Performance Optimizations */
+        @media (max-width: 768px) {
+            * {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            .glass-card, .archive-panel, .glass-panel, .simulator-panel, .control-panel, .result-panel {
+                background: #0f172a !important;
+            }
+            header, aside, .glass-header {
+                background: #0f172a !important;
+            }
+            .ambient-biotech-vector, .ambient-plasmid-ring, .particle-layer, .scan-line, .scan-bar, .scan-overlay {
+                display: none !important;
+                animation: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -315,9 +333,9 @@
     <!-- Signature Gonosomal Animated Background (X & Y Chromosomes + Pedigree) -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <!-- Ambient Neon Glow Core -->
-        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-rose-600/25 rounded-full filter blur-[100px] pointer-events-none"></div>
-        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-cyan-500/20 rounded-full filter blur-[110px] pointer-events-none"></div>
-        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-pink-600/20 rounded-full filter blur-[120px] pointer-events-none"></div>
+        <div class="absolute -top-20 -left-20 w-[30rem] h-[30rem] bg-rose-600/25 rounded-full filter blur-[100px] hidden md:block pointer-events-none"></div>
+        <div class="absolute top-1/2 -right-24 w-[28rem] h-[28rem] bg-cyan-500/20 rounded-full filter blur-[110px] hidden md:block pointer-events-none"></div>
+        <div class="absolute -bottom-24 left-1/4 w-[32rem] h-[32rem] bg-pink-600/20 rounded-full filter blur-[120px] hidden md:block pointer-events-none"></div>
 
         <!-- Floating Chromosome X (Large Gonosome, Crimson/Rose Hue) -->
         <div class="gonosom-particle" style="left: 8%; animation-duration: 25s; animation-delay: 0s;">
@@ -344,11 +362,11 @@
             </svg>
         </div>
 
-        <!-- Ambient Pedigree Inheritance Nodes (♀ Circle & ♂ Square) -->
+        <!-- Ambient Pedigree Inheritance Nodes (â™€ Circle & â™‚ Square) -->
         <div class="pedigree-ambient absolute top-[28%] left-[5%] flex items-center gap-2" style="animation-duration: 6s;">
-            <div class="w-6 h-6 rounded-full border border-rose-400/40 flex items-center justify-center text-[10px] font-mono text-rose-300 font-bold">♀</div>
+            <div class="w-6 h-6 rounded-full border border-rose-400/40 flex items-center justify-center text-[10px] font-mono text-rose-300 font-bold">â™€</div>
             <div class="w-6 h-0.5 bg-rose-400/30"></div>
-            <div class="w-6 h-6 border border-cyan-400/40 flex items-center justify-center text-[10px] font-mono text-cyan-300 font-bold">♂</div>
+            <div class="w-6 h-6 border border-cyan-400/40 flex items-center justify-center text-[10px] font-mono text-cyan-300 font-bold">â™‚</div>
         </div>
 
         <div class="pedigree-ambient absolute bottom-[30%] right-[6%] flex items-center gap-2" style="animation-duration: 7s; animation-delay: 2s;">
@@ -362,13 +380,13 @@
     <header class="sticky top-0 z-40 bg-[#07020d]/90 backdrop-blur-xl border-b border-rose-500/25 px-4 md:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4 flex-shrink-0">
         <div class="flex items-center gap-4">
             <a href="../index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-rose-500/30 bg-[#160b24] hover:border-rose-400 hover:text-rose-200 text-slate-200 text-xs font-mono transition group">
-                <span class="transform group-hover:-translate-x-1 transition-transform">←</span>
+                <span class="transform group-hover:-translate-x-1 transition-transform">â†</span>
                 <span>BERANDA GEN-OS</span>
             </a>
             <div class="h-6 w-px bg-rose-500/20 hidden sm:block"></div>
             <div class="flex items-center gap-3">
                 <div class="p-1.5 rounded-lg bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xl shadow-[0_0_12px_rgba(255,0,127,0.35)]">
-                    🩸
+                    ðŸ©¸
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
@@ -387,19 +405,19 @@
         <div class="flex items-center gap-2 sm:gap-3">
             <!-- Audio Toggle -->
             <button id="btn-sound" onclick="toggleSound()" class="px-2.5 py-1.5 rounded-lg border border-rose-500/30 bg-[#160b24] hover:border-rose-400 text-slate-200 text-xs font-mono flex items-center gap-1.5 transition" title="Toggle Efek Suara">
-                <span id="sound-icon">🔊</span>
+                <span id="sound-icon">ðŸ”Š</span>
                 <span class="hidden md:inline">AUDIO</span>
             </button>
 
             <!-- Literature Button -->
             <button onclick="openLiteratureModal()" class="px-3 py-1.5 rounded-lg border border-cyan-500/40 bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-200 text-xs font-mono flex items-center gap-1.5 transition">
-                <span>📚</span>
+                <span>ðŸ“š</span>
                 <span class="hidden sm:inline">LITERATUR</span>
             </button>
 
             <!-- Tutorial Button -->
             <button onclick="openTutorialModal()" class="px-3 py-1.5 rounded-lg border border-rose-500/60 bg-rose-500/25 hover:bg-rose-500/35 text-rose-100 text-xs font-mono flex items-center gap-1.5 transition shadow-[0_0_12px_rgba(255,0,127,0.35)]">
-                <span>📖</span>
+                <span>ðŸ“–</span>
                 <span>PANDUAN</span>
             </button>
         </div>
@@ -420,7 +438,7 @@
                         </div>
                         <h2 class="text-sm md:text-base font-bold text-white font-sans">Kondisi Hemizigot Pria (XY)</h2>
                     </div>
-                    <span class="text-2xl text-rose-400 opacity-90 group-hover:scale-110 transition-transform">♂️</span>
+                    <span class="text-2xl text-rose-400 opacity-90 group-hover:scale-110 transition-transform">â™‚ï¸</span>
                 </div>
                 <p class="text-xs text-slate-100 mt-2 leading-relaxed">
                     Laki-laki hanya memiliki satu kromosom X. Karena tidak ada alel penyeimbang pada kromosom Y, satu salinan alel mutan resesif (X<sup>b</sup>) langsung memunculkan fenotipe penyakit secara penuh.
@@ -437,7 +455,7 @@
                         </div>
                         <h2 class="text-sm md:text-base font-bold text-white font-sans">Pola Pewarisan Silang</h2>
                     </div>
-                    <span class="text-2xl text-amber-400 opacity-90 group-hover:scale-110 transition-transform">⚡</span>
+                    <span class="text-2xl text-amber-400 opacity-90 group-hover:scale-110 transition-transform">âš¡</span>
                 </div>
                 <p class="text-xs text-slate-100 mt-2 leading-relaxed">
                     Ayah penderita (X<sup>b</sup>Y) <b>tidak pernah</b> mewariskan gen penyakit ke anak laki-lakinya (yang selalu menerima kromosom Y), melainkan mewariskannya ke semua anak perempuan menjadi pembawa sifat (*carrier*).
@@ -454,7 +472,7 @@
                         </div>
                         <h2 class="text-sm md:text-base font-bold text-white font-sans">Kompensasi Dosis Wanita</h2>
                     </div>
-                    <span class="text-2xl text-cyan-300 opacity-90 group-hover:scale-110 transition-transform">♀️</span>
+                    <span class="text-2xl text-cyan-300 opacity-90 group-hover:scale-110 transition-transform">â™€ï¸</span>
                 </div>
                 <p class="text-xs text-slate-100 mt-2 leading-relaxed">
                     Pada wanita (XX), salah satu kromosom X secara acak dipadatkan menjadi <b>Badan Barr</b> (*Barr Body*) pada awal embriogenesis. Wanita *carrier* terlindungi dari penyakit oleh sel-sel dengan alel normal aktif.
@@ -498,7 +516,7 @@
                     <div class="space-y-2">
                         <div class="flex justify-between items-center">
                             <label class="text-xs font-bold text-pink-300 tracking-wider flex items-center gap-1.5 font-mono">
-                                <span>♀</span> IBU (MATERNAL XX)
+                                <span>â™€</span> IBU (MATERNAL XX)
                             </label>
                             <span id="mom-status" class="text-[10px] bg-[#140b22] px-2.5 py-0.5 rounded text-cyan-200 font-mono border border-cyan-400/40 font-bold shadow-[0_0_8px_rgba(0,240,255,0.3)]">
                                 NORMAL
@@ -525,7 +543,7 @@
                     <div class="space-y-2">
                         <div class="flex justify-between items-center">
                             <label class="text-xs font-bold text-cyan-300 tracking-wider flex items-center gap-1.5 font-mono">
-                                <span>♂</span> AYAH (PATERNAL XY)
+                                <span>â™‚</span> AYAH (PATERNAL XY)
                             </label>
                             <span id="dad-status" class="text-[10px] bg-[#140b22] px-2.5 py-0.5 rounded text-cyan-200 font-mono border border-cyan-400/40 font-bold shadow-[0_0_8px_rgba(0,240,255,0.3)]">
                                 NORMAL
@@ -546,7 +564,7 @@
 
                     <!-- Analysis Trigger Button -->
                     <button onclick="analyze()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 hover:from-rose-500 hover:to-pink-500 text-white font-display font-bold text-sm tracking-widest transition shadow-lg shadow-rose-500/35 active:scale-95 flex items-center justify-center gap-2">
-                        <span>⚡</span>
+                        <span>âš¡</span>
                         <span>SIMULASI PERSILANGAN & RISIKO</span>
                     </button>
                 </div>
@@ -631,7 +649,7 @@
                                 <thead>
                                     <tr>
                                         <th class="p-2.5 border border-pink-500/20 bg-[#160820] text-slate-300 text-[10px] font-bold">
-                                            Gamet ♀ \ ♂
+                                            Gamet â™€ \ â™‚
                                         </th>
                                         <th class="p-2.5 border border-pink-500/20 bg-[#1a0a27] text-cyan-300 font-bold" id="th-sperm-1">
                                             Sperma X
@@ -644,7 +662,7 @@
                                 <tbody>
                                     <tr>
                                         <th class="p-2.5 border border-pink-500/20 bg-[#1a0a27] text-pink-300 font-bold" id="th-ovum-1">
-                                            Ovum X₁
+                                            Ovum Xâ‚
                                         </th>
                                         <td class="p-3 border border-pink-500/20 bg-[#110517]" id="cell-0">
                                             -
@@ -655,7 +673,7 @@
                                     </tr>
                                     <tr>
                                         <th class="p-2.5 border border-pink-500/20 bg-[#1a0a27] text-pink-300 font-bold" id="th-ovum-2">
-                                            Ovum X₂
+                                            Ovum Xâ‚‚
                                         </th>
                                         <td class="p-3 border border-pink-500/20 bg-[#110517]" id="cell-2">
                                             -
@@ -673,7 +691,7 @@
                     <div class="glass-panel p-5 sm:p-6 rounded-2xl space-y-4">
                         <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                             <h4 class="font-display font-bold text-xs uppercase tracking-wider text-slate-200">
-                                👶 SIMULASI PROFIL 4 KETURUNAN (F1)
+                                ðŸ‘¶ SIMULASI PROFIL 4 KETURUNAN (F1)
                             </h4>
                             <span class="text-[10px] font-mono text-slate-400">Probabilitas Relatif per Kehamilan: 25% Tiap Kotak</span>
                         </div>
@@ -687,7 +705,7 @@
                     <div class="glass-panel p-6 sm:p-7 rounded-2xl space-y-4">
                         <div class="border-b border-slate-800 pb-3 flex items-center justify-between">
                             <h4 class="font-display font-bold text-sm tracking-wide text-rose-300 flex items-center gap-2">
-                                <span>📋</span> LAPORAN KONSELING GENETIKA KLINIS
+                                <span>ðŸ“‹</span> LAPORAN KONSELING GENETIKA KLINIS
                             </h4>
                             <span class="text-[10px] font-mono text-slate-400">KONSULTASI PREMARITAL</span>
                         </div>
@@ -712,7 +730,7 @@
 
     <!-- ==================== FOOTER ==================== -->
     <footer class="mt-8 border-t border-slate-800/80 bg-slate-950/80 py-6 px-4 text-center text-xs font-mono text-slate-500">
-        <p>GEN-OS // BIO-CORE • Modul 04: Analisis Risiko Pewarisan Terpaut Seks (GEN-X)</p>
+        <p>GEN-OS // BIO-CORE â€¢ Modul 04: Analisis Risiko Pewarisan Terpaut Seks (GEN-X)</p>
         <p class="mt-1 text-[11px] text-slate-600">Simulasi Dogma Genetika Mendel Terpaut Kromosom X, Hemofilia, dan Buta Warna</p>
     </footer>
 
@@ -721,13 +739,13 @@
         <div class="glass-panel rounded-2xl max-w-2xl w-full border border-rose-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl p-2 rounded-xl bg-rose-500/10 border border-rose-500/30">📖</span>
+                    <span class="text-2xl p-2 rounded-xl bg-rose-500/10 border border-rose-500/30">ðŸ“–</span>
                     <div>
                         <h3 class="text-lg font-display font-bold text-white tracking-wider">PANDUAN LENGKAP SIMULASI GEN-X</h3>
                         <p class="text-xs font-mono text-rose-400">MODUL 04: PEWARISAN TERPAUT KROMOSOM SEKS (X-LINKED)</p>
                     </div>
                 </div>
-                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">âœ•</button>
             </div>
 
             <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
@@ -768,13 +786,13 @@
         <div class="glass-panel rounded-2xl max-w-2xl w-full border border-purple-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">📚</span>
+                    <span class="text-2xl p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">ðŸ“š</span>
                     <div>
                         <h3 class="text-lg font-display font-bold text-white tracking-wider">DASAR TEORETIS & REFERENSI ILMIAH</h3>
                         <p class="text-xs font-mono text-purple-400">PEWARISAN KROMOSOM SEKS, HEMOFILIA & BUTA WARNA</p>
                     </div>
                 </div>
-                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">âœ•</button>
             </div>
 
             <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
@@ -785,10 +803,10 @@
                         <span class="text-[10px] font-mono text-slate-500">1910</span>
                     </div>
                     <p class="text-slate-300">
-                        <b>Morgan, Thomas Hunt (1910).</b> <i>Sex limited inheritance in Drosophila.</i> Science, 32(812): 120–122.
+                        <b>Morgan, Thomas Hunt (1910).</b> <i>Sex limited inheritance in Drosophila.</i> Science, 32(812): 120â€“122.
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        → Penemuan pertama mutasi mata putih (*white eye*) terpaut kromosom X pada lalat buah, membuktikan secara definitif Teori Kromosom Pewarisan Sifat Sutton-Boveri.
+                        â†’ Penemuan pertama mutasi mata putih (*white eye*) terpaut kromosom X pada lalat buah, membuktikan secara definitif Teori Kromosom Pewarisan Sifat Sutton-Boveri.
                     </p>
                 </div>
 
@@ -799,10 +817,10 @@
                         <span class="text-[10px] font-mono text-slate-500">1935</span>
                     </div>
                     <p class="text-slate-300">
-                        <b>Haldane, J. B. S. (1935).</b> <i>The rate of spontaneous mutation of a human gene.</i> Journal of Genetics, 31(3): 317–326.
+                        <b>Haldane, J. B. S. (1935).</b> <i>The rate of spontaneous mutation of a human gene.</i> Journal of Genetics, 31(3): 317â€“326.
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        → Menghitung laju mutasi spontan gen hemofilia manusia pada kromosom X dan menjelaskan keseimbangan seleksi alam terhadap alel letal resesif.
+                        â†’ Menghitung laju mutasi spontan gen hemofilia manusia pada kromosom X dan menjelaskan keseimbangan seleksi alam terhadap alel letal resesif.
                     </p>
                 </div>
 
@@ -813,10 +831,10 @@
                         <span class="text-[10px] font-mono text-slate-500">1961</span>
                     </div>
                     <p class="text-slate-300">
-                        <b>Lyon, Mary F. (1961).</b> <i>Gene action in the X-chromosome of the mouse (Mus musculus L.).</i> Nature, 190(4773): 372–373.
+                        <b>Lyon, Mary F. (1961).</b> <i>Gene action in the X-chromosome of the mouse (Mus musculus L.).</i> Nature, 190(4773): 372â€“373.
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        → Menjelaskan kompensasi dosis gen antara pria (XY) dan wanita (XX) melalui kondensasi salah satu kromosom X menjadi Badan Barr heterokromatin.
+                        â†’ Menjelaskan kompensasi dosis gen antara pria (XY) dan wanita (XX) melalui kondensasi salah satu kromosom X menjadi Badan Barr heterokromatin.
                     </p>
                 </div>
 
@@ -827,10 +845,10 @@
                         <span class="text-[10px] font-mono text-slate-500">1986</span>
                     </div>
                     <p class="text-slate-300">
-                        <b>Nathans, J., Thomas, D., & Hogness, D. S. (1986).</b> <i>Molecular genetics of human color vision: the genes encoding blue, green, and red pigments.</i> Science, 232(4747): 193–202.
+                        <b>Nathans, J., Thomas, D., & Hogness, D. S. (1986).</b> <i>Molecular genetics of human color vision: the genes encoding blue, green, and red pigments.</i> Science, 232(4747): 193â€“202.
                     </p>
                     <p class="text-slate-400 text-[11px]">
-                        → Mengisolasi dan mengurutkan gen opsin fotoreseptor kerucut merah dan hijau pada kromosom Xq28, memetakan penyebab protanopia dan deuteranopia.
+                        â†’ Mengisolasi dan mengurutkan gen opsin fotoreseptor kerucut merah dan hijau pada kromosom Xq28, memetakan penyebab protanopia dan deuteranopia.
                     </p>
                 </div>
             </div>
@@ -900,7 +918,7 @@
         window.toggleSound = function() {
             soundEnabled = !soundEnabled;
             const icon = document.getElementById('sound-icon');
-            if (icon) icon.textContent = soundEnabled ? '🔊' : '🔇';
+            if (icon) icon.textContent = soundEnabled ? 'ðŸ”Š' : 'ðŸ”‡';
             const btn = document.getElementById('btn-sound');
             if (btn) {
                 if (!soundEnabled) btn.classList.add('opacity-60');
@@ -1089,10 +1107,10 @@
 
             // 4 Offspring Zygotes
             const children = [
-                { sex: 'F', g1: m1, g2: f1, name: 'Anak 1 (♀)' },
-                { sex: 'M', g1: m1, g2: 'Y', name: 'Anak 2 (♂)' },
-                { sex: 'F', g1: m2, g2: f1, name: 'Anak 3 (♀)' },
-                { sex: 'M', g1: m2, g2: 'Y', name: 'Anak 4 (♂)' }
+                { sex: 'F', g1: m1, g2: f1, name: 'Anak 1 (â™€)' },
+                { sex: 'M', g1: m1, g2: 'Y', name: 'Anak 2 (â™‚)' },
+                { sex: 'F', g1: m2, g2: f1, name: 'Anak 3 (â™€)' },
+                { sex: 'M', g1: m2, g2: 'Y', name: 'Anak 4 (â™‚)' }
             ];
 
             let stats = { sick: 0, carrier: 0, normal: 0, maleSick: 0, maleTotal: 2, femaleCar: 0, femaleTotal: 2 };
@@ -1220,7 +1238,7 @@
                 html += `
                     <div class="p-3.5 rounded-xl bg-rose-950/40 border border-rose-500/40 space-y-1.5 shadow-md">
                         <span class="text-[10px] font-mono text-rose-300 uppercase tracking-wider block font-bold">
-                            ⚠️ 2. Peringatan Risiko Fenotipe Sakit (${(stats.sick / 4) * 100}%)
+                            âš ï¸ 2. Peringatan Risiko Fenotipe Sakit (${(stats.sick / 4) * 100}%)
                         </span>
                         <p class="text-xs text-rose-100 font-sans leading-relaxed">
                             Setiap kehamilan memiliki probabilitas <b class="text-white">${(stats.sick / 4) * 100}%</b> melahirkan anak dengan fenotipe sakit. Perhatikan bahwa risiko pada <b class="text-white">anak laki-laki mencapai ${(stats.maleSick / 2) * 100}%</b> akibat sifat <b class="text-rose-200">hemizigot</b>, di mana kromosom Y tidak memiliki alel pelindung.
@@ -1231,7 +1249,7 @@
                 html += `
                     <div class="p-3.5 rounded-xl bg-amber-950/40 border border-amber-500/40 space-y-1.5 shadow-md">
                         <span class="text-[10px] font-mono text-amber-300 uppercase tracking-wider block font-bold">
-                            🔸 2. Deteksi Pembawa Sifat (Carrier: ${(stats.carrier / 4) * 100}%)
+                            ðŸ”¸ 2. Deteksi Pembawa Sifat (Carrier: ${(stats.carrier / 4) * 100}%)
                         </span>
                         <p class="text-xs text-amber-100 font-sans leading-relaxed">
                             Seluruh keturunan (100%) akan lahir secara klinis <b class="text-white">sehat normal</b>. Namun, terdapat peluang <b class="text-white">${(stats.femaleCar / 2) * 100}% pada anak perempuan</b> menjadi *Carrier*. Mereka membawa mutasi genetik tersembunyi yang berisiko diturunkan ke generasi cucu laki-laki melalui pola <i class="text-amber-200">Criss-Cross Inheritance</i>.
@@ -1242,7 +1260,7 @@
                 html += `
                     <div class="p-3.5 rounded-xl bg-cyan-950/40 border border-cyan-500/40 space-y-1.5 shadow-md">
                         <span class="text-[10px] font-mono text-cyan-200 uppercase tracking-wider block font-bold">
-                            ✅ 2. Status Genomik Aman (0% Risiko)
+                            âœ… 2. Status Genomik Aman (0% Risiko)
                         </span>
                         <p class="text-xs text-cyan-100 font-sans leading-relaxed">
                             Kedua orang tua tidak membawa alel mutan resesif. Seluruh anak (100%) dipastikan memiliki genotipe dominan homozigot atau hemizigot normal tanpa risiko penyakit maupun carrier.
@@ -1274,3 +1292,4 @@
 </body>
 
 </html>
+
