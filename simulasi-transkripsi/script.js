@@ -194,6 +194,27 @@ document.addEventListener("DOMContentLoaded", () => {
     let mrnaReleaseProgress = 0; // 0 to 1
     let floatAnimTime = 0;
 
+    // Dynamic Camera Tracking State (Smooth Follow on Mobile)
+    let cameraX = 0;
+    let targetCameraX = 0;
+    let maxScrollX = 0;
+    let isUserPanning = false;
+    let panStartX = 0;
+    let panCameraStartX = 0;
+    let userPanCooldown = 0;
+    let isMobile = false;
+
+    // Ambient Nucleoplasm Particles (Floating rNTPs inside nucleus)
+    const nucleoplasmParticles = Array.from({ length: 16 }, () => ({
+        x: Math.random() * 1000,
+        y: Math.random() * 400,
+        char: ['U', 'A', 'G', 'C'][Math.floor(Math.random() * 4)],
+        size: 9 + Math.random() * 4,
+        speedX: (Math.random() - 0.5) * 0.35,
+        speedY: (Math.random() - 0.5) * 0.25,
+        alpha: 0.18 + Math.random() * 0.25
+    }));
+
     // Canvas layout dimensions
     let dims = {
         w: 1000,
@@ -206,12 +227,50 @@ document.addEventListener("DOMContentLoaded", () => {
         bubbleWidth: 260
     };
 
+    function updateCameraTarget(immediate = false) {
+        if (maxScrollX <= 0) {
+            targetCameraX = 0;
+            if (immediate) cameraX = 0;
+            return;
+        }
+
+        // Camera tracks the active biological action
+        if (currentStep === 0) {
+            targetCameraX = 0;
+        } else if (currentStep === 1) {
+            targetCameraX = Math.max(0, Math.min(maxScrollX, polyX - dims.w * 0.38));
+        } else if (currentStep === 2) {
+            // Elongation: Center RNA Polymerase smoothly as it polymerizes
+            targetCameraX = Math.max(0, Math.min(maxScrollX, polyX - dims.w * 0.42));
+        } else if (currentStep === 3) {
+            // Termination: Focus on terminator end
+            targetCameraX = maxScrollX;
+        } else if (currentStep === 4) {
+            // Final result: Show complete mRNA in the center
+            const centerGeneX = dims.startX + (seqCoding.length * dims.baseXSpacing) / 2;
+            targetCameraX = Math.max(0, Math.min(maxScrollX, centerGeneX - dims.w / 2));
+        }
+
+        if (immediate) {
+            cameraX = targetCameraX;
+        }
+    }
+
     function resizeCanvas() {
         const container = document.getElementById('sim-container');
         if (!container) return;
+        
+        isMobile = window.innerWidth < 768;
         const rect = container.getBoundingClientRect();
-        const displayW = Math.max(340, rect.width - 32);
-        const displayH = Math.max(380, rect.height - 110);
+        
+        // Accurate inner width calculation avoiding overflow
+        const padX = isMobile ? 24 : 32;
+        const displayW = Math.max(280, Math.floor(rect.width - padX));
+        
+        // Proportionate height for mobile devices to keep nucleus & controls visible
+        const displayH = isMobile 
+            ? Math.min(360, Math.max(280, Math.floor(window.innerHeight * 0.38))) 
+            : Math.max(380, rect.height - 110);
         
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
         canvas.width = displayW * dpr;
@@ -222,23 +281,51 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.resetTransform();
         ctx.scale(dpr, dpr);
 
-        // Calculate responsive scale
-        const scale = Math.min(displayW / 1100, displayH / 480);
-        const startX = Math.max(120, displayW * 0.12);
-        const availWidth = displayW - startX - 80;
-        const baseXSpacing = Math.min(32, Math.max(20, availWidth / seqCoding.length));
+        // Responsive scaling
+        const scale = Math.min(displayW / 960, displayH / 440);
         
+        const totalBases = seqCoding.length;
+        let baseXSpacing = 28;
+        let startX = 85;
+        
+        if (displayW >= 720) {
+            // Desktop / Wide viewport: comfortably fit entire strand and center it
+            const availW = displayW - 130;
+            baseXSpacing = Math.min(28, Math.max(22, Math.floor(availW / totalBases)));
+            const totalDnaW = totalBases * baseXSpacing;
+            startX = Math.floor((displayW - totalDnaW) / 2);
+            maxScrollX = 0;
+            cameraX = 0;
+            targetCameraX = 0;
+        } else {
+            // Mobile / Narrow viewport: keep bases legible and large enough, camera smoothly tracks
+            startX = 75;
+            baseXSpacing = isMobile ? 25 : 27;
+            const totalStrandSpan = startX + totalBases * baseXSpacing + 65;
+            maxScrollX = Math.max(0, totalStrandSpan - displayW);
+        }
+
         dims = {
             w: displayW,
             h: displayH,
             scale: scale,
             startX: startX,
             baseXSpacing: baseXSpacing,
-            baseYCoding: displayH * 0.40,
+            baseYCoding: displayH * 0.38,
             baseYTemplate: displayH * 0.58,
-            bubbleWidth: baseXSpacing * 9
+            bubbleWidth: baseXSpacing * 8.5
         };
 
+        const camBadge = document.getElementById('camera-badge');
+        if (camBadge) {
+            if (maxScrollX > 0) {
+                camBadge.classList.remove('hidden');
+            } else {
+                camBadge.classList.add('hidden');
+            }
+        }
+
+        updateCameraTarget(true);
         drawScene();
     }
     window.addEventListener('resize', resizeCanvas);
@@ -394,12 +481,13 @@ document.addEventListener("DOMContentLoaded", () => {
             mrnaReleaseProgress = 0.4;
         } else if (step === 4) {
             dnaSeparation = 0;
-            polyX = dims.w + 200;
+            polyX = startX + seqCoding.length * baseXSpacing + 60;
             elongationProgress = seqCoding.length;
             mrnaReleaseProgress = 1;
             playSound('finish');
         }
 
+        updateCameraTarget(false);
         updateUI();
         drawScene();
     }
@@ -421,27 +509,82 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function drawNucleus() {
         ctx.save();
-        ctx.beginPath();
-        ctx.ellipse(dims.w / 2, dims.h / 2, dims.w * 0.48, dims.h * 0.46, 0, 0, Math.PI * 2);
-        ctx.setLineDash([12, 8]);
-        ctx.lineWidth = 2.5;
-        ctx.strokeStyle = 'rgba(245, 158, 11, 0.2)';
-        ctx.stroke();
         
-        // Nuclear envelope halo
-        ctx.fillStyle = 'rgba(245, 158, 11, 0.02)';
+        // Nuclear matrix boundary fits comfortably inside canvas margins
+        const padX = Math.max(10, Math.floor(14 * dims.scale));
+        const padY = Math.max(8, Math.floor(12 * dims.scale));
+        const radiusX = (dims.w / 2) - padX;
+        const radiusY = (dims.h / 2) - padY;
+        
+        // Draw dashed nuclear envelope (Membran Inti Sel)
+        ctx.beginPath();
+        ctx.ellipse(dims.w / 2, dims.h / 2, radiusX, radiusY, 0, 0, Math.PI * 2);
+        ctx.setLineDash([10, 7]);
+        ctx.lineWidth = 2.2;
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.32)';
+        ctx.stroke();
+        ctx.setLineDash([]);
+        
+        // Nuclear matrix subtle atmospheric glow
+        const nucGrad = ctx.createRadialGradient(dims.w / 2, dims.h / 2, 30, dims.w / 2, dims.h / 2, radiusX);
+        nucGrad.addColorStop(0, 'rgba(255, 109, 0, 0.04)');
+        nucGrad.addColorStop(0.7, 'rgba(10, 18, 38, 0.25)');
+        nucGrad.addColorStop(1, 'rgba(245, 158, 11, 0.09)');
+        ctx.fillStyle = nucGrad;
         ctx.fill();
 
-        // Label
-        ctx.fillStyle = 'rgba(245, 158, 11, 0.35)';
-        ctx.font = `bold ${Math.max(11, 13 * dims.scale)}px 'Orbitron', sans-serif`;
+        // Nuclear pores accent points along the envelope
+        ctx.fillStyle = 'rgba(245, 158, 11, 0.55)';
+        for (let a = 0; a < Math.PI * 2; a += Math.PI / 8) {
+            const px = dims.w / 2 + Math.cos(a) * radiusX;
+            const py = dims.h / 2 + Math.sin(a) * radiusY;
+            ctx.beginPath();
+            ctx.arc(px, py, 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Nucleus Label with sleek pill backdrop so it looks ultra crisp and never clashes
+        const labelText = 'NUKLEUS SEL // MATRIKS INTI';
+        ctx.font = `bold ${Math.max(9, Math.floor(10.5 * dims.scale))}px 'Orbitron', sans-serif`;
+        const textW = ctx.measureText(labelText).width;
+        
+        ctx.fillStyle = 'rgba(8, 14, 30, 0.88)';
+        ctx.beginPath();
+        ctx.roundRect((dims.w - textW) / 2 - 8, padY + 6, textW + 16, 17, 4);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.fillStyle = '#f59e0b';
         ctx.textAlign = 'center';
-        ctx.fillText('NUKLEUS SEL // MATRIKS INTI', dims.w / 2, 28);
+        ctx.textBaseline = 'middle';
+        ctx.fillText(labelText, dims.w / 2, padY + 15);
+        
+        ctx.restore();
+    }
+
+    function drawNucleoplasmParticles() {
+        ctx.save();
+        nucleoplasmParticles.forEach(p => {
+            p.x += p.speedX;
+            p.y += p.speedY;
+            if (p.x < 10) p.x = dims.w - 10;
+            if (p.x > dims.w - 10) p.x = 10;
+            if (p.y < 35) p.y = dims.h - 35;
+            if (p.y > dims.h - 35) p.y = 35;
+
+            const col = baseColors[p.char] || { bg: '#ff9100' };
+            ctx.fillStyle = col.bg;
+            ctx.globalAlpha = p.alpha * 0.4;
+            ctx.font = `bold ${Math.floor(p.size * dims.scale)}px 'Fira Code', monospace`;
+            ctx.textAlign = 'center';
+            ctx.fillText(p.char, p.x, p.y);
+        });
         ctx.restore();
     }
 
     function drawPolymerase(x, y) {
-        if (x < -100 || x > dims.w + 100) return;
         ctx.save();
         ctx.translate(x, y);
 
@@ -479,7 +622,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.textAlign = 'center';
         ctx.fillText('RNA POLIMERASE II', 0, -r - 10);
 
-        ctx.fillStyle = 'rgba(254, 243, 199, 0.7)';
+        ctx.fillStyle = 'rgba(254, 243, 199, 0.8)';
         ctx.font = `${Math.max(8, 9 * dims.scale)}px 'Rajdhani', sans-serif`;
         ctx.fillText('Situs Katalitik Aktif', 0, r + 14);
 
@@ -535,11 +678,110 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.stroke();
     }
 
+    function drawStrandBadges(startX, baseXSpacing, baseYCoding, baseYTemplate) {
+        const totalW = seqCoding.length * baseXSpacing;
+        const endX = startX + totalW;
+
+        ctx.save();
+        ctx.textAlign = 'right';
+        
+        // Sense strand 5'
+        ctx.font = `bold ${Math.max(10, Math.floor(11 * dims.scale))}px 'Fira Code', monospace`;
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillText("5'", startX - 10, baseYCoding - 4);
+        ctx.font = `${Math.max(9, Math.floor(10 * dims.scale))}px 'Rajdhani', sans-serif`;
+        ctx.fillStyle = 'rgba(148, 163, 184, 0.9)';
+        ctx.fillText("Sense", startX - 10, baseYCoding + 9);
+
+        // Antisense strand 3'
+        ctx.font = `bold ${Math.max(10, Math.floor(11 * dims.scale))}px 'Fira Code', monospace`;
+        ctx.fillStyle = '#06b6d4';
+        ctx.fillText("3'", startX - 10, baseYTemplate - 4);
+        ctx.font = `${Math.max(9, Math.floor(10 * dims.scale))}px 'Rajdhani', sans-serif`;
+        ctx.fillStyle = 'rgba(6, 182, 212, 0.9)';
+        ctx.fillText("Cetakan", startX - 10, baseYTemplate + 9);
+
+        // 3' End Labels
+        ctx.textAlign = 'left';
+        ctx.font = `bold ${Math.max(10, Math.floor(11 * dims.scale))}px 'Fira Code', monospace`;
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillText("3'", endX + 10, baseYCoding - 4);
+        
+        ctx.fillStyle = '#06b6d4';
+        ctx.fillText("5'", endX + 10, baseYTemplate + 10);
+        ctx.restore();
+    }
+
+    function drawMiniMap() {
+        if (maxScrollX <= 0) return;
+        
+        ctx.save();
+        const mapW = Math.min(180, dims.w * 0.55);
+        const mapH = 9;
+        const mapX = (dims.w - mapW) / 2;
+        const mapY = dims.h - 18;
+
+        // Track background
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
+        ctx.lineWidth = 1;
+        ctx.roundRect(mapX, mapY, mapW, mapH, 4);
+        ctx.fill();
+        ctx.stroke();
+
+        // Gene span (Promoter to Terminator)
+        ctx.fillStyle = 'rgba(100, 116, 139, 0.6)';
+        ctx.fillRect(mapX + 2, mapY + 3.5, mapW - 4, 2);
+
+        // Active Camera Viewport box
+        const totalSpan = dims.startX + seqCoding.length * dims.baseXSpacing + 70;
+        const viewNormX = cameraX / totalSpan;
+        const viewNormW = dims.w / totalSpan;
+        const boxX = mapX + viewNormX * mapW;
+        const boxW = Math.max(14, viewNormW * mapW);
+
+        ctx.fillStyle = 'rgba(6, 182, 212, 0.35)';
+        ctx.strokeStyle = '#06b6d4';
+        ctx.lineWidth = 1;
+        ctx.roundRect(Math.max(mapX, boxX), mapY + 1, Math.min(mapW - (boxX - mapX), boxW), mapH - 2, 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // RNA Polymerase Pip indicator
+        if (currentStep > 0 && currentStep < 4) {
+            const polyNorm = Math.max(0, Math.min(1, (polyX - dims.startX) / (seqCoding.length * dims.baseXSpacing)));
+            const pipX = mapX + 3 + polyNorm * (mapW - 6);
+            ctx.fillStyle = '#f59e0b';
+            ctx.shadowColor = '#f59e0b';
+            ctx.shadowBlur = 6;
+            ctx.beginPath();
+            ctx.arc(pipX, mapY + mapH / 2, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+
+        // Labels: 5' (Promotor) and 3' (Terminator)
+        ctx.font = "8px 'Fira Code', monospace";
+        ctx.fillStyle = 'rgba(148, 163, 184, 0.8)';
+        ctx.textAlign = 'right';
+        ctx.fillText("5' Promotor", mapX - 5, mapY + mapH - 1);
+        ctx.textAlign = 'left';
+        ctx.fillText("Terminator 3'", mapX + mapW + 5, mapY + mapH - 1);
+
+        ctx.restore();
+    }
+
     function drawScene() {
         ctx.clearRect(0, 0, dims.w, dims.h);
         floatAnimTime += 0.04;
 
+        // 1. Draw Nuclear Envelope & Matrix (Stationary in canvas viewport)
         drawNucleus();
+        drawNucleoplasmParticles();
+
+        // 2. Draw Molecular Elements (In Camera Coordinate Space)
+        ctx.save();
+        ctx.translate(-Math.round(cameraX), 0);
 
         const { startX, baseXSpacing, baseYCoding, baseYTemplate } = dims;
 
@@ -581,41 +823,30 @@ document.addEventListener("DOMContentLoaded", () => {
         drawBackbone(codingPts, '#64748b', 3.5);
         drawBackbone(templatePts, '#06b6d4', 3.5);
 
-        // DNA Strand Labels (5' and 3')
-        ctx.fillStyle = '#94a3b8';
-        ctx.font = `bold ${Math.max(10, 12 * dims.scale)}px 'Fira Code', monospace`;
-        ctx.textAlign = 'right';
-        ctx.fillText("5'", startX - 18, baseYCoding - 14);
-        ctx.fillText("3'", startX - 18, baseYTemplate + 22);
-
-        ctx.textAlign = 'left';
-        ctx.fillText("3'", startX + seqCoding.length * baseXSpacing + 12, baseYCoding - 14);
-        ctx.fillText("5'", startX + seqCoding.length * baseXSpacing + 12, baseYTemplate + 22);
-
-        // Sense and Antisense Text Labels
-        ctx.textAlign = 'right';
-        ctx.font = `${Math.max(9, 10 * dims.scale)}px 'Rajdhani', sans-serif`;
-        ctx.fillStyle = 'rgba(148, 163, 184, 0.7)';
-        ctx.fillText("Untai Pengkode (Sense)", startX - 32, baseYCoding - 14);
-        ctx.fillStyle = 'rgba(6, 182, 212, 0.8)';
-        ctx.fillText("Untai Cetakan (Antisense)", startX - 32, baseYTemplate + 22);
+        // DNA Strand End Markers (5' and 3')
+        drawStrandBadges(startX, baseXSpacing, baseYCoding, baseYTemplate);
 
         // Draw mRNA if in Elongation, Termination, or Final steps
         if (currentStep >= 2) {
             drawMRNA();
         }
+
+        ctx.restore();
+
+        // 3. Draw MiniMap / Tracking Overlay in canvas space
+        drawMiniMap();
     }
 
     function drawMRNA() {
         const { startX, baseXSpacing, baseYTemplate } = dims;
         const mrnaBaseY = baseYTemplate - 16 * dims.scale;
-        const finalY = dims.h * 0.78;
+        const finalY = dims.h * 0.76;
 
         let currentY = mrnaBaseY;
         if (currentStep === 3) {
             currentY = mrnaBaseY + (finalY - mrnaBaseY) * mrnaReleaseProgress;
         } else if (currentStep === 4) {
-            currentY = finalY + Math.sin(floatAnimTime) * 6;
+            currentY = finalY + Math.sin(floatAnimTime) * 5;
         }
 
         const mrnaPts = [];
@@ -627,7 +858,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Outside bubble curvature during active transcription
             if (currentStep === 2 && polyX > x + dims.bubbleWidth / 2) {
-                yPos = mrnaBaseY + 45 * dims.scale;
+                yPos = mrnaBaseY + 42 * dims.scale;
             }
 
             mrnaPts.push({ x, y: yPos - 18 * dims.scale });
@@ -653,19 +884,30 @@ document.addEventListener("DOMContentLoaded", () => {
             drawBackbone(mrnaPts, '#f43f5e', 4);
 
             ctx.fillStyle = '#f43f5e';
-            ctx.font = `bold ${Math.max(10, 12 * dims.scale)}px 'Fira Code', monospace`;
+            ctx.font = `bold ${Math.max(10, Math.floor(11 * dims.scale))}px 'Fira Code', monospace`;
             ctx.textAlign = 'right';
-            ctx.fillText("5' mRNA", mrnaPts[0].x - 16, mrnaPts[0].y + 6);
+            ctx.fillText("5' mRNA", mrnaPts[0].x - 14, mrnaPts[0].y + 5);
 
             if (basesToDraw === seqMRNA.length) {
                 ctx.textAlign = 'left';
-                ctx.fillText("3' poly(A)", mrnaPts[mrnaPts.length - 1].x + 16, mrnaPts[mrnaPts.length - 1].y + 6);
+                ctx.fillText("3' poly(A)", mrnaPts[mrnaPts.length - 1].x + 14, mrnaPts[mrnaPts.length - 1].y + 5);
             }
         }
     }
 
     // Main animation state update
     function updateState(dt) {
+        // Smooth camera tracking interpolation
+        if (!isUserPanning && maxScrollX > 0) {
+            const now = Date.now();
+            if (now > userPanCooldown) {
+                updateCameraTarget(false);
+                const lerpRate = Math.min(1, (dt / 16) * 0.08);
+                cameraX += (targetCameraX - cameraX) * lerpRate;
+                cameraX = Math.max(0, Math.min(maxScrollX, cameraX));
+            }
+        }
+
         if (!isPlaying) return;
 
         const { startX, baseXSpacing } = dims;
@@ -709,7 +951,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         } else if (currentStep === 3) {
             mrnaReleaseProgress = Math.min(1, mrnaReleaseProgress + stepDt * 0.05);
-            polyX += stepDt * 25;
+            polyX += stepDt * 20;
             dnaSeparation = Math.max(0, dnaSeparation - stepDt * 0.08);
 
             if (mrnaReleaseProgress >= 1) {
@@ -731,6 +973,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
         animationFrame = requestAnimationFrame(loop);
     }
+
+    // Pointer / Touch Events for interactive panning
+    canvas.addEventListener('pointerdown', (e) => {
+        if (maxScrollX <= 0) return;
+        isUserPanning = true;
+        panStartX = e.clientX;
+        panCameraStartX = cameraX;
+        canvas.setPointerCapture(e.pointerId);
+        
+        const hint = document.getElementById('swipe-hint');
+        if (hint) hint.classList.add('opacity-0');
+    });
+
+    canvas.addEventListener('pointermove', (e) => {
+        if (!isUserPanning) return;
+        const deltaX = e.clientX - panStartX;
+        cameraX = Math.max(0, Math.min(maxScrollX, panCameraStartX - deltaX));
+        drawScene();
+    });
+
+    const endPan = (e) => {
+        if (!isUserPanning) return;
+        isUserPanning = false;
+        try {
+            canvas.releasePointerCapture(e.pointerId);
+        } catch (_) {}
+        userPanCooldown = Date.now() + 2500;
+    };
+
+    canvas.addEventListener('pointerup', endPan);
+    canvas.addEventListener('pointercancel', endPan);
+    canvas.addEventListener('pointerleave', endPan);
 
     // Button event listeners
     btnPlay.addEventListener('click', () => {

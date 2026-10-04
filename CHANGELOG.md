@@ -6,6 +6,29 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📱 Optimasi Responsivitas Mobile & Dynamic Camera Tracking: Simulasi Transkripsi (`simulasi-transkripsi`)
+- **Penerapan Sistem Kamera Dinamis Mengikuti RNA Polimerase (*Dynamic Camera Tracking*):**
+  - Mengatasi kendala visual simulasi terpotong di layar HP di mana pemanjangan untai DNA (27 nukleotida) sebelumnya melampaui lebar layar seluler sehingga enzim RNA Polimerase II dan gelembung transkripsi (*transcription bubble*) menghilang ke luar layar.
+  - Mengimplementasikan sistem koordinat kamera virtual (`cameraX`) berbasis interpolasi halus (*lerp*):
+    - Pada **Tahap 1 (Inisiasi)**: Kamera berfokus pada daerah promoter 5' (TATA Box).
+    - Pada **Tahap 2 (Pembukaan Heliks)**: Kamera membingkai pembentukan *transcription bubble*.
+    - Pada **Tahap 3 (Elongasi)**: Kamera secara mulus melacak (*auto-track*) pergerakan RNA Polimerase II ke kanan, menjaga enzim dan rantai mRNA komplementer yang sedang disintesis selalu berada di tengah bidang pandang layar ponsel.
+    - Pada **Tahap 4 (Terminasi)**: Kamera berfokus pada sekuens sinyal terminasi 3'.
+    - Pada **Tahap 5 (Hasil Akhir)**: Kamera memposisikan untai mRNA utuh secara sentral di dalam matriks inti.
+- **Koreksi Matriks Inti / Batas Membran Inti Sel (*Nuclear Matrix Boundary*):**
+  - Memperbaiki batas elips putus-putus (`NUKLEUS SEL // MATRIKS INTI`) agar terkurung rapi (*enclosed*) di dalam batas canvas dengan jarak bantalan aman (*safe padding*), sehingga tidak lagi terpotong atau keluar dari layar saat viewport berubah ukuran.
+  - Menambahkan *pill backdrop* gelap elegan pada label header inti sel agar kontras dan tidak bertabrakan dengan garis putus-putus membran inti.
+  - Menambahkan partikel ribonukleotida bebas (rUTP, rATP, rGTP, rCTP) yang melayang halus di matriks nukleoplasma.
+- **Mini-Map Sekuens Gen & Navigasi Gestur Sentuh (*Touch Pan & Mini-Track*):**
+  - Menambahkan *Gene Mini-Track* interaktif di bagian bawah canvas pada layar seluler (Promotor 5' [===*===] Terminator 3') yang menampilkan posisi relatif kamera dan pip RNA Polimerase secara *real-time*.
+  - Menambahkan dukungan gestur sentuh / *drag-and-swipe* interaktif pada canvas seluler sehingga pengguna dapat menggeser sekuens DNA secara bebas untuk menginspeksi nukleotida tertentu, dengan fitur *auto-resume tracking* setelah 2.5 detik.
+  - Memposisikan indikator petunjuk gestur (`👆 Geser layar untuk melihat untai DNA`) di sudut kanan atas agar tidak tumpang tindih dengan mini-map.
+- **Preservasi Tata Letak Desktop:**
+  - Pada layar lebar/desktop (lebar canvas >= 720px), untai DNA secara otomatis disejajarkan di tengah (*centered*) di dalam matriks inti sel tanpa memerlukan panning, sehingga pengalaman di laptop/PC tetap sempurna.
+- **Berkas yang Diperbarui:**
+  - `simulasi-transkripsi/index.html`
+  - `simulasi-transkripsi/script.js`
+  - `CHANGELOG.md`
 ### 🧩 Perbaikan Bug Alur Mode Kuis: Simulasi Penggolongan Darah (`Simulasi Penggolongan Darah/Simulasi-Penggolongan-Darah.html`)
 - **Penundaan Tampilan Penjelasan & Hasil Hingga Jawaban Kuis Dipilih (Anti-Spoiler):**
   - Memperbaiki *timing leak* pada fungsi `runAgglutinationTest()` di mana panel `agglut-explanation` (penjelasan reaksi antigen-antibodi) sebelumnya langsung dipanggil dan ditampilkan di bawah sumur uji sebelum pengguna memilih tebakan golongan darah.
