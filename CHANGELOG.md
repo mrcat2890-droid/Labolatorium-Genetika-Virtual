@@ -6,6 +6,27 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🌐 Audit Responsivitas Menyeluruh & Standardisasi Mobile Seluruh Modul Laboratorium Virtual
+- **Audit Komprehensif Satu per Satu Terhadap 19 Berkas Modul Simulasi:**
+  - Melakukan pengujian sistematis pada rasio *mobile viewport* (390 x 844 px) untuk seluruh 19 berkas simulasi di repositori.
+  - Memastikan seluruh modul memiliki kompatibilitas tata letak, proporsi kartu visual, serta kemudahan sentuhan jari (*thumb-friendly interaction*).
+- **Perbaikan Pembungkus Adaptif Papan Catur Punnett (*Adaptive Punnett Matrix & Touch Scrolling*):**
+  - **Generator Rasio Dihibrid (`Generator Rasio Dihibrid (terbaru)/Generator Rasio Dihibrid.html`):** Membungkus tabel 4x4 (16 kotak) dengan kontainer gulir berjarak aman (`overflow-x-auto pb-2 -mx-2 px-2`) serta menambahkan petunjuk geser visual di layar seluler (`👉 Geser tabel ke samping untuk melihat 16 kotak lengkap 👈`).
+  - **Generator Genotipe Alel (`Generator Genotipe Alel (terbaru)/Generator Genotipe Alel.html`):** Mengoreksi `min-w-[480px]` yang kaku menjadi matriks grid adaptif (`grid-cols-[85px_1fr_1fr] sm:grid-cols-[110px_1fr_1fr] md:grid-cols-[130px_1fr_1fr]` dan `min-w-[320px] sm:min-w-[420px] md:min-w-[480px]`) sehingga pas di layar ponsel pintar tanpa memicu *layout overflow*.
+  - **Penyimpangan Semu Hukum Mendel (`Simulasi Atavisme.html`, `Simulasi Epistasis.html`, `Simulasi Hipostasis.html`, `Simulasi Kriptomeri.html`):** Menata ulang wadah bujur sangkar Punnett dengan *nested scroll wrapper* dan indikator gestur sentuh agar pengguna ponsel dapat menginspeksi seluruh 16 kombinasi fenotipe (jengger ayam 9:3:3:1, gandum 12:3:1 & epistasis ganda, bunga *Linaria* 9:3:4) secara leluasa.
+- **Pembersihan Sintaks Matematika & Standardisasi Notasi Alel:**
+  - Menghilangkan residu sintaks matematika LaTeX mentah (seperti `$BbKk \times BbKk$`, `$B/b$`, `$X^b$`, `$X^b Y$`) pada `Generator Rasio Dihibrid.html` dan `Generator Risiko Pewarisan Sifat Seks.html`.
+  - Mengonversi ke dalam format HTML semantik standar yang bersih, tajam, dan universal (`<i>BbKk</i> &times; <i>BbKk</i>`, `X<sup>b</sup>`, `X<sup>b</sup>Y`, `XX`, `XY`) tanpa ketergantungan pustaka eksternal.
+- **Berkas yang Diperbarui:**
+  - `Generator Rasio Dihibrid (terbaru)/Generator Rasio Dihibrid.html`
+  - `Generator Genotipe Alel (terbaru)/Generator Genotipe Alel.html`
+  - `Generator Risiko Pewarisan Sifat Seks (terbaru)/Generator Risiko Pewarisan Sifat Seks.html`
+  - `Generator Penyimpangan Semu/Simulasi Atavisme.html`
+  - `Generator Penyimpangan Semu/Simulasi Epistasis.html`
+  - `Generator Penyimpangan Semu/Simulasi Hipostasis.html`
+  - `Generator Penyimpangan Semu/Simulasi Kriptomeri.html`
+  - `CHANGELOG.md`
+
 ### 📱 Solusi Total Responsivitas Mobile & Sistem Navigasi BIO-ARCHIVE (`Generator Aplikasi Bioteknologi (terbaru)/Generator Bioteknologi Profesional.html`)
 - **Penyelesaian Kendala Layout Terhimpit di Layar Seluler (*Mobile Squishing & Dual-Scroll Fix*):**
   - Mengidentifikasi akar masalah di mana wadah pembungkus desktop menggunakan susunan fleksibel statis berdampingan (`flex flex-1 overflow-hidden`) dengan lebar tetap sidebar `<aside class="w-64">`. Pada layar ponsel cerdas (360–390px), sidebar mengambil 65% lebar layar sehingga area konten utama tertekan menjadi ~130px dengan bantalan teks `p-8` (64px) yang menyisakan hanya ~60px ruang baca.
