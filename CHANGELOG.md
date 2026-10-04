@@ -6,6 +6,31 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📌 Refaktorisasi & Overhaul Desain: Modul TRANSLATION (Simulasi Translasi mRNA & Perakitan Protein)
+- **Harmonisasi Desain Sistem GEN-OS Futuristik (`simulasi-translasi/index.html` & `style.css`):**
+  - Menggantikan antarmuka lama berbasis vanilla CSS (hasil buatan Claude yang tidak seragam) menjadi standar desain sistem futuristik GEN-OS menggunakan Tailwind CSS, dark mode `#030712`, glassmorphism (`glass-panel`), tipografi resmi (`Orbitron`, `Rajdhani`, dan `Fira Code`), serta palet warna selaras (aksen Emerald `#10b981` dan Cyan `#06b6d4` sesuai tema Modul 10 pada `index.html`).
+  - Menghubungkan modul secara utuh ke Beranda dengan tombol navigasi `← BERANDA GEN-OS` menuju `../index.html`.
+- **Banner Ringkasan Ilmiah 3 Tahap Translasi:**
+  - Menyediakan 3 kartu ringkasan visual interaktif:
+    1. *Tahap 1: Inisiasi Ribosom* (kodon start AUG, inisiator tRNA Metionin pada Situs P).
+    2. *Tahap 2: Elongasi Peptida* (masuknya aminoasil-tRNA di Situs A, pembentukan ikatan peptida oleh peptidil transferase, translokasi triplet kodon).
+    3. *Tahap 3: Terminasi & Pelepasan* (pengenalan kodon stop UAA/UAG/UGA oleh Faktor Pelepas/Release Factor, pembebasan polipeptida).
+- **Peningkatan Engine Canvas & Visualisasi Molekuler (`simulasi-translasi/script.js`):**
+  - Rendering canvas responsif dan tajam dengan dukungan rasio layar Hi-DPI (Retina Display).
+  - Visualisasi dinamis pita mRNA 5' cap ke 3' poly(A) lengkap dengan penanda triplet kodon berbingkai pendar neon.
+  - Representasi anatomis kompleks ribosom: Subunit Besar (50S/60S) dan Subunit Kecil (30S/40S) dengan rongga chamber Situs P (Peptidil) dan Situs A (Aminoasil).
+  - Visualisasi molekul tRNA berstruktur adaptor L-shape/cloverleaf dengan asam amino bermuatan, ikatan hidrogen komplementer antikodon-kodon, serta interaksi ikatan peptida.
+  - Simulasi tahap terminasi dengan pengikatan Faktor Pelepas (*Release Factor* / RF) berwarna merah dan pembebasan rantai polipeptida 8 residu lengkap dengan ujung terminus N (`H2N─`) dan C (`─COOH`) beranimasi mengapung bebas (*free-floating*).
+- **Sinkronisasi Matriks Kode Genetik Standar & Panel Status Translasi:**
+  - Panel data realtime menampilkan kodon aktif, antikodon komplementer, nama asam amino lengkap, dan visualisator untai polipeptida dengan lencana warna per residu asam amino.
+  - Tabel 64 kode genetik standar dengan penyorotan sel otomatis (*active codon highlighting*) secara realtime sesuai kodon yang sedang dibaca ribosom.
+  - Tombol pintas navigasi langsung ke tahap kunci: *Inisiasi*, *Elongasi 1*, *Elongasi 4*, *Terminasi (STOP)*, dan *Hasil Akhir*.
+- **Penerapan Modal Panduan & Referensi Ilmiah (Kepatuhan Aturan #1 & #5):**
+  - Dialog modal **"📖 Panduan Lengkap Simulasi Translasi"** yang merinci konsep dogma sentral biologi molekuler, fungsi 3 situs ribosom (A, P, E), dan tata cara pengoperasian simulator.
+  - Dialog modal **"📚 Literatur Ilmiah"** dengan rujukan orisinal: Marshall Nirenberg & J. Heinrich Matthaei (1961 - pemecahan kode triplet kodon), Francis Crick (1966 - hipotesis goyang/wobble pairing), serta Nenad Ban et al. (2000) dan Ramakrishnan, Steitz, & Yonath (Nobel Kimia 2009 - struktur resolusi atomik ribosom sebagai ribozim).
+  - Efek audio interaktif sintetis (Web Audio API) untuk umpan balik auditori pergantian kodon, pembentukan ikatan peptida, dan penyelesaian sintesis protein.
+
+
 ### 📌 Peningkatan Visual & Estetika: Efek Glassmorphism Penuh pada Beranda Utama (`index.html`)
 - **Penerapan Efek Glassmorphism Penuh pada 13 Kotak Modul Simulator:**
   - Mengubah seluruh kartu modul dari warna gelap solid menjadi panel kaca beku (*frosted glassmorphism*) dengan `backdrop-filter: blur(18px)`, latar belakang gradien semi-transparan ganda, border kaca halus (`border: 1px solid rgba(255, 255, 255, 0.12)`), dan sudut melengkung modern (`rounded-2xl`).

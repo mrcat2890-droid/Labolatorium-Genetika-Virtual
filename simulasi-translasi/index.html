@@ -1,134 +1,498 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulasi Translasi mRNA &rarr; Protein - GEN-OS Bio-Core</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>GEN-OS // TRANSLATION: Protein Assembly Lab</title>
+    <meta name="description" content="Simulasi interaktif biologi molekuler translasi mRNA menjadi protein: inisiasi ribosom, elongasi tRNA, pembentukan ikatan peptida, dan terminasi kodon stop.">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        trans: {
+                            dark: '#030712',
+                            panel: 'rgba(15, 23, 42, 0.85)',
+                            border: 'rgba(16, 185, 129, 0.25)',
+                            emerald: '#10b981',
+                            green: '#22c55e',
+                            cyan: '#06b6d4',
+                            indigo: '#6366f1',
+                            purple: '#a855f7',
+                            amber: '#f59e0b',
+                            rose: '#ef4444'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['Fira Code', 'JetBrains Mono', 'monospace'],
+                        display: ['Orbitron', 'sans-serif'],
+                        sans: ['Rajdhani', 'sans-serif']
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2.5s infinite ease-in-out',
+                        'float': 'float 3s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(16, 185, 129, 0.25)' },
+                            '50%': { boxShadow: '0 0 30px rgba(16, 185, 129, 0.6)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Orbitron:wght@600;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="app-container">
-        <header class="header">
-            <div class="branding">GEN-OS <span>BIO-CORE</span></div>
-            <h1 class="title">SIMULASI TRANSLASI mRNA &rarr; PROTEIN</h1>
-            <a href="../index.html" class="btn-back">Kembali ke Beranda</a>
-        </header>
 
-        <main class="main-content">
-            <section class="simulation-area">
-                <div class="sim-container" id="sim-container">
-                    <canvas id="sim-canvas"></canvas>
-                </div>
-                <div class="controls-panel">
-                    <div class="step-controls">
-                        <button id="btn-prev" class="btn"><span class="icon">&laquo;</span> Sebelumnya</button>
-                        <button id="btn-play" class="btn btn-primary"><span class="icon">&#9658;</span> Mulai</button>
-                        <button id="btn-next" class="btn">Selanjutnya <span class="icon">&raquo;</span></button>
-                    </div>
-                    <div class="speed-control">
-                        <label for="speed-slider">Kecepatan:</label>
-                        <input type="range" id="speed-slider" min="0.5" max="2" step="0.1" value="1">
-                    </div>
-                    <div class="progress-container">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progress-fill"></div>
-                        </div>
-                        <span id="step-counter" class="step-counter">Langkah 0 / 11</span>
-                    </div>
-                </div>
-            </section>
+<body class="flex flex-col min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 relative overflow-x-hidden">
+    <div class="scanlines"></div>
 
-            <aside class="side-panel">
-                <div class="info-card">
-                    <h2 class="card-title">Keterangan Langkah</h2>
-                    <div class="info-content">
-                        <h3 id="step-title" class="step-title">Persiapan Translasi</h3>
-                        <p id="step-description" class="step-desc">Ribosom akan menempel pada mRNA dan memulai proses translasi dari kodon awal (AUG).</p>
-                        
-                        <div class="data-grid">
-                            <div class="data-item">
-                                <span class="data-label">Kodon Saat Ini</span>
-                                <span id="current-codon" class="data-value">-</span>
-                            </div>
-                            <div class="data-item">
-                                <span class="data-label">Antikodon tRNA</span>
-                                <span id="current-anticodon" class="data-value">-</span>
-                            </div>
-                            <div class="data-item">
-                                <span class="data-label">Asam Amino</span>
-                                <span id="current-aa" class="data-value">-</span>
-                            </div>
+    <!-- ==================== TOP NAVIGATION HEADER ==================== -->
+    <header class="sticky top-0 z-40 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 px-4 md:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4 flex-shrink-0">
+        <div class="flex items-center gap-4">
+            <a href="../index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-700/80 bg-slate-900/90 hover:border-emerald-400 hover:text-emerald-300 text-slate-300 text-xs font-mono transition group">
+                <span class="transform group-hover:-translate-x-1 transition-transform">←</span>
+                <span>BERANDA GEN-OS</span>
+            </a>
+            <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
+            <div class="flex items-center gap-3">
+                <div class="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xl">
+                    ⚙️
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-base md:text-lg font-display font-bold text-white tracking-wider flex items-center gap-2">
+                            TRANSLATION
+                        </h1>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold tracking-wider">
+                            MODUL 10
+                        </span>
+                    </div>
+                    <p class="text-[11px] font-mono text-slate-400 tracking-wider">PROTEIN ASSEMBLY & POLYPEPTIDE SYNTHESIS</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Audio Toggle -->
+            <button id="btn-sound" onclick="toggleSound()" class="px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 hover:border-emerald-400 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition" title="Toggle Efek Suara">
+                <span id="sound-icon">🔊</span>
+                <span class="hidden md:inline">AUDIO</span>
+            </button>
+
+            <!-- Literature Button -->
+            <button onclick="openLiteratureModal()" class="px-3 py-1.5 rounded-lg border border-purple-500/40 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-xs font-mono flex items-center gap-1.5 transition">
+                <span>📚</span>
+                <span class="hidden sm:inline">LITERATUR</span>
+            </button>
+
+            <!-- Tutorial Button -->
+            <button onclick="openTutorialModal()" class="px-3 py-1.5 rounded-lg border border-emerald-500/50 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 text-xs font-mono flex items-center gap-1.5 transition animate-pulse">
+                <span>📖</span>
+                <span>PANDUAN</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 md:p-8 space-y-6">
+
+        <!-- Top Educational Banner: 3 Stages of Translation -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Stage 1 Card: Inisiasi -->
+            <div class="glass-panel rounded-xl p-4 sm:p-5 border-l-4 border-l-emerald-500 relative overflow-hidden group">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">TAHAP 1</span>
+                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">KODON START</span>
                         </div>
-                        
-                        <div class="chain-info">
-                            <span class="data-label">Rantai Polipeptida:</span>
-                            <div id="polypeptide-chain" class="chain-display">Belum ada asam amino</div>
+                        <h2 class="text-sm md:text-base font-bold text-white font-sans">Inisiasi Ribosom</h2>
+                    </div>
+                    <span class="text-2xl text-emerald-400 opacity-80 group-hover:scale-110 transition-transform">🎯</span>
+                </div>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                    Subunit kecil ribosom mengenali kodon awal <span class="font-mono text-emerald-300 font-bold">AUG</span> pada mRNA. Inisiator tRNA membawa asam amino <b>Metionin (Met)</b> menuju Situs P (Peptidil).
+                </p>
+            </div>
+
+            <!-- Stage 2 Card: Elongasi -->
+            <div class="glass-panel rounded-xl p-4 sm:p-5 border-l-4 border-l-cyan-500 relative overflow-hidden group">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold">TAHAP 2</span>
+                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">RANTAI POLIPEPTIDA</span>
+                        </div>
+                        <h2 class="text-sm md:text-base font-bold text-white font-sans">Elongasi Peptida</h2>
+                    </div>
+                    <span class="text-2xl text-cyan-400 opacity-80 group-hover:scale-110 transition-transform">🔗</span>
+                </div>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                    tRNA baru memasuki Situs A (Aminoasil). Enzim <b>peptidil transferase</b> membentuk ikatan peptida antar-asam amino, lalu ribosom bertranslokasi sepanjang mRNA sejauh satu kodon.
+                </p>
+            </div>
+
+            <!-- Stage 3 Card: Terminasi -->
+            <div class="glass-panel rounded-xl p-4 sm:p-5 border-l-4 border-l-rose-500 relative overflow-hidden group">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold">TAHAP 3</span>
+                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">KODON STOP</span>
+                        </div>
+                        <h2 class="text-sm md:text-base font-bold text-white font-sans">Terminasi & Pelepasan</h2>
+                    </div>
+                    <span class="text-2xl text-rose-400 opacity-80 group-hover:scale-110 transition-transform">🛑</span>
+                </div>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                    Kodon stop (<span class="font-mono text-rose-300 font-bold">UAA, UAG, UGA</span>) mencapai Situs A. Faktor pelepas (Release Factor) memicu hidrolisis rantai polipeptida, dan kompleks ribosom terdisosiasi.
+                </p>
+            </div>
+        </section>
+
+        <!-- Main Simulation Area & Control Deck -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- Left Simulation & Controls Column -->
+            <div class="lg:col-span-8 space-y-4 flex flex-col">
+                <!-- Canvas Simulation Container -->
+                <div class="glass-panel rounded-2xl p-4 relative overflow-hidden flex-grow flex flex-col justify-between" id="sim-container" style="min-height: 480px;">
+                    <!-- Floating Viewport HUD Header -->
+                    <div class="flex items-center justify-between z-10 pointer-events-none mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                            <span class="text-[11px] font-mono text-emerald-300 font-bold tracking-widest bg-slate-950/80 px-2.5 py-1 rounded-md border border-emerald-500/30">
+                                RIBOSOM SINTESIS AKTIF
+                            </span>
+                        </div>
+                        <div class="text-[11px] font-mono text-slate-400 bg-slate-950/80 px-2.5 py-1 rounded-md border border-slate-800">
+                            Arah Translasi: <span class="text-emerald-400 font-bold">5' &rarr; 3'</span>
+                        </div>
+                    </div>
+
+                    <!-- Canvas -->
+                    <div class="relative w-full flex-grow flex items-center justify-center">
+                        <canvas id="sim-canvas" class="w-full h-full block rounded-xl"></canvas>
+                    </div>
+
+                    <!-- Legend Chips Overlay -->
+                    <div class="flex flex-wrap items-center justify-center gap-3 pt-3 border-t border-slate-800/80 text-[11px] font-mono text-slate-400">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3 h-3 rounded-full bg-indigo-500/60 border border-indigo-400"></span>
+                            <span>Subunit Besar (50S/60S)</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3 h-3 rounded-full bg-cyan-600/60 border border-cyan-400"></span>
+                            <span>Subunit Kecil (30S/40S)</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3 h-3 rounded-sm bg-emerald-500/60 border border-emerald-400"></span>
+                            <span>tRNA</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3 h-3 rounded-full bg-amber-400"></span>
+                            <span>Asam Amino</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="codon-card">
-                    <h2 class="card-title">Referensi Kodon (Tabel Genetik)</h2>
-                    <div class="codon-table-wrapper">
-                        <table class="codon-table">
+                <!-- Simulation Controls Deck -->
+                <div class="glass-panel rounded-2xl p-4 sm:p-5 space-y-4">
+                    <!-- Stage Bookmark Shortcuts -->
+                    <div class="flex items-center justify-between gap-2 flex-wrap border-b border-slate-800/80 pb-3">
+                        <span class="text-[11px] font-mono text-slate-400 uppercase tracking-wider">Lompat ke Tahap:</span>
+                        <div class="flex items-center gap-1.5 flex-wrap" id="stage-buttons">
+                            <button onclick="jumpToStep(0)" class="quick-btn text-xs font-mono px-3 py-1 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:border-emerald-400 hover:text-white transition">Inisiasi</button>
+                            <button onclick="jumpToStep(1)" class="quick-btn text-xs font-mono px-3 py-1 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:border-emerald-400 hover:text-white transition">Elongasi 1</button>
+                            <button onclick="jumpToStep(4)" class="quick-btn text-xs font-mono px-3 py-1 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:border-emerald-400 hover:text-white transition">Elongasi 4</button>
+                            <button onclick="jumpToStep(8)" class="quick-btn text-xs font-mono px-3 py-1 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:border-emerald-400 hover:text-white transition">Terminasi (STOP)</button>
+                            <button onclick="jumpToStep(9)" class="quick-btn text-xs font-mono px-3 py-1 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:border-emerald-400 hover:text-white transition">Hasil Akhir</button>
+                        </div>
+                    </div>
+
+                    <!-- Main Playback & Speed Controls -->
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <!-- Step Navigation -->
+                        <div class="flex items-center gap-2">
+                            <button id="btn-prev" class="px-4 py-2 rounded-xl border border-slate-700 bg-slate-900 text-slate-200 font-mono text-xs hover:border-emerald-400 transition disabled:opacity-40 disabled:cursor-not-allowed">
+                                &laquo; Sebelumnya
+                            </button>
+                            <button id="btn-play" class="px-6 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-display font-bold text-xs tracking-wider transition shadow-lg shadow-emerald-500/20 active:scale-95">
+                                &#9658; Mulai
+                            </button>
+                            <button id="btn-next" class="px-4 py-2 rounded-xl border border-slate-700 bg-slate-900 text-slate-200 font-mono text-xs hover:border-emerald-400 transition disabled:opacity-40 disabled:cursor-not-allowed">
+                                Selanjutnya &raquo;
+                            </button>
+                        </div>
+
+                        <!-- Speed Controls -->
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-xs font-mono text-slate-400">Kecepatan:</span>
+                            <input type="range" id="speed-slider" min="0.5" max="2" step="0.1" value="1" class="w-28 cursor-pointer accent-emerald-400">
+                            <span id="speed-label" class="text-xs font-mono font-bold text-emerald-400 min-w-[32px]">1.0x</span>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar & Counter -->
+                    <div class="flex items-center gap-3 pt-1">
+                        <div class="flex-grow h-2.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800/80">
+                            <div id="progress-fill" class="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 transition-all duration-300 w-0 shadow-sm shadow-emerald-400"></div>
+                        </div>
+                        <span id="step-counter" class="text-xs font-mono font-bold text-emerald-400 min-w-[100px] text-right">
+                            Langkah 0 / 10
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Information & Genetic Codon Column -->
+            <div class="lg:col-span-4 space-y-4">
+                <!-- Step Narrative Card -->
+                <div class="glass-panel rounded-2xl p-5 space-y-4 border-t-2 border-t-emerald-400">
+                    <div class="border-b border-slate-800 pb-3">
+                        <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block mb-1">// STATUS TRANSLASI</span>
+                        <h3 id="step-title" class="text-base sm:text-lg font-display font-bold text-white tracking-wide">Persiapan Translasi</h3>
+                    </div>
+
+                    <p id="step-description" class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+                        Ribosom akan menempel pada mRNA dan memulai proses translasi dari kodon awal (AUG).
+                    </p>
+
+                    <!-- Realtime Triple Data Grid -->
+                    <div class="grid grid-cols-3 gap-2 pt-1">
+                        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-center space-y-0.5">
+                            <span class="text-[10px] font-mono text-slate-400 block uppercase">Kodon</span>
+                            <span id="current-codon" class="font-mono text-base font-bold text-emerald-400 block">-</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-center space-y-0.5">
+                            <span class="text-[10px] font-mono text-slate-400 block uppercase">Antikodon</span>
+                            <span id="current-anticodon" class="font-mono text-base font-bold text-cyan-400 block">-</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-center space-y-0.5">
+                            <span class="text-[10px] font-mono text-slate-400 block uppercase">Asam Amino</span>
+                            <span id="current-aa" class="font-mono text-base font-bold text-amber-400 block">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Polypeptide Chain Visualizer -->
+                    <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                        <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+                            <span>Rantai Polipeptida Tumbuh:</span>
+                            <span id="chain-length" class="text-emerald-400 font-bold">0 Residu</span>
+                        </div>
+                        <div id="polypeptide-chain" class="text-xs font-mono text-emerald-300 p-2 rounded-lg bg-slate-950 border border-slate-800/80 min-h-[38px] flex items-center flex-wrap gap-1 font-semibold">
+                            Belum ada asam amino
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Genetic Codon Reference Card -->
+                <div class="glass-panel rounded-2xl p-5 space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                        <h4 class="font-display font-bold text-xs uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
+                            <span>🧬</span> TABEL KODE GENETIK STANDAR
+                        </h4>
+                        <span class="text-[10px] font-mono text-slate-400">64 Kodon</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-center text-[11px] font-mono border-collapse" id="codon-table">
                             <thead>
-                                <tr>
-                                    <th>1st</th>
-                                    <th colspan="4">2nd Base</th>
-                                    <th>3rd</th>
-                                </tr>
-                                <tr>
-                                    <th></th>
-                                    <th>U</th>
-                                    <th>C</th>
-                                    <th>A</th>
-                                    <th>G</th>
-                                    <th></th>
+                                <tr class="bg-slate-900 text-emerald-400 border border-slate-800">
+                                    <th class="p-1.5 border border-slate-800">Basa 1</th>
+                                    <th class="p-1.5 border border-slate-800" colspan="4">Basa ke-2 (U - C - A - G)</th>
+                                    <th class="p-1.5 border border-slate-800">Basa 3</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <!-- Tabel Ringkas -->
-                                <tr>
-                                    <td rowspan="4">U</td>
-                                    <td>Phe, Leu</td>
-                                    <td>Ser</td>
-                                    <td>Tyr, STOP</td>
-                                    <td>Cys, STOP, Trp</td>
-                                    <td>U,C,A,G</td>
+                            <tbody class="text-slate-300">
+                                <tr class="border border-slate-800">
+                                    <td class="p-1 font-bold text-indigo-400 bg-slate-900/60 border border-slate-800">U</td>
+                                    <td class="p-1 border border-slate-800/80">Phe, Leu</td>
+                                    <td class="p-1 border border-slate-800/80">Ser</td>
+                                    <td class="p-1 border border-slate-800/80">Tyr, STOP</td>
+                                    <td class="p-1 border border-slate-800/80">Cys, Trp</td>
+                                    <td class="p-1 font-bold text-slate-500 bg-slate-900/60 border border-slate-800">U,C,A,G</td>
                                 </tr>
-                                <tr>
-                                    <td rowspan="4">C</td>
-                                    <td>Leu</td>
-                                    <td>Pro</td>
-                                    <td>His, Gln</td>
-                                    <td>Arg</td>
-                                    <td>U,C,A,G</td>
+                                <tr class="border border-slate-800">
+                                    <td class="p-1 font-bold text-indigo-400 bg-slate-900/60 border border-slate-800">C</td>
+                                    <td class="p-1 border border-slate-800/80">Leu</td>
+                                    <td class="p-1 border border-slate-800/80">Pro</td>
+                                    <td class="p-1 border border-slate-800/80">His, Gln</td>
+                                    <td class="p-1 border border-slate-800/80">Arg</td>
+                                    <td class="p-1 font-bold text-slate-500 bg-slate-900/60 border border-slate-800">U,C,A,G</td>
                                 </tr>
-                                <tr>
-                                    <td rowspan="4">A</td>
-                                    <td>Ile, Met(Start)</td>
-                                    <td>Thr</td>
-                                    <td>Asn, Lys</td>
-                                    <td>Ser, Arg</td>
-                                    <td>U,C,A,G</td>
+                                <tr class="border border-slate-800">
+                                    <td class="p-1 font-bold text-indigo-400 bg-slate-900/60 border border-slate-800">A</td>
+                                    <td class="p-1 border border-slate-800/80">Ile, Met*</td>
+                                    <td class="p-1 border border-slate-800/80">Thr</td>
+                                    <td class="p-1 border border-slate-800/80">Asn, Lys</td>
+                                    <td class="p-1 border border-slate-800/80">Ser, Arg</td>
+                                    <td class="p-1 font-bold text-slate-500 bg-slate-900/60 border border-slate-800">U,C,A,G</td>
                                 </tr>
-                                <tr>
-                                    <td rowspan="4">G</td>
-                                    <td>Val</td>
-                                    <td>Ala</td>
-                                    <td>Asp, Glu</td>
-                                    <td>Gly</td>
-                                    <td>U,C,A,G</td>
+                                <tr class="border border-slate-800">
+                                    <td class="p-1 font-bold text-indigo-400 bg-slate-900/60 border border-slate-800">G</td>
+                                    <td class="p-1 border border-slate-800/80">Val</td>
+                                    <td class="p-1 border border-slate-800/80">Ala</td>
+                                    <td class="p-1 border border-slate-800/80">Asp, Glu</td>
+                                    <td class="p-1 border border-slate-800/80">Gly</td>
+                                    <td class="p-1 font-bold text-slate-500 bg-slate-900/60 border border-slate-800">U,C,A,G</td>
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="codon-note">* AUG (Metionin) = Kodon START. UAA, UAG, UGA = Kodon STOP.</div>
+                    </div>
+                    <p class="text-[10px] font-mono text-slate-400 leading-tight">
+                        <span class="text-emerald-400 font-bold">* AUG (Met)</span> = Kodon Start universal.<br>
+                        <span class="text-rose-400 font-bold">UAA, UAG, UGA</span> = Kodon Stop (Terminasi).
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="mt-8 border-t border-slate-800/80 bg-slate-950/80 py-6 px-4 text-center text-xs font-mono text-slate-500">
+        <p>GEN-OS // BIO-CORE • Modul 10: Translasi mRNA &rarr; Polipeptida</p>
+        <p class="mt-1 text-[11px] text-slate-600">Simulasi Dogma Sentral Biologi Molekuler berdasarkan struktur atomik ribosom (Nobel Kimia 2009)</p>
+    </footer>
+
+    <!-- ==================== TUTORIAL MODAL ==================== -->
+    <div id="modal-tutorial" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden transition-opacity">
+        <div class="glass-panel rounded-2xl max-w-2xl w-full border border-emerald-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30">📖</span>
+                    <div>
+                        <h3 class="text-lg font-display font-bold text-white tracking-wider">PANDUAN LENGKAP SIMULASI TRANSLASI</h3>
+                        <p class="text-xs font-mono text-emerald-400">MODUL 10: PEMBACAAN KODON & SINTESIS PROTEIN</p>
                     </div>
                 </div>
-            </aside>
-        </main>
+                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+            </div>
+
+            <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-emerald-300 text-xs tracking-wider uppercase">1. Apa Itu Translasi Genetik?</h4>
+                    <p class="text-xs text-slate-300">
+                        Translasi adalah proses penerjemahan urutan nukleotida pada mRNA menjadi rangkaian asam amino pembentuk protein di ribosom. Setiap 3 basa nitrogen pada mRNA disebut <b>kodon</b>, yang berpasangan secara komplementer dengan <b>antikodon</b> pada tRNA.
+                    </p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-cyan-300 text-xs tracking-wider uppercase">2. Tiga Situs Pengikatan Ribosom (A, P, E)</h4>
+                    <ul class="list-disc list-inside text-xs space-y-1 text-slate-300">
+                        <li><b>Situs A (Aminoasil):</b> Tempat masuknya aminoasil-tRNA baru yang membawa asam amino berikutnya sesuai kodon.</li>
+                        <li><b>Situs P (Peptidil):</b> Tempat melekatnya peptidil-tRNA yang mengikat rantai polipeptida yang sedang tumbuh.</li>
+                        <li><b>Situs E (Exit):</b> Tempat keluarnya tRNA kosong (deasilasi) setelah melepaskan asam aminonya.</li>
+                    </ul>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-amber-300 text-xs tracking-wider uppercase">3. Cara Mengoperasikan Simulator</h4>
+                    <ol class="list-decimal list-inside text-xs space-y-1.5 text-slate-300">
+                        <li>Klik tombol <b>&#9658; Mulai</b> untuk menjalankan simulasi otomatis atau tombol <b>Selanjutnya &raquo;</b> untuk memeriksa per langkah.</li>
+                        <li>Gunakan slider <b>Kecepatan</b> untuk memperlambat atau mempercepat animasi translokasi.</li>
+                        <li>Amati bagaimana tRNA bergerak masuk, membentuk ikatan peptida, dan bagaimana rantai asam amino bertambah panjang di panel kanan.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="text-right border-t border-slate-800 pt-4">
+                <button onclick="closeTutorialModal()" class="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-display font-bold text-xs tracking-wider transition">
+                    MENGERTI, MULAI SIMULASI
+                </button>
+            </div>
+        </div>
     </div>
+
+    <!-- ==================== SCIENTIFIC LITERATURE MODAL ==================== -->
+    <div id="modal-literature" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden transition-opacity">
+        <div class="glass-panel rounded-2xl max-w-2xl w-full border border-purple-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">📚</span>
+                    <div>
+                        <h3 class="text-lg font-display font-bold text-white tracking-wider">DASAR TEORETIS & REFERENSI ILMIAH</h3>
+                        <p class="text-xs font-mono text-purple-400">BIOLOGI MOLEKULER KODE GENETIK & STRUKTUR RIBOSOM</p>
+                    </div>
+                </div>
+                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
+                <!-- Ref 1 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-emerald-400 font-mono">1. Pemecahan Kode Genetik Triplet</span>
+                        <span class="text-[10px] font-mono text-slate-500">1961</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Nirenberg, Marshall W., & Matthaei, J. Heinrich (1961).</b> <i>The dependence of cell-free protein synthesis in E. coli upon naturally occurring or synthetic polyribonucleotides.</i> PNAS, 47(10): 1588–1602.
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Membuktikan bahwa urutan poli-U (UUU) mengodekan asam amino fenilalanin, membuka kunci pemecahan tabel 64 kodon asam amino.
+                    </p>
+                </div>
+
+                <!-- Ref 2 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-cyan-400 font-mono">2. Hipotesis Pasangan Goyang (Wobble Hypothesis)</span>
+                        <span class="text-[10px] font-mono text-slate-500">1966</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Crick, Francis H. C. (1966).</b> <i>Codon–anticodon pairing: The wobble hypothesis.</i> Journal of Molecular Biology, 19(2): 548–555.
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Menjelaskan bagaimana 1 jenis tRNA dapat mengenali lebih dari satu kodon sinonim melalui fleksibilitas pasangan basa pada posisi ke-3 kodon.
+                    </p>
+                </div>
+
+                <!-- Ref 3 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-purple-400 font-mono">3. Struktur Resolusi Atomik Ribosom (Hadiah Nobel Kimia)</span>
+                        <span class="text-[10px] font-mono text-slate-500">2000 & 2009</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Ban, N., Nissen, P., Hansen, J., Moore, P. B., & Steitz, T. A. (2000).</b> <i>The complete atomic structure of the large ribosomal subunit at 2.4 Å resolution.</i> Science, 289(5481): 905–920.<br>
+                        <b>Ramakrishnan, V., Steitz, T. A., & Yonath, A. (2009).</b> <i>The Nobel Prize in Chemistry for studies of the structure and function of the ribosome.</i>
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Membuktikan bahwa ribosom adalah sebuah <i>ribozim</i>, di mana rRNA (bukan protein) yang mengkatalisis pembentukan ikatan peptida di pusat peptidil transferase (PTC).
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-right border-t border-slate-800 pt-4">
+                <button onclick="closeLiteratureModal()" class="px-5 py-2 rounded-xl bg-purple-500 hover:bg-purple-400 text-slate-950 font-display font-bold text-xs tracking-wider transition">
+                    TUTUP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="script.js"></script>
 </body>
+
 </html>
