@@ -18,21 +18,45 @@
         }
         .mono { font-family: 'JetBrains Mono', monospace; }
         
+        /* High-End Frosted Glassmorphism Panel (Translucent Glass Effect) */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(148, 163, 184, 0.1);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(22, 13, 38, 0.42);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(168, 85, 247, 0.22);
             border-top: 2px solid #a855f7;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.55), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
             border-radius: 1rem;
+            position: relative;
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.5), transparent);
+            pointer-events: none;
         }
         
         .glass-panel-secondary {
-            background: rgba(30, 41, 59, 0.5);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(148, 163, 184, 0.1);
+            background: rgba(30, 16, 50, 0.42);
+            backdrop-filter: blur(16px) saturate(160%);
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
+            border: 1px solid rgba(168, 85, 247, 0.16);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12);
             border-radius: 0.75rem;
+        }
+
+        /* Frosted Glass Translucency for Sub-panels and Internal Cards */
+        [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-slate-800/"] {
+            background-color: rgba(22, 14, 40, 0.42) !important;
+            backdrop-filter: blur(16px) saturate(160%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+            border-color: rgba(168, 85, 247, 0.16) !important;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
         }
 
         .flower-svg {
@@ -81,8 +105,8 @@
         }
         
         .input-box {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid #475569;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.3);
             color: white;
             text-align: center;
             font-family: 'JetBrains Mono', monospace;
@@ -93,6 +117,9 @@
         .input-box:focus {
             outline: none;
             border-color: #a855f7;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+        }
+
         @keyframes linariaDrift {
             0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
             20% { opacity: 0.35; }

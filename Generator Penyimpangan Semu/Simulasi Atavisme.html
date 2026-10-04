@@ -48,46 +48,47 @@
             user-select: none;
             animation: atavismGlow ease-in-out infinite;
         }
-    </style>
-</head>
-<body class="p-4 md:p-8 relative overflow-x-hidden">
-
-    <!-- Signature Atavisme Background Elements -->
-    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-        <div class="absolute -top-16 -left-16 w-96 h-96 bg-amber-600/15 rounded-full filter blur-[100px]"></div>
-        <div class="absolute top-1/2 -right-20 w-[30rem] h-[30rem] bg-red-600/15 rounded-full filter blur-[120px]"></div>
-
-        <!-- Floating Comb Silhouettes (Walnut, Rose, Pea, Single) -->
-        <svg class="comb-particle w-12 h-12 text-amber-500/20 fill-current" style="left: 10%; animation-duration: 24s; animation-delay: 0s;" viewBox="0 0 100 60">
-            <path d="M10 50 C20 40, 25 20, 35 25 C45 15, 55 10, 65 20 C75 10, 85 25, 90 50 Z" />
-        </svg>
-        <svg class="comb-particle w-10 h-10 text-red-500/20 fill-current" style="left: 82%; animation-duration: 28s; animation-delay: 5s;" viewBox="0 0 100 60">
-            <path d="M10 50 C25 30, 40 35, 50 20 C60 35, 75 30, 90 50 Z" />
-        </svg>
-
-        <!-- Floating Loci R & P -->
-        <div class="gene-atavism text-amber-400/25 text-3xl" style="top: 25%; left: 6%; animation-duration: 7s;">R_P_ (Walnut)</div>
-        <div class="gene-atavism text-red-400/25 text-2xl" style="top: 45%; right: 7%; animation-duration: 8s; animation-delay: 2s;">R_pp (Rose)</div>
-        <div class="gene-atavism text-amber-300/25 text-2xl" style="bottom: 25%; left: 8%; animation-duration: 9s; animation-delay: 3s;">rrP_ (Pea)</div>
-        <div class="gene-atavism text-rose-400/25 text-2xl" style="bottom: 35%; right: 8%; animation-duration: 7.5s; animation-delay: 1s;">rrpp (Single)</div>
-    </div>
         .mono { font-family: 'JetBrains Mono', monospace; }
         
+        /* High-End Frosted Glassmorphism Panel (Translucent Glass Effect) */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(148, 163, 184, 0.1);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(20, 14, 28, 0.42);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(245, 158, 11, 0.22);
             border-top: 2px solid #f59e0b;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.55), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
             border-radius: 1rem;
+            position: relative;
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.5), transparent);
+            pointer-events: none;
         }
         
         .glass-panel-secondary {
-            background: rgba(30, 41, 59, 0.5);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(148, 163, 184, 0.1);
+            background: rgba(30, 20, 45, 0.42);
+            backdrop-filter: blur(16px) saturate(160%);
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
+            border: 1px solid rgba(245, 158, 11, 0.16);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12);
             border-radius: 0.75rem;
+        }
+
+        /* Frosted Glass Translucency for Sub-panels and Internal Cards */
+        [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-slate-800/"] {
+            background-color: rgba(20, 14, 30, 0.42) !important;
+            backdrop-filter: blur(16px) saturate(160%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+            border-color: rgba(245, 158, 11, 0.16) !important;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
         }
 
         .comb-svg {
@@ -124,7 +125,27 @@
         }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-8 relative overflow-x-hidden">
+
+    <!-- Signature Atavisme Background Elements -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute -top-16 -left-16 w-96 h-96 bg-amber-600/15 rounded-full filter blur-[100px]"></div>
+        <div class="absolute top-1/2 -right-20 w-[30rem] h-[30rem] bg-red-600/15 rounded-full filter blur-[120px]"></div>
+
+        <!-- Floating Comb Silhouettes (Walnut, Rose, Pea, Single) -->
+        <svg class="comb-particle w-12 h-12 text-amber-500/20 fill-current" style="left: 10%; animation-duration: 24s; animation-delay: 0s;" viewBox="0 0 100 60">
+            <path d="M10 50 C20 40, 25 20, 35 25 C45 15, 55 10, 65 20 C75 10, 85 25, 90 50 Z" />
+        </svg>
+        <svg class="comb-particle w-10 h-10 text-red-500/20 fill-current" style="left: 82%; animation-duration: 28s; animation-delay: 5s;" viewBox="0 0 100 60">
+            <path d="M10 50 C25 30, 40 35, 50 20 C60 35, 75 30, 90 50 Z" />
+        </svg>
+
+        <!-- Floating Loci R & P -->
+        <div class="gene-atavism text-amber-400/25 text-3xl" style="top: 25%; left: 6%; animation-duration: 7s;">R_P_ (Walnut)</div>
+        <div class="gene-atavism text-red-400/25 text-2xl" style="top: 45%; right: 7%; animation-duration: 8s; animation-delay: 2s;">R_pp (Rose)</div>
+        <div class="gene-atavism text-amber-300/25 text-2xl" style="bottom: 25%; left: 8%; animation-duration: 9s; animation-delay: 3s;">rrP_ (Pea)</div>
+        <div class="gene-atavism text-rose-400/25 text-2xl" style="bottom: 35%; right: 8%; animation-duration: 7.5s; animation-delay: 1s;">rrpp (Single)</div>
+    </div>
 
     <!-- Header -->
     <header class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 mb-8 pb-4 border-b border-slate-800">
