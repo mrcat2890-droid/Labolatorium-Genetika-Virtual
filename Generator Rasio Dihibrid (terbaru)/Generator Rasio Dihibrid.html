@@ -3,8 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bab 2: Dihibrid Bio-Lab v4</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>GEN-OS // BIO-SEQUENCER: Dihybrid Cross Engine</title>
+    <meta name="description" content="Simulasi interaktif persilangan dihibrid Hukum II Mendel (Asortasi Bebas): papan Punnett 4x4, rasio fenotipe 9:3:3:1, uji silang test cross, dan visualisasi biji ercis.">
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -12,242 +15,351 @@
             theme: {
                 extend: {
                     colors: {
-                        lab: { bg: '#020617', card: '#0f172a', gold: '#fbbf24', emerald: '#10b981', blue: '#3b82f6' }
+                        seq: {
+                            dark: '#030712',
+                            panel: 'rgba(15, 23, 42, 0.82)',
+                            border: 'rgba(52, 211, 153, 0.25)',
+                            emerald: '#10b981',
+                            green: '#34d399',
+                            gold: '#fbbf24',
+                            amber: '#f59e0b',
+                            cyan: '#06b6d4',
+                            blue: '#3b82f6',
+                            purple: '#a855f7'
+                        }
                     },
-                    fontFamily: { mono: ['JetBrains Mono', 'monospace'], sans: ['Inter', 'sans-serif'] },
+                    fontFamily: {
+                        mono: ['Fira Code', 'JetBrains Mono', 'Courier Prime', 'monospace'],
+                        display: ['Orbitron', 'sans-serif'],
+                        sans: ['Rajdhani', 'sans-serif']
+                    },
                     animation: {
-                        'bounce-slow': 'bounce 2s infinite',
-                        'fade-in': 'fadeIn 0.5s ease-out forwards'
+                        'pulse-glow': 'pulseGlow 2.5s infinite ease-in-out',
+                        'float': 'float 3.5s ease-in-out infinite'
                     },
                     keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0', transform: 'translateY(10px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(52, 211, 153, 0.25)' },
+                            '50%': { boxShadow: '0 0 30px rgba(52, 211, 153, 0.6)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' }
                         }
                     }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Orbitron:wght@600;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
     <style>
+        /* Base styles & background */
         body {
-            background-color: #020617;
+            background-color: #030712;
             background-image:
-                radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(251, 191, 36, 0.1) 0%, transparent 40%);
-            color: #e2e8f0;
+                radial-gradient(circle at 15% 20%, rgba(52, 211, 153, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(251, 191, 36, 0.06) 0%, transparent 50%),
+                linear-gradient(rgba(52, 211, 153, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(52, 211, 153, 0.02) 1px, transparent 1px);
+            background-size: 100%, 100%, 36px 36px, 36px 36px;
         }
 
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 50;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            opacity: 0.35;
+        }
+
+        /* Glassmorphism Panel */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(15, 23, 42, 0.82);
             backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
+        /* Genotype Inputs */
         .input-gen {
-            background: rgba(2, 6, 23, 0.6);
+            background: rgba(3, 7, 18, 0.8);
             border: 2px solid #334155;
-            color: #10b981;
-            font-family: 'JetBrains Mono', monospace;
+            color: #34d399;
+            font-family: 'Fira Code', monospace;
             font-size: 1.5rem;
             text-align: center;
-            transition: all 0.3s;
-            letter-spacing: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 3px;
         }
 
         .input-gen:focus {
             outline: none;
             border-color: #10b981;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+            background: rgba(6, 78, 59, 0.15);
         }
 
+        /* Punnett 4x4 Grid */
         .grid-16 {
             display: grid;
             grid-template-columns: auto repeat(4, 1fr);
-            gap: 4px;
+            gap: 6px;
         }
 
-        .citation {
-            border-bottom: 1px dashed #10b981;
-            cursor: help;
-            color: #34d399;
-            position: relative;
-            display: inline-block;
+        /* Punnett Cells */
+        .punnett-cell {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .citation:hover::after {
-            content: attr(data-ref);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #000;
-            color: #fff;
-            padding: 8px 12px;
-            font-size: 0.75rem;
-            border-radius: 6px;
-            width: 280px;
-            text-align: center;
-            z-index: 50;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-            border: 1px solid #333;
-            margin-bottom: 8px;
-            pointer-events: none;
+        .punnett-cell:hover {
+            transform: translateY(-2px) scale(1.03);
+            border-color: #34d399;
+            box-shadow: 0 0 15px rgba(52, 211, 153, 0.35);
+            z-index: 10;
         }
 
-        /* --- DNA ANIMATION CSS --- */
+        /* Animated DNA Helix */
         .dna-container {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             justify-content: center;
             align-items: center;
-            height: 80px;
-            perspective: 1000px;
+            height: 60px;
         }
 
         .dna-strand {
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            animation: dna-move 1.5s infinite ease-in-out;
+            animation: dna-move 1.6s infinite ease-in-out;
         }
 
         .dna-pair .strand-a {
             background-color: #fbbf24;
-            box-shadow: 0 0 5px #fbbf24;
+            box-shadow: 0 0 8px #fbbf24;
         }
 
         .dna-pair .strand-b {
-            background-color: #10b981;
-            box-shadow: 0 0 5px #10b981;
-            animation-delay: -0.75s;
+            background-color: #34d399;
+            box-shadow: 0 0 8px #34d399;
+            animation-delay: -0.8s;
         }
-
-        .dna-pair:nth-child(1) .dna-strand { animation-delay: -1.4s; }
-        .dna-pair:nth-child(1) .strand-b { animation-delay: -2.15s; }
-        .dna-pair:nth-child(2) .dna-strand { animation-delay: -1.2s; }
-        .dna-pair:nth-child(2) .strand-b { animation-delay: -1.95s; }
-        .dna-pair:nth-child(3) .dna-strand { animation-delay: -1.0s; }
-        .dna-pair:nth-child(3) .strand-b { animation-delay: -1.75s; }
-        .dna-pair:nth-child(4) .dna-strand { animation-delay: -0.8s; }
-        .dna-pair:nth-child(4) .strand-b { animation-delay: -1.55s; }
-        .dna-pair:nth-child(5) .dna-strand { animation-delay: -0.6s; }
-        .dna-pair:nth-child(5) .strand-b { animation-delay: -1.35s; }
-        .dna-pair:nth-child(6) .dna-strand { animation-delay: -0.4s; }
-        .dna-pair:nth-child(6) .strand-b { animation-delay: -1.15s; }
-        .dna-pair:nth-child(7) .dna-strand { animation-delay: -0.2s; }
-        .dna-pair:nth-child(7) .strand-b { animation-delay: -0.95s; }
-        .dna-pair:nth-child(8) .dna-strand { animation-delay: 0s; }
-        .dna-pair:nth-child(8) .strand-b { animation-delay: -0.75s; }
 
         @keyframes dna-move {
-            0%, 100% { transform: translateY(-20px) scale(0.6); opacity: 0.4; z-index: 0; }
-            50% { transform: translateY(20px) scale(1.2); opacity: 1; z-index: 10; }
+            0%, 100% { transform: translateY(-16px) scale(0.65); opacity: 0.45; }
+            50% { transform: translateY(16px) scale(1.2); opacity: 1; }
         }
 
-        svg.vis-item {
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
         }
-        svg.vis-item:hover {
-            transform: scale(1.3);
+        ::-webkit-scrollbar-track {
+            background: #090d16;
         }
-
-        @media print {
-            .no-print { display: none; }
-            body { background: white; color: black; }
-            .glass-panel { border: 1px solid #ccc; background: white; color: black; box-shadow: none; }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #34d399;
         }
     </style>
 </head>
 
-<body class="min-h-screen p-4 pb-20 font-sans">
+<body class="flex flex-col min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 relative overflow-x-hidden">
+    <div class="scanlines"></div>
 
-    <header class="max-w-6xl mx-auto flex justify-between items-center mb-10 pt-4 border-b border-slate-800 pb-4 no-print">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-black font-bold text-xl shadow-lg shadow-emerald-500/20">
-                D2
-            </div>
-            <div>
-                <h1 class="text-2xl font-bold tracking-tight text-white">BIO-LAB <span class="text-emerald-400">RESEARCH</span></h1>
-                <p class="text-[10px] text-slate-400 font-mono">DIHYBRID SEQUENCING v4.0</p>
+    <!-- ==================== TOP NAVIGATION HEADER ==================== -->
+    <header class="sticky top-0 z-40 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 px-4 md:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4 flex-shrink-0">
+        <div class="flex items-center gap-4">
+            <a href="../index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-700/80 bg-slate-900/90 hover:border-emerald-400 hover:text-emerald-300 text-slate-300 text-xs font-mono transition group">
+                <span class="transform group-hover:-translate-x-1 transition-transform">←</span>
+                <span>BERANDA GEN-OS</span>
+            </a>
+            <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
+            <div class="flex items-center gap-3">
+                <div class="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xl">
+                    🌿
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-base md:text-lg font-display font-bold text-white tracking-wider flex items-center gap-2">
+                            BIO-SEQUENCER
+                        </h1>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold tracking-wider">
+                            MODUL 02
+                        </span>
+                    </div>
+                    <p class="text-[11px] font-mono text-slate-400 tracking-wider">DIHYBRID CROSS ENGINE & INDEPENDENT ASSORTMENT</p>
+                </div>
             </div>
         </div>
-        <div class="flex items-center gap-3">
-            <button onclick="toggleTutorialModal()" class="text-sm text-emerald-300 hover:text-white transition bg-emerald-950/60 hover:bg-emerald-900/80 px-4 py-2 rounded-lg border border-emerald-500/40 flex items-center gap-1.5 font-medium shadow-sm">
-                <span>📖</span> Panduan Simulasi
+
+        <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Audio Toggle -->
+            <button id="btn-sound" onclick="toggleSound()" class="px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 hover:border-emerald-400 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition" title="Toggle Efek Suara">
+                <span id="sound-icon">🔊</span>
+                <span class="hidden md:inline">AUDIO</span>
             </button>
-            <a href="../index.html" class="text-sm text-slate-400 hover:text-white transition bg-slate-800 px-4 py-2 rounded-lg border border-slate-700">← Kembali</a>
+
+            <!-- Literature Button -->
+            <button onclick="openLiteratureModal()" class="px-3 py-1.5 rounded-lg border border-purple-500/40 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-xs font-mono flex items-center gap-1.5 transition">
+                <span>📚</span>
+                <span class="hidden sm:inline">LITERATUR</span>
+            </button>
+
+            <!-- Tutorial Button -->
+            <button onclick="openTutorialModal()" class="px-3 py-1.5 rounded-lg border border-emerald-500/50 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 text-xs font-mono flex items-center gap-1.5 transition animate-pulse">
+                <span>📖</span>
+                <span>PANDUAN</span>
+            </button>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto">
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 md:p-8 space-y-6">
 
-        <div class="glass-panel rounded-2xl p-8 mb-8 relative overflow-hidden group no-print border-t-4 border-emerald-500">
-            <div class="absolute -top-10 -right-10 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl group-hover:bg-emerald-500/10 transition duration-1000"></div>
-
-            <div class="relative z-10 flex flex-col items-center">
-                
-                <div class="mb-6 w-full max-w-2xl text-center">
-                    <h2 class="text-xl font-bold text-slate-200 mb-2">Simulasi Persilangan Dihibrid Hukum Mendel II</h2>
-                    <p class="text-sm text-slate-400">Persilangan dengan dua sifat beda (Bentuk Biji dan Warna Biji). Alel dominan B = Bulat, b = Kisut. Alel dominan K = Kuning, k = Hijau.</p>
+        <!-- Top Educational Banner: 3 Core Concepts of Dihybrid Cross -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Concept 1: Hukum II Mendel -->
+            <div class="glass-panel rounded-xl p-4 sm:p-5 border-l-4 border-l-emerald-500 relative overflow-hidden group">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">HUKUM II MENDEL</span>
+                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">INDEPENDENT ASSORTMENT</span>
+                        </div>
+                        <h2 class="text-sm md:text-base font-bold text-white font-sans">Asortasi Bebas Gen Independen</h2>
+                    </div>
+                    <span class="text-2xl text-emerald-400 opacity-80 group-hover:scale-110 transition-transform">🔀</span>
                 </div>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                    Alel dari dua lokus gen yang berbeda memisah secara independen saat meiosis. Pewarisan sifat bentuk biji ($B/b$) tidak mempengaruhi pewarisan warna biji ($K/k$).
+                </p>
+            </div>
 
-                <!-- PRESET CEPAT 1-KLIK -->
-                <div class="mb-6 w-full flex flex-wrap items-center justify-center gap-2">
-                    <span class="text-xs font-mono text-emerald-400 font-bold mr-1">PRESET CEPAT:</span>
-                    <button type="button" onclick="setPreset('BbKk', 'BbKk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition">
-                        Heterozigot (BbKk × BbKk → 9:3:3:1)
-                    </button>
-                    <button type="button" onclick="setPreset('BBKK', 'bbkk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition">
-                        Galur Murni (BBKK × bbkk → 100% Bulat Kuning)
-                    </button>
-                    <button type="button" onclick="setPreset('BbKk', 'bbkk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition">
-                        Test Cross (BbKk × bbkk → 1:1:1:1)
-                    </button>
-                    <button type="button" onclick="setPreset('BbKK', 'BbKK')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition">
-                        Monohibrid Sifat B (BbKK × BbKK → 3:1)
-                    </button>
-                    <button type="button" onclick="setPreset('bbkk', 'bbkk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition">
-                        Resesif Murni (bbkk × bbkk)
-                    </button>
+            <!-- Concept 2: Rasio Klasik 9:3:3:1 -->
+            <div class="glass-panel rounded-xl p-4 sm:p-5 border-l-4 border-l-amber-500 relative overflow-hidden group">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">RASIO FENOTIPE</span>
+                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">DIHIBRID HETEROZIGOT</span>
+                        </div>
+                        <h2 class="text-sm md:text-base font-bold text-white font-sans">Proporsi Fenotipe 9:3:3:1</h2>
+                    </div>
+                    <span class="text-2xl text-amber-400 opacity-80 group-hover:scale-110 transition-transform">⚖️</span>
                 </div>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                    Persilangan heterozigot ganda ($BbKk \times BbKk$) menghasilkan 4 kombinasi fenotipe F2: <b>9 Bulat Kuning</b>, <b>3 Bulat Hijau</b>, <b>3 Kisut Kuning</b>, dan <b>1 Kisut Hijau</b> dari 16 kotak kombinasi.
+                </p>
+            </div>
 
-                <div class="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-16 w-full">
-                    <div class="text-center group mt-8 md:mt-0">
-                        <label class="text-xs font-bold text-emerald-500 tracking-widest mb-2 block">PARENTAL 1 (♂)</label>
-                        <input type="text" id="p1" maxlength="4" value="BbKk" class="input-gen w-48 h-16 rounded-xl">
-                        <div id="p1-preview" class="mt-4 h-16 flex justify-center items-center"></div>
+            <!-- Concept 3: Uji Silang / Test Cross -->
+            <div class="glass-panel rounded-xl p-4 sm:p-5 border-l-4 border-l-cyan-500 relative overflow-hidden group">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold">UJI SILANG</span>
+                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">TEST CROSS (1:1:1:1)</span>
+                        </div>
+                        <h2 class="text-sm md:text-base font-bold text-white font-sans">Deteksi Genotipe Test Cross</h2>
                     </div>
+                    <span class="text-2xl text-cyan-400 opacity-80 group-hover:scale-110 transition-transform">🎯</span>
+                </div>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                    Menyilangkan individu heterozigot dengan homozigot resesif murni ($BbKk \times bbkk$) menghasilkan rasio setara <b>1:1:1:1</b>, membuktikan bahwa 4 jenis gamet diproduksi dengan frekuensi seimbang (25%).
+                </p>
+            </div>
+        </section>
 
-                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-slate-800 border border-slate-700">
-                        <span class="text-2xl text-slate-400 font-light">×</span>
-                    </div>
-
-                    <div class="text-center group">
-                        <label class="text-xs font-bold text-amber-500 tracking-widest mb-2 block">PARENTAL 2 (♀)</label>
-                        <input type="text" id="p2" maxlength="4" value="BbKk" class="input-gen w-48 h-16 rounded-xl">
-                        <div id="p2-preview" class="mt-4 h-16 flex justify-center items-center"></div>
-                    </div>
+        <!-- Parental Configuration & Workbench -->
+        <div class="glass-panel rounded-2xl p-6 sm:p-8 space-y-6 border-t-2 border-t-emerald-400 relative overflow-hidden">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                <div>
+                    <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block">// PENGATURAN PERSILANGAN MENDEL</span>
+                    <h3 class="text-base sm:text-lg font-display font-bold text-white tracking-wide">
+                        Konfigurasi Genotipe Induk (P1 & P2)
+                    </h3>
+                </div>
+                <div class="flex items-center gap-2 text-[11px] font-mono text-slate-400">
+                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700">B = Bulat</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700">b = Kisut</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700">K = Kuning</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700">k = Hijau</span>
                 </div>
             </div>
 
-            <div class="mt-10 flex justify-center w-full">
-                <button onclick="startAnalysis()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-4 px-10 rounded-xl shadow-lg shadow-emerald-900/40 transition-all hover:scale-105 active:scale-95 flex items-center gap-2 group">
-                    <span class="group-hover:animate-pulse">MULAI PERSILANGAN</span>
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
-                    </svg>
+            <!-- Quick Preset 1-Click Buttons -->
+            <div>
+                <label class="text-[10px] text-slate-400 font-mono mb-2 block uppercase tracking-wider">Pintas Skenario Cepat 1-Klik:</label>
+                <div class="flex flex-wrap gap-2">
+                    <button type="button" onclick="setPreset('BbKk', 'BbKk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 hover:border-emerald-400 font-mono transition">
+                        🔹 Heterozigot Dihibrid (BbKk × BbKk &rarr; 9:3:3:1)
+                    </button>
+                    <button type="button" onclick="setPreset('BBKK', 'bbkk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 hover:border-emerald-400 font-mono transition">
+                        🟢 Galur Murni (BBKK × bbkk &rarr; 100% Bulat Kuning)
+                    </button>
+                    <button type="button" onclick="setPreset('BbKk', 'bbkk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 hover:border-emerald-400 font-mono transition">
+                        🔸 Test Cross (BbKk × bbkk &rarr; 1:1:1:1)
+                    </button>
+                    <button type="button" onclick="setPreset('BbKK', 'BbKK')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 hover:border-emerald-400 font-mono transition">
+                        🟡 Monohibrid Sifat B (BbKK × BbKK &rarr; 3:1)
+                    </button>
+                    <button type="button" onclick="setPreset('bbkk', 'bbkk')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 hover:border-emerald-400 font-mono transition">
+                        ⚪ Resesif Murni (bbkk × bbkk)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Parents Input & Preview Cards -->
+            <div class="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-12 pt-2">
+                <!-- Parental 1 (Male) -->
+                <div class="glass-panel p-5 rounded-2xl w-full max-w-xs flex flex-col items-center text-center space-y-3 border-l-4 border-l-emerald-500">
+                    <label class="text-xs font-bold text-emerald-400 tracking-widest font-mono uppercase">
+                        ♂ PARENTAL 1 (JANTAN)
+                    </label>
+                    <input type="text" id="p1" maxlength="4" value="BbKk" class="input-gen w-44 h-14 rounded-xl shadow-inner">
+                    <div id="p1-preview" class="h-16 flex justify-center items-center"></div>
+                </div>
+
+                <!-- Cross Multiply Symbol -->
+                <div class="w-12 h-12 flex items-center justify-center rounded-full bg-slate-900 border border-slate-700 text-xl font-display text-emerald-400 shadow-md">
+                    &times;
+                </div>
+
+                <!-- Parental 2 (Female) -->
+                <div class="glass-panel p-5 rounded-2xl w-full max-w-xs flex flex-col items-center text-center space-y-3 border-l-4 border-l-amber-500">
+                    <label class="text-xs font-bold text-amber-400 tracking-widest font-mono uppercase">
+                        ♀ PARENTAL 2 (BETINA)
+                    </label>
+                    <input type="text" id="p2" maxlength="4" value="BbKk" class="input-gen w-44 h-14 rounded-xl shadow-inner">
+                    <div id="p2-preview" class="h-16 flex justify-center items-center"></div>
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            <div class="flex justify-center pt-2">
+                <button onclick="startAnalysis()" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-display font-bold text-sm tracking-widest transition shadow-lg shadow-emerald-500/25 active:scale-95 flex items-center gap-2">
+                    <span>⚡</span>
+                    <span>MULAI PERSILANGAN & ASORTASI</span>
                 </button>
             </div>
         </div>
 
-        <div id="loading-overlay" class="hidden fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center">
-            <div class="dna-container mb-8">
-                <!-- DNA Animation -->
-                <div class="dna-pair flex flex-col gap-4"><div class="dna-strand strand-a"></div><div class="dna-strand strand-b"></div></div>
-                <div class="dna-pair flex flex-col gap-4"><div class="dna-strand strand-a"></div><div class="dna-strand strand-b"></div></div>
+        <!-- Loading Animation Overlay -->
+        <div id="loading-overlay" class="hidden glass-panel p-10 rounded-2xl flex-col items-center justify-center min-h-[300px] space-y-4">
+            <div class="dna-container mb-2">
                 <div class="dna-pair flex flex-col gap-4"><div class="dna-strand strand-a"></div><div class="dna-strand strand-b"></div></div>
                 <div class="dna-pair flex flex-col gap-4"><div class="dna-strand strand-a"></div><div class="dna-strand strand-b"></div></div>
                 <div class="dna-pair flex flex-col gap-4"><div class="dna-strand strand-a"></div><div class="dna-strand strand-b"></div></div>
@@ -255,51 +367,340 @@
                 <div class="dna-pair flex flex-col gap-4"><div class="dna-strand strand-a"></div><div class="dna-strand strand-b"></div></div>
                 <div class="dna-pair flex flex-col gap-4"><div class="dna-strand strand-a"></div><div class="dna-strand strand-b"></div></div>
             </div>
-            <div class="text-emerald-400 font-mono text-sm tracking-widest animate-pulse font-bold">MEMPROSES GENOM...</div>
-            <div class="text-slate-500 text-xs mt-2 font-mono" id="loading-text">Mengekstrak Alel...</div>
+            <div class="text-emerald-400 font-display text-sm tracking-widest font-bold animate-pulse">
+                SEGREGASI MEIOSIS & REKOMBINASI GEN...
+            </div>
+            <p class="text-slate-400 text-xs font-mono" id="loading-text">Mengekstrak 4 Tipe Gamet...</p>
         </div>
 
-        <div id="result-container" class="hidden space-y-8 animate-fade-in">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-8 glass-panel p-6 rounded-2xl">
-                    <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
-                        <h3 class="font-bold text-lg text-white flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Punnett 4x4 Grid
-                        </h3>
+        <!-- Simulation Output Results -->
+        <div id="result-container" class="space-y-6">
+
+            <!-- Punnett Grid (Left 8 cols) & Statistics (Right 4 cols) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- 4x4 Punnett Matrix (8 cols) -->
+                <div class="lg:col-span-8 glass-panel p-5 sm:p-6 rounded-2xl border-t-2 border-t-emerald-400 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                        <div>
+                            <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block">// PAPAN PUNNETT 4×4</span>
+                            <h3 class="text-base sm:text-lg font-display font-bold text-white tracking-wide">
+                                Matriks Fertilisasi 16 Kombinasi
+                            </h3>
+                        </div>
+                        <div class="text-[11px] font-mono text-slate-400">
+                            P1 &rarr; 4 Gamet &times; P2 &rarr; 4 Gamet
+                        </div>
                     </div>
+
                     <div class="overflow-x-auto pb-2">
-                        <div id="punnett-grid" class="grid-16 min-w-[500px] text-center"></div>
+                        <div id="punnett-grid" class="grid-16 min-w-[500px] text-center">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Seed Phenotype Legend -->
+                    <div class="flex flex-wrap items-center justify-center gap-4 pt-3 border-t border-slate-800/80 text-[11px] font-mono text-slate-300">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3.5 h-3.5 rounded-full bg-amber-400 border border-amber-300 shadow-sm"></span>
+                            <span>Bulat Kuning (B_K_)</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 border border-emerald-400 shadow-sm"></span>
+                            <span>Bulat Hijau (B_kk)</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3.5 h-3.5 rounded-sm bg-yellow-600 border border-yellow-500 shadow-sm"></span>
+                            <span>Kisut Kuning (bbK_)</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3.5 h-3.5 rounded-sm bg-teal-600 border border-teal-500 shadow-sm"></span>
+                            <span>Kisut Hijau (bbkk)</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="lg:col-span-4 glass-panel p-6 rounded-2xl flex flex-col">
-                    <h3 class="font-bold text-sm text-slate-400 uppercase tracking-widest border-b border-slate-700 pb-2 mb-4">Statistik Fenotipe</h3>
-                    <div id="stats-bars" class="space-y-4 flex-grow mb-6"></div>
-                    <h4 class="font-bold text-sm text-slate-400 mb-3 uppercase tracking-widest border-b border-slate-700 pb-2">Distribusi Genotipe</h4>
-                    <div id="geno-stats" class="flex flex-wrap gap-2 w-full"></div>
+                <!-- Statistics & Frequency Column (4 cols) -->
+                <div class="lg:col-span-4 glass-panel p-5 sm:p-6 rounded-2xl flex flex-col justify-between space-y-6">
+                    <div>
+                        <div class="border-b border-slate-800 pb-3 mb-4 flex items-center justify-between">
+                            <h4 class="font-display font-bold text-xs uppercase tracking-wider text-slate-200">
+                                STATISTIK FENOTIPE F2
+                            </h4>
+                            <span class="text-[10px] font-mono text-emerald-400 font-bold">16 KOTAK</span>
+                        </div>
+                        <div id="stats-bars" class="space-y-3.5">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-800/80">
+                        <h4 class="font-display font-bold text-xs uppercase tracking-wider text-slate-200 mb-3">
+                            DISTRIBUSI FREKUENSI GENOTIPE
+                        </h4>
+                        <div id="geno-stats" class="flex flex-wrap gap-1.5 w-full">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Comprehensive Academic Genetic Analysis Report Card -->
+            <div class="glass-panel p-6 sm:p-7 rounded-2xl space-y-4 border-t-2 border-t-amber-400">
+                <div class="border-b border-slate-800 pb-3 flex items-center justify-between">
+                    <h4 class="font-display font-bold text-sm tracking-wide text-amber-300 flex items-center gap-2">
+                        <span>📋</span> LAPORAN ANALISIS HUKUM MENDEL II
+                    </h4>
+                    <span class="text-[10px] font-mono text-slate-400">DIHYBRID SEQUENCING v4.0</span>
+                </div>
+
+                <div id="academic-text" class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans space-y-3">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <div class="pt-3 border-t border-slate-800 flex flex-wrap justify-between items-center text-[10px] font-mono text-slate-500">
+                    <span>STANDAR BIOLOGI: CAMPBELL BIOLOGY (12TH ED.) & GREGOR MENDEL (1866)</span>
+                    <span class="text-emerald-400/80">VALIDASI: BIO-SEQUENCER CORE</span>
                 </div>
             </div>
 
-            <div class="glass-panel p-8 rounded-2xl border-t-4 border-amber-500">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="p-2 bg-amber-500/20 rounded-lg">
-                        <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                    </div>
-                    <h2 class="text-xl font-bold text-white">Laporan Analisis Genetika</h2>
-                </div>
-                <div id="academic-text" class="prose prose-invert max-w-none text-slate-300 text-sm leading-relaxed text-justify border-b border-slate-700 pb-6 mb-4"></div>
-                <div class="text-[10px] text-slate-500 font-mono">
-                    GENERATED BY BIO-LAB v4.0 • REFERENCES: CAMPBELL BIOLOGY (12TH ED), MENDEL (1866).
-                </div>
-            </div>
         </div>
 
     </main>
 
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="mt-8 border-t border-slate-800/80 bg-slate-950/80 py-6 px-4 text-center text-xs font-mono text-slate-500">
+        <p>GEN-OS // BIO-CORE • Modul 02: Generator Rasio Dihibrid Mendel (BIO-SEQUENCER)</p>
+        <p class="mt-1 text-[11px] text-slate-600">Simulasi Dogma Sentral Hukum Asortasi Bebas Mendel (Independent Assortment)</p>
+    </footer>
+
+    <!-- ==================== TUTORIAL MODAL ==================== -->
+    <div id="modal-tutorial" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden transition-opacity">
+        <div class="glass-panel rounded-2xl max-w-2xl w-full border border-emerald-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30">📖</span>
+                    <div>
+                        <h3 class="text-lg font-display font-bold text-white tracking-wider">PANDUAN LENGKAP SIMULASI DIHIBRID</h3>
+                        <p class="text-xs font-mono text-emerald-400">MODUL 02: PERSILANGAN DUA SIFAT BEDA (HUKUM II MENDEL)</p>
+                    </div>
+                </div>
+                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+            </div>
+
+            <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-emerald-300 text-xs tracking-wider uppercase">1. Memahami Dua Karakter Biji Ercis</h4>
+                    <p class="text-xs text-slate-300">
+                        Simulasi melibatkan dua lokus gen independen pada tanaman ercis (*Pisum sativum*):
+                    </p>
+                    <ul class="list-disc list-inside text-xs space-y-1 text-slate-300 font-mono">
+                        <li><b>Bentuk Biji:</b> Gen dominan <b>B (Bulat)</b> vs gen resesif <b>b (Kisut)</b></li>
+                        <li><b>Warna Biji:</b> Gen dominan <b>K (Kuning)</b> vs gen resesif <b>k (Hijau)</b></li>
+                    </ul>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-amber-300 text-xs tracking-wider uppercase">2. Menentukan Genotipe Induk (Parental)</h4>
+                    <p class="text-xs text-slate-300">
+                        Masukkan 4 huruf genotipe untuk Induk 1 (♂) dan Induk 2 (♀), misalnya <code class="text-emerald-300 font-mono bg-slate-950 px-1 py-0.5 rounded border border-slate-700">BbKk</code>. Anda juga dapat memilih <b>Pintas Skenario Cepat 1-Klik</b> untuk memuat variasi persilangan klasik seperti F1 &times; F1 (9:3:3:1) atau Uji Silang / Test Cross (1:1:1:1).
+                    </p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-cyan-300 text-xs tracking-wider uppercase">3. Menelaah Papan Punnett 4×4 & Laporan</h4>
+                    <p class="text-xs text-slate-300">
+                        Klik tombol <b>MULAI PERSILANGAN & ASORTASI</b>. Sistem akan membentuk 4 macam gamet dari masing-masing induk ($BK, Bk, bK, bk$) dan menggabungkannya ke dalam 16 kotak kombinasi F2 beserta visualisasi ilustrasi biji ercis, diagram batang persentase, dan rasio penyederhanaan otomatis (GCD).
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-right border-t border-slate-800 pt-4">
+                <button onclick="closeTutorialModal()" class="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-display font-bold text-xs tracking-wider transition">
+                    MENGERTI, MULAI BELAJAR
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SCIENTIFIC LITERATURE MODAL ==================== -->
+    <div id="modal-literature" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden transition-opacity">
+        <div class="glass-panel rounded-2xl max-w-2xl w-full border border-purple-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">📚</span>
+                    <div>
+                        <h3 class="text-lg font-display font-bold text-white tracking-wider">DASAR TEORETIS & REFERENSI ILMIAH</h3>
+                        <p class="text-xs font-mono text-purple-400">HUKUM ASORTASI BEBAS MENDEL & GENETIKA MOLEKULER ERCIS</p>
+                    </div>
+                </div>
+                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
+                <!-- Ref 1 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-emerald-400 font-mono">1. Karya Seminal Hukum Pewarisan Sifat Mendel</span>
+                        <span class="text-[10px] font-mono text-slate-500">1866</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Mendel, Gregor (1866).</b> <i>Versuche über Pflanzen-Hybriden.</i> Verhandlungen des naturforschenden Vereines in Brünn, Bd. IV für das Jahr 1865: 3–47.
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Melaporkan persilangan dihibrid biji ercis kuning-bulat dengan hijau-kisut dan merumuskan Hukum Asortasi Bebas (*Law of Independent Assortment*).
+                    </p>
+                </div>
+
+                <!-- Ref 2 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-amber-400 font-mono">2. Karakterisasi Molekuler Gen Bentuk Biji Mendel (Lokus R / SBEI)</span>
+                        <span class="text-[10px] font-mono text-slate-500">1990</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Bhattacharyya, M. K., Smith, A. M., Ellis, T. H. N., Hedley, C., & Martin, C. (1990).</b> <i>The wrinkled-seed character of pea described by Mendel is caused by a transposon insertion in a gene encoding starch-branching enzyme.</i> Cell, 60(1): 115–122.
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Menemukan bahwa fenotipe kisut/berkerut (*wrinkled*) disebabkan oleh insersi transposon pada gen pengkode enzim percabangan pati SBEI.
+                    </p>
+                </div>
+
+                <!-- Ref 3 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-cyan-400 font-mono">3. Karakterisasi Molekuler Gen Warna Kotiledon Mendel (Lokus I / SGR)</span>
+                        <span class="text-[10px] font-mono text-slate-500">2007</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Armstead, I., et al. (2007).</b> <i>Cross-species identification of Mendel's I locus.</i> Science, 315(5808): 73.<br>
+                        <b>Sato, Y., et al. (2007).</b> <i>Stay-green enzyme mediates chlorophyll degradation in pea cotyledons.</i>
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Mengidentifikasi lokus warna biji Mendel (*I locus*) sebagai gen *Stay-Green* (SGR) pengatur pemecahan klorofil selama pematangan biji.
+                    </p>
+                </div>
+
+                <!-- Ref 4 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-purple-400 font-mono">4. Penciptaan Diagram Bujur Sangkar Punnett</span>
+                        <span class="text-[10px] font-mono text-slate-500">1905</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Punnett, Reginald Crundall (1905).</b> <i>Mendelism.</i> Cambridge: Bowes & Bowes.
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Memperkenalkan diagram visual matriks silang ($2 \times 2$ dan $4 \times 4$) yang kini digunakan secara universal di seluruh dunia untuk memvisualisasikan rekombinasi alel.
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-right border-t border-slate-800 pt-4">
+                <button onclick="closeLiteratureModal()" class="px-5 py-2 rounded-xl bg-purple-500 hover:bg-purple-400 text-slate-950 font-display font-bold text-xs tracking-wider transition">
+                    TUTUP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT LOGIC ENGINE ==================== -->
     <script>
-        // --- UTILS ---
+        // --- Web Audio API Synthesizer ---
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) audioCtx = new AudioContext();
+            }
+        }
+
+        function playTone(freq, type = 'sine', duration = 0.12, gainLevel = 0.1) {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(gainLevel, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.warn('Audio not allowed yet:', e);
+            }
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            if (type === 'click') {
+                playTone(550, 'sine', 0.06, 0.08);
+            } else if (type === 'process') {
+                [440, 554, 659, 880].forEach((f, idx) => {
+                    setTimeout(() => playTone(f, 'sine', 0.08, 0.06), idx * 60);
+                });
+            } else if (type === 'finish') {
+                [523.25, 659.25, 783.99, 1046.5].forEach((f, idx) => {
+                    setTimeout(() => playTone(f, 'sine', 0.18, 0.08), idx * 75);
+                });
+            }
+        }
+
+        // Global Modal Handlers
+        window.toggleSound = function() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            if (icon) icon.textContent = soundEnabled ? '🔊' : '🔇';
+            const btn = document.getElementById('btn-sound');
+            if (btn) {
+                if (!soundEnabled) btn.classList.add('opacity-60');
+                else {
+                    btn.classList.remove('opacity-60');
+                    playSound('click');
+                }
+            }
+        };
+
+        window.openTutorialModal = function() {
+            const modal = document.getElementById('modal-tutorial');
+            if (modal) modal.classList.remove('hidden');
+            playSound('click');
+        };
+
+        window.closeTutorialModal = function() {
+            const modal = document.getElementById('modal-tutorial');
+            if (modal) modal.classList.add('hidden');
+            playSound('click');
+        };
+
+        window.openLiteratureModal = function() {
+            const modal = document.getElementById('modal-literature');
+            if (modal) modal.classList.remove('hidden');
+            playSound('click');
+        };
+
+        window.closeLiteratureModal = function() {
+            const modal = document.getElementById('modal-literature');
+            if (modal) modal.classList.add('hidden');
+            playSound('click');
+        };
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                window.closeTutorialModal();
+                window.closeLiteratureModal();
+            }
+        });
+
+        // --- GENOTYPE FORMATTING & PHENOTYPE MAPPING ---
         function formatGenotype(input) {
             let raw = input.replace(/[^a-zA-Z]/g, '');
             if (raw.length !== 4) return raw;
@@ -314,60 +715,103 @@
         }
 
         function getPhenotypeLabel(fullGen) {
-            let isRound = fullGen[0] === fullGen[0].toUpperCase();
-            let isYellow = fullGen[2] === fullGen[2].toUpperCase();
+            if (!fullGen || fullGen.length < 4) return "Bulat Kuning";
+            let isRound = fullGen[0] === fullGen[0].toUpperCase() || fullGen[1] === fullGen[1].toUpperCase();
+            let isYellow = fullGen[2] === fullGen[2].toUpperCase() || fullGen[3] === fullGen[3].toUpperCase();
             return (isRound ? "Bulat" : "Kisut") + " " + (isYellow ? "Kuning" : "Hijau");
         }
 
-        // --- SVG SEED VISUALS ---
-        function getSeedSVG(phenotype) {
-            let fill = "#10b981"; // Hijau
-            let stroke = "#059669";
-            let isRound = true; 
-            
-            if (phenotype.includes("Kuning")) { fill = "#fbbf24"; stroke = "#d97706"; }
-            if (phenotype.includes("Kisut")) { isRound = false; }
+        // --- ENHANCED SVG SEED VISUALIZATIONS ---
+        function getSeedSVG(phenotype, sizeClass = "w-10 h-10 md:w-12 md:h-12") {
+            let fillGradId = "grad-round-yellow";
+            let isRound = true;
 
-            const roundPath = "M50 5 C25 5 5 25 5 50 C5 75 25 95 50 95 C75 95 95 75 95 50 C95 25 75 5 50 5 Z";
-            const wrinkledPath = "M50 8 C28 8 12 25 12 40 C10 52 22 62 15 72 C10 82 30 88 50 92 C70 88 88 82 85 72 C80 62 90 52 88 40 C88 25 72 8 50 8 Z";
-            
-            // Add subtle shading
-            const reflection = isRound 
-                ? `<path d="M 30 20 Q 40 10 50 15 Q 40 25 30 20" fill="white" opacity="0.4"/>`
-                : `<circle cx="35" cy="30" r="5" fill="white" opacity="0.3"/> <circle cx="65" cy="40" r="4" fill="white" opacity="0.2"/>`;
+            if (phenotype.includes("Kuning")) {
+                fillGradId = isRound ? "grad-yellow" : "grad-yellow-wrinkled";
+            } else {
+                fillGradId = isRound ? "grad-green" : "grad-green-wrinkled";
+            }
 
-            return `<svg viewBox="0 0 100 100" class="w-10 h-10 md:w-14 md:h-14 mx-auto vis-item drop-shadow-md">
-                <path d="${isRound ? roundPath : wrinkledPath}" fill="${fill}" stroke="${stroke}" stroke-width="4"/>
-                ${reflection}
-                <path d="M45 50 Q50 40 60 50" fill="none" stroke="${stroke}" stroke-width="2" opacity="0.6"/>
-            </svg>`;
+            if (phenotype.includes("Kisut")) {
+                isRound = false;
+            }
+
+            const roundPath = "M50 8 C25 8 8 25 8 50 C8 75 25 92 50 92 C75 92 92 75 92 50 C92 25 75 8 50 8 Z";
+            const wrinkledPath = "M50 10 C30 10 14 26 14 42 C11 54 22 64 16 74 C11 84 30 90 50 93 C70 90 89 84 84 74 C78 64 89 54 86 42 C86 26 70 10 50 10 Z";
+
+            const isYellow = phenotype.includes("Kuning");
+            const mainColor = isYellow ? "#fbbf24" : "#10b981";
+            const strokeColor = isYellow ? "#d97706" : "#047857";
+
+            return `
+            <svg viewBox="0 0 100 100" class="${sizeClass} mx-auto drop-shadow-md transition-transform duration-300 hover:scale-125">
+                <defs>
+                    <radialGradient id="grad-seed-${isYellow ? 'y' : 'g'}-${isRound ? 'r' : 'w'}" cx="35%" cy="30%" r="65%">
+                        <stop offset="0%" stop-color="${isYellow ? '#fef08a' : '#a7f3d0'}"/>
+                        <stop offset="60%" stop-color="${mainColor}"/>
+                        <stop offset="100%" stop-color="${strokeColor}"/>
+                    </radialGradient>
+                </defs>
+                <path d="${isRound ? roundPath : wrinkledPath}" 
+                      fill="url(#grad-seed-${isYellow ? 'y' : 'g'}-${isRound ? 'r' : 'w'})" 
+                      stroke="${strokeColor}" stroke-width="3.5"/>
+                ${isRound 
+                    ? `<ellipse cx="38" cy="28" rx="14" ry="7" transform="rotate(-30 38 28)" fill="#ffffff" opacity="0.45"/>`
+                    : `<ellipse cx="34" cy="30" rx="8" ry="4" fill="#ffffff" opacity="0.4"/>
+                       <path d="M 35 55 Q 50 48 65 55" stroke="${strokeColor}" stroke-width="2.5" fill="none" opacity="0.7"/>
+                       <path d="M 40 68 Q 50 62 60 68" stroke="${strokeColor}" stroke-width="2" fill="none" opacity="0.6"/>`
+                }
+            </svg>
+            `;
         }
 
-        // Live Preview Update
+        // Live Preview Updater
         function updatePreviews() {
-            const p1Val = formatGenotype(document.getElementById('p1').value);
-            const p2Val = formatGenotype(document.getElementById('p2').value);
+            const p1Input = document.getElementById('p1');
+            const p2Input = document.getElementById('p2');
+            if (!p1Input || !p2Input) return;
+
+            const p1Val = formatGenotype(p1Input.value);
+            const p2Val = formatGenotype(p2Input.value);
+
+            const p1Prev = document.getElementById('p1-preview');
+            const p2Prev = document.getElementById('p2-preview');
 
             if (p1Val.length === 4) {
                 const pheno1 = getPhenotypeLabel(p1Val);
-                document.getElementById('p1-preview').innerHTML = `<div class="flex flex-col items-center">${getSeedSVG(pheno1)}<span class="text-[10px] text-slate-400 mt-1">${pheno1}</span></div>`;
+                p1Prev.innerHTML = `
+                    <div class="flex flex-col items-center">
+                        ${getSeedSVG(pheno1, "w-10 h-10")}
+                        <span class="text-[11px] font-mono font-bold text-slate-300 mt-1">${pheno1}</span>
+                    </div>
+                `;
             } else {
-                document.getElementById('p1-preview').innerHTML = '';
+                p1Prev.innerHTML = '';
             }
 
             if (p2Val.length === 4) {
                 const pheno2 = getPhenotypeLabel(p2Val);
-                document.getElementById('p2-preview').innerHTML = `<div class="flex flex-col items-center">${getSeedSVG(pheno2)}<span class="text-[10px] text-slate-400 mt-1">${pheno2}</span></div>`;
+                p2Prev.innerHTML = `
+                    <div class="flex flex-col items-center">
+                        ${getSeedSVG(pheno2, "w-10 h-10")}
+                        <span class="text-[11px] font-mono font-bold text-slate-300 mt-1">${pheno2}</span>
+                    </div>
+                `;
             } else {
-                document.getElementById('p2-preview').innerHTML = '';
+                p2Prev.innerHTML = '';
             }
         }
 
-        document.getElementById('p1').addEventListener('input', updatePreviews);
-        document.getElementById('p2').addEventListener('input', updatePreviews);
-        updatePreviews();
+        // Preset Selector
+        function setPreset(p1Val, p2Val) {
+            document.getElementById('p1').value = p1Val;
+            document.getElementById('p2').value = p2Val;
+            updatePreviews();
+            playSound('click');
+            startAnalysis();
+        }
 
-        // --- MAIN LOGIC ---
+        // Main Simulation Flow
         function startAnalysis() {
             let p1 = document.getElementById('p1').value;
             let p2 = document.getElementById('p2').value;
@@ -382,17 +826,21 @@
             const loadText = document.getElementById('loading-text');
 
             loader.classList.remove('hidden');
+            loader.classList.add('flex');
             results.classList.add('hidden');
+            playSound('process');
 
-            setTimeout(() => loadText.innerText = "Recombining Alleles...", 800);
-            setTimeout(() => loadText.innerText = "Calculating Phenotypes...", 1500);
+            setTimeout(() => { if (loadText) loadText.innerText = "Membentuk 4 Macam Gamet Independen..."; }, 400);
+            setTimeout(() => { if (loadText) loadText.innerText = "Mengisi 16 Kotak Papan Punnett..."; }, 800);
 
             setTimeout(() => {
                 processDihybrid(p1, p2);
                 loader.classList.add('hidden');
+                loader.classList.remove('flex');
                 results.classList.remove('hidden');
-                results.scrollIntoView({ behavior: 'smooth' });
-            }, 2200);
+                playSound('finish');
+                results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 1100);
         }
 
         function processDihybrid(rawP1, rawP2) {
@@ -413,17 +861,27 @@
             const g2 = getGametes(p2);
 
             const grid = document.getElementById('punnett-grid');
-            grid.innerHTML = '<div></div>'; // Corner
+            grid.innerHTML = '<div class="p-2 border border-slate-800 bg-slate-900/60 text-slate-500 font-mono text-[10px] rounded-lg flex items-center justify-center">♀ \\ ♂</div>';
 
-            // Header Top
-            g2.forEach(g => grid.innerHTML += `<div class="bg-slate-800/80 text-amber-400 font-mono font-bold py-2 rounded-lg border border-slate-700 flex flex-col items-center justify-center">${g}</div>`);
+            // Top Gamete Headers (P2 Sperm / Male Gametes)
+            g2.forEach(g => {
+                grid.innerHTML += `
+                    <div class="bg-slate-900/90 text-amber-400 font-mono font-bold py-2 rounded-lg border border-slate-700/80 shadow-sm flex flex-col items-center justify-center">
+                        <span class="text-xs">${g}</span>
+                    </div>
+                `;
+            });
 
             let phenoCounts = { "Bulat Kuning": 0, "Bulat Hijau": 0, "Kisut Kuning": 0, "Kisut Hijau": 0 };
             let genoCounts = {};
 
             for (let i = 0; i < 4; i++) {
-                // Header Left
-                grid.innerHTML += `<div class="flex flex-col items-center justify-center bg-slate-800/80 text-emerald-400 font-mono font-bold rounded-lg border border-slate-700">${g1[i]}</div>`;
+                // Left Gamete Header (P1 Ovum / Female Gametes)
+                grid.innerHTML += `
+                    <div class="flex flex-col items-center justify-center bg-slate-900/90 text-emerald-400 font-mono font-bold py-2 rounded-lg border border-slate-700/80 shadow-sm">
+                        <span class="text-xs">${g1[i]}</span>
+                    </div>
+                `;
 
                 for (let j = 0; j < 4; j++) {
                     let char1 = [g1[i][0], g2[j][0]].sort((a, b) => (a === a.toLowerCase() && b === b.toUpperCase()) ? 1 : -1).join('');
@@ -435,14 +893,15 @@
                     genoCounts[fullGen] = (genoCounts[fullGen] || 0) + 1;
 
                     grid.innerHTML += `
-                        <div class="bg-slate-800/40 border border-slate-700/50 rounded-lg p-2 flex flex-col items-center group relative hover:bg-slate-700 transition cursor-pointer">
-                            ${getSeedSVG(pLabel)}
-                            <span class="text-xs font-mono text-slate-500 mt-2 group-hover:text-white transition-colors">${fullGen}</span>
-                            <div class="absolute bottom-full bg-black text-white text-[10px] px-3 py-1.5 rounded-lg hidden group-hover:block whitespace-nowrap z-20 border border-slate-700 font-bold mb-1 shadow-xl">${pLabel}</div>
+                        <div class="punnett-cell bg-slate-900/60 border border-slate-800/80 rounded-xl p-2.5 flex flex-col items-center justify-between group relative hover:border-emerald-400 cursor-pointer">
+                            ${getSeedSVG(pLabel, "w-8 h-8 md:w-11 md:h-11")}
+                            <span class="text-xs font-mono font-bold text-slate-200 mt-1">${fullGen}</span>
+                            <span class="text-[9px] font-mono text-slate-400 tracking-wider">${pLabel}</span>
                         </div>
                     `;
                 }
             }
+
             updateStatsAndReport(phenoCounts, genoCounts, p1, p2);
         }
 
@@ -455,32 +914,49 @@
             order.forEach(key => {
                 let val = counts[key];
                 let pct = (val / 16) * 100;
-                let color = "bg-slate-500";
-                if (key === "Bulat Kuning") color = "bg-amber-400";
-                if (key === "Bulat Hijau") color = "bg-emerald-500";
-                if (key === "Kisut Kuning") color = "bg-yellow-600";
-                if (key === "Kisut Hijau") color = "bg-teal-600";
+                let colorClass = "from-amber-400 to-yellow-500";
+                let textCol = "text-amber-400";
+
+                if (key === "Bulat Hijau") {
+                    colorClass = "from-emerald-400 to-green-500";
+                    textCol = "text-emerald-400";
+                } else if (key === "Kisut Kuning") {
+                    colorClass = "from-yellow-600 to-amber-700";
+                    textCol = "text-yellow-500";
+                } else if (key === "Kisut Hijau") {
+                    colorClass = "from-teal-600 to-emerald-800";
+                    textCol = "text-teal-400";
+                }
 
                 statsDiv.innerHTML += `
-                    <div class="mb-3">
-                        <div class="flex flex-wrap justify-between gap-1 text-xs text-slate-300 mb-1">
-                            <span class="font-bold">${key}</span>
-                            <span class="font-mono">${val}/16 (${pct.toFixed(1)}%)</span>
+                    <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold ${textCol} flex items-center gap-1.5">
+                                <span>●</span> ${key}
+                            </span>
+                            <span class="font-mono font-bold text-slate-200">${val}/16 (${pct.toFixed(1)}%)</span>
                         </div>
-                        <div class="w-full bg-slate-700 rounded-full h-2.5 overflow-hidden">
-                            <div class="${color} h-2.5 transition-all duration-1000" style="width: ${pct}%"></div>
+                        <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
+                            <div class="bg-gradient-to-r ${colorClass} h-full rounded-full transition-all duration-1000" style="width: ${pct}%"></div>
                         </div>
                     </div>
                 `;
             });
 
+            // Genotype badges
             let genoHTML = '';
             let sortedGenos = Object.entries(genoCounts).sort((a, b) => b[1] - a[1]);
             for (let [gKey, gVal] of sortedGenos) {
-                genoHTML += `<span class="bg-slate-800 text-xs px-2.5 py-1.5 rounded-md border border-slate-700 text-slate-300 font-mono shadow-sm">${gKey}: <strong class="text-white">${gVal}</strong></span>`;
+                genoHTML += `
+                    <span class="bg-slate-900/90 text-xs px-2.5 py-1 rounded-lg border border-slate-800 text-slate-300 font-mono shadow-sm flex items-center gap-1.5">
+                        <span class="text-emerald-400 font-bold">${gKey}:</span>
+                        <strong class="text-white">${gVal}/16</strong>
+                    </span>
+                `;
             }
             document.getElementById('geno-stats').innerHTML = genoHTML;
 
+            // Report generation
             let report = "";
             let nonZeroCounts = order.map(k => counts[k]).filter(x => x > 0);
             let rawRatio = nonZeroCounts.join(':');
@@ -490,80 +966,85 @@
             let commonDivisor = nonZeroCounts.reduce((acc, val) => getGcd(acc, val), nonZeroCounts[0] || 1);
             let simplifiedRatio = nonZeroCounts.map(x => x / commonDivisor).join(':');
 
-            report += `<p class="mb-3"><strong class="text-amber-400">ANALISIS HUKUM MENDEL II:</strong> Sistem telah memetakan persilangan P1 (${p1}) × P2 (${p2}). Rasio Fenotipe Terhitung: <strong class="text-emerald-400 font-mono">${rawRatio}</strong>${rawRatio !== simplifiedRatio ? ` (Disederhanakan: <strong class="text-cyan-300 font-mono">${simplifiedRatio}</strong>)` : ''}.</p>`;
+            report += `
+                <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider block font-bold">
+                        1. Ringkasan Perhitungan Rasio Fenotipe
+                    </span>
+                    <p class="text-xs text-slate-300">
+                        Persilangan induk <b>Parental 1 (${p1})</b> dengan <b>Parental 2 (${p2})</b> menghasilkan rasio fenotipe terhitung: <strong class="text-emerald-400 font-mono text-sm">${rawRatio}</strong>${rawRatio !== simplifiedRatio ? ` (Penyederhanaan matematis: <strong class="text-cyan-300 font-mono text-sm">${simplifiedRatio}</strong>)` : ''}.
+                    </p>
+                </div>
+            `;
 
             if (rawRatio === "9:3:3:1" || simplifiedRatio === "9:3:3:1") {
-                report += `<p class="mb-3">Terdeteksi rasio klasik <strong>9:3:3:1</strong>. Fenomena ini secara kuat mengkonfirmasi <span class="citation" data-ref="Prinsip Asortasi Bebas: Pasangan alel memisah secara independen satu sama lain (Campbell Biology).">Hukum II Mendel</span> (Asortasi Bebas). Kedua induk bersifat Heterozigot untuk kedua sifat.</p>`;
+                report += `
+                    <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 space-y-1.5">
+                        <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider block font-bold">
+                            ✅ 2. Konfirmasi Teoretis Hukum II Mendel (Asortasi Bebas)
+                        </span>
+                        <p class="text-xs text-slate-300">
+                            Terdeteksi rasio klasik <b>9:3:3:1</b>. Hasil ini membuktikan secara empiris bahwa kedua pasang alel (Bentuk Biji dan Warna Biji) terletak pada pasangan kromosom homolog yang berbeda dan memilah secara independen saat anafase I meiosis tanpa pautan genetik (*linkage*).
+                        </p>
+                    </div>
+                `;
             } else if (rawRatio === "1:1:1:1" || simplifiedRatio === "1:1:1:1") {
-                report += `<p class="mb-3">Terdeteksi rasio <strong>1:1:1:1</strong>. Ini adalah tanda tangan genetik dari <span class="citation" data-ref="Metode persilangan dengan individu homozigot resesif untuk mengungkap genotipe.">Test Cross Dihibrid</span>.</p>`;
+                report += `
+                    <div class="p-3.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 space-y-1.5">
+                        <span class="text-[10px] font-mono text-cyan-300 uppercase tracking-wider block font-bold">
+                            🎯 2. Konfirmasi Uji Silang (Test Cross Dihibrid)
+                        </span>
+                        <p class="text-xs text-slate-300">
+                            Terdeteksi rasio setara <b>1:1:1:1</b>. Ini adalah tanda tangan diagnostik dari <b>Test Cross Dihibrid</b> ($BbKk \times bbkk$), membuktikan bahwa individu heterozigot menghasilkan 4 jenis gamet ($BK, Bk, bK, bk$) dengan frekuensi probabilitas yang persis sama besar (25% tiap jenis gamet).
+                        </p>
+                    </div>
+                `;
             } else if (simplifiedRatio === "3:1") {
-                report += `<p class="mb-3">Terdeteksi rasio monohibrid <strong>3:1</strong> (${rawRatio}). Ini terjadi karena salah satu lokus gen bersifat homozigot seragam pada kedua induk, sehingga segregasi aktif hanya berlangsung pada satu pasang alel.</p>`;
+                report += `
+                    <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-1.5">
+                        <span class="text-[10px] font-mono text-amber-400 uppercase tracking-wider block font-bold">
+                            🔸 2. Monohibrid Semu pada Salah Satu Lokus
+                        </span>
+                        <p class="text-xs text-slate-300">
+                            Terdeteksi rasio monohibrid <b>3:1</b> (${rawRatio}). Fenomena ini terjadi karena salah satu lokus gen bersifat homozigot seragam pada kedua induk, sehingga segregasi aktif hanya berlangsung pada satu pasang lokus gen saja.
+                        </p>
+                    </div>
+                `;
             } else if (counts["Bulat Kuning"] === 16 || counts["Bulat Hijau"] === 16 || counts["Kisut Kuning"] === 16 || counts["Kisut Hijau"] === 16) {
-                report += `<p class="mb-3">Terdeteksi <strong>Uniformitas Genetik (100%)</strong>. Ini sesuai dengan Hukum I Mendel dimana alel dominan sepenuhnya menutupi alel resesif pada keturunan F1.</p>`;
+                report += `
+                    <div class="p-3.5 rounded-xl bg-purple-500/10 border border-purple-500/30 space-y-1.5">
+                        <span class="text-[10px] font-mono text-purple-400 uppercase tracking-wider block font-bold">
+                            🌟 2. Keseragaman Fenotipe 100% (Uniformitas F1)
+                        </span>
+                        <p class="text-xs text-slate-300">
+                            Seluruh 16 kombinasi keturunan (100%) memiliki fenotipe seragam. Ini sesuai dengan Hukum Dominansi Mendel di mana alel dominan sepenuhnya menutupi ekspresi alel resesif pada keturunan generasi pertama galur murni.
+                        </p>
+                    </div>
+                `;
             } else {
-                report += `<p class="mb-3">Rasio fenotipe yang terbentuk adalah variasi persilangan genetik berdasarkan hukum Mendel biasa tanpa penyimpangan semu.</p>`;
+                report += `
+                    <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                        <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">
+                            3. Interpretasi Rekombinasi Genetik
+                        </span>
+                        <p class="text-xs text-slate-300">
+                            Rasio fenotipe yang terbentuk merupakan variasi persilangan genetik terprediksi berdasarkan kombinasi alel bivalen parental yang saling melengkapi sesuai hukum dasar probabilitas perkalian Mendel.
+                        </p>
+                    </div>
+                `;
             }
+
             document.getElementById('academic-text').innerHTML = report;
         }
 
-        // --- PRESET & TUTORIAL MODAL CONTROLLERS ---
-        function setPreset(p1Val, p2Val) {
-            document.getElementById('p1').value = p1Val;
-            document.getElementById('p2').value = p2Val;
+        // Initialize view on load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('p1').addEventListener('input', updatePreviews);
+            document.getElementById('p2').addEventListener('input', updatePreviews);
             updatePreviews();
-            startAnalysis();
-        }
-
-        function toggleTutorialModal() {
-            const modal = document.getElementById('tutorial-modal');
-            if (modal) modal.classList.toggle('hidden');
-        }
+            processDihybrid('BbKk', 'BbKk');
+        });
     </script>
-
-    <!-- MODAL PANDUAN SIMULASI DIHIBRID (TUTORIAL) -->
-    <div id="tutorial-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-panel max-w-xl w-full rounded-2xl p-6 md:p-8 border border-emerald-500/40 shadow-2xl relative text-left">
-            <button onclick="toggleTutorialModal()" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition">
-                ✕
-            </button>
-            <div class="flex items-center gap-3 mb-4 border-b border-slate-700 pb-3">
-                <span class="text-3xl">📖</span>
-                <div>
-                    <h3 class="text-lg font-bold text-white">Panduan Simulasi Persilangan Dihibrid</h3>
-                    <p class="text-xs text-emerald-400 font-mono">HUKUM II MENDEL (ASORTASI BEBAS)</p>
-                </div>
-            </div>
-
-            <div class="space-y-4 text-xs text-slate-300 leading-relaxed max-h-[60vh] overflow-y-auto pr-2">
-                <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700">
-                    <h4 class="font-bold text-emerald-400 mb-1">1. Memahami Karakter Gen</h4>
-                    <p>Simulasi menggunakan 2 lokus gen independen pada tanaman ercis:</p>
-                    <ul class="list-disc list-inside mt-1 space-y-0.5 font-mono text-[11px] text-slate-400">
-                        <li><strong>B (Bulat)</strong> dominan terhadap <strong>b (Kisut)</strong></li>
-                        <li><strong>K (Kuning)</strong> dominan terhadap <strong>k (Hijau)</strong></li>
-                    </ul>
-                </div>
-
-                <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700">
-                    <h4 class="font-bold text-amber-400 mb-1">2. Menentukan Genotipe Parental</h4>
-                    <p>Masukkan 4 huruf genotipe untuk Induk 1 (♂) dan Induk 2 (♀), misalnya <code class="text-white bg-slate-800 px-1 py-0.5 rounded">BbKk</code>. Anda juga dapat menggunakan tombol <strong>Preset Cepat 1-Klik</strong> untuk mencoba variasi klasik Mendel seperti F1 × F1 (9:3:3:1) atau Uji Silang / Test Cross (1:1:1:1).</p>
-                </div>
-
-                <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700">
-                    <h4 class="font-bold text-cyan-400 mb-1">3. Eksplorasi Papan Punnett 4×4</h4>
-                    <p>Klik tombol <strong>MULAI PERSILANGAN</strong>. Sistem akan membentuk 4 macam gamet dari masing-masing induk (BK, Bk, bK, bk) dan menggabungkannya ke dalam 16 kotak kombinasi F2 beserta ilustrasi visual biji.</p>
-                </div>
-
-                <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700">
-                    <h4 class="font-bold text-purple-400 mb-1">4. Analisis Rasio & Laporan</h4>
-                    <p>Periksa diagram batang persentase fenotipe, distribusi frekuensi genotipe, serta ringkasan analisis ilmiah yang mengacu pada literatur biologi resmi.</p>
-                </div>
-            </div>
-
-            <button onclick="toggleTutorialModal()" class="w-full mt-6 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-3 rounded-xl text-xs font-mono transition shadow-lg shadow-emerald-900/40">
-                SAYA MENGERTI, MULAI BELAJAR
-            </button>
-        </div>
-    </div>
 </body>
+
 </html>

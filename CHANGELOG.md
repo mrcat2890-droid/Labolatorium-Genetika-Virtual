@@ -6,6 +6,40 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📌 Refaktorisasi & Overhaul Desain: Modul BIO-SEQUENCER (Dihybrid Cross Engine & Independent Assortment)
+- **Harmonisasi Desain Sistem GEN-OS Futuristik (`Generator Rasio Dihibrid (terbaru)/Generator Rasio Dihibrid.html`):**
+  - Menggantikan antarmuka lama berbasis vanilla CSS (hasil buatan Claude dengan gaya dan palet warna yang tidak seragam) menjadi standar desain sistem futuristik GEN-OS menggunakan Tailwind CSS, latar belakang dark slate `#030712`, glassmorphism (`glass-panel` melengkung modern dengan `backdrop-blur-xl`), tipografi resmi (`Orbitron`, `Rajdhani`, dan `Fira Code`), serta palet warna selaras (aksen Emerald `#10b981` & Amber `#f59e0b` sesuai identitas Modul 02 pada `index.html`).
+  - Menghubungkan modul secara utuh ke Beranda dengan tombol navigasi `← BERANDA GEN-OS` menuju `../index.html`.
+- **Banner Edukatif 3 Prinsip Fundamental Hukum Mendel II:**
+  - Menyediakan 3 kartu ringkasan visual interaktif:
+    1. *Hukum II Mendel: Asortasi Bebas Gen Independen* – Prinsip pemisahan alel secara bebas pada anafase I meiosis untuk lokus pada kromosom homolog yang berlainan.
+    2. *Rasio Fenotipe Heterozigot Ganda (9:3:3:1)* – Proporsi 4 kombinasi fenotipe F2 (9 Bulat Kuning, 3 Bulat Hijau, 3 Kisut Kuning, 1 Kisut Hijau) dari total 16 kotak kombinasi.
+    3. *Uji Silang (Test Cross 1:1:1:1)* – Menyilangkan individu heterozigot dengan homozigot resesif murni ($BbKk \times bbkk$) untuk memverifikasi rasio gamet 1:1:1:1.
+- **Konfigurasi Genotipe Induk (P1 & P2) & Pintas Skenario 1-Klik:**
+  - Panel input genotipe interaktif untuk Parental 1 (Jantan - aksen Cyan/Emerald) dan Parental 2 (Betina - aksen Gold/Amber) lengkap dengan indikator grafis 3D fenotipe biji ercis (*live real-time preview*).
+  - 5 tombol pintas skenario persilangan cepat:
+    - *Heterozigot Dihibrid (BbKk × BbKk → 9:3:3:1)*
+    - *Galur Murni (BBKK × bbkk → 100% Bulat Kuning)*
+    - *Test Cross (BbKk × bbkk → 1:1:1:1)*
+    - *Monohibrid Sifat B (BbKK × BbKK → 3:1)*
+    - *Resesif Murni (bbkk × bbkk)*
+- **Papan Catur Punnett 4×4 & Visualisasi Fenotipe Ercis 3D:**
+  - Matriks fertilisasi 16 kombinasi ($4 \times 4$) yang secara otomatis mengekstraksi 4 jenis gamet paternal dan maternal ($BK, Bk, bK, bk$).
+  - Setiap sel kotak Punnett dilengkapi ilustrasi SVG 3D biji ercis (*Bulat Kuning, Bulat Hijau, Kisut Kuning, Kisut Hijau*), formula genotipe gabungan, nama fenotipe, dan *hover effect* penyorot alel.
+- **Telemetri Statistik Rasio F2, Frekuensi Genotipe & Laporan Analisis:**
+  - *Progress bar* rasio fenotipe F2 real-time (pecahan kotak, persentase, dan rasio penyederhanaan otomatis berbasis FPB/GCD).
+  - Distribusi 9 kemungkinan genotipe F2 dalam bentuk chip interaktif.
+  - Kartu laporan analisis ilmiah Hukum Mendel II yang menguraikan konfirmasi asortasi bebas dan validasi Campbell Biology (12th Ed.).
+- **Penerapan Modal Panduan & Referensi Ilmiah (Kepatuhan Aturan #1 & #5):**
+  - Dialog modal **"📖 Panduan Lengkap Simulasi Dihibrid"** yang menguraikan dua karakter lokus ercis (*Pisum sativum*), cara memasukkan genotipe, dan membaca matriks Punnett.
+  - Dialog modal **"📚 Literatur Ilmiah"** dengan sitasi primer:
+    - *Gregor Mendel (1866)* – *Versuche über Pflanzen-Hybriden* (Perumusan Hukum Asortasi Bebas).
+    - *Bhattacharyya et al. (Cell 1990)* – Karakterisasi molekuler lokus bentuk biji R (*wrinkled seed*, insersi transposon pada enzim percabangan pati SBEI).
+    - *Armstead et al. (Science 2007) & Sato et al. (2007)* – Identifikasi molekuler lokus warna biji I (*Stay-Green / SGR* enzyme).
+    - *Reginald Punnett (1905)* – Perancangan diagram papan catur genetika (*Punnett Square*).
+  - Integrasi Web Audio API synthesizer untuk feedback interaksi pengguna (klik preset, suara simulasi asortasi, dan kalkulasi rasio).
+
+
 ### 📌 Refaktorisasi & Overhaul Desain: Modul GEN-X (Sex-Linked Heredity & Hemophilia Risk Engine)
 - **Harmonisasi Desain Sistem GEN-OS Futuristik (`Generator Risiko Pewarisan Sifat Seks (terbaru)/Generator Risiko Pewarisan Sifat Seks.html`):**
   - Menggantikan antarmuka lama berbasis vanilla CSS (hasil buatan Claude dengan warna dan tema yang tidak seragam) menjadi standar desain sistem futuristik GEN-OS menggunakan Tailwind CSS, latar belakang dark slate `#030712`, glassmorphism (`glass-panel` melengkung modern dengan `backdrop-blur-xl`), tipografi resmi (`Orbitron`, `Rajdhani`, dan `Fira Code`), serta palet warna selaras (aksen Rose `#fb7185` & Pink `#ec4899` sesuai tema Modul 04 pada `index.html`).
