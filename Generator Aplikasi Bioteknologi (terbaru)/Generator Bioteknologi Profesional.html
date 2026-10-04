@@ -119,7 +119,7 @@
             background: transparent !important;
         }
 
-        [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-slate-800/"] {
+        [class*="bg-slate-900"]:not(body), [class*="bg-slate-950"]:not(body), [class*="bg-slate-800/"]:not(body) {
             background-color: rgba(12, 20, 42, 0.42) !important;
             backdrop-filter: blur(16px) saturate(160%) !important;
             -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
@@ -131,24 +131,50 @@
         .nav-btn {
             text-align: left;
             width: 100%;
-            padding: 12px 16px;
+            padding: 10px 14px;
             font-family: 'JetBrains Mono';
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: #94a3b8;
             border-left: 2px solid transparent;
             transition: all 0.2s;
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
         }
 
         .nav-btn:hover {
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(59, 130, 246, 0.12);
             color: white;
+            border-left-color: rgba(59, 130, 246, 0.5);
         }
 
         .nav-btn.active {
-            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent);
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05));
             border-left-color: #3b82f6;
-            color: #3b82f6;
+            color: #60a5fa;
             font-weight: bold;
+        }
+
+        /* Category Filter Chips */
+        .cat-chip {
+            transition: all 0.15s ease;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .cat-chip:hover {
+            background-color: rgba(59, 130, 246, 0.2);
+            color: #ffffff;
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .cat-chip.active {
+            background-color: #2563eb !important;
+            color: #ffffff !important;
+            border-color: #60a5fa !important;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+            font-weight: 600;
         }
 
         /* Holographic Object Container */
@@ -157,27 +183,30 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 200px;
-            background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            height: 180px;
+            background: radial-gradient(circle at center, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
             overflow: hidden;
             border-bottom: 1px solid rgba(59, 130, 246, 0.2);
         }
 
+        @media (min-width: 640px) {
+            .holo-container {
+                height: 220px;
+            }
+        }
+
         .holo-icon {
-            font-size: 5rem;
-            filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.6));
+            filter: drop-shadow(0 0 16px rgba(59, 130, 246, 0.65));
             animation: float 4s ease-in-out infinite;
+            user-select: none;
         }
 
         @keyframes float {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: translateY(0px);
             }
-
             50% {
-                transform: translateY(-10px);
+                transform: translateY(-8px);
             }
         }
 
@@ -189,17 +218,17 @@
             background: #3b82f6;
             box-shadow: 0 0 10px #3b82f6;
             opacity: 0.5;
-            animation: scanVertical 2s linear infinite;
+            animation: scanVertical 2.5s linear infinite;
         }
 
         /* Content Typography */
         .prose-tech h3 {
             color: #fff;
             font-family: 'Oswald';
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             margin-top: 1.5rem;
             margin-bottom: 0.5rem;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             border-left: 3px solid #3b82f6;
             padding-left: 10px;
         }
@@ -209,7 +238,13 @@
             font-size: 0.95rem;
             line-height: 1.7;
             margin-bottom: 1rem;
-            text-align: justify;
+            text-align: left;
+        }
+
+        @media (min-width: 640px) {
+            .prose-tech p {
+                text-align: justify;
+            }
         }
 
         .prose-tech ul {
@@ -224,6 +259,7 @@
             margin-bottom: 0.5rem;
             color: #cbd5e1;
             font-size: 0.9rem;
+            line-height: 1.6;
         }
 
         .prose-tech li::before {
@@ -234,47 +270,67 @@
             font-weight: bold;
         }
 
-        /* Citation Tooltip (Innote) */
+        /* Citation Tooltip & Interactive Touch Target (Innote) */
         .innote {
             color: #60a5fa;
-            cursor: help;
+            cursor: pointer;
             border-bottom: 1px dotted #60a5fa;
             font-weight: 600;
             font-size: 0.85em;
             vertical-align: super;
             margin-left: 2px;
+            padding: 1px 4px;
+            border-radius: 4px;
+            background: rgba(59, 130, 246, 0.12);
             position: relative;
             display: inline-block;
             text-decoration: none;
+            touch-action: manipulation;
+            transition: all 0.2s;
         }
 
-        .innote:hover::after {
-            content: attr(data-ref);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #0f172a;
-            color: #fff;
-            padding: 10px;
-            font-size: 0.75rem;
-            font-family: 'Inter';
-            font-weight: normal;
-            border: 1px solid #3b82f6;
-            width: 250px;
-            z-index: 50;
-            border-radius: 6px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
-            margin-bottom: 5px;
-            pointer-events: none;
-            white-space: normal;
-            text-align: left;
-            line-height: 1.4;
+        .innote:hover, .innote:active {
+            background: rgba(59, 130, 246, 0.25);
+            color: #93c5fd;
+        }
+
+        /* Desktop Hover Tooltip */
+        @media (hover: hover) and (min-width: 769px) {
+            .innote:hover::after {
+                content: attr(data-ref);
+                position: absolute;
+                bottom: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #0f172a;
+                color: #fff;
+                padding: 10px;
+                font-size: 0.75rem;
+                font-family: 'Inter';
+                font-weight: normal;
+                border: 1px solid #3b82f6;
+                width: 250px;
+                z-index: 50;
+                border-radius: 6px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
+                margin-bottom: 5px;
+                pointer-events: none;
+                white-space: normal;
+                text-align: left;
+                line-height: 1.4;
+            }
+        }
+
+        @media (hover: none), (max-width: 768px) {
+            .innote:hover::after {
+                display: none !important;
+            }
         }
 
         /* Scrollbar */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
+            height: 5px;
         }
 
         ::-webkit-scrollbar-track {
@@ -292,7 +348,7 @@
     </style>
 </head>
 
-<body class="flex flex-col h-screen overflow-hidden selection:bg-blue-500 selection:text-white relative">
+<body class="flex flex-col h-screen h-[100dvh] overflow-hidden selection:bg-blue-500 selection:text-white relative font-sans">
 
     <!-- Signature Biotechnology Animated Background Layer (Plasmid Vectors & Telemetry) -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
@@ -327,129 +383,193 @@
         </div>
 
         <!-- Ambient Security Level & Telemetry Tags -->
-        <div class="absolute top-[22%] left-[6%] font-mono text-[10px] text-blue-400/25 tracking-widest">[DATABASE CLEARANCE LEVEL: RECOMBINANT OVERSIGHT]</div>
-        <div class="absolute bottom-[28%] right-[7%] font-mono text-[10px] text-cyan-400/25 tracking-widest">[GENETIC ENGINEERING & BIO-SYNTHESIS REPOSITORY]</div>
+        <div class="absolute top-[22%] left-[6%] font-mono text-[10px] text-blue-400/25 tracking-widest hidden sm:block">[DATABASE CLEARANCE LEVEL: RECOMBINANT OVERSIGHT]</div>
+        <div class="absolute bottom-[28%] right-[7%] font-mono text-[10px] text-cyan-400/25 tracking-widest hidden sm:block">[GENETIC ENGINEERING & BIO-SYNTHESIS REPOSITORY]</div>
     </div>
 
-    <header
-        class="h-16 border-b border-slate-800 bg-arch-bg/90 backdrop-blur flex items-center justify-between px-6 shrink-0 z-50">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-white text-sm">BA
+    <!-- Header Navigation -->
+    <header class="h-16 border-b border-slate-800 bg-arch-bg/90 backdrop-blur flex items-center justify-between px-3 sm:px-6 shrink-0 z-40">
+        <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Mobile Drawer Toggle Button -->
+            <button id="mobile-drawer-toggle" class="md:hidden p-2 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-blue-400 hover:text-white border border-slate-700 transition flex items-center gap-1.5 text-xs font-mono active:scale-95 shadow-sm" aria-label="Buka Indeks Topik">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                <span class="font-bold text-[11px]">TOPIK</span>
+            </button>
+
+            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-white text-sm shadow-[0_0_12px_rgba(37,99,235,0.6)]">BA</div>
+            <div>
+                <h1 class="text-base sm:text-xl font-display tracking-widest text-white flex items-center gap-1.5">
+                    BIO-<span class="text-blue-500">ARCHIVE</span>
+                    <span class="text-[10px] sm:text-xs text-slate-500 font-mono hidden xs:inline">v.PRO.24</span>
+                </h1>
             </div>
-            <h1 class="text-xl font-display tracking-widest text-white">BIO-<span class="text-blue-500">ARCHIVE</span>
-                <span class="text-xs text-slate-500 font-mono ml-2">v.PRO.24</span>
-            </h1>
         </div>
-        <div class="flex items-center gap-4">
-            <a href="../index.html" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-mono transition flex items-center gap-1.5">
-                <span>←</span> Beranda
+
+        <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Panduan / Tutorial Button -->
+            <button id="btn-open-tutorial" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 hover:text-white border border-blue-500/40 text-xs font-mono transition flex items-center gap-1.5 shadow-sm active:scale-95">
+                <span>💡</span> <span class="hidden sm:inline">Panduan</span>
+            </button>
+
+            <a href="../index.html" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-mono transition flex items-center gap-1.5 active:scale-95">
+                <span>←</span> <span class="hidden sm:inline">Beranda</span>
             </a>
-            <div class="text-[10px] font-mono text-blue-400 hidden sm:block">
+
+            <div class="text-[10px] font-mono text-blue-400 hidden lg:block">
                 SECURE CONNECTION ESTABLISHED
             </div>
         </div>
     </header>
 
-    <div class="flex flex-1 overflow-hidden">
+    <div class="flex flex-1 overflow-hidden relative">
 
-        <aside class="w-64 bg-arch-panel border-r border-slate-800 flex flex-col shrink-0 overflow-y-auto">
-            <div class="p-4">
-                <h2 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 font-mono">DATABASE INDEX
-                </h2>
-                <div class="space-y-1" id="menu-container">
+        <!-- Mobile Drawer Backdrop Overlay -->
+        <div id="mobile-drawer-backdrop" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0 md:hidden pointer-events-none"></div>
+
+        <!-- Aside Sidebar (Mobile Drawer + Desktop Sidebar) -->
+        <aside id="sidebar-drawer" class="fixed md:relative inset-y-0 left-0 z-50 md:z-auto w-72 sm:w-80 bg-arch-panel border-r border-slate-800 flex flex-col shrink-0 overflow-hidden transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 shadow-2xl md:shadow-none">
+            
+            <!-- Mobile Drawer Top Bar with Close Button (Visible on mobile only) -->
+            <div class="flex items-center justify-between p-3.5 border-b border-slate-800/80 md:hidden bg-slate-900/80 shrink-0">
+                <div class="flex items-center gap-2">
+                    <span class="text-blue-400 font-mono text-xs font-bold tracking-wider">🧬 INDEKS TOPIK</span>
+                    <span id="topic-count-badge" class="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-[10px] font-mono border border-blue-500/30">16 Modul</span>
+                </div>
+                <button id="btn-close-drawer" class="p-1.5 rounded-lg bg-slate-800/80 text-slate-400 hover:text-white hover:bg-slate-700 transition" aria-label="Tutup Indeks">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- Search & Filter Controls -->
+            <div class="p-3 sm:p-4 border-b border-slate-800/80 shrink-0 bg-slate-950/30">
+                <div class="relative mb-2.5">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-slate-500 text-xs">🔍</span>
+                    <input type="text" id="topic-search" placeholder="Cari topik bioteknologi..." class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700 text-slate-200 placeholder-slate-500 text-xs font-mono focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                </div>
+
+                <!-- Category Filter Chips -->
+                <div class="flex gap-1 overflow-x-auto pb-1 text-[11px] font-mono" id="category-chips">
+                    <button data-cat="all" class="cat-chip active px-2 py-1 rounded bg-blue-600 text-white shrink-0">Semua</button>
+                    <button data-cat="KESEHATAN" class="cat-chip px-2 py-1 rounded bg-slate-800/80 text-slate-400 shrink-0">Kesehatan</button>
+                    <button data-cat="PERTANIAN" class="cat-chip px-2 py-1 rounded bg-slate-800/80 text-slate-400 shrink-0">Pertanian</button>
+                    <button data-cat="LINGKUNGAN" class="cat-chip px-2 py-1 rounded bg-slate-800/80 text-slate-400 shrink-0">Lingkungan</button>
+                    <button data-cat="FORENSIK" class="cat-chip px-2 py-1 rounded bg-slate-800/80 text-slate-400 shrink-0">Forensik</button>
+                    <button data-cat="BIOETIKA" class="cat-chip px-2 py-1 rounded bg-slate-800/80 text-slate-400 shrink-0">Bioetika</button>
                 </div>
             </div>
 
-            <div class="mt-auto p-4 border-t border-slate-800">
-                <div class="bg-blue-900/20 border border-blue-900/50 p-3 rounded text-xs text-blue-300 font-mono">
-                    <span class="animate-pulse">●</span> SISTEM SIAP<br>
-                    Mengakses Penyimpanan Lokal...
+            <!-- Topics Menu List (Scrollable) -->
+            <div class="flex-1 overflow-y-auto p-2 sm:p-3 space-y-1" id="menu-container"></div>
+
+            <!-- Sidebar Footer Status -->
+            <div class="p-3 border-t border-slate-800/80 shrink-0 bg-slate-950/40">
+                <div class="bg-blue-900/20 border border-blue-900/50 p-2.5 rounded text-[11px] text-blue-300 font-mono flex items-center justify-between">
+                    <div>
+                        <span class="animate-pulse text-emerald-400">●</span> 16 TOPIK ILMIAH
+                    </div>
+                    <button id="sidebar-btn-tutorial" class="text-xs text-blue-400 hover:text-white underline">Panduan</button>
                 </div>
             </div>
         </aside>
 
-        <main class="flex-1 bg-arch-bg relative overflow-hidden flex flex-col">
+        <!-- Main Content Area -->
+        <main class="flex-1 bg-arch-bg relative overflow-hidden flex flex-col min-w-0">
 
-            <div id="content-viewer" class="flex-1 overflow-y-auto p-8 animate-fade-in">
+            <div id="content-viewer" class="flex-1 overflow-y-auto p-3.5 sm:p-6 md:p-8 animate-fade-in pb-24 md:pb-8">
 
-                <div class="archive-panel rounded-2xl overflow-hidden mb-8 max-w-4xl mx-auto">
-                    <div class="holo-container">
+                <!-- Hologram Hero Banner -->
+                <div class="archive-panel rounded-2xl overflow-hidden mb-6 sm:mb-8 max-w-4xl mx-auto">
+                    <div class="holo-container h-36 sm:h-44 md:h-52">
                         <div class="scan-line"></div>
-                        <div class="holo-icon" id="display-icon">🧬</div>
-                        <div class="absolute bottom-2 right-4 text-[10px] font-mono text-blue-500/70">VISUALIZATION
-                            RENDER</div>
+                        <div class="holo-icon text-4xl sm:text-5xl md:text-6xl" id="display-icon">🧬</div>
+                        <div class="absolute bottom-2 right-3 sm:right-4 text-[9px] sm:text-[10px] font-mono text-blue-400/80 tracking-wider">VISUALIZATION RENDER</div>
                     </div>
-                    <div class="p-6 border-t border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <span
-                                    class="text-xs font-mono text-blue-500 bg-blue-900/20 px-2 py-1 rounded mb-2 inline-block"
-                                    id="display-cat">CATEGORY</span>
-                                <h1 class="text-3xl font-display font-bold text-white mb-1" id="display-title">PILIH
-                                    DATA</h1>
-                                <p class="text-sm text-slate-400" id="display-subtitle">Silakan pilih topik dari bilah samping untuk memulai analisis.</p>
+                    <div class="p-4 sm:p-6 border-t border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950">
+                        <div class="flex flex-col sm:flex-row justify-between items-start gap-2">
+                            <div class="flex-1 min-w-0">
+                                <span class="text-[11px] sm:text-xs font-mono text-blue-400 bg-blue-900/30 border border-blue-500/30 px-2 py-0.5 rounded mb-2 inline-block font-semibold" id="display-cat">CATEGORY</span>
+                                <h1 class="text-xl sm:text-2xl md:text-3xl font-display font-bold text-white mb-1 leading-tight break-words" id="display-title">PILIH DATA</h1>
+                                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed" id="display-subtitle">Silakan pilih topik dari bilah samping untuk memulai analisis.</p>
                             </div>
-                            <div class="text-right hidden sm:block">
-                                <div class="text-3xl font-bold text-slate-700 font-display" id="display-id">00</div>
+                            <div class="text-right shrink-0 flex items-center sm:block gap-2">
+                                <span class="text-[10px] font-mono text-slate-500 sm:hidden">MODUL</span>
+                                <div class="text-xl sm:text-3xl font-bold text-blue-400/80 font-display" id="display-id">01</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div id="article-container" class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 hidden">
+                <!-- Article Content Grid -->
+                <div id="article-container" class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 hidden">
 
                     <div class="lg:col-span-2">
-                        <div class="archive-panel rounded-2xl p-8 prose-tech min-h-[400px]">
-                            <div id="display-body">
-                            </div>
+                        <div class="archive-panel rounded-2xl p-4 sm:p-6 md:p-8 prose-tech min-h-[350px]">
+                            <div id="display-body"></div>
                         </div>
                     </div>
 
                     <div class="space-y-6">
-                        <div class="archive-panel rounded-2xl p-6">
-                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 font-mono">ANALISIS
-                                DAMPAK</h4>
+                        <div class="archive-panel rounded-2xl p-4 sm:p-6">
+                            <h4 class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-4 font-mono flex items-center justify-between">
+                                <span>ANALISIS DAMPAK</span>
+                                <span class="text-[10px] text-blue-400 font-normal">Tri-Metrics</span>
+                            </h4>
 
                             <div class="mb-4">
-                                <div class="flex justify-between text-xs mb-1 text-slate-300">
+                                <div class="flex justify-between text-xs mb-1 text-slate-200">
                                     <span>Economic Value</span>
-                                    <span id="stat-eco">0%</span>
+                                    <span id="stat-eco" class="font-mono text-blue-400">0%</span>
                                 </div>
-                                <div class="h-1 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-1.5 bg-slate-800 rounded-full overflow-hidden">
                                     <div id="bar-eco" class="h-full bg-blue-500 w-0 transition-all duration-1000"></div>
                                 </div>
                             </div>
 
                             <div class="mb-4">
-                                <div class="flex justify-between text-xs mb-1 text-slate-300">
+                                <div class="flex justify-between text-xs mb-1 text-slate-200">
                                     <span>Sustainability</span>
-                                    <span id="stat-sus">0%</span>
+                                    <span id="stat-sus" class="font-mono text-emerald-400">0%</span>
                                 </div>
-                                <div class="h-1 bg-slate-800 rounded-full overflow-hidden">
-                                    <div id="bar-sus" class="h-full bg-emerald-500 w-0 transition-all duration-1000">
-                                    </div>
+                                <div class="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                                    <div id="bar-sus" class="h-full bg-emerald-500 w-0 transition-all duration-1000"></div>
                                 </div>
                             </div>
 
                             <div>
-                                <div class="flex justify-between text-xs mb-1 text-slate-300">
+                                <div class="flex justify-between text-xs mb-1 text-slate-200">
                                     <span>Ethical Risk</span>
-                                    <span id="stat-eth">0%</span>
+                                    <span id="stat-eth" class="font-mono text-rose-400">0%</span>
                                 </div>
-                                <div class="h-1 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-1.5 bg-slate-800 rounded-full overflow-hidden">
                                     <div id="bar-eth" class="h-full bg-rose-500 w-0 transition-all duration-1000"></div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="archive-panel rounded-2xl p-6">
-                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 font-mono">TERMINOLOGI
-                                KUNCI</h4>
-                            <div class="flex flex-wrap gap-2" id="display-tags">
-                            </div>
+                        <div class="archive-panel rounded-2xl p-4 sm:p-6">
+                            <h4 class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-3 font-mono">TERMINOLOGI KUNCI</h4>
+                            <div class="flex flex-wrap gap-1.5 sm:gap-2" id="display-tags"></div>
                         </div>
                     </div>
 
+                </div>
+
+                <!-- Chapter Navigation Footer (Prev / Next Topic) -->
+                <div id="article-nav-footer" class="max-w-4xl mx-auto mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <button id="btn-prev-topic" class="w-full sm:w-1/2 p-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 text-left text-xs font-mono transition flex items-center gap-3 group active:scale-95">
+                        <span class="text-blue-400 text-base group-hover:-translate-x-1 transition-transform">←</span>
+                        <div class="min-w-0">
+                            <div class="text-[10px] text-slate-500 uppercase tracking-wider">Topik Sebelumnya</div>
+                            <div id="prev-topic-title" class="font-bold text-slate-200 group-hover:text-white truncate">-</div>
+                        </div>
+                    </button>
+                    <button id="btn-next-topic" class="w-full sm:w-1/2 p-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 text-right text-xs font-mono transition flex items-center justify-end gap-3 group active:scale-95">
+                        <div class="min-w-0">
+                            <div class="text-[10px] text-slate-500 uppercase tracking-wider">Topik Selanjutnya</div>
+                            <div id="next-topic-title" class="font-bold text-slate-200 group-hover:text-white truncate">-</div>
+                        </div>
+                        <span class="text-blue-400 text-base group-hover:translate-x-1 transition-transform">→</span>
+                    </button>
                 </div>
 
             </div>
@@ -554,51 +674,667 @@
                 `,
                 stats: { eco: 60, sus: 50, eth: 40 },
                 tags: ['PCR', 'STR', 'Forensik', 'Elektroforesis', 'Taq Polymerase']
+            },
+            // ===== TOPIK BARU #05 — CRISPR-Cas9 =====
+            {
+                id: '05',
+                cat: 'BIOTEKNOLOGI MODERN (GENOME EDITING)',
+                title: 'CRISPR-Cas9',
+                subtitle: 'Sistem pengeditan genom presisi tinggi berbasis imun adaptif bakteri.',
+                icon: '✂️',
+                content: `
+                    <h3>1. Asal Usul &amp; Definisi</h3>
+                    <p>CRISPR-Cas9 (Clustered Regularly Interspaced Short Palindromic Repeats) adalah teknologi pengeditan genom yang berasal dari sistem imun adaptif bakteri dan archaea. Bakteri menggunakan sistem ini secara alami untuk mempertahankan diri terhadap infeksi bakteriofag (virus bakteri) dengan memotong DNA asing yang masuk <a href="#" class="innote" data-ref="Jinek, M., et al. (2012). A programmable dual-RNA-guided DNA endonuclease in adaptive bacterial immunity. Science, 337(6096), 816-821.">(Jinek et al., 2012)</a>. Penemuan ini mengantarkan Jennifer Doudna dan Emmanuelle Charpentier meraih Nobel Kimia 2020.</p>
+
+                    <h3>2. Mekanisme Kerja</h3>
+                    <p>Sistem CRISPR-Cas9 terdiri dari dua komponen utama yang bekerja secara sinergis:</p>
+                    <ul>
+                        <li><strong>Guide RNA (gRNA/sgRNA):</strong> RNA pemandu sepanjang ~20 nukleotida yang dirancang untuk mengenali dan menempel pada sekuens DNA target spesifik melalui komplementaritas pasangan basa Watson-Crick.</li>
+                        <li><strong>Cas9 Nuclease:</strong> Enzim endonuklease yang berfungsi sebagai "gunting molekuler" untuk memotong kedua untai DNA (double-strand break/DSB) pada lokus yang ditargetkan oleh gRNA.</li>
+                    </ul>
+                    <p>Setelah DNA target dipotong, sel akan memperbaikinya melalui salah satu dari dua jalur:</p>
+                    <ul>
+                        <li><strong>NHEJ (Non-Homologous End Joining):</strong> Perbaikan cepat namun rawan kesalahan (insersi/delesi), sering digunakan untuk menonaktifkan (knock-out) gen tertentu.</li>
+                        <li><strong>HDR (Homology-Directed Repair):</strong> Perbaikan presisi menggunakan template DNA donor, memungkinkan penyisipan atau koreksi sekuens gen secara tepat <a href="#" class="innote" data-ref="Doudna, J. A. &amp; Charpentier, E. (2014). The new frontier of genome engineering with CRISPR-Cas9. Science, 346(6213), 1258096.">(Doudna &amp; Charpentier, 2014)</a>.</li>
+                    </ul>
+                    <p>Penting dicatat bahwa gRNA hanya menempel pada sekuens DNA yang berdekatan dengan motif PAM (Protospacer Adjacent Motif), biasanya sekuens NGG pada Cas9 dari <em>Streptococcus pyogenes</em>, yang menjadi syarat pengenalan target.</p>
+
+                    <h3>3. Aplikasi Utama</h3>
+                    <ul>
+                        <li><strong>Terapi Gen:</strong> Koreksi mutasi penyebab penyakit genetik seperti anemia sel sabit dan beta-thalassemia (contoh: Casgevy, terapi CRISPR pertama yang disetujui FDA pada 2023).</li>
+                        <li><strong>Pertanian:</strong> Pengembangan varietas tanaman tahan kekeringan, penyakit, dan bernilai gizi tinggi tanpa menyisipkan DNA asing.</li>
+                        <li><strong>Riset Fungsional:</strong> Studi fungsi gen melalui knock-out/knock-in secara sistematis di laboratorium.</li>
+                    </ul>
+
+                    <h3>4. Tantangan &amp; Batasan</h3>
+                    <p>Meskipun revolusioner, CRISPR-Cas9 masih menghadapi tantangan efek off-target (pemotongan di lokus yang tidak diinginkan), efisiensi delivery ke jaringan target in vivo, serta perdebatan etika terkait pengeditan germline (sel reproduksi) yang perubahannya dapat diwariskan ke generasi berikutnya <a href="#" class="innote" data-ref="Zhang, F. (2019). Development of CRISPR-Cas systems for genome editing and beyond. Quarterly Reviews of Biophysics, 52, e6.">(Zhang, 2019)</a>.</p>
+                `,
+                stats: { eco: 90, sus: 80, eth: 75 },
+                tags: ['CRISPR', 'Cas9', 'gRNA', 'Genome Editing', 'Nobel 2020', 'Off-Target']
+            },
+            // ===== TOPIK BARU #06 — Terapi Gen =====
+            {
+                id: '06',
+                cat: 'BIOTEKNOLOGI KESEHATAN',
+                title: 'Terapi Gen (Gene Therapy)',
+                subtitle: 'Penyisipan gen fungsional untuk menyembuhkan penyakit genetik.',
+                icon: '🧪',
+                content: `
+                    <h3>1. Konsep Dasar</h3>
+                    <p>Terapi gen adalah pendekatan medis yang bertujuan mengobati atau mencegah penyakit dengan cara memodifikasi materi genetik pasien. Alih-alih menggunakan obat atau operasi konvensional, terapi gen mengoreksi akar penyebab penyakit pada level DNA. Konsep ini pertama kali berhasil diterapkan pada pasien manusia tahun 1990 untuk ADA-SCID (defisiensi imun berat) <a href="#" class="innote" data-ref="Blaese, R. M., et al. (1995). T lymphocyte-directed gene therapy for ADA-SCID. Science, 270(5235), 475-480.">(Blaese et al., 1995)</a>.</p>
+
+                    <h3>2. Strategi Terapi Gen</h3>
+                    <ul>
+                        <li><strong>Gene Addition (Penambahan Gen):</strong> Menyisipkan salinan gen fungsional ke dalam sel pasien yang gennya rusak/mutan, tanpa menghilangkan gen asli. Contoh: terapi Luxturna untuk distrofi retina herediter.</li>
+                        <li><strong>Gene Editing (Pengeditan Gen):</strong> Menggunakan alat seperti CRISPR-Cas9 untuk memperbaiki mutasi secara langsung pada gen endogen pasien.</li>
+                        <li><strong>Gene Silencing (Pembungkaman Gen):</strong> Menonaktifkan ekspresi gen yang berbahaya menggunakan RNA interferensi (RNAi) atau antisense oligonucleotides.</li>
+                    </ul>
+
+                    <h3>3. Vektor Penghantar</h3>
+                    <p>Gen terapeutik memerlukan kendaraan (vektor) untuk masuk ke dalam sel target. Dua kategori utama vektor:</p>
+                    <ul>
+                        <li><strong>Vektor Viral:</strong> Virus yang telah dimodifikasi agar tidak patogen, termasuk Adeno-Associated Virus (AAV), Lentivirus, dan Adenovirus. AAV paling banyak digunakan karena profil keamanannya yang baik dan kemampuan menginfeksi sel yang tidak membelah <a href="#" class="innote" data-ref="Naldini, L. (2015). Gene therapy returns to centre stage. Nature, 526(7573), 351-360.">(Naldini, 2015)</a>.</li>
+                        <li><strong>Vektor Non-Viral:</strong> Lipid Nanoparticle (LNP), elektroporasi, atau nanopartikel polimer yang lebih aman namun umumnya kurang efisien.</li>
+                    </ul>
+
+                    <h3>4. Metode Pelaksanaan</h3>
+                    <ul>
+                        <li><strong>Ex Vivo:</strong> Sel diambil dari pasien, dimodifikasi di laboratorium, lalu dikembalikan. Contoh: modifikasi sel punca hematopoietik untuk anemia sel sabit.</li>
+                        <li><strong>In Vivo:</strong> Vektor pembawa gen disuntikkan langsung ke dalam tubuh pasien. Contoh: injeksi AAV ke retina mata untuk Luxturna.</li>
+                    </ul>
+
+                    <h3>5. Keberhasilan &amp; Tantangan</h3>
+                    <p>Per 2023, FDA telah menyetujui beberapa terapi gen: Luxturna (mata), Zolgensma (SMA), Casgevy &amp; Lyfgenia (anemia sel sabit). Tantangan utama meliputi biaya yang sangat tinggi (jutaan dolar per pasien), respons imun terhadap vektor viral, dan kebutuhan pemantauan jangka panjang untuk mendeteksi potensi mutagenesis insersional <a href="#" class="innote" data-ref="High, K. A. &amp; Roncarolo, M. G. (2019). Gene therapy. The New England Journal of Medicine, 381(5), 455-464.">(High &amp; Roncarolo, 2019)</a>.</p>
+                `,
+                stats: { eco: 85, sus: 70, eth: 65 },
+                tags: ['Gene Therapy', 'AAV', 'Lentivirus', 'Ex Vivo', 'In Vivo', 'Vektor']
+            },
+            // ===== TOPIK BARU #07 — Sel Punca & iPSC =====
+            {
+                id: '07',
+                cat: 'BIOTEKNOLOGI BIOMEDIS',
+                title: 'Sel Punca &amp; iPSC',
+                subtitle: 'Sel pluripoten terinduksi untuk kedokteran regeneratif.',
+                icon: '🔬',
+                content: `
+                    <h3>1. Apa Itu Sel Punca (Stem Cells)?</h3>
+                    <p>Sel punca adalah sel yang memiliki dua kemampuan unik: <strong>self-renewal</strong> (memperbarui diri tanpa batas) dan <strong>diferensiasi</strong> (berubah menjadi berbagai tipe sel spesifik seperti sel saraf, otot jantung, sel darah, dll). Berdasarkan potensinya, sel punca dikategorikan menjadi:</p>
+                    <ul>
+                        <li><strong>Totipoten:</strong> Dapat menjadi semua tipe sel tubuh termasuk jaringan ekstraembrionik (zigot).</li>
+                        <li><strong>Pluripoten:</strong> Dapat menjadi hampir semua tipe sel kecuali jaringan ekstraembrionik (sel punca embrionik/ESC).</li>
+                        <li><strong>Multipoten:</strong> Dapat menjadi beberapa tipe sel terkait (sel punca hematopoietik/HSC).</li>
+                    </ul>
+
+                    <h3>2. iPSC (Induced Pluripotent Stem Cells)</h3>
+                    <p>Terobosan revolusioner terjadi tahun 2006 ketika Shinya Yamanaka berhasil memprogram ulang sel somatik dewasa (seperti sel kulit) menjadi sel yang bersifat pluripoten menggunakan empat faktor transkripsi: <strong>Oct4, Sox2, Klf4, dan c-Myc</strong> (dikenal sebagai "Faktor Yamanaka"). Penemuan ini memenangkan Nobel Kedokteran 2012 <a href="#" class="innote" data-ref="Takahashi, K. &amp; Yamanaka, S. (2006). Induction of pluripotent stem cells from mouse embryonic and adult fibroblast cultures by defined factors. Cell, 126(4), 663-676.">(Takahashi &amp; Yamanaka, 2006)</a>.</p>
+                    <p>iPSC memiliki keunggulan besar karena menghindari kontroversi etis penggunaan embrio manusia yang melekat pada sel punca embrionik (ESC), sekaligus tetap memiliki kemampuan diferensiasi yang setara.</p>
+
+                    <h3>3. Aplikasi dalam Kedokteran Regeneratif</h3>
+                    <ul>
+                        <li><strong>Model Penyakit:</strong> iPSC dari pasien dapat didiferensiasi menjadi sel yang terdampak penyakit untuk mempelajari mekanisme patologi secara in vitro, seperti pada penyakit Parkinson dan ALS.</li>
+                        <li><strong>Uji Obat:</strong> Pengujian efektivitas dan toksisitas kandidat obat pada sel manusia spesifik tanpa menggunakan hewan percobaan.</li>
+                        <li><strong>Terapi Sel:</strong> Memproduksi sel pengganti yang kompatibel secara imunologis untuk transplantasi, misalnya sel retina untuk degenerasi makula <a href="#" class="innote" data-ref="Yamanaka, S. (2020). Pluripotent stem cell-based cell therapy — promise and challenges. Cell Stem Cell, 27(4), 523-531.">(Yamanaka, 2020)</a>.</li>
+                    </ul>
+
+                    <h3>4. Tantangan Saat Ini</h3>
+                    <p>Meskipun menjanjikan, iPSC menghadapi tantangan seperti risiko tumorigenisitas (kemampuan membentuk teratoma jika tidak terdiferensiasi sempurna), ketidakstabilan genom setelah kultur berkepanjangan, serta biaya dan kompleksitas standardisasi produksi skala klinis <a href="#" class="innote" data-ref="Shi, Y., et al. (2017). Induced pluripotent stem cell technology: a decade of progress. Nature Reviews Drug Discovery, 16(2), 115-130.">(Shi et al., 2017)</a>.</p>
+                `,
+                stats: { eco: 80, sus: 75, eth: 70 },
+                tags: ['iPSC', 'Sel Punca', 'Yamanaka', 'Pluripoten', 'Nobel 2012', 'Regeneratif']
+            },
+            // ===== TOPIK BARU #08 — Elektroforesis Gel =====
+            {
+                id: '08',
+                cat: 'BIOTEKNOLOGI LABORATORIUM',
+                title: 'Elektroforesis Gel',
+                subtitle: 'Teknik pemisahan fragmen DNA berdasarkan ukuran molekul.',
+                icon: '⚡',
+                content: `
+                    <h3>1. Prinsip Dasar</h3>
+                    <p>Elektroforesis gel adalah teknik laboratorium fundamental dalam biologi molekuler yang digunakan untuk memisahkan, mengidentifikasi, dan memurnikan fragmen DNA (atau RNA dan protein) berdasarkan ukuran dan muatan listriknya. Teknik ini menjadi prasyarat mutlak dalam hampir semua eksperimen bioteknologi modern <a href="#" class="innote" data-ref="Sambrook, J. &amp; Russell, D. W. (2001). Molecular Cloning: A Laboratory Manual. 3rd Ed. Cold Spring Harbor Laboratory Press.">(Sambrook &amp; Russell, 2001)</a>.</p>
+
+                    <h3>2. Cara Kerja</h3>
+                    <p>Prinsip kerjanya memanfaatkan sifat muatan listrik negatif yang dimiliki molekul DNA (karena gugus fosfat pada backbone-nya):</p>
+                    <ul>
+                        <li><strong>Persiapan Gel:</strong> Matriks gel agarosa (untuk fragmen DNA standar 100 bp–25 kb) atau poliakrilamid (untuk resolusi tinggi, perbedaan 1 nukleotida) disiapkan dalam cetakan dengan sisir pembentuk sumur (well).</li>
+                        <li><strong>Pemuatan Sampel:</strong> Sampel DNA dicampur dengan loading dye (pewarna pelacak + gliserol untuk pembobotan) lalu dimasukkan ke dalam sumur gel.</li>
+                        <li><strong>Migrasi:</strong> Ketika arus listrik dialirkan, DNA bermigrasi dari kutub negatif (katoda) menuju kutub positif (anoda). Gel bertindak sebagai saringan molekuler — fragmen kecil bergerak lebih cepat, fragmen besar tertahan dan bergerak lebih lambat.</li>
+                        <li><strong>Visualisasi:</strong> Pita-pita DNA divisualisasikan menggunakan pewarna interkalasi (ethidium bromide atau SYBR Green/Safe) di bawah sinar ultraviolet (UV) <a href="#" class="innote" data-ref="Lee, P. Y., et al. (2012). Agarose gel electrophoresis for the separation of DNA fragments. Journal of Visualized Experiments, (62), e3923.">(Lee et al., 2012)</a>.</li>
+                    </ul>
+
+                    <h3>3. Faktor yang Mempengaruhi</h3>
+                    <ul>
+                        <li><strong>Konsentrasi Gel:</strong> Konsentrasi agarosa tinggi (2–3%) untuk fragmen kecil; rendah (0.5–0.8%) untuk fragmen besar.</li>
+                        <li><strong>Tegangan Listrik:</strong> Tegangan terlalu tinggi mempercepat migrasi namun menurunkan resolusi dan dapat merusak gel akibat pemanasan.</li>
+                        <li><strong>Konformasi DNA:</strong> DNA superkoil, linier, dan sirkular terbuka memiliki laju migrasi berbeda meskipun ukurannya sama.</li>
+                        <li><strong>Buffer:</strong> TAE (Tris-Asetat-EDTA) atau TBE (Tris-Borat-EDTA) menjaga pH dan konduktivitas listrik selama proses.</li>
+                    </ul>
+
+                    <h3>4. Aplikasi Kunci</h3>
+                    <ul>
+                        <li>Verifikasi hasil amplifikasi PCR dan kloning gen.</li>
+                        <li>Analisis pemotongan enzim restriksi (restriction digest).</li>
+                        <li>Estimasi ukuran fragmen DNA menggunakan marker/ladder standar.</li>
+                        <li>Identifikasi forensik dan diagnosis molekuler.</li>
+                    </ul>
+                `,
+                stats: { eco: 50, sus: 60, eth: 5 },
+                tags: ['Agarosa', 'Elektroforesis', 'Gel', 'UV', 'Loading Dye', 'Laboratorium']
+            },
+            // ===== TOPIK BARU #09 — Antibodi Monoklonal =====
+            {
+                id: '09',
+                cat: 'BIOTEKNOLOGI IMUNOLOGI',
+                title: 'Antibodi Monoklonal',
+                subtitle: 'Produksi antibodi identik melalui teknologi hibridoma.',
+                icon: '🛡️',
+                content: `
+                    <h3>1. Definisi &amp; Sejarah</h3>
+                    <p>Antibodi monoklonal (mAb) adalah antibodi yang diproduksi oleh klon sel identik tunggal, sehingga memiliki spesifisitas tinggi terhadap satu epitop (bagian antigen) tertentu. Teknologi ini dipelopori oleh Georges Köhler dan César Milstein pada tahun 1975 melalui pengembangan teknik hibridoma, yang memenangkan Nobel Kedokteran 1984 <a href="#" class="innote" data-ref="Köhler, G. &amp; Milstein, C. (1975). Continuous cultures of fused cells secreting antibody of predefined specificity. Nature, 256(5517), 495-497.">(Köhler &amp; Milstein, 1975)</a>.</p>
+
+                    <h3>2. Pembuatan dengan Teknologi Hibridoma</h3>
+                    <p>Proses produksi antibodi monoklonal melalui hibridoma melibatkan langkah-langkah berikut:</p>
+                    <ul>
+                        <li><strong>Imunisasi:</strong> Hewan percobaan (biasanya mencit) diinjeksi dengan antigen target untuk merangsang respons imun dan produksi antibodi oleh sel B limfosit di limpa.</li>
+                        <li><strong>Isolasi Sel B:</strong> Sel B penghasil antibodi diisolasi dari limpa mencit yang telah diimunisasi.</li>
+                        <li><strong>Fusi Sel (Hibridisasi):</strong> Sel B difusikan dengan sel mieloma (sel kanker yang mampu membelah tanpa batas) menggunakan agen fusi seperti PEG (polyethylene glycol), menghasilkan sel hibridoma.</li>
+                        <li><strong>Seleksi HAT:</strong> Sel hibridoma diseleksi menggunakan medium HAT (Hypoxanthine-Aminopterin-Thymidine) — hanya sel hibridoma yang bertahan hidup.</li>
+                        <li><strong>Skrining &amp; Kloning:</strong> Sel hibridoma yang menghasilkan antibodi dengan spesifisitas yang diinginkan diidentifikasi melalui ELISA, lalu diklon untuk produksi massal <a href="#" class="innote" data-ref="Nelson, A. L., Dhimolea, E., &amp; Reichert, J. M. (2010). Development trends for human monoclonal antibody therapeutics. Nature Reviews Drug Discovery, 9(10), 767-774.">(Nelson et al., 2010)</a>.</li>
+                    </ul>
+
+                    <h3>3. Evolusi Teknologi</h3>
+                    <ul>
+                        <li><strong>Murine (Mencit):</strong> Generasi pertama, berakhiran -omab. Sering memicu respons imun manusia (HAMA).</li>
+                        <li><strong>Chimeric (Kimerik):</strong> Kombinasi regio variabel mencit + regio konstan manusia, berakhiran -ximab (contoh: Rituximab).</li>
+                        <li><strong>Humanized:</strong> Sebagian besar sekuens diganti manusia, berakhiran -zumab (contoh: Trastuzumab/Herceptin).</li>
+                        <li><strong>Fully Human:</strong> 100% sekuens manusia, berakhiran -umab (contoh: Adalimumab/Humira) <a href="#" class="innote" data-ref="Lu, R. M., et al. (2020). Development of therapeutic antibodies for the treatment of diseases. Journal of Biomedical Science, 27(1), 1.">(Lu et al., 2020)</a>.</li>
+                    </ul>
+
+                    <h3>4. Aplikasi Klinis</h3>
+                    <ul>
+                        <li><strong>Onkologi:</strong> Targeting sel kanker (Trastuzumab untuk kanker payudara HER2+).</li>
+                        <li><strong>Autoimun:</strong> Menekan reaksi imun berlebihan (Adalimumab untuk rheumatoid arthritis).</li>
+                        <li><strong>Diagnostik:</strong> Deteksi biomarker penyakit, tes kehamilan, dan imunohistokimia.</li>
+                        <li><strong>Infeksi:</strong> Netralisasi patogen (Palivizumab untuk RSV).</li>
+                    </ul>
+                `,
+                stats: { eco: 95, sus: 85, eth: 30 },
+                tags: ['Hibridoma', 'Antibodi', 'Monoklonal', 'ELISA', 'Nobel 1984', 'Imunoterapi']
+            },
+            // ===== TOPIK BARU #10 — Kloning Hewan (Dolly) =====
+            {
+                id: '10',
+                cat: 'BIOTEKNOLOGI REPRODUKSI',
+                title: 'Kloning Hewan (Domba Dolly)',
+                subtitle: 'Kloning mamalia pertama melalui Somatic Cell Nuclear Transfer.',
+                icon: '🐑',
+                content: `
+                    <h3>1. Latar Belakang Bersejarah</h3>
+                    <p>Domba Dolly, lahir pada 5 Juli 1996 di Roslin Institute, Skotlandia, merupakan mamalia pertama yang berhasil dikloning dari sel somatik dewasa. Kelahirannya membuktikan bahwa sel yang telah terdiferensiasi penuh (sel kelenjar susu) dapat "diprogram ulang" menjadi sel totipoten yang mampu membentuk organisme utuh <a href="#" class="innote" data-ref="Wilmut, I., et al. (1997). Viable offspring derived from fetal and adult mammalian cells. Nature, 385(6619), 810-813.">(Wilmut et al., 1997)</a>. Penemuan ini mengguncang dogma biologi bahwa diferensiasi sel bersifat ireversibel.</p>
+
+                    <h3>2. Teknik SCNT (Somatic Cell Nuclear Transfer)</h3>
+                    <p>Prosedur kloning Dolly menggunakan teknik SCNT dengan tahapan sebagai berikut:</p>
+                    <ul>
+                        <li><strong>Pengambilan Sel Donor:</strong> Sel somatik (sel kelenjar susu/mammary gland) dari domba Finn Dorset berusia 6 tahun dikultur dan diinduksi ke fase quiescent (G0) melalui serum starvation untuk meningkatkan efisiensi reprogramming.</li>
+                        <li><strong>Enukleasi Oosit:</strong> Inti sel telur (oosit) dari domba Scottish Blackface dikeluarkan menggunakan micropipette, menyisakan sitoplasma yang kaya faktor reprogramming.</li>
+                        <li><strong>Transfer Nukleus:</strong> Nukleus dari sel donor difusikan dengan oosit yang telah dienukleasi menggunakan pulsa elektrik.</li>
+                        <li><strong>Aktivasi &amp; Implantasi:</strong> Embrio hasil fusi diaktivasi secara elektrik untuk memulai pembelahan sel, lalu ditanamkan ke dalam uterus ibu pengganti (surrogate mother) domba Scottish Blackface.</li>
+                    </ul>
+                    <p>Dari 277 percobaan fusi sel, hanya 29 yang berkembang menjadi embrio, dan hanya <strong>satu</strong> yang berhasil lahir hidup — Dolly <a href="#" class="innote" data-ref="Campbell, K. H. S., et al. (1996). Sheep cloned by nuclear transfer from a cultured cell line. Nature, 380(6569), 64-66.">(Campbell et al., 1996)</a>.</p>
+
+                    <h3>3. Dampak &amp; Warisan Ilmiah</h3>
+                    <ul>
+                        <li><strong>Kedokteran Regeneratif:</strong> Membuka jalan bagi riset reprogramming sel yang mengarah pada penemuan iPSC oleh Yamanaka (2006).</li>
+                        <li><strong>Peternakan:</strong> Kloning hewan ternak unggul dengan sifat produksi superior (namun masih tidak efisien dengan tingkat keberhasilan kurang dari 5%).</li>
+                        <li><strong>Konservasi:</strong> Potensi untuk menyelamatkan spesies terancam punah melalui pelestarian materi genetik.</li>
+                    </ul>
+
+                    <h3>4. Kontroversi Etis</h3>
+                    <p>Kelahiran Dolly memicu perdebatan global tentang kemungkinan kloning manusia. Hingga saat ini, kloning reproduktif manusia dilarang secara luas di hampir seluruh negara, sementara kloning terapeutik (untuk menghasilkan sel punca) masih menjadi area abu-abu dalam bioetika <a href="#" class="innote" data-ref="National Academies of Sciences. (2002). Scientific and Medical Aspects of Human Reproductive Cloning. National Academies Press.">(NAS, 2002)</a>.</p>
+                `,
+                stats: { eco: 55, sus: 40, eth: 90 },
+                tags: ['SCNT', 'Dolly', 'Kloning', 'Enukleasi', 'Reprogramming', 'Bioetika']
+            },
+            // ===== TOPIK BARU #11 — Vaksin mRNA =====
+            {
+                id: '11',
+                cat: 'BIOTEKNOLOGI VAKSIN',
+                title: 'Vaksin mRNA',
+                subtitle: 'Teknologi vaksin generasi baru berbasis messenger RNA.',
+                icon: '💊',
+                content: `
+                    <h3>1. Revolusi Teknologi Vaksin</h3>
+                    <p>Vaksin mRNA merupakan terobosan bioteknologi yang menjadi sorotan global saat pandemi COVID-19. Berbeda dari vaksin konvensional yang menggunakan virus yang dilemahkan atau dimatikan, vaksin mRNA mengirimkan instruksi genetik berupa messenger RNA sintetis ke dalam sel tubuh agar sel tersebut memproduksi protein antigen virus secara mandiri <a href="#" class="innote" data-ref="Pardi, N., et al. (2018). mRNA vaccines — a new era in vaccinology. Nature Reviews Drug Discovery, 17(4), 261-279.">(Pardi et al., 2018)</a>. Riset ini dirintis oleh Katalin Karikó dan Drew Weissman (Nobel Kedokteran 2023) yang menemukan bahwa modifikasi nukleosida (pseudouridine) dapat mengurangi respon inflamasi terhadap mRNA sintetis.</p>
+
+                    <h3>2. Komponen Kunci: Lipid Nanoparticle (LNP)</h3>
+                    <p>mRNA adalah molekul yang sangat rapuh dan mudah didegradasi oleh enzim RNase. Untuk melindungi dan menghantarkannya ke dalam sel, digunakan sistem penghantaran Lipid Nanoparticle yang terdiri dari:</p>
+                    <ul>
+                        <li><strong>Lipid Kationik (Ionizable):</strong> Bermuatan positif pada pH rendah untuk mengikat mRNA bermuatan negatif dan memfasilitasi pelepasan endosomal.</li>
+                        <li><strong>Lipid Pembantu (Helper Lipid, DSPC):</strong> Memberikan stabilitas struktural pada membran LNP.</li>
+                        <li><strong>Kolesterol:</strong> Meningkatkan rigiditas dan integritas partikel.</li>
+                        <li><strong>PEG-Lipid:</strong> Membentuk lapisan hidrofilik yang mencegah agregasi dan memperpanjang sirkulasi in vivo <a href="#" class="innote" data-ref="Hou, X., et al. (2021). Lipid nanoparticles for mRNA delivery. Nature Reviews Materials, 6(12), 1078-1094.">(Hou et al., 2021)</a>.</li>
+                    </ul>
+
+                    <h3>3. Mekanisme Kerja</h3>
+                    <ul>
+                        <li><strong>Injeksi Intramuskular:</strong> Vaksin disuntikkan ke otot deltoid.</li>
+                        <li><strong>Endositosis:</strong> LNP diambil oleh sel melalui endositosis. Di dalam endosom, lipid kationik memfasilitasi pelepasan mRNA ke sitoplasma.</li>
+                        <li><strong>Translasi Protein:</strong> Ribosom sel membaca mRNA dan memproduksi protein Spike (S) virus SARS-CoV-2.</li>
+                        <li><strong>Presentasi Antigen:</strong> Protein Spike ditampilkan di permukaan sel melalui MHC, dikenali oleh sel dendritik dan sel T.</li>
+                        <li><strong>Respons Imun Adaptif:</strong> Sistem imun membentuk antibodi penetral dan sel T memori untuk perlindungan jangka panjang.</li>
+                    </ul>
+                    <p><strong>Catatan penting:</strong> mRNA vaksin <em>tidak</em> memasuki nukleus sel dan <em>tidak</em> berintegrasi dengan DNA inang. mRNA akan didegradasi secara alami oleh enzim seluler dalam beberapa hari setelah translasi <a href="#" class="innote" data-ref="Verbeke, R., et al. (2021). Three decades of messenger RNA vaccine development. Nano Today, 28, 100766.">(Verbeke et al., 2021)</a>.</p>
+
+                    <h3>4. Keunggulan &amp; Masa Depan</h3>
+                    <ul>
+                        <li>Pengembangan sangat cepat (sekuens mRNA Moderna dirancang dalam <strong>2 hari</strong> setelah genom virus dipublikasikan).</li>
+                        <li>Platform yang fleksibel — dapat diadaptasi untuk berbagai penyakit infeksi, kanker, dan penyakit autoimun.</li>
+                        <li>Tantangan: stabilitas termal (memerlukan penyimpanan suhu ultra-rendah) dan optimasi formulasi LNP generasi baru.</li>
+                    </ul>
+                `,
+                stats: { eco: 95, sus: 85, eth: 25 },
+                tags: ['mRNA', 'LNP', 'Vaksin', 'COVID-19', 'Nobel 2023', 'Protein Spike']
+            },
+            // ===== TOPIK BARU #12 — Tanaman Bt =====
+            {
+                id: '12',
+                cat: 'BIOTEKNOLOGI PERTANIAN',
+                title: 'Tanaman Bt (Transgenik)',
+                subtitle: 'Tanaman tahan hama dengan gen insektisidal Bacillus thuringiensis.',
+                icon: '🌱',
+                content: `
+                    <h3>1. Definisi &amp; Prinsip</h3>
+                    <p>Tanaman Bt adalah tanaman transgenik yang direkayasa secara genetik dengan menyisipkan gen cry dari bakteri tanah <em>Bacillus thuringiensis</em> (Bt). Gen ini mengkode protein kristal insektisidal yang bersifat toksik secara spesifik terhadap larva serangga hama tertentu, namun aman bagi manusia, hewan, dan serangga non-target <a href="#" class="innote" data-ref="Schnepf, E., et al. (1998). Bacillus thuringiensis and its pesticidal crystal proteins. Microbiology and Molecular Biology Reviews, 62(3), 775-806.">(Schnepf et al., 1998)</a>.</p>
+
+                    <h3>2. Mekanisme Toksisitas terhadap Serangga</h3>
+                    <p>Protein Cry bekerja melalui mekanisme unik yang membuatnya sangat selektif:</p>
+                    <ul>
+                        <li><strong>Ingesti:</strong> Larva serangga (misalnya penggerek batang jagung) memakan jaringan tanaman Bt yang mengandung protein Cry dalam bentuk pro-toksin inaktif.</li>
+                        <li><strong>Solubilisasi:</strong> Di dalam usus tengah (midgut) serangga yang bersifat basa (pH 9–12), kristal protein Cry terlarut.</li>
+                        <li><strong>Aktivasi Proteolitik:</strong> Enzim protease spesifik serangga memotong pro-toksin menjadi fragmen toksin aktif (~65 kDa).</li>
+                        <li><strong>Pengikatan Reseptor:</strong> Toksin aktif berikatan dengan reseptor spesifik (cadherin, aminopeptidase N) di membran epitel usus — reseptor ini <em>tidak ada</em> pada mamalia, sehingga tidak toksik bagi manusia.</li>
+                        <li><strong>Pembentukan Pori:</strong> Toksin menyisip ke membran sel dan membentuk pori-pori, menyebabkan kebocoran osmotik, lisis sel, sepsis, dan kematian serangga dalam 24–72 jam <a href="#" class="innote" data-ref="Bravo, A., Gill, S. S., &amp; Soberón, M. (2007). Mode of action of Bacillus thuringiensis Cry and Cyt toxins. Toxicon, 49(4), 423-435.">(Bravo et al., 2007)</a>.</li>
+                    </ul>
+
+                    <h3>3. Contoh Produk Komersial</h3>
+                    <ul>
+                        <li><strong>Bt Corn (Jagung Bt):</strong> Mengandung gen Cry1Ab, tahan terhadap European Corn Borer (<em>Ostrinia nubilalis</em>).</li>
+                        <li><strong>Bt Cotton (Kapas Bt):</strong> Mengandung gen Cry1Ac, tahan terhadap bollworm (<em>Helicoverpa armigera</em>). Sangat sukses di India dan China.</li>
+                        <li><strong>Bt Brinjal (Terong Bt):</strong> Tahan terhadap fruit and shoot borer, disetujui di Bangladesh.</li>
+                    </ul>
+
+                    <h3>4. Strategi Pencegahan Resistensi</h3>
+                    <ul>
+                        <li><strong>Refuge Planting:</strong> Menanam 20% area dengan tanaman non-Bt untuk menjaga populasi serangga rentan dan memperlambat evolusi resistensi.</li>
+                        <li><strong>Gene Pyramiding:</strong> Menggabungkan beberapa gen Cry berbeda (misalnya Cry1Ab + Cry2Ab2) dalam satu tanaman agar serangga sulit berevolusi resistensi terhadap semua toksin sekaligus <a href="#" class="innote" data-ref="Tabashnik, B. E., et al. (2013). Insect resistance to Bt crops: lessons from the first billion acres. Nature Biotechnology, 31(6), 510-521.">(Tabashnik et al., 2013)</a>.</li>
+                    </ul>
+                `,
+                stats: { eco: 85, sus: 75, eth: 55 },
+                tags: ['Bt', 'Transgenik', 'Cry Protein', 'Insektisidal', 'Resistensi', 'Pertanian']
+            },
+            // ===== TOPIK BARU #13 — Fermentasi & Bioteknologi Tradisional =====
+            {
+                id: '13',
+                cat: 'BIOTEKNOLOGI KONVENSIONAL',
+                title: 'Fermentasi &amp; Bioteknologi Tradisional',
+                subtitle: 'Pemanfaatan mikroorganisme alami dalam industri pangan dan farmasi.',
+                icon: '🧫',
+                content: `
+                    <h3>1. Definisi Bioteknologi Konvensional</h3>
+                    <p>Bioteknologi konvensional (tradisional) adalah pemanfaatan organisme hidup atau bagiannya secara utuh, tanpa rekayasa genetika, untuk menghasilkan produk yang bermanfaat bagi manusia. Praktik ini telah dilakukan selama ribuan tahun, jauh sebelum istilah "bioteknologi" dicetuskan. Prinsip utamanya adalah <strong>fermentasi</strong> — proses metabolisme anaerobik (atau aerobik terbatas) oleh mikroorganisme yang mengubah substrat organik menjadi produk bernilai <a href="#" class="innote" data-ref="Thieman, W. J. &amp; Palladino, M. A. (2013). Introduction to Biotechnology. 3rd Ed. Pearson. Chapter 1.">(Thieman &amp; Palladino, 2013)</a>.</p>
+
+                    <h3>2. Jenis-Jenis Fermentasi</h3>
+                    <ul>
+                        <li><strong>Fermentasi Alkohol:</strong> Ragi <em>Saccharomyces cerevisiae</em> mengubah glukosa menjadi etanol + CO2. Digunakan dalam pembuatan bir, anggur, dan bioetanol.</li>
+                        <li><strong>Fermentasi Asam Laktat:</strong> Bakteri <em>Lactobacillus bulgaricus</em> dan <em>Streptococcus thermophilus</em> mengubah laktosa susu menjadi asam laktat, menghasilkan yoghurt dan keju.</li>
+                        <li><strong>Fermentasi Asam Asetat:</strong> Bakteri <em>Acetobacter</em> mengoksidasi etanol menjadi asam asetat (vinegar/cuka).</li>
+                    </ul>
+
+                    <h3>3. Produk Bioteknologi Konvensional</h3>
+                    <ul>
+                        <li><strong>Tempe:</strong> Fermentasi kedelai oleh kapang <em>Rhizopus oligosporus</em> yang menghidrolisis protein menjadi asam amino dan meningkatkan ketersediaan nutrisi <a href="#" class="innote" data-ref="Nout, M. J. R. &amp; Kiers, J. L. (2005). Tempe fermentation, innovation and functionality. Journal of Applied Microbiology, 98(2), 180-188.">(Nout &amp; Kiers, 2005)</a>.</li>
+                        <li><strong>Tape:</strong> Fermentasi beras/singkong oleh ragi <em>Saccharomyces</em> dan kapang <em>Mucor/Rhizopus</em>.</li>
+                        <li><strong>Kecap:</strong> Fermentasi kedelai oleh <em>Aspergillus oryzae</em> dan <em>A. sojae</em> (proses koji).</li>
+                        <li><strong>Nata de Coco:</strong> Selulosa bakteri yang diproduksi oleh <em>Acetobacter xylinum</em> pada air kelapa.</li>
+                    </ul>
+
+                    <h3>4. Antibiotik dari Fermentasi</h3>
+                    <p>Penemuan penisilin oleh Alexander Fleming pada tahun 1928 merupakan tonggak penting bioteknologi farmasi. Jamur <em>Penicillium chrysogenum</em> memproduksi penisilin sebagai metabolit sekunder melalui fermentasi skala industri. Produk antibiotik lain dari fermentasi meliputi streptomisin (dari <em>Streptomyces griseus</em>) dan eritromisin (dari <em>Saccharopolyspora erythraea</em>) <a href="#" class="innote" data-ref="Demain, A. L. &amp; Sanchez, S. (2009). Microbial drug discovery: 80 years of progress. The Journal of Antibiotics, 62(1), 5-16.">(Demain &amp; Sanchez, 2009)</a>.</p>
+
+                    <h3>5. Perbandingan Bioteknologi Konvensional vs Modern</h3>
+                    <ul>
+                        <li><strong>Konvensional:</strong> Menggunakan organisme utuh, tanpa modifikasi genetik, produk dihasilkan dari metabolisme alami.</li>
+                        <li><strong>Modern:</strong> Memanipulasi DNA secara langsung (rekayasa genetika), menghasilkan organisme transgenik dengan sifat baru yang tidak mungkin dicapai secara alami.</li>
+                    </ul>
+                `,
+                stats: { eco: 75, sus: 95, eth: 5 },
+                tags: ['Fermentasi', 'Tempe', 'Penisilin', 'Ragi', 'Tradisional', 'Metabolit']
+            },
+            // ===== TOPIK BARU #14 — Bioinformatika & Genomik =====
+            {
+                id: '14',
+                cat: 'BIOTEKNOLOGI KOMPUTASIONAL',
+                title: 'Bioinformatika &amp; Genomik',
+                subtitle: 'Analisis data genom berskala besar dengan komputasi dan AI.',
+                icon: '💻',
+                content: `
+                    <h3>1. Definisi Bioinformatika</h3>
+                    <p>Bioinformatika adalah bidang interdisipliner yang menggabungkan biologi, ilmu komputer, matematika, dan statistika untuk mengelola, menganalisis, dan menginterpretasi data biologi berskala besar (Big Data). Bidang ini menjadi tulang punggung bioteknologi modern karena kemajuan teknologi sekuensing yang menghasilkan data genomik dalam jumlah masif <a href="#" class="innote" data-ref="Luscombe, N. M., Greenbaum, D., &amp; Gerstein, M. (2001). What is bioinformatics? A proposed definition and overview of the field. Methods of Information in Medicine, 40(4), 346-358.">(Luscombe et al., 2001)</a>.</p>
+
+                    <h3>2. Proyek Genom Manusia (Human Genome Project)</h3>
+                    <p>Proyek monumental yang berlangsung tahun 1990–2003 ini berhasil memetakan seluruh ~3,2 miliar pasangan basa DNA manusia. Proyek ini mengidentifikasi sekitar 20.000–25.000 gen pengkode protein dan mengungkap bahwa hanya ~1,5% genom yang mengkode protein — sisanya merupakan sekuens regulatori, intron, dan DNA non-coding <a href="#" class="innote" data-ref="International Human Genome Sequencing Consortium. (2004). Finishing the euchromatic sequence of the human genome. Nature, 431(7011), 931-945.">(IHGSC, 2004)</a>.</p>
+
+                    <h3>3. Next-Generation Sequencing (NGS)</h3>
+                    <p>NGS merevolusi bioteknologi dengan memungkinkan sekuensing paralel masif (millions of reads simultan) dengan kecepatan tinggi dan biaya yang turun drastis:</p>
+                    <ul>
+                        <li><strong>2001:</strong> Sekuensing genom manusia pertama memakan waktu 13 tahun dan biaya ~$3 miliar.</li>
+                        <li><strong>2024:</strong> Genom manusia dapat disekuensing dalam kurang dari 24 jam dengan biaya ~$200 (platform Illumina/Nanopore).</li>
+                    </ul>
+                    <p>Platform NGS populer meliputi:</p>
+                    <ul>
+                        <li><strong>Illumina (Short-Read):</strong> Sequencing-by-synthesis, akurasi tinggi (lebih dari 99,9%), read pendek (150–300 bp). Dominan di pasar.</li>
+                        <li><strong>Oxford Nanopore (Long-Read):</strong> Sekuensing berbasis nanopore, read sangat panjang (lebih dari 100 kb), portable (MinION seukuran USB), cocok untuk analisis struktural dan epigenetik.</li>
+                        <li><strong>PacBio HiFi:</strong> Kombinasi read panjang dengan akurasi tinggi melalui circular consensus sequencing <a href="#" class="innote" data-ref="Goodwin, S., McPherson, J. D., &amp; McCombie, W. R. (2016). Coming of age: ten years of next-generation sequencing technologies. Nature Reviews Genetics, 17(6), 333-351.">(Goodwin et al., 2016)</a>.</li>
+                    </ul>
+
+                    <h3>4. Cabang-Cabang "Omics"</h3>
+                    <ul>
+                        <li><strong>Genomik:</strong> Studi keseluruhan genom organisme (DNA).</li>
+                        <li><strong>Transkriptomik:</strong> Analisis seluruh transkrip RNA (ekspresi gen) dalam sel/jaringan pada waktu tertentu.</li>
+                        <li><strong>Proteomik:</strong> Studi keseluruhan protein yang diekspresikan (proteome), termasuk struktur 3D dan interaksi protein-protein.</li>
+                        <li><strong>Metabolomik:</strong> Analisis seluruh metabolit kecil dalam sel (profil metabolisme).</li>
+                        <li><strong>Epigenomik:</strong> Studi modifikasi epigenetik (metilasi DNA, modifikasi histon) yang mengatur ekspresi gen tanpa mengubah sekuens DNA.</li>
+                    </ul>
+
+                    <h3>5. Peran AI &amp; Machine Learning</h3>
+                    <p>AI semakin integral dalam bioinformatika: AlphaFold (DeepMind) mampu memprediksi struktur 3D protein dari sekuens asam amino dengan akurasi mendekati eksperimen kristalografi sinar-X. Ini membuka pintu untuk desain obat rasional dan pemahaman mekanisme penyakit pada level molekuler <a href="#" class="innote" data-ref="Jumper, J., et al. (2021). Highly accurate protein structure prediction with AlphaFold. Nature, 596(7873), 583-589.">(Jumper et al., 2021)</a>.</p>
+                `,
+                stats: { eco: 90, sus: 90, eth: 15 },
+                tags: ['NGS', 'Genomik', 'Bioinformatika', 'AlphaFold', 'Proteomik', 'Big Data']
+            },
+            // ===== TOPIK BARU #15 — Terapi Gen Anemia Sel Sabit =====
+            {
+                id: '15',
+                cat: 'BIOTEKNOLOGI KESEHATAN (STUDI KASUS)',
+                title: 'Terapi Gen Anemia Sel Sabit',
+                subtitle: 'Penyembuhan penyakit genetik monogenik melalui CRISPR dan vektor viral.',
+                icon: '🩸',
+                content: `
+                    <h3>1. Tentang Anemia Sel Sabit (Sickle Cell Disease)</h3>
+                    <p>Anemia sel sabit (SCD) adalah penyakit genetik autosomal resesif yang disebabkan oleh mutasi titik tunggal pada gen <em>HBB</em> (kromosom 11). Mutasi ini mengubah asam amino ke-6 rantai beta-globin dari glutamic acid (GAG) menjadi valine (GTG), menghasilkan hemoglobin abnormal yang disebut HbS. Dalam kondisi kadar oksigen rendah, HbS berpolimerisasi membentuk serat kaku yang mendeformasi eritrosit menjadi bentuk sabit (sickle) <a href="#" class="innote" data-ref="Rees, D. C., Williams, T. N., &amp; Gladwin, M. T. (2010). Sickle-cell disease. The Lancet, 376(9757), 2018-2031.">(Rees et al., 2010)</a>.</p>
+                    <p>Eritrosit berbentuk sabit menyebabkan oklusi vaskular (penyumbatan pembuluh darah kecil), krisis nyeri hebat, anemia hemolitik kronis, kerusakan organ progresif, dan harapan hidup yang lebih pendek. SCD mempengaruhi ~20 juta orang di seluruh dunia, terutama populasi di Afrika, India, dan Mediterania.</p>
+
+                    <h3>2. Pendekatan Terapi Gen: Gene Addition (Lyfgenia)</h3>
+                    <p>Pendekatan pertama menggunakan strategi penambahan gen fungsional:</p>
+                    <ul>
+                        <li>Sel punca hematopoietik (CD34+) pasien diambil melalui leukapheresis.</li>
+                        <li>Vektor lentiviral (turunan HIV yang dimodifikasi) membawa gen beta-A-T87Q-globin — versi termodifikasi beta-globin yang memiliki sifat anti-sickling.</li>
+                        <li>Gen terintegrasi ke genom sel punca dan diekspresikan setelah sel diinfuskan kembali ke pasien.</li>
+                        <li>Sel punca yang telah dimodifikasi memproduksi hemoglobin fungsional (HbAT87Q) yang mencegah polimerisasi HbS <a href="#" class="innote" data-ref="Kanter, J., et al. (2022). Biologic and clinical efficacy of LentiGlobin for sickle cell disease. New England Journal of Medicine, 386(7), 617-628.">(Kanter et al., 2022)</a>.</li>
+                    </ul>
+
+                    <h3>3. Pendekatan Terapi Gen: Gene Editing — CRISPR (Casgevy)</h3>
+                    <p>Pendekatan kedua yang lebih inovatif menggunakan CRISPR-Cas9:</p>
+                    <ul>
+                        <li>Target: enhancer eritroid gen <em>BCL11A</em> — faktor transkripsi represor yang membungkam ekspresi hemoglobin fetal (HbF) setelah kelahiran.</li>
+                        <li>CRISPR-Cas9 memotong dan mendisrupsi enhancer <em>BCL11A</em> di sel punca hematopoietik pasien secara ex vivo.</li>
+                        <li>Dengan <em>BCL11A</em> yang dibungkam, gen gamma-globin diaktifkan kembali, menghasilkan peningkatan kadar HbF.</li>
+                        <li>HbF secara alami menghambat polimerisasi HbS, mencegah pembentukan sel sabit dan gejala klinis SCD.</li>
+                    </ul>
+                    <p>Casgevy (exagamglogene autotemcel) disetujui FDA pada Desember 2023, menjadikannya terapi berbasis CRISPR pertama yang disetujui untuk penggunaan klinis di dunia <a href="#" class="innote" data-ref="Frangoul, H., et al. (2021). CRISPR-Cas9 gene editing for sickle cell disease and beta-thalassemia. New England Journal of Medicine, 384(3), 252-260.">(Frangoul et al., 2021)</a>.</p>
+
+                    <h3>4. Alur Kerja Klinis (Ex Vivo)</h3>
+                    <ul>
+                        <li><strong>Harvesting:</strong> Pengambilan sel punca CD34+ dari darah perifer pasien.</li>
+                        <li><strong>Modifikasi:</strong> Sel dimodifikasi dengan CRISPR atau lentivirus di laboratorium GMP (Good Manufacturing Practice).</li>
+                        <li><strong>Conditioning:</strong> Pasien menjalani kemoterapi myeloablative (busulfan) untuk mengosongkan sumsum tulang.</li>
+                        <li><strong>Infusi:</strong> Sel yang telah dimodifikasi diinfuskan kembali melalui IV, menempati niche sumsum tulang dan menghasilkan eritrosit sehat.</li>
+                    </ul>
+
+                    <h3>5. Tantangan Akses</h3>
+                    <p>Harga terapi gen SCD sangat tinggi (~$2,2 juta untuk Casgevy), infrastruktur medis yang kompleks, dan kebutuhan kemoterapi conditioning menjadi hambatan utama aksesibilitas, terutama di negara-negara berkembang di mana prevalensi SCD paling tinggi.</p>
+                `,
+                stats: { eco: 70, sus: 65, eth: 60 },
+                tags: ['Sickle Cell', 'CRISPR', 'Casgevy', 'HbF', 'BCL11A', 'Lentivirus']
+            },
+            // ===== TOPIK BARU #16 — Bioetika Rekayasa Genetika =====
+            {
+                id: '16',
+                cat: 'BIOETIKA &amp; REGULASI',
+                title: 'Bioetika Rekayasa Genetika',
+                subtitle: 'Dilema moral, regulasi, dan masa depan modifikasi genetik manusia.',
+                icon: '⚖️',
+                content: `
+                    <h3>1. Mengapa Bioetika Penting?</h3>
+                    <p>Kemajuan pesat bioteknologi genetika — dari CRISPR, terapi gen, hingga kloning — membawa pertanyaan etis fundamental yang tidak dapat dijawab oleh sains semata. Bioetika menjadi jembatan antara kemampuan teknologi dan tanggung jawab moral masyarakat. Empat prinsip bioetika klasik yang relevan meliputi: <strong>autonomy</strong> (hak individu), <strong>beneficence</strong> (kebaikan), <strong>non-maleficence</strong> (tidak merugikan), dan <strong>justice</strong> (keadilan) <a href="#" class="innote" data-ref="Beauchamp, T. L. &amp; Childress, J. F. (2019). Principles of Biomedical Ethics. 8th Ed. Oxford University Press.">(Beauchamp &amp; Childress, 2019)</a>.</p>
+
+                    <h3>2. Kasus "Bayi CRISPR" — He Jiankui (2018)</h3>
+                    <p>Pada November 2018, ilmuwan China He Jiankui mengejutkan dunia dengan mengklaim telah mengedit gen CCR5 pada embrio manusia menggunakan CRISPR-Cas9, menghasilkan kelahiran bayi kembar (Lulu dan Nana) yang diklaim tahan terhadap infeksi HIV. Eksperimen ini dikecam keras oleh komunitas ilmiah global karena:</p>
+                    <ul>
+                        <li><strong>Pengeditan Germline:</strong> Perubahan dilakukan pada embrio, sehingga modifikasi genetik akan diwariskan ke semua generasi berikutnya — konsekuensi yang tidak dapat diprediksi.</li>
+                        <li><strong>Prematur Secara Ilmiah:</strong> Risiko mosaicism (pengeditan tidak merata) dan efek off-target belum dapat dieliminasi secara memadai.</li>
+                        <li><strong>Pelanggaran Informed Consent:</strong> Orang tua calon bayi tidak mendapat informasi risiko yang memadai.</li>
+                        <li><strong>Tidak Diperlukan Secara Medis:</strong> Tersedia metode pencegahan HIV yang lebih aman dan efektif.</li>
+                    </ul>
+                    <p>He Jiankui dijatuhi hukuman 3 tahun penjara oleh pengadilan China <a href="#" class="innote" data-ref="Lander, E. S., et al. (2019). Adopt a moratorium on heritable genome editing. Nature, 567(7747), 165-168.">(Lander et al., 2019)</a>.</p>
+
+                    <h3>3. Pengeditan Somatik vs Germline</h3>
+                    <ul>
+                        <li><strong>Somatik (Diizinkan dengan regulasi):</strong> Modifikasi gen pada sel tubuh non-reproduktif pasien. Perubahan tidak diwariskan. Contoh: terapi Casgevy untuk anemia sel sabit — diterima secara luas karena manfaatnya jelas dan risikonya terbatas pada individu.</li>
+                        <li><strong>Germline (Moratorium global):</strong> Modifikasi gen pada sel reproduktif (sperma, ovum) atau embrio. Perubahan diwariskan ke generasi berikutnya. Saat ini, konsensus ilmiah dan regulasi internasional melarang pengeditan germline untuk tujuan reproduksi karena ketidakpastian dampak jangka panjang.</li>
+                    </ul>
+
+                    <h3>4. Kekhawatiran "Designer Babies"</h3>
+                    <p>Kemampuan pengeditan genom membuka kemungkinan "enhancement" — modifikasi genetik bukan untuk menyembuhkan penyakit tetapi untuk meningkatkan sifat (kecerdasan, penampilan fisik, kekuatan). Ini menimbulkan kekhawatiran:</p>
+                    <ul>
+                        <li><strong>Ketidakadilan Sosial:</strong> Jika hanya orang kaya yang mampu mengakses, akan tercipta kesenjangan biologis permanen antarkelas sosial.</li>
+                        <li><strong>Erosi Keberagaman:</strong> Standarisasi sifat manusia dapat mengurangi keberagaman genetik yang merupakan kekuatan adaptif spesies.</li>
+                        <li><strong>Pergeseran Norma:</strong> Apa yang hari ini dianggap "pilihan" mungkin besok menjadi "kewajiban" sosial bagi orang tua.</li>
+                    </ul>
+
+                    <h3>5. Kerangka Regulasi Global</h3>
+                    <ul>
+                        <li><strong>WHO:</strong> Membentuk Expert Advisory Committee on Human Genome Editing (2019) yang merekomendasikan registry global untuk semua riset pengeditan genom manusia.</li>
+                        <li><strong>UNESCO:</strong> Universal Declaration on the Human Genome and Human Rights (1997) menyatakan genom manusia adalah "warisan kemanusiaan" yang harus dilindungi.</li>
+                        <li><strong>Convention on Biological Diversity (CBD):</strong> Protokol Cartagena mengatur pergerakan lintas batas organisme hasil modifikasi genetik (LMO) <a href="#" class="innote" data-ref="National Academies of Sciences. (2017). Human Genome Editing: Science, Ethics, and Governance. The National Academies Press.">(NAS, 2017)</a>.</li>
+                    </ul>
+                `,
+                stats: { eco: 30, sus: 50, eth: 100 },
+                tags: ['Bioetika', 'Germline', 'He Jiankui', 'Regulasi', 'Designer Baby', 'UNESCO']
             }
         ];
 
-        // --- LOGIC ---
-        function init() {
-            const menu = document.getElementById('menu-container');
+        // --- ADVANCED STATE & LOGIC ---
+        let currentIndex = 0;
+        let currentCategory = 'all';
+        let searchQuery = '';
 
-            database.forEach((item, index) => {
-                const btn = document.createElement('button');
-                btn.className = `nav-btn ${index === 0 ? 'active' : ''}`;
-                btn.id = `btn-${index}`;
-                btn.innerHTML = `<span class="font-bold mr-2">${item.id}.</span> ${item.title}`;
-                btn.onclick = () => loadContent(index);
-                menu.appendChild(btn);
-            });
+        function init() {
+            // Render menu based on current filters
+            renderMenu();
+
+            // Set up search and filter events
+            setupFilterEvents();
+
+            // Set up drawer toggle events
+            setupDrawerEvents();
+
+            // Set up modals (tutorial & citations)
+            setupModalEvents();
+
+            // Set up navigation buttons
+            setupNavigationEvents();
 
             // Load first item
             loadContent(0);
+
+            // Auto show tutorial on first visit
+            try {
+                if (!localStorage.getItem('bioarchive_tutorial_viewed')) {
+                    setTimeout(() => openTutorialModal(), 600);
+                }
+            } catch (e) {
+                // Ignore localStorage errors
+            }
         }
 
+        // Render the sidebar menu with search and category filtering
+        function renderMenu() {
+            const menu = document.getElementById('menu-container');
+            menu.innerHTML = '';
+
+            const filteredData = database.map((item, originalIndex) => ({ ...item, originalIndex }))
+                .filter(item => {
+                    // Category filter
+                    const matchesCategory = currentCategory === 'all' || 
+                        item.cat.toUpperCase().includes(currentCategory.toUpperCase());
+                    
+                    // Search query filter
+                    const matchesQuery = !searchQuery || 
+                        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        item.subtitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        item.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()));
+
+                    return matchesCategory && matchesQuery;
+                });
+
+            // Update badge count
+            const badge = document.getElementById('topic-count-badge');
+            if (badge) {
+                badge.innerText = `${filteredData.length} Modul`;
+            }
+
+            if (filteredData.length === 0) {
+                const emptyMsg = document.createElement('div');
+                emptyMsg.className = 'p-4 text-center text-xs font-mono text-slate-500 bg-slate-900/40 rounded-xl border border-slate-800/80 my-2';
+                emptyMsg.innerHTML = '<span>🔍 Tidak ada topik yang cocok.<br><button id="btn-reset-filters" class="mt-2 px-2.5 py-1 rounded bg-blue-600/30 text-blue-300 hover:bg-blue-600/50 text-[11px] transition">Reset Filter</button></span>';
+                menu.appendChild(emptyMsg);
+                document.getElementById('btn-reset-filters')?.addEventListener('click', () => {
+                    document.getElementById('topic-search').value = '';
+                    searchQuery = '';
+                    currentCategory = 'all';
+                    document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+                    document.querySelector('.cat-chip[data-cat="all"]')?.classList.add('active');
+                    renderMenu();
+                });
+                return;
+            }
+
+            filteredData.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = `nav-btn ${item.originalIndex === currentIndex ? 'active' : ''}`;
+                btn.id = `btn-${item.originalIndex}`;
+                btn.innerHTML = `
+                    <span class="font-bold mr-2 text-blue-400 font-mono shrink-0">${item.id}.</span> 
+                    <span class="truncate flex-1 text-left">${item.title}</span>
+                `;
+                btn.onclick = () => {
+                    loadContent(item.originalIndex);
+                    closeDrawer(); // Auto close on mobile
+                };
+                menu.appendChild(btn);
+            });
+        }
+
+        // Set up search and category chip listeners
+        function setupFilterEvents() {
+            const searchInput = document.getElementById('topic-search');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    searchQuery = e.target.value.trim();
+                    renderMenu();
+                });
+            }
+
+            const chips = document.querySelectorAll('.cat-chip');
+            chips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    chips.forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    currentCategory = chip.getAttribute('data-cat') || 'all';
+                    renderMenu();
+                });
+            });
+        }
+
+        // Set up mobile drawer open / close handlers
+        function setupDrawerEvents() {
+            const toggleBtn = document.getElementById('mobile-drawer-toggle');
+            const closeBtn = document.getElementById('btn-close-drawer');
+            const backdrop = document.getElementById('mobile-drawer-backdrop');
+            const floatingTopicsBtn = document.getElementById('floating-btn-topics');
+
+            if (toggleBtn) toggleBtn.addEventListener('click', openDrawer);
+            if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+            if (backdrop) backdrop.addEventListener('click', closeDrawer);
+            if (floatingTopicsBtn) floatingTopicsBtn.addEventListener('click', openDrawer);
+        }
+
+        function openDrawer() {
+            const drawer = document.getElementById('sidebar-drawer');
+            const backdrop = document.getElementById('mobile-drawer-backdrop');
+            if (!drawer || !backdrop) return;
+
+            drawer.classList.remove('-translate-x-full');
+            backdrop.classList.remove('hidden', 'pointer-events-none');
+            setTimeout(() => {
+                backdrop.classList.remove('opacity-0');
+                backdrop.classList.add('opacity-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDrawer() {
+            const drawer = document.getElementById('sidebar-drawer');
+            const backdrop = document.getElementById('mobile-drawer-backdrop');
+            if (!drawer || !backdrop) return;
+
+            drawer.classList.add('-translate-x-full');
+            backdrop.classList.remove('opacity-100');
+            backdrop.classList.add('opacity-0');
+            setTimeout(() => {
+                backdrop.classList.add('hidden', 'pointer-events-none');
+            }, 300);
+            document.body.style.overflow = '';
+        }
+
+        // Load Topic Content by database index
         function loadContent(index) {
+            if (index < 0 || index >= database.length) return;
+            currentIndex = index;
             const data = database[index];
 
-            // Update Active Menu
+            // Update Active Menu item
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`btn-${index}`).classList.add('active');
+            const activeBtn = document.getElementById(`btn-${index}`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+                activeBtn.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
 
             // Show Container
             document.getElementById('article-container').classList.remove('hidden');
 
-            // Update Header
+            // Update Header & Hologram Info
             document.getElementById('display-id').innerText = data.id;
+            const quickCurrentIdx = document.getElementById('quick-current-idx');
+            if (quickCurrentIdx) quickCurrentIdx.innerText = data.id;
+
             document.getElementById('display-cat').innerText = data.cat;
             document.getElementById('display-title').innerText = data.title;
             document.getElementById('display-subtitle').innerText = data.subtitle;
             document.getElementById('display-icon').innerText = data.icon;
 
-            // Update Body (With simple fade animation reset)
+            // Update Body with subtle fade animation
             const body = document.getElementById('display-body');
             body.style.opacity = '0';
             setTimeout(() => {
                 body.innerHTML = data.content;
                 body.style.opacity = '1';
-                body.style.transition = 'opacity 0.5s ease-in';
-            }, 100);
+                body.style.transition = 'opacity 0.4s ease-in';
+                // Attach click listeners to innotes
+                attachInnoteListeners();
+            }, 80);
 
             // Update Stats
             updateBar('bar-eco', 'stat-eco', data.stats.eco);
@@ -609,21 +1345,305 @@
             const tagsContainer = document.getElementById('display-tags');
             tagsContainer.innerHTML = '';
             data.tags.forEach(tag => {
-                tagsContainer.innerHTML += `<span class="px-3 py-1 rounded-full border border-slate-700 bg-slate-800/50 text-xs text-blue-400 font-mono hover:border-blue-500 transition cursor-default">#${tag}</span>`;
+                const tagSpan = document.createElement('span');
+                tagSpan.className = 'px-2.5 py-1 rounded-full border border-slate-700 bg-slate-800/60 text-xs text-blue-400 font-mono hover:border-blue-500 transition cursor-pointer select-none';
+                tagSpan.innerText = `#${tag}`;
+                tagSpan.onclick = () => {
+                    const searchInput = document.getElementById('topic-search');
+                    if (searchInput) {
+                        searchInput.value = tag;
+                        searchQuery = tag;
+                        renderMenu();
+                        openDrawer();
+                    }
+                };
+                tagsContainer.appendChild(tagSpan);
             });
+
+            // Update Previous & Next Topic Nav Buttons
+            updateNavButtons();
+
+            // Smooth scroll to top of content viewer
+            const contentViewer = document.getElementById('content-viewer');
+            if (contentViewer) {
+                contentViewer.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
 
         function updateBar(barId, textId, value) {
-            document.getElementById(textId).innerText = value + '%';
+            const textElem = document.getElementById(textId);
+            if (textElem) textElem.innerText = value + '%';
             const bar = document.getElementById(barId);
-            bar.style.width = '0%';
-            setTimeout(() => bar.style.width = value + '%', 200);
+            if (bar) {
+                bar.style.width = '0%';
+                setTimeout(() => bar.style.width = value + '%', 150);
+            }
         }
 
-        // Run Init
-        window.onload = init;
+        // Update Prev / Next topic navigation
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('btn-prev-topic');
+            const nextBtn = document.getElementById('btn-next-topic');
+            const prevTitle = document.getElementById('prev-topic-title');
+            const nextTitle = document.getElementById('next-topic-title');
 
+            const hasPrev = currentIndex > 0;
+            const hasNext = currentIndex < database.length - 1;
+
+            if (prevBtn) {
+                prevBtn.style.opacity = hasPrev ? '1' : '0.4';
+                prevBtn.style.pointerEvents = hasPrev ? 'auto' : 'none';
+            }
+            if (nextBtn) {
+                nextBtn.style.opacity = hasNext ? '1' : '0.4';
+                nextBtn.style.pointerEvents = hasNext ? 'auto' : 'none';
+            }
+
+            if (prevTitle) {
+                prevTitle.innerText = hasPrev ? `${database[currentIndex - 1].id}. ${database[currentIndex - 1].title}` : 'Awal Arsip';
+            }
+            if (nextTitle) {
+                nextTitle.innerText = hasNext ? `${database[currentIndex + 1].id}. ${database[currentIndex + 1].title}` : 'Akhir Arsip';
+            }
+        }
+
+        function setupNavigationEvents() {
+            const prevBtn = document.getElementById('btn-prev-topic');
+            const nextBtn = document.getElementById('btn-next-topic');
+            const floatPrev = document.getElementById('floating-btn-prev');
+            const floatNext = document.getElementById('floating-btn-next');
+
+            const goPrev = () => {
+                if (currentIndex > 0) loadContent(currentIndex - 1);
+            };
+            const goNext = () => {
+                if (currentIndex < database.length - 1) loadContent(currentIndex + 1);
+            };
+
+            if (prevBtn) prevBtn.addEventListener('click', goPrev);
+            if (nextBtn) nextBtn.addEventListener('click', goNext);
+            if (floatPrev) floatPrev.addEventListener('click', goPrev);
+            if (floatNext) floatNext.addEventListener('click', goNext);
+
+            // Desktop Keyboard Shortcuts
+            window.addEventListener('keydown', (e) => {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+                if (e.key === 'ArrowLeft') goPrev();
+                if (e.key === 'ArrowRight') goNext();
+                if (e.key === 'Escape') {
+                    closeDrawer();
+                    closeCitationModal();
+                    closeTutorialModal();
+                }
+            });
+        }
+
+        // Attach touch and click handlers to innotes
+        function attachInnoteListeners() {
+            const innotes = document.querySelectorAll('.innote');
+            innotes.forEach(note => {
+                note.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const refText = note.getAttribute('data-ref') || note.innerText;
+                    showCitationModal(refText);
+                });
+            });
+        }
+
+        // Citation Modal Handler
+        function showCitationModal(refText) {
+            const modal = document.getElementById('citation-modal');
+            const textElem = document.getElementById('citation-modal-text');
+            const card = document.getElementById('citation-dialog-card');
+            if (!modal || !textElem) return;
+
+            textElem.innerText = refText;
+            modal.classList.remove('hidden', 'pointer-events-none');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+                if (card) card.classList.remove('translate-y-6');
+            }, 10);
+        }
+
+        function closeCitationModal() {
+            const modal = document.getElementById('citation-modal');
+            const card = document.getElementById('citation-dialog-card');
+            if (!modal) return;
+
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            if (card) card.classList.add('translate-y-6');
+            setTimeout(() => {
+                modal.classList.add('hidden', 'pointer-events-none');
+            }, 200);
+        }
+
+        // Tutorial Modal Handler
+        function openTutorialModal() {
+            const modal = document.getElementById('tutorial-modal');
+            const card = document.getElementById('tutorial-dialog-card');
+            if (!modal) return;
+
+            modal.classList.remove('hidden', 'pointer-events-none');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+                if (card) {
+                    card.classList.remove('scale-95');
+                    card.classList.add('scale-100');
+                }
+            }, 10);
+        }
+
+        function closeTutorialModal() {
+            const modal = document.getElementById('tutorial-modal');
+            const card = document.getElementById('tutorial-dialog-card');
+            if (!modal) return;
+
+            try {
+                localStorage.setItem('bioarchive_tutorial_viewed', 'true');
+            } catch (e) {}
+
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            if (card) {
+                card.classList.remove('scale-100');
+                card.classList.add('scale-95');
+            }
+            setTimeout(() => {
+                modal.classList.add('hidden', 'pointer-events-none');
+            }, 200);
+        }
+
+        function setupModalEvents() {
+            // Tutorial triggers
+            const btnTutorialHeader = document.getElementById('btn-open-tutorial');
+            const btnTutorialSidebar = document.getElementById('sidebar-btn-tutorial');
+            const btnTutorialFloating = document.getElementById('floating-btn-guide');
+            const btnCloseTutorial = document.getElementById('btn-close-tutorial');
+            const btnStartExplore = document.getElementById('btn-start-explore');
+            const tutorialModal = document.getElementById('tutorial-modal');
+
+            if (btnTutorialHeader) btnTutorialHeader.addEventListener('click', openTutorialModal);
+            if (btnTutorialSidebar) btnTutorialSidebar.addEventListener('click', openTutorialModal);
+            if (btnTutorialFloating) btnTutorialFloating.addEventListener('click', openTutorialModal);
+            if (btnCloseTutorial) btnCloseTutorial.addEventListener('click', closeTutorialModal);
+            if (btnStartExplore) btnStartExplore.addEventListener('click', closeTutorialModal);
+            if (tutorialModal) {
+                tutorialModal.addEventListener('click', (e) => {
+                    if (e.target === tutorialModal) closeTutorialModal();
+                });
+            }
+
+            // Citation triggers
+            const btnCloseCitation = document.getElementById('btn-close-citation');
+            const btnDismissCitation = document.getElementById('btn-dismiss-citation');
+            const citationModal = document.getElementById('citation-modal');
+
+            if (btnCloseCitation) btnCloseCitation.addEventListener('click', closeCitationModal);
+            if (btnDismissCitation) btnDismissCitation.addEventListener('click', closeCitationModal);
+            if (citationModal) {
+                citationModal.addEventListener('click', (e) => {
+                    if (e.target === citationModal) closeCitationModal();
+                });
+            }
+        }
+
+        // Run Initialization
+        window.addEventListener('DOMContentLoaded', init);
     </script>
+
+    <!-- Floating Mobile Quick Action Bar (Visible on mobile only) -->
+    <div id="mobile-quick-bar" class="md:hidden fixed bottom-3 inset-x-3 z-30 flex items-center justify-between p-2 rounded-2xl bg-slate-950/90 backdrop-blur-xl border border-blue-500/30 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+        <button id="floating-btn-topics" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 border border-blue-500/40 text-xs font-mono font-semibold transition active:scale-95">
+            <span>📚</span> <span>Topik (<span id="quick-current-idx">01</span>/16)</span>
+        </button>
+        <div class="flex items-center gap-1.5">
+            <button id="floating-btn-prev" class="p-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-mono transition active:scale-95" aria-label="Topik Sebelumnya">
+                <span>◀</span>
+            </button>
+            <button id="floating-btn-next" class="p-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-mono transition active:scale-95" aria-label="Topik Berikutnya">
+                <span>▶</span>
+            </button>
+            <button id="floating-btn-guide" class="p-2 px-2.5 rounded-xl bg-emerald-600/25 hover:bg-emerald-600/40 text-emerald-300 border border-emerald-500/40 text-xs font-mono transition active:scale-95" title="Buka Panduan Pengguna">
+                <span>💡</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Citation (Innote) Modal / Bottom Sheet -->
+    <div id="citation-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-sm hidden transition-opacity duration-200 opacity-0 pointer-events-none">
+        <div id="citation-dialog-card" class="w-full max-w-lg rounded-2xl bg-slate-900 border border-blue-500/40 p-5 shadow-[0_20px_50px_rgba(0,0,0,0.9)] transform transition-transform duration-200 translate-y-6 sm:translate-y-0">
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
+                <div class="flex items-center gap-2 text-blue-400 font-mono text-xs font-bold">
+                    <span>📖</span> <span>RUJUKAN ILMIAH &amp; SITASI</span>
+                </div>
+                <button id="btn-close-citation" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">✕</button>
+            </div>
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800/80 mb-4">
+                <p id="citation-modal-text" class="text-sm text-slate-200 leading-relaxed font-sans italic"></p>
+            </div>
+            <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <span class="text-emerald-400 flex items-center gap-1">✓ Peer-Reviewed Literature</span>
+                <button id="btn-dismiss-citation" class="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold transition active:scale-95">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Tutorial / User Guide Modal -->
+    <div id="tutorial-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/85 backdrop-blur-md hidden transition-opacity duration-200 opacity-0 pointer-events-none">
+        <div id="tutorial-dialog-card" class="w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl bg-slate-900 border border-blue-500/40 shadow-[0_25px_60px_rgba(0,0,0,0.9)] overflow-hidden transform transition-all duration-200 scale-95">
+            <!-- Header -->
+            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-800 bg-slate-950/60 shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-blue-600/30 border border-blue-400/40 flex items-center justify-center text-base">💡</div>
+                    <div>
+                        <h3 class="text-base font-bold text-white font-display tracking-wide">PANDUAN EKSPLORASI BIO-ARCHIVE</h3>
+                        <p class="text-[11px] font-mono text-blue-400">Database Pengetahuan Bioteknologi Profesional</p>
+                    </div>
+                </div>
+                <button id="btn-close-tutorial" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">✕</button>
+            </div>
+            <!-- Content Steps -->
+            <div class="p-4 sm:p-6 space-y-3.5 overflow-y-auto text-xs sm:text-sm text-slate-300">
+                <div class="flex gap-3.5 items-start p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80">
+                    <div class="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-400 font-mono font-bold flex items-center justify-center shrink-0 border border-blue-500/30 text-xs">01</div>
+                    <div>
+                        <h4 class="font-bold text-white mb-1">Navigasi Indeks &amp; Filter Topik</h4>
+                        <p class="text-slate-400 leading-relaxed text-xs">Pada perangkat seluler (HP), sentuh tombol <strong>☰ TOPIK</strong> di pojok kiri atas atau bilah navigasi bawah untuk membuka laci 16 modul bioteknologi. Saring berdasarkan kategori (Kesehatan, Pertanian, Lingkungan, Forensik, Bioetika) atau ketik pada kolom pencarian.</p>
+                    </div>
+                </div>
+                <div class="flex gap-3.5 items-start p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80">
+                    <div class="w-7 h-7 rounded-lg bg-cyan-500/20 text-cyan-400 font-mono font-bold flex items-center justify-center shrink-0 border border-cyan-500/30 text-xs">02</div>
+                    <div>
+                        <h4 class="font-bold text-white mb-1">Mekanisme Kerja Ilmiah Molekuler</h4>
+                        <p class="text-slate-400 leading-relaxed text-xs">Setiap topik menyajikan latar belakang komprehensif, skema tahapan molekuler (rekombinasi gen, enzim restriksi, ligase, CRISPR-Cas9, translasi mRNA, SCNT, dll.), serta studi kasus nyata yang valid secara ilmiah.</p>
+                    </div>
+                </div>
+                <div class="flex gap-3.5 items-start p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80">
+                    <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 font-mono font-bold flex items-center justify-center shrink-0 border border-emerald-500/30 text-xs">03</div>
+                    <div>
+                        <h4 class="font-bold text-white mb-1">Tri-Metrik Analisis Dampak</h4>
+                        <p class="text-slate-400 leading-relaxed text-xs">Evaluasi dampak bioteknologi melalui 3 indikator terukur: <strong>Economic Value</strong> (nilai ekonomis/industri), <strong>Sustainability</strong> (keberlanjutan ekologis), dan <strong>Ethical Risk</strong> (kompleksitas bioetika &amp; regulasi sosial).</p>
+                    </div>
+                </div>
+                <div class="flex gap-3.5 items-start p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80">
+                    <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-bold flex items-center justify-center shrink-0 border border-amber-500/30 text-xs">04</div>
+                    <div>
+                        <h4 class="font-bold text-white mb-1">Sitasi &amp; Validasi Literatur Akademis (Innote)</h4>
+                        <p class="text-slate-400 leading-relaxed text-xs">Sentuh atau klik teks rujukan biru bertanda <span class="text-blue-400 underline font-mono">(Campbell et al., 2020)</span> untuk menampilkan detail publikasi ilmiah jurnal rujukan internasional (*Nature*, *Science*, *NEJM*, dll.).</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer -->
+            <div class="px-5 py-4 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between shrink-0">
+                <span class="text-[11px] font-mono text-slate-500">Materi Edukasi Biologi Modern</span>
+                <button id="btn-start-explore" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs font-mono shadow-[0_0_15px_rgba(59,130,246,0.5)] transition active:scale-95">Mulai Eksplorasi →</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

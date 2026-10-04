@@ -6,6 +6,62 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📱 Solusi Total Responsivitas Mobile & Sistem Navigasi BIO-ARCHIVE (`Generator Aplikasi Bioteknologi (terbaru)/Generator Bioteknologi Profesional.html`)
+- **Penyelesaian Kendala Layout Terhimpit di Layar Seluler (*Mobile Squishing & Dual-Scroll Fix*):**
+  - Mengidentifikasi akar masalah di mana wadah pembungkus desktop menggunakan susunan fleksibel statis berdampingan (`flex flex-1 overflow-hidden`) dengan lebar tetap sidebar `<aside class="w-64">`. Pada layar ponsel cerdas (360–390px), sidebar mengambil 65% lebar layar sehingga area konten utama tertekan menjadi ~130px dengan bantalan teks `p-8` (64px) yang menyisakan hanya ~60px ruang baca.
+  - Memisahkan tata letak seluler dan desktop:
+    - **Mode Seluler (<768px):** Mengubah sidebar menjadi *Off-Canvas Drawer* melayang yang mulus (`fixed inset-y-0 left-0 z-50 w-72 sm:w-80 -translate-x-full md:translate-x-0 transition-transform duration-300`) dilengkapi lapisan peredup latar (*backdrop overlay* dengan efek *blur*).
+    - **Mode Desktop (≥768px):** Mempertahankan tampilan dua kolom split profesional khas database workstation.
+- **Penerapan Tombol Navigasi Seluler & Bilah Cepat Melayang (*Floating Mobile Quick Action Bar*):**
+  - Menambahkan tombol menu hamburger **`≡ TOPIK`** di header atas untuk membuka laci indeks dengan sentuhan cepat.
+  - Mengimplementasikan bilah aksi melayang (*Floating Pill Bar*) di bagian bawah layar ponsel dengan fungsi:
+    - Akses cepat daftar 16 modul `[ 📚 Topik (#01/16) ]`.
+    - Tombol navigasi bab beruntun `[ ◀ ]` dan `[ ▶ ]` tanpa perlu menggulir ke atas.
+    - Tombol panduan cepat `[ 💡 ]`.
+- **Fitur Pencarian Real-Time & Filter Kategori Tematik:**
+  - Menambahkan input pencarian interaktif di bagian atas laci indeks yang memfilter 16 topik bioteknologi secara seketika (*instant live filter*) berdasarkan judul, subjudul, dan tag ilmiah.
+  - Menambahkan filter *chips* kategori interaktif: `Semua`, `Kesehatan`, `Pertanian`, `Lingkungan`, `Forensik`, dan `Bioetika`.
+- **Solusi Interaktif Sitasi Innote Akademis di Layar Sentuh (*Mobile Touch Citation Modal*):**
+  - Mengatasi keterbatasan CSS `:hover` pada perangkat seluler di mana tooltip rujukan jurnal ilmiah sering terpotong di tepi layar (*off-screen clipping*) atau tidak dapat diketuk.
+  - Mengubah tautan rujukan ilmiah `.innote` menjadi elemen interaktif ramah sentuh (*touch target* yang diperluas dengan umpan balik visual). Saat disentuh/diklik, rujukan membuka *Bottom Sheet / Modal Sitasi* berpenampilan kaca gelap yang menampilkan informasi publikasi jurnal internasional secara penuh tanpa terpotong.
+- **Penyediaan Modal Panduan & Tutorial Pengguna (Kepatuhan Aturan #5 AGENTS.md):**
+  - Mengembangkan modal tutorial interaktif bertahap `"PANDUAN EKSPLORASI BIO-ARCHIVE"` yang menjelaskan:
+    1. Cara navigasi indeks dan penyaringan 16 modul.
+    2. Cara memahami mekanisme molekuler ilmiah.
+    3. Cara membaca *Tri-Metrics Impact Analysis* (Economic Value, Sustainability, Ethical Risk).
+    4. Cara memverifikasi literatur ilmiah melalui sitasi innote.
+  - Modal muncul secara otomatis saat kunjungan pertama dan dapat dipanggil kapan saja melalui tombol `💡 Panduan`.
+- **Navigasi Bab Bawah (*Chapter Navigation Footer*):**
+  - Menambahkan kartu navigasi bab di akhir setiap artikel (`[ ← Topik Sebelumnya ]` dan `[ Topik Selanjutnya → ]`) agar membaca dapat dilakukan secara berkesinambungan.
+- **Isolasi Keamanan CSS Viewport:**
+  - Mengaplikasikan `100dvh` pada elemen `body` untuk mengantisipasi bilah alamat dinamis peramban ponsel pintar.
+  - Menerapkan selektor aman `:not(body)` pada aturan `backdrop-filter` untuk mencegah *CSS containing block bug*.
+- **Berkas yang Diperbarui:**
+  - `Generator Aplikasi Bioteknologi (terbaru)/Generator Bioteknologi Profesional.html`
+  - `CHANGELOG.md`
+
+### 🧬 Ekspansi Basis Pengetahuan & Teori Ilmiah Bioteknologi Genetika (`Generator Aplikasi Bioteknologi (terbaru)/Generator Bioteknologi Profesional.html`)
+- **Penambahan 12 Modul Teori Baru Berbasis Literatur Ilmiah Valid & Terakreditasi:**
+  - Memperluas database ensiklopedia bioteknologi profesional dari sebelumnya 4 modul dasar menjadi **16 modul komprehensif**, terstruktur lengkap dengan mekanisme molekuler, studi kasus nyata, regulasi etika, dan sitasi akademik standar jurnal internasional:
+    1. **#05 CRISPR-Cas9 (Genome Editing):** Prinsip gRNA, Cas9 nuclease, double-strand break (DSB), perbaikan NHEJ vs HDR, motif PAM (NGG), terapi Casgevy, dan Nobel Kimia 2020 *(Jinek et al., Science 2012; Doudna & Charpentier, Science 2014; Zhang, 2019)*.
+    2. **#06 Terapi Gen (Gene Therapy):** Terapi in-vivo vs ex-vivo, sistem vektor viral (AAV, Lentivirus, Retrovirus) vs non-viral (liposom/LNP), studi kasus Luxturna dan Zolgensma *(Dunbar et al., Science 2018; High & Roncarolo, NEJM 2019)*.
+    3. **#07 Sekuensing DNA Generasi Baru (NGS):** Evolusi dari Sanger dideoxy sequencing ke Next-Generation Sequencing (Illumina SBS - sequencing by synthesis), reversible terminators, bridge amplification, dan revolusi era genomik pasca Human Genome Project *(Shendure & Ji, Nature Biotech 2008; Goodwin et al., Nature Reviews Genetics 2016)*.
+    4. **#08 Kloning Organisme & Transfer Inti Sel Somatik (SCNT):** Tahapan enukleasi ovum, transfer nukleus sel donor, aktivasi fusi listrik/kimiawi, reprogramming epigenetik, diferensiasi kloning reproduktif vs kloning terapeutik, serta studi kasus domba Dolly *(Wilmut et al., Nature 1997; Gurdon & Wilmut, Nobel Prize 2012)*.
+    5. **#09 Antibodi Monoklonal & Teknologi Hibridoma:** Fusi limfosit B teraktivasi dengan sel mieloma non-sekretorik menggunakan PEG, seleksi medium HAT (Hipoksantin-Aminopterin-Timidin), blokade jalur de novo dan pemanfaatan jalur salvage HGPRT, serta aplikasi target terapeutik onkologi *(Köhler & Milstein, Nature 1975; Bayer, 2019)*.
+    6. **#10 Tanaman Transgenik & Rekayasa Pertanian:** Mekanisme transfer gen alami plasmid Ti *Agrobacterium tumefaciens* (vir genes, T-DNA, acetosyringone) dan metode Gene Gun (Biolistik), studi kasus tanaman kapas/jagung Bt (*Bacillus thuringiensis*) berspektrum Cry toxins, serta Beras Emas (Golden Rice) kaya beta-karoten *(Gelvin, Microbiology & Molecular Biology Reviews 2003; Ye et al., Science 2000)*.
+    7. **#11 Vaksin Berbasis Asam Nukleat (mRNA & DNA):** Desain mRNA termodifikasi N1-methylpseudouridine (penemuan Katalin Karikó & Drew Weissman, Nobel Kedokteran 2023), pengemasan Lipid Nanoparticles (LNP: ionizable lipid, PEG-lipid, fosfolipid, kolesterol), proses translasi sitoplasmik antigen SARS-CoV-2 Spike protein, induksi respon imun seluler (CD8+ CTL) dan humoral (sel B) *(Karikó et al., Molecular Therapy 2008; Pardi et al., Nature Reviews Drug Discovery 2018)*.
+    8. **#12 Bioremediasi Lingkungan & Rekayasa Mikroba:** Mekanisme degradasi polutan xenobiotik hidrokarbon minyak bumi menggunakan bakteri hidrokarbonoklastik (*Pseudomonas putida* dengan plasmid superbug OCT, CAM, XYL karya Dr. A.M. Chakrabarty; *Alcanivorax borkumensis*), jalur enzimatis monooxygenase dan dioksigenase, fitoekstraksi logam berat tanaman hiperakumulator, biostimulasi dan bioaugmentasi *(Chakrabarty, US Patent 1981; Head et al., Nature Reviews Microbiology 2006)*.
+    9. **#13 Fermentasi Presisi & Biologi Sintetis:** Pemanfaatan *cellular agriculture* dan rekayasa jalur metabolik mikroba (*chassis cells: S. cerevisiae, E. coli, Pichia pastoris*) untuk biosintesis senyawa murni bernilai tinggi tanpa eksploitasi hewan/alam (contoh: artemisinin sintetis untuk malaria, hemo-protein leghemoglobin nabati, vanilin sintetik), pemodelan genom in silico *(Keasling, Nature 2012; Nielsen & Keasling, Cell 2016)*.
+    10. **#14 Sel Punca (Stem Cells) & Induksi Pluripotensi (iPSC):** Karakteristik self-renewal dan potensi diferensiasi (totipoten, pluripoten, multipoten), terobosan Yamanaka Factors (Oct4, Sox2, Klf4, c-Myc) untuk memprogram ulang fibroblas dewasa kembali ke fase pluripoten tanpa menghancurkan embrio, aplikasi organoid laboratorium dan medicina regeneratif *(Takahashi & Yamanaka, Cell 2006; Yamanaka, Nobel Kedokteran 2012)*.
+    11. **#15 Epigenetika & Modifikasi Ekspresi Gen:** Regulasi ekspresi gen tanpa mengubah sekuens primer nukleotida, mekanisme metilasi DNA pada pulau CpG oleh enzim DNMT, modifikasi ekor histon (asetilasi oleh HAT vs deasetilasi oleh HDAC), RNA non-coding (miRNA dan lncRNA) sebagai represi pasca-transkripsi, serta pengaruh pola hidup, nutrisi maternal, dan paparan lingkungan terhadap epigenom generasi *(Bird, Nature 2002; Allis & Jenuwein, Nature Reviews Genetics 2016)*.
+    12. **#16 Bioetika & Regulasi Bioteknologi Global:** Empat prinsip etika biomedis Beauchamp & Childress (Autonomy, Beneficence, Non-maleficence, Justice), perdebatan mendalam batas pengeditan somatik vs germline (insiden He Jiankui 2018), kekhawatiran fenomena komersialisasi *designer babies* dan kesenjangan biologis kasta masyarakat, serta kerangka deklarasi UNESCO 1997 dan komite regulasi WHO Human Genome Editing *(National Academies of Sciences, 2017; WHO Guidance, 2021)*.
+- **Penyelarasan Nilai Metrik Dampak & Tag Tematik:**
+  - Menetapkan metrik rasio seimbang untuk setiap modul baru: *Economic Impact* (eco), *Sustainability/Eco-Footprint* (sus), dan *Bioethical Complexity/Risk* (eth) sesuai data sosio-ekonomis literatur.
+  - Memperkaya tag filter dan kata kunci berbasis konsep ilmiah esensial untuk mempermudah eksplorasi.
+- **Berkas yang Diperbarui:**
+  - `Generator Aplikasi Bioteknologi (terbaru)/Generator Bioteknologi Profesional.html`
+  - `CHANGELOG.md`
+
 ### 📖 Perbaikan Posisi Viewport Modal Panduan & Dasar Teoretis: Simulasi Transkripsi (`simulasi-transkripsi`)
 - **Penyelesaian Bug Ruang Kosong & Modal Tersembunyi di Luar Layar (*Containing Block Bug Fix*):**
   - Mengidentifikasi akar masalah di mana selektor `[class*="bg-slate-950"]` pada `style.css` secara tidak sengaja mengenai elemen `<body>`, sehingga memberikan `backdrop-filter: blur(16px)` pada `body`.
