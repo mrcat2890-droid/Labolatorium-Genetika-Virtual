@@ -3,8 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GEN-X: Mutation Analyzer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>GEN-OS // GEN-X: Sex-Linked Heredity & Risk Engine</title>
+    <meta name="description" content="Simulasi interaktif pewarisan sifat dan penyakit terpaut kromosom seks X: Hemofilia, Buta Warna, DMD, pola criss-cross inheritance, dan papan Punnett gonosom.">
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -12,701 +15,1120 @@
             theme: {
                 extend: {
                     colors: {
-                        medical: {
-                            dark: '#0f172a',
-                            panel: '#1e293b',
-                            cyan: '#06b6d4', // Normal
-                            pink: '#ec4899', // Carrier/Female
-                            danger: '#ef4444', // Affected
-                            gold: '#f59e0b'
+                        sex: {
+                            dark: '#030712',
+                            panel: 'rgba(15, 23, 42, 0.82)',
+                            border: 'rgba(251, 113, 133, 0.25)',
+                            rose: '#fb7185',
+                            pink: '#ec4899',
+                            cyan: '#06b6d4',
+                            amber: '#f59e0b',
+                            danger: '#f43f5e',
+                            emerald: '#10b981',
+                            purple: '#a855f7'
                         }
                     },
                     fontFamily: {
-                        mono: ['JetBrains Mono', 'monospace'],
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Orbitron', 'sans-serif']
+                        mono: ['Fira Code', 'JetBrains Mono', 'Courier Prime', 'monospace'],
+                        display: ['Orbitron', 'sans-serif'],
+                        sans: ['Rajdhani', 'sans-serif']
                     },
                     animation: {
-                        'pulse-glow': 'pulseGlow 2s infinite',
-                        'float': 'float 3s ease-in-out infinite',
-                        'spin-slow': 'spin 12s linear infinite',
-                        'glitch': 'glitch 0.5s infinite',
+                        'pulse-glow': 'pulseGlow 2.5s infinite ease-in-out',
+                        'float': 'float 3.5s ease-in-out infinite'
                     },
                     keyframes: {
                         pulseGlow: {
-                            '0%, 100%': { boxShadow: '0 0 10px rgba(6, 182, 212, 0.2)' },
-                            '50%': { boxShadow: '0 0 20px rgba(6, 182, 212, 0.6)' }
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(251, 113, 133, 0.25)' },
+                            '50%': { boxShadow: '0 0 30px rgba(251, 113, 133, 0.6)' }
                         },
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-5px)' }
-                        },
-                        glitch: {
-                            '0%': { transform: 'translate(0)' },
-                            '20%': { transform: 'translate(-2px, 2px)' },
-                            '40%': { transform: 'translate(-2px, -2px)' },
-                            '60%': { transform: 'translate(2px, 2px)' },
-                            '80%': { transform: 'translate(2px, -2px)' },
-                            '100%': { transform: 'translate(0)' }
+                            '50%': { transform: 'translateY(-6px)' }
                         }
                     }
                 }
             }
         }
     </script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;700;900&family=Orbitron:wght@500;700;900&display=swap"
-        rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Orbitron:wght@600;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
     <style>
+        /* Base styles & background */
         body {
-            background-color: #050b14;
+            background-color: #030712;
             background-image:
-                linear-gradient(to right, #0f172a 1px, transparent 1px),
-                linear-gradient(to bottom, #0f172a 1px, transparent 1px);
-            background-size: 40px 40px;
-            color: #cbd5e1;
+                radial-gradient(circle at 15% 20%, rgba(251, 113, 133, 0.07) 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(6, 182, 212, 0.06) 0%, transparent 50%),
+                linear-gradient(rgba(251, 113, 133, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(251, 113, 133, 0.02) 1px, transparent 1px);
+            background-size: 100%, 100%, 36px 36px, 36px 36px;
         }
 
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 50;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            opacity: 0.35;
+        }
+
+        /* Glassmorphism Panel */
         .glass-panel {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
+        /* Chromosome Select Buttons */
         .chromo-btn {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
 
-        .chromo-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: translateX(-100%);
-            transition: 0.5s;
-        }
-
-        .chromo-btn:hover::before {
-            transform: translateX(100%);
+        .chromo-btn:hover {
+            border-color: var(--color, #fb7185);
+            color: #ffffff;
+            background: rgba(15, 23, 42, 0.6);
+            box-shadow: 0 0 12px var(--glow, rgba(251, 113, 133, 0.3));
         }
 
         .chromo-btn.active {
-            border-color: #06b6d4;
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
-            background: rgba(6, 182, 212, 0.1);
+            border-color: var(--color, #fb7185);
+            color: var(--color, #fb7185);
+            background: linear-gradient(135deg, rgba(251, 113, 133, 0.18), rgba(15, 23, 42, 0.9));
+            font-weight: 700;
+            box-shadow: 0 0 16px var(--glow, rgba(251, 113, 133, 0.4)), inset 0 0 12px var(--glow, rgba(251, 113, 133, 0.2));
+            text-shadow: 0 0 8px var(--color, #fb7185);
         }
 
         /* Ring Chart */
         .ring-chart {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            background: conic-gradient(var(--color) var(--percent), #1e293b 0);
+            background: conic-gradient(var(--color) var(--percent), rgba(30, 41, 59, 0.7) 0);
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
         }
 
         .ring-chart::after {
             content: '';
             position: absolute;
-            width: 100px;
-            height: 100px;
-            background: #0f172a;
+            width: 82px;
+            height: 82px;
+            background: #030712;
             border-radius: 50%;
         }
 
         .ring-content {
             position: relative;
             z-index: 10;
-            font-family: 'Orbitron';
+            font-family: 'Orbitron', sans-serif;
         }
 
-        /* Baby Card */
+        /* Baby F1 Cards */
         .baby-card {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s ease;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .baby-card:hover {
-            transform: translateY(-5px) scale(1.02);
+            transform: translateY(-4px) scale(1.02);
             border-color: var(--card-color);
-            box-shadow: 0 10px 30px -10px var(--card-color-glow);
+            box-shadow: 0 12px 30px -10px var(--card-color-glow);
         }
 
         .sup {
-            font-size: 0.6em;
+            font-size: 0.65em;
             vertical-align: super;
+            font-weight: 700;
         }
 
-        /* CITATION TOOLTIP STYLE */
-        .citation {
-            border-bottom: 1px dashed #06b6d4;
-            cursor: help;
-            color: #67e8f9;
-            font-weight: 600;
-            position: relative;
-            display: inline-block;
-        }
-
-        .citation:hover::after {
-            content: attr(data-ref);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #000;
-            color: #fff;
-            padding: 10px 14px;
-            font-size: 0.75rem;
-            border-radius: 8px;
-            width: 300px;
-            text-align: center;
-            z-index: 50;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
-            border: 1px solid #334155;
-            margin-bottom: 8px;
-            pointer-events: none;
-            line-height: 1.4;
-            white-space: normal;
-        }
-
-        /* --- MUTATING DNA ANIMATION --- */
+        /* Animated DNA Mutation Track */
         .dna-container {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             justify-content: center;
             align-items: center;
-            height: 80px;
-            perspective: 1000px;
+            height: 60px;
         }
 
         .dna-strand {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             animation: dna-mutate 2s infinite ease-in-out;
         }
 
-        /* Warna Awal (Cyan) berubah jadi Merah (Mutasi) di tengah animasi */
         @keyframes dna-mutate {
             0% {
-                transform: translateY(-20px) scale(0.6);
+                transform: translateY(-16px) scale(0.7);
                 background-color: #06b6d4;
-                box-shadow: 0 0 5px #06b6d4;
+                box-shadow: 0 0 6px #06b6d4;
             }
-
             50% {
-                transform: translateY(20px) scale(1.2);
-                background-color: #ef4444;
-                box-shadow: 0 0 15px #ef4444;
+                transform: translateY(16px) scale(1.2);
+                background-color: #f43f5e;
+                box-shadow: 0 0 16px #f43f5e;
             }
-
-            /* RED ALERT */
             100% {
-                transform: translateY(-20px) scale(0.6);
+                transform: translateY(-16px) scale(0.7);
                 background-color: #06b6d4;
-                box-shadow: 0 0 5px #06b6d4;
+                box-shadow: 0 0 6px #06b6d4;
             }
         }
 
-        /* Staggered Delay */
-        .dna-pair:nth-child(1) .dna-strand {
-            animation-delay: -1.4s;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
         }
-
-        .dna-pair:nth-child(2) .dna-strand {
-            animation-delay: -1.2s;
+        ::-webkit-scrollbar-track {
+            background: #090d16;
         }
-
-        .dna-pair:nth-child(3) .dna-strand {
-            animation-delay: -1.0s;
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
         }
-
-        .dna-pair:nth-child(4) .dna-strand {
-            animation-delay: -0.8s;
-        }
-
-        .dna-pair:nth-child(5) .dna-strand {
-            animation-delay: -0.6s;
-        }
-
-        .dna-pair:nth-child(6) .dna-strand {
-            animation-delay: -0.4s;
-        }
-
-        .dna-pair:nth-child(7) .dna-strand {
-            animation-delay: -0.2s;
-        }
-
-        .dna-pair:nth-child(8) .dna-strand {
-            animation-delay: 0s;
-        }
-
-        .dna-pair .strand-b {
-            animation-delay: inherit;
-            animation-direction: reverse;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #fb7185;
         }
     </style>
 </head>
 
-<body class="min-h-screen p-4 pb-20 font-sans selection:bg-medical-cyan selection:text-black">
+<body class="flex flex-col min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-rose-500/30 selection:text-rose-200 relative overflow-x-hidden">
+    <div class="scanlines"></div>
 
-    <header class="max-w-6xl mx-auto flex justify-between items-center mb-8 pt-4 border-b border-slate-800 pb-4">
+    <!-- ==================== TOP NAVIGATION HEADER ==================== -->
+    <header class="sticky top-0 z-40 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 px-4 md:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4 flex-shrink-0">
         <div class="flex items-center gap-4">
-            <div
-                class="w-12 h-12 rounded-lg bg-medical-cyan/10 border border-medical-cyan/30 flex items-center justify-center relative overflow-hidden group">
-                <div class="absolute inset-0 bg-medical-cyan/20 animate-pulse-glow"></div>
-                <span class="font-display font-bold text-2xl text-medical-cyan relative z-10">X</span>
-            </div>
-            <div>
-                <h1 class="text-3xl font-display font-bold tracking-wider text-white">GEN-<span
-                        class="text-medical-cyan">X</span></h1>
-                <p class="text-[10px] text-medical-cyan font-mono tracking-[0.2em] uppercase">Sex-Linked Heredity System
-                </p>
-            </div>
-        <div class="flex items-center gap-3">
-            <button onclick="toggleSexTutorialModal()" class="text-xs text-medical-cyan hover:text-white transition bg-cyan-950/60 hover:bg-cyan-900/80 px-3.5 py-2 rounded-lg border border-medical-cyan/40 flex items-center gap-1.5 font-medium shadow-sm">
-                <span>📖</span> Panduan Simulasi
-            </button>
-            <a href="../index.html" class="text-xs text-slate-400 hover:text-white transition bg-slate-800 px-3.5 py-2 rounded-lg border border-slate-700 flex items-center gap-1">
-                ← Beranda
+            <a href="../index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-700/80 bg-slate-900/90 hover:border-rose-400 hover:text-rose-300 text-slate-300 text-xs font-mono transition group">
+                <span class="transform group-hover:-translate-x-1 transition-transform">←</span>
+                <span>BERANDA GEN-OS</span>
             </a>
-            <div class="hidden sm:block text-right ml-2 pl-3 border-l border-slate-800">
-                <div class="text-[10px] text-slate-500 font-mono">TARGET: CHROMOSOME 23</div>
-                <div class="flex items-center justify-end gap-2 mt-0.5">
-                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    <span class="text-[10px] font-bold text-green-500">SISTEM AKTIF</span>
+            <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
+            <div class="flex items-center gap-3">
+                <div class="p-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xl">
+                    🩸
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-base md:text-lg font-display font-bold text-white tracking-wider flex items-center gap-2">
+                            GEN-X
+                        </h1>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 font-semibold tracking-wider">
+                            MODUL 04
+                        </span>
+                    </div>
+                    <p class="text-[11px] font-mono text-slate-400 tracking-wider">SEX-LINKED HEREDITY & HEMOPHILIA RISK ENGINE</p>
                 </div>
             </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Audio Toggle -->
+            <button id="btn-sound" onclick="toggleSound()" class="px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 hover:border-rose-400 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition" title="Toggle Efek Suara">
+                <span id="sound-icon">🔊</span>
+                <span class="hidden md:inline">AUDIO</span>
+            </button>
+
+            <!-- Literature Button -->
+            <button onclick="openLiteratureModal()" class="px-3 py-1.5 rounded-lg border border-purple-500/40 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-xs font-mono flex items-center gap-1.5 transition">
+                <span>📚</span>
+                <span class="hidden sm:inline">LITERATUR</span>
+            </button>
+
+            <!-- Tutorial Button -->
+            <button onclick="openTutorialModal()" class="px-3 py-1.5 rounded-lg border border-rose-500/50 bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 text-xs font-mono flex items-center gap-1.5 transition animate-pulse">
+                <span>📖</span>
+                <span>PANDUAN</span>
+            </button>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 md:p-8 space-y-6">
 
-        <div class="lg:col-span-4 space-y-6">
-
-            <div class="glass-panel rounded-2xl p-6 relative overflow-hidden">
-                <div class="absolute -top-10 -left-10 w-32 h-32 bg-medical-cyan/10 rounded-full blur-3xl"></div>
-
-                <div class="mb-8">
-                    <div class="flex justify-between items-center mb-3">
-                        <label class="text-xs font-bold text-medical-pink tracking-widest flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 2C9.243 2 7 4.243 7 7C7 9.757 9.243 12 12 12C14.757 12 17 9.757 17 7C17 4.243 14.757 2 12 2ZM12 14C9.556 14 7.426 12.87 6.083 11.13C4.195 12.596 3 14.908 3 17.5V20H21V17.5C21 14.908 19.805 12.596 17.917 11.13C16.574 12.87 14.444 14 12 14ZM11 22V24H13V22H11Z" />
-                            </svg>
-                            IBU (XX)
-                        </label>
-                        <span id="mom-status"
-                            class="text-[10px] bg-slate-800 px-2 py-1 rounded text-slate-400 font-mono">NORMAL</span>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-2">
-                        <button onclick="setMother('XX')"
-                            class="chromo-btn active w-full py-3 rounded-lg border border-slate-700 bg-slate-800/50 flex flex-col items-center gap-1"
-                            id="btn-m-norm">
-                            <span class="text-lg font-display text-white">X<span
-                                    class="sup text-medical-cyan">B</span>X<span
-                                    class="sup text-medical-cyan">B</span></span>
-                            <span class="text-[9px] text-slate-400 uppercase">Normal</span>
-                        </button>
-                        <button onclick="setMother('Carrier')"
-                            class="chromo-btn w-full py-3 rounded-lg border border-slate-700 bg-slate-800/50 flex flex-col items-center gap-1"
-                            id="btn-m-car">
-                            <span class="text-lg font-display text-white">X<span
-                                    class="sup text-medical-cyan">B</span>X<span
-                                    class="sup text-medical-danger">b</span></span>
-                            <span class="text-[9px] text-medical-gold uppercase">Carrier</span>
-                        </button>
-                        <button onclick="setMother('Sick')"
-                            class="chromo-btn w-full py-3 rounded-lg border border-slate-700 bg-slate-800/50 flex flex-col items-center gap-1"
-                            id="btn-m-sick">
-                            <span class="text-lg font-display text-white">X<span
-                                    class="sup text-medical-danger">b</span>X<span
-                                    class="sup text-medical-danger">b</span></span>
-                            <span class="text-[9px] text-medical-danger uppercase">Sakit</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex justify-between items-center mb-3">
-                        <label class="text-xs font-bold text-medical-cyan tracking-widest flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 2C9.243 2 7 4.243 7 7C7 9.757 9.243 12 12 12C14.757 12 17 9.757 17 7C17 4.243 14.757 2 12 2ZM12 14C9.556 14 7.426 12.87 6.083 11.13C4.195 12.596 3 14.908 3 17.5V20H21V17.5C21 14.908 19.805 12.596 17.917 11.13C16.574 12.87 14.444 14 12 14ZM16.5 22L18 20.5L16.5 19L15 20.5L13.5 19L12 20.5L13.5 22L12 23.5L13.5 25L15 23.5L16.5 25L18 23.5L16.5 22Z" />
-                            </svg>
-                            AYAH (XY)
-                        </label>
-                        <span id="dad-status"
-                            class="text-[10px] bg-slate-800 px-2 py-1 rounded text-slate-400 font-mono">NORMAL</span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2">
-                        <button onclick="setFather('XY')"
-                            class="chromo-btn active w-full py-3 rounded-lg border border-slate-700 bg-slate-800/50 flex flex-col items-center gap-1"
-                            id="btn-f-norm">
-                            <span class="text-lg font-display text-white">X<span
-                                    class="sup text-medical-cyan">B</span>Y</span>
-                            <span class="text-[9px] text-slate-400 uppercase">Normal</span>
-                        </button>
-                        <button onclick="setFather('Sick')"
-                            class="chromo-btn w-full py-3 rounded-lg border border-slate-700 bg-slate-800/50 flex flex-col items-center gap-1"
-                            id="btn-f-sick">
-                            <span class="text-lg font-display text-white">X<span
-                                    class="sup text-medical-danger">b</span>Y</span>
-                            <span class="text-[9px] text-medical-danger uppercase">Sakit</span>
-                        </button>
-                    </div>
-                </div>
-
-                <button onclick="analyze()"
-                    class="mt-8 w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-cyan-900/40 transition-all hover:scale-[1.02] active:scale-95 group relative overflow-hidden">
-                    <div
-                        class="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500">
-                    </div>
-                    <span class="flex items-center justify-center gap-2 font-display tracking-widest">
-                        MULAI ANALISIS <svg class="w-5 h-5 animate-bounce-slow" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                        </svg>
-                    </span>
-                </button>
-            </div>
-
-            <div id="risk-panel" class="glass-panel rounded-2xl p-6 hidden animate-float">
-                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Total Risk Assessment</h3>
-                <div class="flex items-center justify-center gap-6">
-                    <div class="text-center">
-                        <div class="ring-chart" id="ring-risk" style="--color: #ef4444; --percent: 0%;">
-                            <span class="ring-content text-xl font-bold text-white" id="risk-percent">0%</span>
+        <!-- Top Educational Banner: 3 Core Principles of Sex-Linked Inheritance -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Principle 1: Hemizigot -->
+            <div class="glass-panel rounded-xl p-4 sm:p-5 border-l-4 border-l-rose-500 relative overflow-hidden group">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold">PRINSIP 1</span>
+                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">PRIA HEMIZIGOT</span>
                         </div>
-                        <p class="text-[10px] text-slate-400 mt-2 font-mono">RISIKO SAKIT</p>
+                        <h2 class="text-sm md:text-base font-bold text-white font-sans">Kondisi Hemizigot Pria (XY)</h2>
                     </div>
-                    <div class="text-center">
-                        <div class="ring-chart" id="ring-carrier" style="--color: #f59e0b; --percent: 0%;">
-                            <span class="ring-content text-xl font-bold text-white" id="carrier-percent">0%</span>
+                    <span class="text-2xl text-rose-400 opacity-80 group-hover:scale-110 transition-transform">♂️</span>
+                </div>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                    Laki-laki hanya memiliki satu kromosom X. Karena tidak ada alel penyeimbang pada kromosom Y, satu salinan alel mutan resesif ($X^b$) langsung memunculkan fenotipe penyakit secara penuh.
+                </p>
+            </div>
+
+            <!-- Principle 2: Criss-Cross Inheritance -->
+            <div class="glass-panel rounded-xl p-4 sm:p-5 border-l-4 border-l-amber-500 relative overflow-hidden group">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">PRINSIP 2</span>
+                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">CRISS-CROSS INHERITANCE</span>
                         </div>
-                        <p class="text-[10px] text-slate-400 mt-2 font-mono">RISIKO CARRIER</p>
+                        <h2 class="text-sm md:text-base font-bold text-white font-sans">Pola Pewarisan Silang</h2>
                     </div>
+                    <span class="text-2xl text-amber-400 opacity-80 group-hover:scale-110 transition-transform">⚡</span>
                 </div>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                    Ayah penderita ($X^b Y$) <b>tidak pernah</b> mewariskan gen penyakit ke anak laki-lakinya (yang selalu menerima kromosom Y), melainkan mewariskannya ke semua anak perempuan menjadi pembawa sifat (*carrier*).
+                </p>
             </div>
 
-        </div>
-
-        <div class="lg:col-span-8 space-y-6">
-
-            <div id="loader"
-                class="glass-panel p-12 rounded-2xl hidden flex-col items-center justify-center h-full min-h-[400px]">
-                <div class="dna-container mb-6">
-                    <div class="dna-pair flex flex-col gap-4">
-                        <div class="dna-strand strand-a"></div>
-                        <div class="dna-strand strand-b"></div>
+            <!-- Principle 3: Lyonisasi / X-Inactivation -->
+            <div class="glass-panel rounded-xl p-4 sm:p-5 border-l-4 border-l-cyan-500 relative overflow-hidden group">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold">PRINSIP 3</span>
+                            <span class="text-[10px] font-mono text-slate-400 tracking-wider">LYONISASI (INAKTIVASI X)</span>
+                        </div>
+                        <h2 class="text-sm md:text-base font-bold text-white font-sans">Kompensasi Dosis Wanita</h2>
                     </div>
-                    <div class="dna-pair flex flex-col gap-4">
-                        <div class="dna-strand strand-a"></div>
-                        <div class="dna-strand strand-b"></div>
-                    </div>
-                    <div class="dna-pair flex flex-col gap-4">
-                        <div class="dna-strand strand-a"></div>
-                        <div class="dna-strand strand-b"></div>
-                    </div>
-                    <div class="dna-pair flex flex-col gap-4">
-                        <div class="dna-strand strand-a"></div>
-                        <div class="dna-strand strand-b"></div>
-                    </div>
-                    <div class="dna-pair flex flex-col gap-4">
-                        <div class="dna-strand strand-a"></div>
-                        <div class="dna-strand strand-b"></div>
-                    </div>
-                    <div class="dna-pair flex flex-col gap-4">
-                        <div class="dna-strand strand-a"></div>
-                        <div class="dna-strand strand-b"></div>
-                    </div>
-                    <div class="dna-pair flex flex-col gap-4">
-                        <div class="dna-strand strand-a"></div>
-                        <div class="dna-strand strand-b"></div>
-                    </div>
-                    <div class="dna-pair flex flex-col gap-4">
-                        <div class="dna-strand strand-a"></div>
-                        <div class="dna-strand strand-b"></div>
-                    </div>
+                    <span class="text-2xl text-cyan-400 opacity-80 group-hover:scale-110 transition-transform">♀️</span>
                 </div>
-                <h3 class="text-medical-danger font-display animate-pulse tracking-widest text-lg">MEMINDAI MUTASI...</h3>
-                <p class="text-slate-500 text-xs font-mono mt-2">Memeriksa Alel Kromosom X...</p>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                    Pada wanita ($XX$), salah satu kromosom X secara acak dipadatkan menjadi <b>Badan Barr</b> (*Barr Body*) pada awal embriogenesis. Wanita *carrier* terlindungi dari penyakit oleh sel-sel dengan alel normal aktif.
+                </p>
             </div>
+        </section>
 
-            <div id="result-container" class="hidden space-y-6">
-                <div class="glass-panel p-8 rounded-2xl border-t-4 border-medical-cyan">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-display font-bold text-xl text-white">OFFSPRING SIMULATION (F1)</h3>
-                        <div class="flex gap-3 text-[10px] uppercase font-mono">
-                            <span class="flex items-center gap-1"><span
-                                    class="w-2 h-2 rounded-full bg-medical-cyan"></span> Normal</span>
-                            <span class="flex items-center gap-1"><span
-                                    class="w-2 h-2 rounded-full bg-medical-gold"></span> Carrier</span>
-                            <span class="flex items-center gap-1"><span
-                                    class="w-2 h-2 rounded-full bg-medical-danger"></span> Sakit</span>
+        <!-- Main Workspace: Parents Setup & Output Panels -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- Left Setup Column (4 cols) -->
+            <div class="lg:col-span-4 space-y-4">
+                <div class="glass-panel rounded-2xl p-5 sm:p-6 space-y-5 border-t-2 border-t-rose-400">
+                    <div class="border-b border-slate-800 pb-3 flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] font-mono text-rose-400 uppercase tracking-widest block">// SETUP GENOTIPE INDUK</span>
+                            <h3 class="text-base sm:text-lg font-display font-bold text-white tracking-wide">Persilangan Terpaut X</h3>
+                        </div>
+                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                            P1 &rarr; F1
+                        </span>
+                    </div>
+
+                    <!-- Disease Selection -->
+                    <div>
+                        <label class="text-[10px] text-slate-400 font-mono mb-2 block uppercase tracking-wider">Pilih Sifat / Penyakit Terpaut X:</label>
+                        <div class="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-slate-900 border border-slate-800">
+                            <button onclick="setTrait('hemo')" id="btn-trait-hemo" class="tech-btn py-1.5 rounded-lg text-xs font-mono font-bold active" style="--color: #fb7185; --glow: rgba(251, 113, 133, 0.4)">
+                                Hemofilia
+                            </button>
+                            <button onclick="setTrait('color')" id="btn-trait-color" class="tech-btn py-1.5 rounded-lg text-xs font-mono font-bold" style="--color: #06b6d4; --glow: rgba(6, 182, 212, 0.4)">
+                                Buta Warna
+                            </button>
+                            <button onclick="setTrait('dmd')" id="btn-trait-dmd" class="tech-btn py-1.5 rounded-lg text-xs font-mono font-bold" style="--color: #a855f7; --glow: rgba(168, 85, 247, 0.4)">
+                                Distrofi (DMD)
+                            </button>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4" id="children-grid">
+                    <!-- Ibu (XX) Genotype -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-bold text-pink-400 tracking-wider flex items-center gap-1.5 font-mono">
+                                <span>♀</span> IBU (MATERNAL XX)
+                            </label>
+                            <span id="mom-status" class="text-[10px] bg-slate-900 px-2 py-0.5 rounded text-cyan-300 font-mono border border-cyan-500/30 font-bold">
+                                NORMAL
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="setMother('XX')" class="chromo-btn active w-full py-2.5 rounded-xl flex flex-col items-center gap-0.5" id="btn-m-norm" style="--color: #06b6d4; --glow: rgba(6, 182, 212, 0.4)">
+                                <span class="text-sm font-display text-white" id="label-m-norm">X<sup>B</sup>X<sup>B</sup></span>
+                                <span class="text-[9px] text-slate-400 font-mono uppercase">Normal</span>
+                            </button>
+                            <button onclick="setMother('Carrier')" class="chromo-btn w-full py-2.5 rounded-xl flex flex-col items-center gap-0.5" id="btn-m-car" style="--color: #f59e0b; --glow: rgba(245, 158, 11, 0.4)">
+                                <span class="text-sm font-display text-white" id="label-m-car">X<sup>B</sup>X<sup>b</sup></span>
+                                <span class="text-[9px] text-amber-400 font-mono uppercase font-bold">Carrier</span>
+                            </button>
+                            <button onclick="setMother('Sick')" class="chromo-btn w-full py-2.5 rounded-xl flex flex-col items-center gap-0.5" id="btn-m-sick" style="--color: #f43f5e; --glow: rgba(244, 63, 94, 0.4)">
+                                <span class="text-sm font-display text-white" id="label-m-sick">X<sup>b</sup>X<sup>b</sup></span>
+                                <span class="text-[9px] text-rose-400 font-mono uppercase font-bold">Penderita</span>
+                            </button>
+                        </div>
                     </div>
+
+                    <!-- Ayah (XY) Genotype -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-bold text-cyan-400 tracking-wider flex items-center gap-1.5 font-mono">
+                                <span>♂</span> AYAH (PATERNAL XY)
+                            </label>
+                            <span id="dad-status" class="text-[10px] bg-slate-900 px-2 py-0.5 rounded text-cyan-300 font-mono border border-cyan-500/30 font-bold">
+                                NORMAL
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="setFather('XY')" class="chromo-btn active w-full py-2.5 rounded-xl flex flex-col items-center gap-0.5" id="btn-f-norm" style="--color: #06b6d4; --glow: rgba(6, 182, 212, 0.4)">
+                                <span class="text-sm font-display text-white" id="label-f-norm">X<sup>B</sup>Y</span>
+                                <span class="text-[9px] text-slate-400 font-mono uppercase">Normal</span>
+                            </button>
+                            <button onclick="setFather('Sick')" class="chromo-btn w-full py-2.5 rounded-xl flex flex-col items-center gap-0.5" id="btn-f-sick" style="--color: #f43f5e; --glow: rgba(244, 63, 94, 0.4)">
+                                <span class="text-sm font-display text-white" id="label-f-sick">X<sup>b</sup>Y</span>
+                                <span class="text-[9px] text-rose-400 font-mono uppercase font-bold">Penderita</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Analysis Trigger Button -->
+                    <button onclick="analyze()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-400 hover:to-pink-500 text-slate-950 font-display font-bold text-sm tracking-widest transition shadow-lg shadow-rose-500/25 active:scale-95 flex items-center justify-center gap-2">
+                        <span>⚡</span>
+                        <span>SIMULASI PERSILANGAN & RISIKO</span>
+                    </button>
                 </div>
 
-                <div class="glass-panel p-8 rounded-2xl">
-                    <h3 class="font-bold text-lg text-medical-cyan mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                            </path>
-                        </svg>
-                        MEDICAL GENETIC REPORT
-                    </h3>
-                    <div id="report-text"
-                        class="prose prose-invert max-w-none text-slate-300 text-sm leading-7 text-justify font-sans">
+                <!-- Total Risk Telemetry Gauge -->
+                <div id="risk-panel" class="glass-panel rounded-2xl p-5 space-y-4 border-l-4 border-l-rose-500 transition-all">
+                    <div class="border-b border-slate-800 pb-2 flex items-center justify-between">
+                        <span class="text-[10px] font-mono text-slate-400 tracking-wider uppercase">KALKULASI RISIKO F1</span>
+                        <span class="text-[10px] font-mono text-rose-400 font-bold">MENDELIAN SEX-LINKED</span>
                     </div>
-                    <div class="mt-6 pt-4 border-t border-slate-700 text-[10px] text-slate-500 font-mono">
-                        REFERENCES: CAMPBELL BIOLOGY (12TH ED), GENETICS IN MEDICINE (THOMPSON & THOMPSON).
+
+                    <div class="flex items-center justify-around gap-2 pt-1">
+                        <div class="text-center">
+                            <div class="ring-chart mx-auto" id="ring-risk" style="--color: #f43f5e; --percent: 0%;">
+                                <span class="ring-content text-lg font-bold text-white" id="risk-percent">0%</span>
+                            </div>
+                            <p class="text-[10px] text-rose-400 mt-2 font-mono font-bold">RISIKO SAKIT</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="ring-chart mx-auto" id="ring-carrier" style="--color: #f59e0b; --percent: 0%;">
+                                <span class="ring-content text-lg font-bold text-white" id="carrier-percent">0%</span>
+                            </div>
+                            <p class="text-[10px] text-amber-400 mt-2 font-mono font-bold">RISIKO CARRIER</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/80 text-[11px] font-mono">
+                        <div class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-center">
+                            <span class="text-slate-400 block text-[9px]">ANAK LAKI-LAKI SAKIT</span>
+                            <span id="risk-male-sick" class="text-white font-bold text-xs mt-0.5 block">0%</span>
+                        </div>
+                        <div class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-center">
+                            <span class="text-slate-400 block text-[9px]">ANAK PEREMPUAN CARRIER</span>
+                            <span id="risk-female-car" class="text-white font-bold text-xs mt-0.5 block">0%</span>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Right Results Column (8 cols) -->
+            <div class="lg:col-span-8 space-y-4">
+
+                <!-- Loading State Overlay -->
+                <div id="loader" class="glass-panel p-10 rounded-2xl hidden flex-col items-center justify-center min-h-[360px] space-y-4">
+                    <div class="dna-container mb-2">
+                        <div class="dna-strand" style="animation-delay: -1.4s;"></div>
+                        <div class="dna-strand" style="animation-delay: -1.1s;"></div>
+                        <div class="dna-strand" style="animation-delay: -0.8s;"></div>
+                        <div class="dna-strand" style="animation-delay: -0.5s;"></div>
+                        <div class="dna-strand" style="animation-delay: -0.2s;"></div>
+                        <div class="dna-strand" style="animation-delay: 0.1s;"></div>
+                        <div class="dna-strand" style="animation-delay: 0.4s;"></div>
+                    </div>
+                    <div class="text-rose-400 font-display tracking-widest text-sm font-bold animate-pulse">
+                        SEGREGASI KROMOSOM MEIOSIS...
+                    </div>
+                    <p class="text-slate-500 text-xs font-mono">Menghitung Probabilitas Fertilisasi Gamet X & Y...</p>
+                </div>
+
+                <!-- Simulation Output -->
+                <div id="result-container" class="space-y-4">
+
+                    <!-- Interactive Punnett Grid Matrix (2x2) -->
+                    <div class="glass-panel p-5 sm:p-6 rounded-2xl border-t-2 border-t-rose-400 space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                            <div>
+                                <span class="text-[10px] font-mono text-rose-400 uppercase tracking-widest block">// PAPAN PUNNETT GONOSOM</span>
+                                <h3 class="text-base sm:text-lg font-display font-bold text-white tracking-wide">
+                                    Matriks Segregasi & Pembuahan
+                                </h3>
+                            </div>
+                            <div class="flex items-center gap-3 text-[11px] font-mono">
+                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span> Normal</span>
+                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Carrier</span>
+                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Sakit</span>
+                            </div>
+                        </div>
+
+                        <!-- Punnett Matrix Table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-center border-collapse text-xs font-mono" id="punnett-table">
+                                <thead>
+                                    <tr>
+                                        <th class="p-2 border border-slate-800 bg-slate-900/60 text-slate-400 text-[10px]">
+                                            Gamet ♀ \ ♂
+                                        </th>
+                                        <th class="p-2 border border-slate-800 bg-slate-900/80 text-cyan-300 font-bold" id="th-sperm-1">
+                                            Sperma X
+                                        </th>
+                                        <th class="p-2 border border-slate-800 bg-slate-900/80 text-cyan-300 font-bold" id="th-sperm-2">
+                                            Sperma Y
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th class="p-2 border border-slate-800 bg-slate-900/80 text-pink-300 font-bold" id="th-ovum-1">
+                                            Ovum X₁
+                                        </th>
+                                        <td class="p-3 border border-slate-800 bg-slate-950/60" id="cell-0">
+                                            -
+                                        </td>
+                                        <td class="p-3 border border-slate-800 bg-slate-950/60" id="cell-1">
+                                            -
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="p-2 border border-slate-800 bg-slate-900/80 text-pink-300 font-bold" id="th-ovum-2">
+                                            Ovum X₂
+                                        </th>
+                                        <td class="p-3 border border-slate-800 bg-slate-950/60" id="cell-2">
+                                            -
+                                        </td>
+                                        <td class="p-3 border border-slate-800 bg-slate-950/60" id="cell-3">
+                                            -
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- F1 Offspring 4 Cards Gallery -->
+                    <div class="glass-panel p-5 sm:p-6 rounded-2xl space-y-4">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                            <h4 class="font-display font-bold text-xs uppercase tracking-wider text-slate-200">
+                                👶 SIMULASI PROFIL 4 KETURUNAN (F1)
+                            </h4>
+                            <span class="text-[10px] font-mono text-slate-400">Probabilitas Relatif per Kehamilan: 25% Tiap Kotak</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3" id="children-grid">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Medical Genetic Consultation Report -->
+                    <div class="glass-panel p-6 sm:p-7 rounded-2xl space-y-4">
+                        <div class="border-b border-slate-800 pb-3 flex items-center justify-between">
+                            <h4 class="font-display font-bold text-sm tracking-wide text-rose-300 flex items-center gap-2">
+                                <span>📋</span> LAPORAN KONSELING GENETIKA KLINIS
+                            </h4>
+                            <span class="text-[10px] font-mono text-slate-400">KONSULTASI PREMARITAL</span>
+                        </div>
+
+                        <div id="report-text" class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans space-y-3">
+                            <!-- Generated dynamically -->
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-800 flex flex-wrap justify-between items-center text-[10px] font-mono text-slate-500">
+                            <span>STANDAR ANALISIS: CAMPBELL BIOLOGY (12TH ED.) & THOMPSON & THOMPSON GENETICS IN MEDICINE</span>
+                            <span class="text-rose-400/80">VALIDASI: GEN-X CYTO-CORE</span>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
 
     </main>
 
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="mt-8 border-t border-slate-800/80 bg-slate-950/80 py-6 px-4 text-center text-xs font-mono text-slate-500">
+        <p>GEN-OS // BIO-CORE • Modul 04: Analisis Risiko Pewarisan Terpaut Seks (GEN-X)</p>
+        <p class="mt-1 text-[11px] text-slate-600">Simulasi Dogma Genetika Mendel Terpaut Kromosom X, Hemofilia, dan Buta Warna</p>
+    </footer>
+
+    <!-- ==================== TUTORIAL MODAL ==================== -->
+    <div id="modal-tutorial" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden transition-opacity">
+        <div class="glass-panel rounded-2xl max-w-2xl w-full border border-rose-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl p-2 rounded-xl bg-rose-500/10 border border-rose-500/30">📖</span>
+                    <div>
+                        <h3 class="text-lg font-display font-bold text-white tracking-wider">PANDUAN LENGKAP SIMULASI GEN-X</h3>
+                        <p class="text-xs font-mono text-rose-400">MODUL 04: PEWARISAN TERPAUT KROMOSOM SEKS (X-LINKED)</p>
+                    </div>
+                </div>
+                <button onclick="closeTutorialModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+            </div>
+
+            <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-cyan-300 text-xs tracking-wider uppercase">1. Apa Itu Sifat Terpaut Seks (X-Linked)?</h4>
+                    <p class="text-xs text-slate-300">
+                        Sifat atau penyakit terpaut seks adalah kelainan genetik yang alel penyebabnya terletak pada kromosom kelamin X, bukan autosom. Contoh klasik meliputi <b>Hemofilia</b> (gangguan pembekuan darah akibat defisiensi Faktor VIII/IX), <b>Buta Warna Merah-Hijau</b>, dan <b>Distrofi Otot Duchenne (DMD)</b>.
+                    </p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-amber-300 text-xs tracking-wider uppercase">2. Mengapa Laki-Laki Jauh Lebih Rentan?</h4>
+                    <p class="text-xs text-slate-300">
+                        Wanita memiliki dua kromosom X ($XX$), sehingga jika memiliki satu alel resesif mutan ($X^b$), alel normal pada kromosom X pasangannya ($X^B$) masih mampu menghasilkan protein fungsional. Wanita tersebut menjadi <b>Carrier (Pembawa Sifat)</b> tanpa gejala penyakit. Sebaliknya, pria hanya memiliki satu kromosom X ($XY$). Pria bersifat <b>hemizigot</b>; apabila menerima satu alel mutan $X^b$ dari ibunya, pria tersebut 100% akan menderita penyakit.
+                    </p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-display font-bold text-rose-300 text-xs tracking-wider uppercase">3. Cara Mengoperasikan Simulator</h4>
+                    <ol class="list-decimal list-inside text-xs space-y-1.5 text-slate-300">
+                        <li>Pilih jenis penyakit (Hemofilia, Buta Warna, atau DMD) pada panel kontrol kiri.</li>
+                        <li>Tentukan kondisi genotipe Ibu (Normal, Carrier, atau Sakit) dan Ayah (Normal atau Sakit).</li>
+                        <li>Klik <b>SIMULASI PERSILANGAN & RISIKO</b> untuk melihat papan Punnett, kartu profil 4 keturunan F1, dan evaluasi risiko medis.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="text-right border-t border-slate-800 pt-4">
+                <button onclick="closeTutorialModal()" class="px-5 py-2 rounded-xl bg-rose-500 hover:bg-rose-400 text-slate-950 font-display font-bold text-xs tracking-wider transition">
+                    MENGERTI, MULAI ANALISIS
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SCIENTIFIC LITERATURE MODAL ==================== -->
+    <div id="modal-literature" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden transition-opacity">
+        <div class="glass-panel rounded-2xl max-w-2xl w-full border border-purple-500/30 p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">📚</span>
+                    <div>
+                        <h3 class="text-lg font-display font-bold text-white tracking-wider">DASAR TEORETIS & REFERENSI ILMIAH</h3>
+                        <p class="text-xs font-mono text-purple-400">PEWARISAN KROMOSOM SEKS, HEMOFILIA & BUTA WARNA</p>
+                    </div>
+                </div>
+                <button onclick="closeLiteratureModal()" class="text-slate-400 hover:text-white text-xl p-1 font-mono transition">✕</button>
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
+                <!-- Ref 1 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-rose-400 font-mono">1. Penemuan Pola Pewarisan Terpaut Seks (Hadiah Nobel)</span>
+                        <span class="text-[10px] font-mono text-slate-500">1910</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Morgan, Thomas Hunt (1910).</b> <i>Sex limited inheritance in Drosophila.</i> Science, 32(812): 120–122.
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Penemuan pertama mutasi mata putih (*white eye*) terpaut kromosom X pada lalat buah, membuktikan secara definitif Teori Kromosom Pewarisan Sifat Sutton-Boveri.
+                    </p>
+                </div>
+
+                <!-- Ref 2 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-amber-400 font-mono">2. Genetika Populasi & Laju Mutasi Hemofilia</span>
+                        <span class="text-[10px] font-mono text-slate-500">1935</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Haldane, J. B. S. (1935).</b> <i>The rate of spontaneous mutation of a human gene.</i> Journal of Genetics, 31(3): 317–326.
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Menghitung laju mutasi spontan gen hemofilia manusia pada kromosom X dan menjelaskan keseimbangan seleksi alam terhadap alel letal resesif.
+                    </p>
+                </div>
+
+                <!-- Ref 3 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-cyan-400 font-mono">3. Teori Inaktivasi Kromosom X (Lyonisasi)</span>
+                        <span class="text-[10px] font-mono text-slate-500">1961</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Lyon, Mary F. (1961).</b> <i>Gene action in the X-chromosome of the mouse (Mus musculus L.).</i> Nature, 190(4773): 372–373.
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Menjelaskan kompensasi dosis gen antara pria ($XY$) dan wanita ($XX$) melalui kondensasi salah satu kromosom X menjadi Badan Barr heterokromatin.
+                    </p>
+                </div>
+
+                <!-- Ref 4 -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-purple-400 font-mono">4. Karakterisasi Molekuler Pigmen Buta Warna X-Linked</span>
+                        <span class="text-[10px] font-mono text-slate-500">1986</span>
+                    </div>
+                    <p class="text-slate-300">
+                        <b>Nathans, J., Thomas, D., & Hogness, D. S. (1986).</b> <i>Molecular genetics of human color vision: the genes encoding blue, green, and red pigments.</i> Science, 232(4747): 193–202.
+                    </p>
+                    <p class="text-slate-400 text-[11px]">
+                        → Mengisolasi dan mengurutkan gen opsin fotoreseptor kerucut merah dan hijau pada kromosom Xq28, memetakan penyebab protanopia dan deuteranopia.
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-right border-t border-slate-800 pt-4">
+                <button onclick="closeLiteratureModal()" class="px-5 py-2 rounded-xl bg-purple-500 hover:bg-purple-400 text-slate-950 font-display font-bold text-xs tracking-wider transition">
+                    TUTUP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT SIMULATION LOGIC ==================== -->
     <script>
-        // --- STATE ---
-        let state = {
-            mother: 'XX', // XX, Carrier, Sick
-            father: 'XY'  // XY, Sick
+        // --- Web Audio API Synthesizer ---
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) audioCtx = new AudioContext();
+            }
+        }
+
+        function playTone(freq, type = 'sine', duration = 0.12, gainLevel = 0.1) {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(gainLevel, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.warn('Audio not allowed yet:', e);
+            }
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            if (type === 'click') {
+                playTone(580, 'sine', 0.06, 0.08);
+            } else if (type === 'scan') {
+                [440, 550, 660, 880].forEach((f, idx) => {
+                    setTimeout(() => playTone(f, 'sine', 0.08, 0.06), idx * 60);
+                });
+            } else if (type === 'alert') {
+                [320, 260, 320].forEach((f, idx) => {
+                    setTimeout(() => playTone(f, 'triangle', 0.12, 0.09), idx * 90);
+                });
+            } else if (type === 'normal') {
+                [523.25, 659.25, 783.99].forEach((f, idx) => {
+                    setTimeout(() => playTone(f, 'sine', 0.15, 0.08), idx * 75);
+                });
+            }
+        }
+
+        // Global Modal Handlers
+        window.toggleSound = function() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            if (icon) icon.textContent = soundEnabled ? '🔊' : '🔇';
+            const btn = document.getElementById('btn-sound');
+            if (btn) {
+                if (!soundEnabled) btn.classList.add('opacity-60');
+                else {
+                    btn.classList.remove('opacity-60');
+                    playSound('click');
+                }
+            }
         };
 
-        // --- UI CONTROLLERS ---
+        window.openTutorialModal = function() {
+            const modal = document.getElementById('modal-tutorial');
+            if (modal) modal.classList.remove('hidden');
+            playSound('click');
+        };
+
+        window.closeTutorialModal = function() {
+            const modal = document.getElementById('modal-tutorial');
+            if (modal) modal.classList.add('hidden');
+            playSound('click');
+        };
+
+        window.openLiteratureModal = function() {
+            const modal = document.getElementById('modal-literature');
+            if (modal) modal.classList.remove('hidden');
+            playSound('click');
+        };
+
+        window.closeLiteratureModal = function() {
+            const modal = document.getElementById('modal-literature');
+            if (modal) modal.classList.add('hidden');
+            playSound('click');
+        };
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                window.closeTutorialModal();
+                window.closeLiteratureModal();
+            }
+        });
+
+        // --- TRAITS CONFIGURATION ---
+        const traits = {
+            hemo: {
+                name: "Hemofilia",
+                dominant: "H",
+                recessive: "h",
+                geneDesc: "Gen Faktor VIII/IX Pembekuan Darah (Lokus Xq28/Xq27)"
+            },
+            color: {
+                name: "Buta Warna Merah-Hijau",
+                dominant: "Cb",
+                recessive: "cb",
+                geneDesc: "Gen Opsin Fotoreseptor Retina OPN1LW/OPN1MW (Lokus Xq28)"
+            },
+            dmd: {
+                name: "Distrofi Otot Duchenne (DMD)",
+                dominant: "D",
+                recessive: "d",
+                geneDesc: "Gen Distrofin Sarkolema Otot Rangka (Lokus Xp21.2)"
+            }
+        };
+
+        let currentTrait = 'hemo';
+        let state = {
+            mother: 'Carrier', // 'XX', 'Carrier', 'Sick'
+            father: 'XY'       // 'XY', 'Sick'
+        };
+
+        function setTrait(tKey) {
+            currentTrait = tKey;
+            ['btn-trait-hemo', 'btn-trait-color', 'btn-trait-dmd'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.remove('active');
+            });
+            const activeEl = document.getElementById(`btn-trait-${tKey}`);
+            if (activeEl) activeEl.classList.add('active');
+
+            updateGenotypeLabels();
+            playSound('click');
+            processData();
+        }
+
+        function updateGenotypeLabels() {
+            const tr = traits[currentTrait];
+            const D = tr.dominant;
+            const r = tr.recessive;
+
+            document.getElementById('label-m-norm').innerHTML = `X<sup>${D}</sup>X<sup>${D}</sup>`;
+            document.getElementById('label-m-car').innerHTML = `X<sup>${D}</sup>X<sup>${r}</sup>`;
+            document.getElementById('label-m-sick').innerHTML = `X<sup>${r}</sup>X<sup>${r}</sup>`;
+
+            document.getElementById('label-f-norm').innerHTML = `X<sup>${D}</sup>Y`;
+            document.getElementById('label-f-sick').innerHTML = `X<sup>${r}</sup>Y`;
+        }
+
         function setMother(type) {
             state.mother = type;
-            ['btn-m-norm', 'btn-m-car', 'btn-m-sick'].forEach(id => document.getElementById(id).classList.remove('active'));
-            if (type === 'XX') document.getElementById('btn-m-norm').classList.add('active');
-            if (type === 'Carrier') document.getElementById('btn-m-car').classList.add('active');
-            if (type === 'Sick') document.getElementById('btn-m-sick').classList.add('active');
+            ['btn-m-norm', 'btn-m-car', 'btn-m-sick'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.remove('active');
+            });
+            const btn = document.getElementById(type === 'XX' ? 'btn-m-norm' : (type === 'Carrier' ? 'btn-m-car' : 'btn-m-sick'));
+            if (btn) btn.classList.add('active');
 
-            document.getElementById('mom-status').innerText = type.toUpperCase();
-            document.getElementById('mom-status').className = `text-[10px] px-2 py-1 rounded font-mono text-slate-900 font-bold ${type === 'XX' ? 'bg-medical-cyan' : type === 'Carrier' ? 'bg-medical-gold' : 'bg-medical-danger'}`;
+            const statusEl = document.getElementById('mom-status');
+            if (statusEl) {
+                if (type === 'XX') {
+                    statusEl.textContent = 'NORMAL';
+                    statusEl.className = 'text-[10px] bg-slate-900 px-2 py-0.5 rounded text-cyan-300 font-mono border border-cyan-500/30 font-bold';
+                } else if (type === 'Carrier') {
+                    statusEl.textContent = 'CARRIER (PEMBAWA)';
+                    statusEl.className = 'text-[10px] bg-slate-900 px-2 py-0.5 rounded text-amber-400 font-mono border border-amber-500/30 font-bold';
+                } else {
+                    statusEl.textContent = 'PENDERITA';
+                    statusEl.className = 'text-[10px] bg-slate-900 px-2 py-0.5 rounded text-rose-400 font-mono border border-rose-500/30 font-bold';
+                }
+            }
+            playSound('click');
         }
 
         function setFather(type) {
             state.father = type;
-            ['btn-f-norm', 'btn-f-sick'].forEach(id => document.getElementById(id).classList.remove('active'));
-            if (type === 'XY') document.getElementById('btn-f-norm').classList.add('active');
-            if (type === 'Sick') document.getElementById('btn-f-sick').classList.add('active');
+            ['btn-f-norm', 'btn-f-sick'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.remove('active');
+            });
+            const btn = document.getElementById(type === 'XY' ? 'btn-f-norm' : 'btn-f-sick');
+            if (btn) btn.classList.add('active');
 
-            document.getElementById('dad-status').innerText = type === 'XY' ? 'NORMAL' : 'SAKIT';
-            document.getElementById('dad-status').className = `text-[10px] px-2 py-1 rounded font-mono text-slate-900 font-bold ${type === 'XY' ? 'bg-medical-cyan' : 'bg-medical-danger'}`;
+            const statusEl = document.getElementById('dad-status');
+            if (statusEl) {
+                if (type === 'XY') {
+                    statusEl.textContent = 'NORMAL';
+                    statusEl.className = 'text-[10px] bg-slate-900 px-2 py-0.5 rounded text-cyan-300 font-mono border border-cyan-500/30 font-bold';
+                } else {
+                    statusEl.textContent = 'PENDERITA';
+                    statusEl.className = 'text-[10px] bg-slate-900 px-2 py-0.5 rounded text-rose-400 font-mono border border-rose-500/30 font-bold';
+                }
+            }
+            playSound('click');
         }
 
-        // --- ICONS (SVG) ---
-        const iconMale = `<svg class="w-12 h-12 mb-2 opacity-80" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a5 5 0 1 1-5 5 5 5 0 0 1 5-5m0-2a7 7 0 1 0 7 7 7 7 0 0 0-7-7zM20 22h-2v-4a2 2 0 0 0-2-2h-2v-3h2a3 3 0 0 0 3-3v-2h-2v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2h-2v2a3 3 0 0 0 3 3h2v3h-2a2 2 0 0 0-2 2v4H6v-5a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v5z"/></svg>`;
-        const iconFemale = `<svg class="w-12 h-12 mb-2 opacity-80" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a5 5 0 1 1-5 5 5 5 0 0 1 5-5m0-2a7 7 0 1 0 7 7 7 7 0 0 0-7-7zM16 22v-3a4 4 0 0 0-3-3.8V12h3v-2h-3V9h-2v1H8V9H6v1h3v2h3v3.2a4 4 0 0 0-3 3.8v3h2v-3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v3h2z"/></svg>`;
+        // SVG Chromosome/Avatar Icons
+        const iconFemale = `<svg class="w-10 h-10 mb-1.5 opacity-90 mx-auto" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 12v9m-4-4h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+        const iconMale = `<svg class="w-10 h-10 mb-1.5 opacity-90 mx-auto" viewBox="0 0 24 24" fill="currentColor"><circle cx="10" cy="14" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 10l6-6m-4 0h4v4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-        // --- LOGIC ENGINE ---
+        // Simulation Trigger
         function analyze() {
             const container = document.getElementById('result-container');
-            const riskPanel = document.getElementById('risk-panel');
             const loader = document.getElementById('loader');
 
-            // 1. Hide old results, show loader
             container.classList.add('hidden');
-            riskPanel.classList.add('hidden');
             loader.classList.remove('hidden');
-            loader.classList.add('flex'); // Enable flexbox
+            loader.classList.add('flex');
+            playSound('scan');
 
-            // Scroll to loader
-            loader.scrollIntoView({ behavior: 'smooth' });
-
-            // 2. Wait for animation (2.5 seconds)
             setTimeout(() => {
                 loader.classList.add('hidden');
                 loader.classList.remove('flex');
-
-                // Show new results
                 container.classList.remove('hidden');
-                riskPanel.classList.remove('hidden');
-
-                // Process Data
                 processData();
 
-                // Scroll to result
-                container.scrollIntoView({ behavior: 'smooth' });
-            }, 2500);
+                container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 900);
         }
 
         function processData() {
-            // Determine Gametes
-            let m1 = 'B', m2 = 'B';
-            if (state.mother === 'Carrier') { m2 = 'b'; }
-            else if (state.mother === 'Sick') { m1 = 'b'; m2 = 'b'; }
+            const tr = traits[currentTrait];
+            const D = tr.dominant;
+            const r = tr.recessive;
 
-            let f1 = state.father === 'XY' ? 'B' : 'b';
+            // Gametes logic
+            let m1 = D, m2 = D;
+            if (state.mother === 'Carrier') { m2 = r; }
+            else if (state.mother === 'Sick') { m1 = r; m2 = r; }
 
-            // Punnett Square Logic
+            let f1 = state.father === 'XY' ? D : r;
+            let f2 = 'Y';
+
+            // Update Punnett Header Labels
+            document.getElementById('th-sperm-1').innerHTML = `Sperma X<sup>${f1}</sup>`;
+            document.getElementById('th-sperm-2').innerHTML = `Sperma Y`;
+            document.getElementById('th-ovum-1').innerHTML = `Ovum X<sup>${m1}</sup>`;
+            document.getElementById('th-ovum-2').innerHTML = `Ovum X<sup>${m2}</sup>`;
+
+            // 4 Offspring Zygotes
             const children = [
-                { sex: 'F', g1: m1, g2: f1 }, // Female 1
-                { sex: 'F', g1: m2, g2: f1 }, // Female 2
-                { sex: 'M', g1: m1, g2: 'Y' }, // Male 1
-                { sex: 'M', g1: m2, g2: 'Y' }  // Male 2
+                { sex: 'F', g1: m1, g2: f1, name: 'Anak 1 (♀)' },
+                { sex: 'M', g1: m1, g2: 'Y', name: 'Anak 2 (♂)' },
+                { sex: 'F', g1: m2, g2: f1, name: 'Anak 3 (♀)' },
+                { sex: 'M', g1: m2, g2: 'Y', name: 'Anak 4 (♂)' }
             ];
 
+            let stats = { sick: 0, carrier: 0, normal: 0, maleSick: 0, maleTotal: 2, femaleCar: 0, femaleTotal: 2 };
+
+            // Render Punnett Cells & Baby Cards
             const grid = document.getElementById('children-grid');
             grid.innerHTML = '';
 
-            let stats = { sick: 0, carrier: 0, normal: 0 };
-
             children.forEach((child, idx) => {
-                let genotype = '', phenotype = '', status = '', colorVar = '', icon = '';
+                let genotype = '';
+                let status = '';
+                let statusClass = '';
+                let borderCol = '';
+                let shadowGlow = '';
 
                 if (child.sex === 'F') {
-                    genotype = `X<span class="sup">${child.g1}</span>X<span class="sup">${child.g2}</span>`;
-                    icon = iconFemale;
-                    let bCount = (child.g1 === 'b' ? 1 : 0) + (child.g2 === 'b' ? 1 : 0);
+                    genotype = `X<sup>${child.g1}</sup>X<sup>${child.g2}</sup>`;
+                    const rCount = (child.g1 === r ? 1 : 0) + (child.g2 === r ? 1 : 0);
 
-                    if (bCount === 2) {
-                        status = 'SAKIT'; colorVar = '--card-color: #ef4444; --card-color-glow: rgba(239, 68, 68, 0.5);';
-                        phenotype = 'text-medical-danger'; stats.sick++;
-                    } else if (bCount === 1) {
-                        status = 'CARRIER'; colorVar = '--card-color: #f59e0b; --card-color-glow: rgba(245, 158, 11, 0.5);';
-                        phenotype = 'text-medical-gold'; stats.carrier++;
+                    if (rCount === 2) {
+                        status = 'SAKIT (HOMOZIGOT)';
+                        statusClass = 'text-rose-400 bg-rose-500/10 border-rose-500/40';
+                        borderCol = '#f43f5e';
+                        shadowGlow = 'rgba(244, 63, 94, 0.4)';
+                        stats.sick++;
+                    } else if (rCount === 1) {
+                        status = 'CARRIER (PEMBAWA)';
+                        statusClass = 'text-amber-400 bg-amber-500/10 border-amber-500/40';
+                        borderCol = '#f59e0b';
+                        shadowGlow = 'rgba(245, 158, 11, 0.4)';
+                        stats.carrier++;
+                        stats.femaleCar++;
                     } else {
-                        status = 'NORMAL'; colorVar = '--card-color: #06b6d4; --card-color-glow: rgba(6, 182, 212, 0.5);';
-                        phenotype = 'text-medical-cyan'; stats.normal++;
+                        status = 'NORMAL';
+                        statusClass = 'text-cyan-300 bg-cyan-500/10 border-cyan-500/40';
+                        borderCol = '#06b6d4';
+                        shadowGlow = 'rgba(6, 182, 212, 0.4)';
+                        stats.normal++;
                     }
                 } else {
-                    genotype = `X<span class="sup">${child.g1}</span>Y`;
-                    icon = iconMale;
-                    if (child.g1 === 'b') {
-                        status = 'SAKIT'; colorVar = '--card-color: #ef4444; --card-color-glow: rgba(239, 68, 68, 0.5);';
-                        phenotype = 'text-medical-danger'; stats.sick++;
+                    genotype = `X<sup>${child.g1}</sup>Y`;
+                    if (child.g1 === r) {
+                        status = 'SAKIT (HEMIZIGOT)';
+                        statusClass = 'text-rose-400 bg-rose-500/10 border-rose-500/40';
+                        borderCol = '#f43f5e';
+                        shadowGlow = 'rgba(244, 63, 94, 0.4)';
+                        stats.sick++;
+                        stats.maleSick++;
                     } else {
-                        status = 'NORMAL'; colorVar = '--card-color: #06b6d4; --card-color-glow: rgba(6, 182, 212, 0.5);';
-                        phenotype = 'text-medical-cyan'; stats.normal++;
+                        status = 'NORMAL';
+                        statusClass = 'text-cyan-300 bg-cyan-500/10 border-cyan-500/40';
+                        borderCol = '#06b6d4';
+                        shadowGlow = 'rgba(6, 182, 212, 0.4)';
+                        stats.normal++;
                     }
                 }
-                let rawGenotype = child.sex === 'F' ? `X<span class="sup">` + child.g1 + `</span>X<span class="sup">` + child.g2 + `</span>` : `X<span class="sup">` + child.g1 + `</span>Y`;
-                if (!stats.genos) stats.genos = {};
-                if (!stats.genos[rawGenotype]) stats.genos[rawGenotype] = 0;
-                stats.genos[rawGenotype]++;
 
+                // Update Punnett Cell
+                const cellEl = document.getElementById(`cell-${idx}`);
+                if (cellEl) {
+                    cellEl.innerHTML = `
+                        <div class="p-2 rounded-lg font-mono" style="border: 1px solid ${borderCol}60; background: ${borderCol}15;">
+                            <span class="text-sm font-bold text-white block">${genotype}</span>
+                            <span class="text-[9px] font-bold tracking-wider mt-1 block" style="color: ${borderCol}">${status.split(' ')[0]}</span>
+                        </div>
+                    `;
+                }
+
+                // Render Baby Card
+                const icon = child.sex === 'F' ? iconFemale : iconMale;
                 grid.innerHTML += `
-                <div class="baby-card rounded-xl p-4 flex flex-col items-center text-center group" style="${colorVar}">
-                    <div class="${phenotype} transition-transform duration-500 group-hover:scale-110">${icon}</div>
-                    <div class="text-xs text-slate-400 font-mono mb-1">ANAK ${idx + 1} (${child.sex === 'F' ? '♀' : '♂'})</div>
-                    <div class="text-xl font-display font-bold text-white mb-2">${genotype}</div>
-                    <div class="text-[10px] px-2 py-1 rounded bg-slate-900 font-bold tracking-widest ${phenotype.replace('text-', 'bg-').replace('medical-', 'medical-').replace('text-', 'text-slate-900 ')} bg-opacity-20 border border-current">${status}</div>
-                </div>
+                    <div class="baby-card rounded-2xl p-4 flex flex-col items-center text-center group" 
+                         style="--card-color: ${borderCol}; --card-color-glow: ${shadowGlow};">
+                        <div style="color: ${borderCol};" class="transition-transform duration-300 group-hover:scale-110">
+                            ${icon}
+                        </div>
+                        <div class="text-[10px] text-slate-400 font-mono tracking-wider mb-1">${child.name}</div>
+                        <div class="text-base sm:text-lg font-display font-bold text-white mb-2">${genotype}</div>
+                        <div class="text-[9px] px-2 py-1 rounded-md font-mono font-bold tracking-wider border ${statusClass}">
+                            ${status}
+                        </div>
+                    </div>
                 `;
             });
 
-            // Update Risk Meters
-            const sickPercent = (stats.sick / 4) * 100;
-            const carrierPercent = (stats.carrier / 4) * 100;
+            // Update Telemetry Rings
+            const totalRisk = (stats.sick / 4) * 100;
+            const carrierRisk = (stats.carrier / 4) * 100;
+            const maleRisk = (stats.maleSick / stats.maleTotal) * 100;
+            const femaleCarRisk = (stats.femaleCar / stats.femaleTotal) * 100;
 
-            document.getElementById('ring-risk').style.setProperty('--percent', sickPercent + '%');
-            document.getElementById('risk-percent').innerText = sickPercent + '%';
+            const ringRisk = document.getElementById('ring-risk');
+            if (ringRisk) ringRisk.style.setProperty('--percent', `${totalRisk}%`);
+            document.getElementById('risk-percent').textContent = `${totalRisk}%`;
 
-            document.getElementById('ring-carrier').style.setProperty('--percent', carrierPercent + '%');
-            document.getElementById('carrier-percent').innerText = carrierPercent + '%';
+            const ringCarrier = document.getElementById('ring-carrier');
+            if (ringCarrier) ringCarrier.style.setProperty('--percent', `${carrierRisk}%`);
+            document.getElementById('carrier-percent').textContent = `${carrierRisk}%`;
 
-            generateReport(stats);
+            document.getElementById('risk-male-sick').textContent = `${maleRisk}% (${stats.maleSick}/2 Laki-laki)`;
+            document.getElementById('risk-female-car').textContent = `${femaleCarRisk}% (${stats.femaleCar}/2 Perempuan)`;
+
+            generateReport(stats, tr);
+
+            if (totalRisk > 0) playSound('alert');
+            else playSound('normal');
         }
 
-        function generateReport(stats) {
-            let text = `<p class="mb-4">Analisis genetik dilakukan pada persilangan terpaut kromosom X (Sex-Linked). Sifat penyakit diasumsikan resesif (b) dan sifat normal dominan (B).</p>`;
-            
-            let genoVals = [];
-            for (let [gKey, gVal] of Object.entries(stats.genos || {})) {
-                genoVals.push(`${gKey} (${gVal}/4)`);
-            }
-            text += `<p class="mb-4 text-medical-cyan">Distribusi Rasio Genotipe F1: <strong>${genoVals.join(' : ')}</strong></p>`;
+        function generateReport(stats, tr) {
+            const reportEl = document.getElementById('report-text');
+            if (!reportEl) return;
+
+            let html = `
+                <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <span class="text-[10px] font-mono text-cyan-400 uppercase tracking-wider block font-bold">
+                        1. Entitas Penyakit & Lokus Genomik
+                    </span>
+                    <p class="text-xs text-slate-300">
+                        Pemeriksaan dilakukan terhadap sifat <b>${tr.name}</b> yang dikontrol oleh <b>${tr.geneDesc}</b>. Alel normal dominan dilambangkan dengan <code class="text-cyan-300 font-mono">X<sup>${tr.dominant}</sup></code> dan alel mutan resesif dilambangkan dengan <code class="text-rose-400 font-mono">X<sup>${tr.recessive}</sup></code>.
+                    </p>
+                </div>
+            `;
 
             if (stats.sick > 0) {
-                text += `<p class="mb-4"><strong class="text-medical-danger">PERINGATAN RISIKO TINGGI:</strong> Hasil menunjukkan probabilitas <strong>${(stats.sick / 4) * 100}%</strong> anak akan menderita penyakit genetik (Hemofilia/Buta Warna). Laki-laki jauh lebih rentan terkena karena bersifat <span class="citation" data-ref="Hemizigot: Kondisi di mana hanya terdapat satu salinan gen (pada kromosom X) sehingga sifat resesif langsung terekspresikan (Thompson & Thompson Genetics).">Hemizigot</span>.</p>`;
-                if (stats.carrier > 0) {
-                    text += `<p class="mb-4">Selain itu, <strong>${(stats.carrier / 4) * 100}%</strong> anak (khususnya perempuan) berpotensi menjadi <strong>Carrier</strong>. Mereka akan tampak sehat secara fenotipe tetapi membawa gen penyakit yang dapat diturunkan ke cucu Anda.</p>`;
-                }
+                html += `
+                    <div class="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 space-y-1.5">
+                        <span class="text-[10px] font-mono text-rose-400 uppercase tracking-wider block font-bold">
+                            ⚠️ 2. Peringatan Risiko Fenotipe Sakit (${(stats.sick / 4) * 100}%)
+                        </span>
+                        <p class="text-xs text-slate-300">
+                            Setiap kehamilan memiliki probabilitas <b>${(stats.sick / 4) * 100}%</b> melahirkan anak dengan fenotipe sakit. Perhatikan bahwa risiko pada <b>anak laki-laki mencapai ${(stats.maleSick / 2) * 100}%</b> akibat sifat <b>hemizigot</b>, di mana kromosom Y tidak memiliki alel pelindung.
+                        </p>
+                    </div>
+                `;
             } else if (stats.carrier > 0) {
-                text += `<p class="mb-4"><strong class="text-medical-gold">RISIKO CARRIER TERDETEKSI:</strong> Meskipun 100% anak akan lahir dengan fenotipe NORMAL (tidak sakit), terdapat peluang <strong>${(stats.carrier / 4) * 100}%</strong> anak perempuan menjadi Carrier. </p>
-                <p>Hal ini terjadi karena Ayah atau Ibu menyumbangkan satu alel resesif, namun tertutupi oleh alel dominan normal (Hukum Dominasi). Waspadai pola pewarisan <span class="citation" data-ref="Criss-Cross Inheritance: Pola pewarisan dari ibu carrier ke anak laki-laki, melewati anak perempuan yang menjadi carrier (Campbell Biology).">Criss-Cross Inheritance</span> pada generasi berikutnya.</p>`;
+                html += `
+                    <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-1.5">
+                        <span class="text-[10px] font-mono text-amber-400 uppercase tracking-wider block font-bold">
+                            🔸 2. Deteksi Pembawa Sifat (Carrier: ${(stats.carrier / 4) * 100}%)
+                        </span>
+                        <p class="text-xs text-slate-300">
+                            Seluruh keturunan (100%) akan lahir secara klinis <b>sehat normal</b>. Namun, terdapat peluang <b>${(stats.femaleCar / 2) * 100}% pada anak perempuan</b> menjadi *Carrier*. Mereka membawa mutasi genetik tersembunyi yang berisiko diturunkan ke generasi cucu laki-laki melalui pola <i>Criss-Cross Inheritance</i>.
+                        </p>
+                    </div>
+                `;
             } else {
-                text += `<p class="mb-4"><strong class="text-medical-cyan">HASIL NORMAL (AMAN):</strong> Analisis menunjukkan 0% risiko penyakit dan 0% risiko carrier. Seluruh alel yang diwariskan adalah Dominan Normal (B).</p>`;
+                html += `
+                    <div class="p-3.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 space-y-1.5">
+                        <span class="text-[10px] font-mono text-cyan-300 uppercase tracking-wider block font-bold">
+                            ✅ 2. Status Genomik Aman (0% Risiko)
+                        </span>
+                        <p class="text-xs text-slate-300">
+                            Kedua orang tua tidak membawa alel mutan resesif. Seluruh anak (100%) dipastikan memiliki genotipe dominan homozigot atau hemizigot normal tanpa risiko penyakit maupun carrier.
+                        </p>
+                    </div>
+                `;
             }
 
-            text += `<p class="mt-4">Perlu dicatat bahwa pada wanita (XX), salah satu kromosom X akan dinonaktifkan secara acak melalui proses <span class="citation" data-ref="Lyonization (X-inactivation): Proses inaktivasi salah satu kromosom X pada sel wanita untuk menyeimbangkan dosis gen (Murray Barr, 1949).">Lyonisasi</span>, yang dapat mempengaruhi tingkat ekspresi gen pada individu carrier.</p>`;
+            html += `
+                <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                    <span class="text-[10px] font-mono text-purple-400 uppercase tracking-wider block font-bold">
+                        3. Rekomendasi Klinis & Konseling Prenatal
+                    </span>
+                    <p class="text-xs text-slate-300">
+                        Pada pasangan berisiko carrier tinggi, dianjurkan pemeriksaan diagnostik prenatal seperti <i>Amniocentesis</i> atau <i>Chorionic Villus Sampling (CVS)</i> pada trimester awal, serta uji kadar Faktor Pembekuan Darah spesifik saat bayi dilahirkan.
+                    </p>
+                </div>
+            `;
 
-            document.getElementById('report-text').innerHTML = text;
+            reportEl.innerHTML = html;
         }
 
-        function toggleSexTutorialModal() {
-            const modal = document.getElementById('sex-tutorial-modal');
-            if (modal) modal.classList.toggle('hidden');
-        }
+        // Initialize default view
+        document.addEventListener('DOMContentLoaded', () => {
+            updateGenotypeLabels();
+            processData();
+        });
     </script>
-
-    <!-- MODAL PANDUAN SIMULASI GEN-X (TUTORIAL) -->
-    <div id="sex-tutorial-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-panel max-w-xl w-full rounded-2xl p-6 md:p-8 border border-rose-500/40 shadow-2xl relative text-left">
-            <button onclick="toggleSexTutorialModal()" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition">
-                ✕
-            </button>
-            <div class="flex items-center gap-3 mb-4 border-b border-slate-700 pb-3">
-                <span class="text-3xl">🩸</span>
-                <div>
-                    <h3 class="text-lg font-bold text-white">Panduan Simulasi Pewarisan Terpaut Seks</h3>
-                    <p class="text-xs text-rose-400 font-mono">PEWARISAN TERPAUT KROMOSOM X (HEMOFILIA / BUTA WARNA)</p>
-                </div>
-            </div>
-
-            <div class="space-y-4 text-xs text-slate-300 leading-relaxed max-h-[60vh] overflow-y-auto pr-2">
-                <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700">
-                    <h4 class="font-bold text-cyan-400 mb-1">1. Konsep Alel Terpaut Kromosom X</h4>
-                    <p>Gen pembekuan darah (Hemofilia) atau fotoreseptor warna berada pada kromosom X:</p>
-                    <ul class="list-disc list-inside mt-1 space-y-0.5 font-mono text-[11px] text-slate-400">
-                        <li><strong>X<sup>B</sup></strong> = Alel normal dominan</li>
-                        <li><strong>X<sup>b</sup></strong> = Alel mutan resesif</li>
-                        <li><strong>Y</strong> = Kromosom kelamin pria (tidak membawa alel ini)</li>
-                    </ul>
-                </div>
-
-                <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700">
-                    <h4 class="font-bold text-rose-400 mb-1">2. Pilih Kondisi Genotipe Orang Tua</h4>
-                    <p>Tentukan status Ibu (Normal <code class="text-cyan-300">X<sup>B</sup>X<sup>B</sup></code>, Pembawa/Carrier <code class="text-amber-300">X<sup>B</sup>X<sup>b</sup></code>, atau Sakit <code class="text-rose-400">X<sup>b</sup>X<sup>b</sup></code>) dan status Ayah (Normal <code class="text-cyan-300">X<sup>B</sup>Y</code> atau Sakit <code class="text-rose-400">X<sup>b</sup>Y</code>).</p>
-                </div>
-
-                <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700">
-                    <h4 class="font-bold text-amber-400 mb-1">3. Jalankan Analisis Genomik</h4>
-                    <p>Klik tombol <strong>MULAI ANALISIS RISIKO</strong>. Sistem akan mensimulasikan pemisahan kromosom gonosom saat meiosis dan menampilkan 4 kartu digital anak (2 anak perempuan dan 2 anak laki-laki).</p>
-                </div>
-
-                <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700">
-                    <h4 class="font-bold text-emerald-400 mb-1">4. Evaluasi Risiko Medis & Pola Criss-Cross</h4>
-                    <p>Perhatikan indikator probabilitas persentase anak Sakit vs Carrier. Pahami mengapa anak laki-laki lebih rentan menderita karena hanya memiliki satu kromosom X (<em>hemizigot</em>).</p>
-                </div>
-            </div>
-
-            <button onclick="toggleSexTutorialModal()" class="w-full mt-6 bg-gradient-to-r from-rose-600 via-pink-600 to-cyan-600 hover:from-rose-500 hover:to-cyan-500 text-white font-bold py-3 rounded-xl text-xs font-mono transition shadow-lg shadow-rose-900/40">
-                SAYA MENGERTI, MULAI ANALISIS
-            </button>
-        </div>
-    </div>
 </body>
+
 </html>

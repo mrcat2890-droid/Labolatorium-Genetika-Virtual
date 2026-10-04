@@ -6,6 +6,38 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📌 Refaktorisasi & Overhaul Desain: Modul GEN-X (Sex-Linked Heredity & Hemophilia Risk Engine)
+- **Harmonisasi Desain Sistem GEN-OS Futuristik (`Generator Risiko Pewarisan Sifat Seks (terbaru)/Generator Risiko Pewarisan Sifat Seks.html`):**
+  - Menggantikan antarmuka lama berbasis vanilla CSS (hasil buatan Claude dengan warna dan tema yang tidak seragam) menjadi standar desain sistem futuristik GEN-OS menggunakan Tailwind CSS, latar belakang dark slate `#030712`, glassmorphism (`glass-panel` melengkung modern dengan `backdrop-blur-xl`), tipografi resmi (`Orbitron`, `Rajdhani`, dan `Fira Code`), serta palet warna selaras (aksen Rose `#fb7185` & Pink `#ec4899` sesuai tema Modul 04 pada `index.html`).
+  - Menghubungkan modul secara utuh ke Beranda dengan tombol navigasi `← BERANDA GEN-OS` menuju `../index.html`.
+- **Banner Edukatif 3 Prinsip Fundamental Pewarisan Terpaut Seks:**
+  - Menyediakan 3 kartu ringkasan visual interaktif:
+    1. *Prinsip 1: Kondisi Hemizigot Pria (XY)* – Penjelasan mengapa satu alel resesif mutan ($X^b$) langsung memunculkan fenotipe penyakit pada laki-laki.
+    2. *Prinsip 2: Pola Pewarisan Silang (Criss-Cross Inheritance)* – Mengapa ayah penderita mewariskan sifat penyakit kepada anak perempuan (menjadi carrier), bukan anak laki-laki.
+    3. *Prinsip 3: Kompensasi Dosis Lyonisasi (Inaktivasi X)* – Mekanisme kondensasi Badan Barr pada wanita heterozigot normal/carrier.
+- **Pemilih 3 Entitas Penyakit Terpaut Seks Utama:**
+  - Toggle interaktif pemilihan kelainan:
+    1. *Hemofilia*: Defisiensi Faktor VIII/IX pembekuan darah (alel $X^H$ vs $X^h$).
+    2. *Buta Warna Merah-Hijau*: Defisiensi opsin kerucut retina (alel $X^{Cb}$ vs $X^{cb}$).
+    3. *Distrofi Otot Duchenne (DMD)*: Defisiensi protein distrofin sarkolema (alel $X^D$ vs $X^d$).
+  - Seluruh label alel pada tombol induk (Ibu & Ayah), papan Punnett, dan kartu anak secara otomatis menyesuaikan simbol genetik sesuai penyakit terpilih.
+- **Papan Catur Punnett Gonosom ($2 \times 2$) & Galeri 4 Kartu Keturunan F1:**
+  - Matriks persilangan interaktif menampilkan gamet ovum maternal ($X_1, X_2$) bersilangan dengan sperma paternal ($X, Y$) lengkap dengan visualisasi kode warna status kesehatan.
+  - 4 kartu profil digital keturunan F1 menampilkan avatar gender kromatid, formula genotipe lengkap berformat superskrip, probabilitas 25% per kotak kehamilan, dan badge fenotipe (Normal, Carrier, atau Sakit).
+- **Indikator Telemetri Risiko & Laporan Konseling Genetika Medis:**
+  - Pengukur persentase risiko berbentuk grafik cincin melingkar ganda (*double ring gauge*): Risiko Fenotipe Sakit Total (%) dan Risiko Pembawa Sifat/Carrier Total (%).
+  - Breakdown risiko spesifik: probabilitas anak laki-laki sakit (dari total 2 anak laki-laki) dan probabilitas anak perempuan carrier (dari total 2 anak perempuan).
+  - Laporan konseling premarital komprehensif menguraikan entitas lokus kromosom, evaluasi tingkat bahaya mutasi, serta rekomendasi uji diagnostik prenatal (*Amniocentesis/CVS*).
+- **Penerapan Modal Panduan & Referensi Ilmiah (Kepatuhan Aturan #1 & #5):**
+  - Dialog modal **"📖 Panduan Lengkap Simulasi GEN-X"** yang menguraikan konsep alel terpaut kromosom X, kondisi hemizigot, dan petunjuk operasional simulator.
+  - Dialog modal **"📚 Literatur Ilmiah"** dengan sitasi ilmiah primer:
+    - *Thomas Hunt Morgan (1910)* – Penemuan pewarisan terpaut seks pada *Drosophila* (Hadiah Nobel Fisiologi/Kedokteran 1933).
+    - *J. B. S. Haldane (1935)* – Laju mutasi spontan gen hemofilia manusia.
+    - *Mary F. Lyon (1961)* – Teori inaktivasi kromosom X / Lyonisasi.
+    - *Jeremy Nathans et al. (1986)* – Dasar molekuler gen opsin buta warna pada kromosom X.
+  - Efek audio interaktif sintetis (Web Audio API) untuk klik kontrol, animasi segregasi DNA meiosis, dan peringatan klakson risiko mutasi.
+
+
 ### 📌 Refaktorisasi & Overhaul Desain: Modul GEN-K (Karyotype Scanner & Aneuploidy Engine)
 - **Harmonisasi Desain Sistem GEN-OS Futuristik (`Simulasi Deteksi Kromosom/Simulasi-Deteksi-Kromosom.html`):**
   - Menggantikan antarmuka lama berbasis vanilla CSS (hasil buatan Claude dengan sudut tajam kaku dan tema gelap polos) menjadi standar desain sistem futuristik GEN-OS menggunakan Tailwind CSS, latar belakang dark slate `#030712`, glassmorphism (`glass-panel` melengkung modern dengan `backdrop-blur-xl`), tipografi resmi (`Orbitron`, `Rajdhani`, dan `Fira Code`), serta palet warna selaras (aksen Cyan `#06b6d4` & `#22d3ee` sesuai tema Modul 05 pada `index.html`).
