@@ -6,6 +6,16 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📌 Peningkatan Responsivitas Mobile & Integrasi Penuh 12 Modul pada Beranda Klasik
+- **Optimasi Responsivitas Multi-Perangkat (Mobile/Tablet/Desktop):**
+  - Menerapkan arsitektur flex-wrap dinamis (`flex-wrap gap-1`) pada seluruh panel statistik genotipe dan fenotipe di dalam modul untuk mencegah bentrok dan tumpang-tindih (overlap) rasio ketika dibuka pada perangkat berlayar sempit (seperti di HP).
+  - Modul yang diperbaiki rasio panelnya mencakup: *Generator Rasio Dihibrid*, *Simulasi Kriptomeri*, *Simulasi Epistasis*, *Simulasi Atavisme*, dan *Simulasi Hipostasis*.
+  - Mengubah _padding_ absolut statis (`p-8`) menjadi _padding_ dinamis (`p-5 md:p-8` atau `p-5 md:p-6`) pada seluruh kartu antarmuka untuk memberikan ruang bernapas (breathing room) teks secara vertikal & horizontal saat dilihat dari perangkat mobile.
+  - Memperbaiki tata letak (layout flex) tajuk judul/catatan kaki (*footer/metadata*) pada _Simulasi Deteksi Kromosom_ agar menurun terstruktur dan tidak keluar dari area layar (overflow).
+- **Integrasi Penuh 12 Modul pada Template Antarmuka Lama (`index.html`):**
+  - Mengembalikan tata letak kartu grid futuristik asli (dengan animasi _grayscale_ emoji) namun mengembangkannya untuk menampung seluruh 12 modul simulator yang sudah dibangun secara rapi, tanpa mengorbankan desain antarmuka klasik yang disukai.
+  - Menyempurnakan skala elemen 3D loader DNA dan Jaringan Background Partikel (Particle Background) agar tampil _responsive_ menyesuaikan resolusi jendela browser (viewport width).
+
 ### 📌 Audit Komprehensif, Perbaikan Tautan & Navigasi Antar-Modul, Penambahan Tutorial Interaktif (Aturan #5), dan Integrasi Modul 3D Molekuler
 - **Perbaikan Bug Kritis Tautan 404 pada Kartu Modul Beranda (`index.html`):**
   - Memperbaiki tautan modul GEN-K Deteksi Kromosom dari `Simulasi Deteksi Kromosom/Simulasi Deteksi Kromosom.html` (menggunakan spasi yang menyebabkan error 404 pada web server dan GitHub Pages) menjadi `Simulasi Deteksi Kromosom/Simulasi-Deteksi-Kromosom.html` (menggunakan tanda hubung sesuai berkas aktual).
