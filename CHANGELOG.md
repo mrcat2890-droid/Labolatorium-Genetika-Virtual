@@ -6,6 +6,62 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🩸 Desain Latar Kustom, Palet Warna Khas, & Elemen Karakteristik Modul SICKLE-MUT (Anemia Sel Sabit)
+- **Transformasi Palet Warna Khas Hematologic Darkfield & Biolab Matrix Grid:**
+  - Mengeliminasi latar belakang generik flat hitam `#030712` dan menggantinya dengan palet tematik **Deep Hematologic Darkfield Obsidian (`#060205`)**.
+  - Mengimplementasikan perpaduan gradien radial bertingkat: **Sickle Arterial Scarlet Crimson (`rgba(220, 38, 38, 0.20)`)**, **Valine-6 Amber & Fe²⁺ Heme Gold (`rgba(245, 158, 11, 0.14)`)**, dan **Deep Venous Deoxygenation Ruby (`rgba(159, 18, 57, 0.12)`)**.
+  - Mengintegrasikan tekstur grid biologi molekuler presisi laboratorium 36px × 36px (`rgba(239, 68, 68, 0.035)`) serta lapisan pemindai cyber CRT scanlines halus (`0.18 opacity`) khas instrumen workstation GEN-OS.
+- **Elemen Ciri Khas Biologis SICKLE-MUT (*Signature Animated Floating Elements*):**
+  - **Floating Crescent Sickle Erythrocytes (Sel Darah Merah Bentuk Sabit):** Visualisasi SVG eritrosit sabit yang melengkung dengan ujung runcing khas, gradien scarlet-ke-ruby (`#f87171` → `#dc2626` → `#7f1d1d`), serta animasi melayang dan berputar pelan (`sickleDriftAndTumble` durasi 25s–31s).
+  - **Floating Biconcave Red Blood Cells (Eritrosit Bikonkaf Normal):** Sel darah merah normal cakram bikonkaf dengan lekukan tengah (`#fca5a5` → `#ef4444` → `#991b1b`) sebagai pembanding visual langsung antara eritrosit fleksibel HbA dan eritrosit kaku HbS.
+  - **HbS Polymer Helical Fibers (Serat Polimerisasi HbS):** Representasi heliks polimerisasi rantai hemoglobin kristal kaku dengan titik kontak hidrofobik Valin-6 bercahaya kuning amber (`#fbbf24`) dan konektor ikatan hidrofobik.
+  - **Telemetri Sitogenetika & Lokus Mutasi Khas:** Node teks monospaced bercahaya dengan animasi denyut halus:
+    - `[HBB LOCUS // CHR 11p15.4 • POINT MUTATION]`
+    - `[GAG → GTG // Glu6Val • HYDROPHOBIC PATCH]`
+    - `[DEOXY-HbS POLYMER FIBERS • VASO-OCCLUSION]`
+    - `[HETEROZYGOTE ADVANTAGE: MALARIA RESISTANCE]`
+- **Peningkatan Frosted Glassmorphism & Keterbacaan Teks Anti-Washout:**
+  - Panel utama `.glass-panel` ditingkatkan dengan densitas kaca buram `0.85`, pemburaman lensa `backdrop-filter: blur(24px) saturate(180%)`, specular highlight 1px pada sisi atas, serta garis batas bersinar crimson `rgba(239, 68, 68, 0.32)`.
+  - Kartu sub-panel dan internal card berlatar obsidian translucent ruby (`rgba(24, 9, 15, 0.82)`), memungkinkan elemen biologis di latar belakang terlihat melayang lembut di belakang panel teks tanpa mengorbankan keterbacaan.
+  - Aturan tipografi berkontras tinggi (`#f1f5f9` untuk paragraf/teks utama, `#cbd5e1` untuk keterangan/label, dan text-shadow gelap pada heading).
+  - Modal tutorial diperbarui dengan latar kaca obsidian ruby gelap konsisten (`rgba(22, 8, 15, 0.98)`).
+- **Optimasi Performa Seluler (Mobile GPU Compliance):**
+  - Penonaktifan efek `backdrop-filter` pada layar ponsel (`@media (max-width: 768px)`) dengan fallback warna gelap solid (`rgba(15, 23, 42, 0.94)`).
+  - Penyembunyian lingkaran ornamen ambient blur raksasa pada perangkat seluler (`hidden md:block`) demi menjaga kelancaran 60 FPS pada ponsel.
+- **Berkas yang Diperbarui:**
+  - `Simulasi Mutasi Genetik/Simulasi-Anemia-Sel-Sabit.html`
+  - `CHANGELOG.md`
+
+### 🧬 Modul Baru: SICKLE-MUT — Simulasi Mutasi Anemia Sel Sabit (Sickle Cell Anemia)
+- **Riset Literatur Ilmiah:**
+  - Referensi utama: NIH/NCBI, Genome.gov, Ingram (1956), Pauling et al. (1949), BioNinja, LibreTexts
+  - Data sekuens DNA gen HBB (kromosom 11p15.4) berdasarkan database NCBI
+  - Mekanisme mutasi titik (point mutation) kodon ke-6 rantai β-globin
+- **Fitur Simulasi (7 Tahap Interaktif):**
+  1. **Overview:** Identitas genetik lengkap (gen HBB, kromosom 11, substitusi A→T, autosomal resesif) dengan kaskade animasi dampak mutasi
+  2. **DNA Mutation:** Visualisasi perbandingan untai coding & template DNA normal (HbA) vs mutan (HbS) dengan nukleotida bermutasi ditandai animasi pulse
+  3. **Transkripsi:** Proses DNA → mRNA, menunjukkan perubahan kodon GAG → GUG pada posisi ke-6 dengan komplementer basa
+  4. **Translasi:** Visualisasi rantai polipeptida β-globin, tabel perbandingan 8 asam amino pertama, perubahan Glu (hidrofilik) → Val (hidrofobik)
+  5. **Hemoglobin:** Struktur kuartener α₂β₂, gugus heme Fe²⁺, sticky patch hidrofobik, simulasi animasi polimerisasi serat HbS
+  6. **Sel Darah:** Perbandingan eritrosit normal (bikonkaf) vs sabit (sickle), simulasi aliran darah real-time dengan vaso-oklusi, dampak klinis
+  7. **Pewarisan:** Diagram Punnett interaktif (4 kombinasi genotipe), penjelasan HbAA/HbAS/HbSS, heterozygote advantage terhadap malaria
+- **Sistem Tutorial 3 Halaman:**
+  - Halaman 1: Latar belakang sejarah & tujuan pembelajaran
+  - Halaman 2: Perbandingan HbA vs HbS dengan detail kodon dan sifat asam amino
+  - Halaman 3: Panduan navigasi 7 tahap simulasi
+  - Dapat diakses kembali kapan saja via tombol "? TUTORIAL"
+- **UI/UX:**
+  - Desain futuristik GEN-OS cyberpunk konsisten dengan modul lainnya
+  - Glass panel, animasi micro-interaction, progress bar, navigasi step-by-step
+  - Tooltip informatif pada setiap elemen interaktif (nukleotida, asam amino, subunit hemoglobin)
+  - Responsif untuk desktop dan mobile
+- **Dashboard Updated:**
+  - Menambahkan kartu modul ke-14 "SICKLE-MUT" di halaman utama `index.html`
+  - Memperbarui counter modul dari "13 ACTIVE MODULES" → "14 ACTIVE MODULES"
+- **Berkas yang Ditambahkan/Diperbarui:**
+  - `Simulasi Mutasi Genetik/Simulasi-Anemia-Sel-Sabit.html` (BARU)
+  - `index.html` (diperbarui)
+
 ### 🚀 Optimalisasi Performa Mendalam & Rendering Instan Modul Generator Rasio Dihibrid (Render Performance Overhaul)
 - **Investigasi Masalah Render Berat pada Perangkat Seluler (*Render Performance Bottleneck*):**
   - **Penundaan Buatan (*Artificial 1.1s Timeout Latency*):** Ditemukan bahwa fungsi `startAnalysis()` memiliki rantai penundaan `setTimeout` bertingkat (400ms, 800ms, 1100ms) dengan animasi pemuatan DNA buatan yang menyembunyikan hasil dan memblokir rendering. Saat pengguna ponsel menekan tombol *preset* atau tombol hitung, modul terasa "beku" atau sangat berat karena harus menunggu 1,1 detik sebelum tabel muncul.

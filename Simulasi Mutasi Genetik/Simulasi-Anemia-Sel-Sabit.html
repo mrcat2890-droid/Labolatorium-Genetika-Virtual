@@ -1,0 +1,2331 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>GEN-OS // SICKLE-MUT: Simulasi Mutasi Anemia Sel Sabit</title>
+    <meta name="description"
+        content="Simulasi interaktif mutasi gen HBB penyebab Anemia Sel Sabit: visualisasi point mutation DNA, transkripsi mRNA, translasi protein, perubahan hemoglobin, dan deformasi sel darah merah.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        sca: {
+                            dark: '#030712',
+                            panel: 'rgba(15, 23, 42, 0.85)',
+                            border: 'rgba(239, 68, 68, 0.25)',
+                            red: '#ef4444',
+                            crimson: '#dc2626',
+                            rose: '#f43f5e',
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            purple: '#a855f7',
+                            indigo: '#6366f1',
+                            blue: '#3b82f6'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['Fira Code', 'JetBrains Mono', 'Courier Prime', 'monospace'],
+                        display: ['Orbitron', 'sans-serif'],
+                        sans: ['Rajdhani', 'sans-serif']
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2.5s infinite ease-in-out',
+                        'float': 'float 3s ease-in-out infinite',
+                        'sickle-deform': 'sickleDeform 2s ease-in-out forwards',
+                        'flow-rbc': 'flowRBC 8s linear infinite',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(239, 68, 68, 0.25)' },
+                            '50%': { boxShadow: '0 0 30px rgba(239, 68, 68, 0.6)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' }
+                        },
+                        sickleDeform: {
+                            '0%': { borderRadius: '50%' },
+                            '100%': { borderRadius: '60% 10% 60% 10%' }
+                        },
+                        flowRBC: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(calc(100vw + 100%))' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        /* Signature Sickle-Mut Hematologic Darkfield Palette & Biolab Matrix Grid */
+        body {
+            background-color: #060205;
+            background-image:
+                radial-gradient(ellipse at 12% 18%, rgba(220, 38, 38, 0.20) 0%, transparent 48%),
+                radial-gradient(ellipse at 88% 78%, rgba(245, 158, 11, 0.14) 0%, transparent 50%),
+                radial-gradient(circle at 50% 45%, rgba(159, 18, 57, 0.12) 0%, transparent 62%),
+                linear-gradient(rgba(239, 68, 68, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(239, 68, 68, 0.035) 1px, transparent 1px);
+            background-size: 100%, 100%, 100%, 36px 36px, 36px 36px;
+            color: #cbd5e1;
+            margin: 0;
+            font-family: 'Rajdhani', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Scanlines Overlay */
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 40;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.22) 50%);
+            background-size: 100% 4px;
+            opacity: 0.18;
+        }
+
+        /* Sickle-Mut Signature Floating Background Animations */
+        @keyframes sickleDriftAndTumble {
+            0% { transform: translateY(105vh) rotate(-25deg) scale(0.85); opacity: 0; }
+            15% { opacity: 0.45; }
+            50% { transform: translateY(50vh) rotate(15deg) scale(1.05); opacity: 0.75; }
+            85% { opacity: 0.45; }
+            100% { transform: translateY(-12vh) rotate(45deg) scale(0.9); opacity: 0; }
+        }
+
+        @keyframes rbcDiscDrift {
+            0% { transform: translateY(105vh) rotate(0deg) scale(0.9); opacity: 0; }
+            20% { opacity: 0.35; }
+            50% { transform: translateY(52vh) rotate(-18deg) scale(1.05); opacity: 0.6; }
+            80% { opacity: 0.35; }
+            100% { transform: translateY(-10vh) rotate(20deg) scale(0.9); opacity: 0; }
+        }
+
+        @keyframes fiberDrift {
+            0% { transform: translateY(105vh) rotate(-10deg) scale(0.9); opacity: 0; }
+            25% { opacity: 0.4; }
+            50% { transform: translateY(48vh) rotate(5deg) scale(1.02); opacity: 0.65; }
+            75% { opacity: 0.4; }
+            100% { transform: translateY(-10vh) rotate(15deg) scale(0.9); opacity: 0; }
+        }
+
+        @keyframes telemetryPulse {
+            0%, 100% { opacity: 0.25; transform: scale(1); }
+            50% { opacity: 0.65; transform: scale(1.04); filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.5)); }
+        }
+
+        .ambient-sickle {
+            position: absolute;
+            pointer-events: none;
+            animation: sickleDriftAndTumble linear infinite;
+        }
+
+        .ambient-rbc-disc {
+            position: absolute;
+            pointer-events: none;
+            animation: rbcDiscDrift linear infinite;
+        }
+
+        .ambient-fiber {
+            position: absolute;
+            pointer-events: none;
+            animation: fiberDrift linear infinite;
+        }
+
+        .telemetry-ambient {
+            position: absolute;
+            pointer-events: none;
+            animation: telemetryPulse ease-in-out infinite;
+        }
+
+        /* Custom Scrollbar with Crimson Amber Accent */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #060205; }
+        ::-webkit-scrollbar-thumb { background: rgba(239, 68, 68, 0.35); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ef4444; }
+
+        /* High-End Frosted Glassmorphism Panel (Sickle Obsidian Glass Effect) */
+        .glass-panel {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(20, 8, 14, 0.85);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1.5px solid rgba(239, 68, 68, 0.32);
+            border-radius: 1rem;
+            box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.65), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.65), transparent);
+            pointer-events: none;
+        }
+
+        /* Frosted Glass Translucency for Sub-panels and Internal Cards */
+        [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-slate-800/"] {
+            background-color: rgba(24, 9, 15, 0.82) !important;
+            backdrop-filter: blur(16px) saturate(160%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+            border-color: rgba(239, 68, 68, 0.22) !important;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12) !important;
+        }
+
+        /* High Contrast Typography Overrides - Anti-Washout */
+        p, .text-slate-300 {
+            color: #f1f5f9 !important;
+        }
+        .text-slate-400 {
+            color: #cbd5e1 !important;
+        }
+        h1, h2, h3, h4 {
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+        }
+
+        /* DNA Strand Visualization */
+        .dna-container {
+            display: flex;
+            gap: 2px;
+            align-items: center;
+            overflow-x: auto;
+            padding: 12px 0;
+        }
+        .codon-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 8px;
+            border-radius: 8px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            min-width: 56px;
+        }
+        .codon-group:hover {
+            transform: translateY(-4px);
+        }
+        .codon-group.highlight-normal {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+        }
+        .codon-group.highlight-mutant {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+            animation: pulseGlow 2s infinite;
+        }
+        .codon-group.mutation-site {
+            border: 2px solid rgba(245, 158, 11, 0.7);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .nucleotide-base {
+            font-family: 'Fira Code', monospace;
+            font-weight: 600;
+            font-size: 1.1rem;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        .base-A { color: #34d399; background: rgba(52, 211, 153, 0.12); }
+        .base-T { color: #f472b6; background: rgba(244, 114, 182, 0.12); }
+        .base-G { color: #60a5fa; background: rgba(96, 165, 250, 0.12); }
+        .base-C { color: #fbbf24; background: rgba(251, 191, 36, 0.12); }
+        .base-U { color: #c084fc; background: rgba(192, 132, 252, 0.12); }
+
+        .base-mutated {
+            animation: mutantPulse 1.5s infinite;
+            border: 1px solid #ef4444;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
+
+        @keyframes mutantPulse {
+            0%, 100% { box-shadow: 0 0 8px rgba(239, 68, 68, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.8); }
+        }
+
+        /* Hydrogen Bond Lines */
+        .h-bond {
+            width: 1px;
+            height: 14px;
+            background: linear-gradient(to bottom, transparent, rgba(148, 163, 184, 0.5), transparent);
+            margin: 0 auto;
+        }
+
+        /* RBC Visualization */
+        .rbc-normal {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at 40% 40%, #fca5a5, #ef4444, #991b1b);
+            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.3), 2px 2px 8px rgba(0,0,0,0.4);
+            position: relative;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .rbc-normal::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,0,0,0.25), transparent);
+        }
+
+        .rbc-sickle {
+            width: 70px;
+            height: 35px;
+            border-radius: 60% 10% 60% 10%;
+            background: linear-gradient(135deg, #fca5a5, #b91c1c, #7f1d1d);
+            box-shadow: inset -3px -3px 10px rgba(0,0,0,0.4), 2px 2px 8px rgba(0,0,0,0.5);
+            transform: rotate(-15deg);
+        }
+
+        /* Amino Acid Badge */
+        .amino-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        /* Tutorial Modal */
+        .tutorial-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .tutorial-card {
+            max-width: 720px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: linear-gradient(135deg, rgba(22, 8, 15, 0.98), rgba(34, 12, 22, 0.96));
+            border: 1.5px solid rgba(239, 68, 68, 0.4);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 0 60px rgba(239, 68, 68, 0.25), 0 25px 50px rgba(0,0,0,0.7);
+        }
+
+        /* Protein Chain Viz */
+        .protein-chain {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 12px;
+        }
+        .amino-acid-node {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.6rem;
+            font-weight: 700;
+            transition: all 0.4s ease;
+            cursor: help;
+            position: relative;
+        }
+        .amino-acid-node:hover {
+            transform: scale(1.2);
+            z-index: 10;
+        }
+        .peptide-bond {
+            width: 16px;
+            height: 2px;
+            background: linear-gradient(to right, rgba(148,163,184,0.3), rgba(148,163,184,0.7), rgba(148,163,184,0.3));
+            border-radius: 1px;
+        }
+
+        /* Hemoglobin Structure */
+        .hemoglobin-viz {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: 0 auto;
+        }
+        .globin-subunit {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            border-radius: 40% 60% 50% 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+        .globin-subunit:hover {
+            transform: scale(1.1);
+            z-index: 5;
+        }
+        .alpha-chain {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.6), rgba(59, 130, 246, 0.3));
+            border: 1px solid rgba(96, 165, 250, 0.5);
+            color: #93c5fd;
+        }
+        .beta-chain-normal {
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.6), rgba(16, 185, 129, 0.3));
+            border: 1px solid rgba(52, 211, 153, 0.5);
+            color: #6ee7b7;
+        }
+        .beta-chain-mutant {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.6), rgba(220, 38, 38, 0.3));
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            animation: mutantPulse 2s infinite;
+        }
+        .heme-group {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(234, 179, 8, 0.7), rgba(234, 179, 8, 0.2));
+            border: 2px solid rgba(234, 179, 8, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* Inheritance Diagram */
+        .punnett-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-height: 55px;
+        }
+        .punnett-cell:hover {
+            transform: scale(1.05);
+        }
+
+        /* Step Nav */
+        .step-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .step-btn.active {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+        }
+        .step-btn:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+        }
+        .step-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #e2e8f0;
+        }
+
+        /* Blood Vessel Visualization */
+        .blood-vessel {
+            position: relative;
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(to bottom, 
+                rgba(30, 41, 59, 0.9),
+                rgba(127, 29, 29, 0.15) 20%,
+                rgba(127, 29, 29, 0.25) 50%,
+                rgba(127, 29, 29, 0.15) 80%,
+                rgba(30, 41, 59, 0.9)
+            );
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid rgba(239, 68, 68, 0.15);
+        }
+        .vessel-wall {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, transparent, rgba(239, 68, 68, 0.4), transparent);
+        }
+        .vessel-wall.top { top: 15px; }
+        .vessel-wall.bottom { bottom: 15px; }
+
+        .floating-rbc {
+            position: absolute;
+            animation: floatInVessel linear infinite;
+        }
+        @keyframes floatInVessel {
+            0% { transform: translateX(-80px); }
+            100% { transform: translateX(calc(100% + 80px)); }
+        }
+
+        /* Sticky Patch Indicator */
+        .sticky-patch {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(239, 68, 68, 0.7);
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+            animation: stickyPulse 1.5s infinite;
+        }
+        @keyframes stickyPulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.4); opacity: 1; }
+        }
+
+        /* Malaria Advantage Section */
+        .advantage-card {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.03));
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.3s ease;
+        }
+        .advantage-card:hover {
+            border-color: rgba(245, 158, 11, 0.5);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.1);
+        }
+
+        /* Codon Table */
+        .codon-table-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 1fr 1fr 1fr;
+            gap: 4px;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.8rem;
+        }
+        .codon-table-row:last-child { border-bottom: none; }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            *, *::before, *::after {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            .glass-panel {
+                background-color: rgba(15, 23, 42, 0.94) !important;
+            }
+            .glass-panel-secondary {
+                background-color: rgba(15, 23, 42, 0.96) !important;
+            }
+            .hemoglobin-viz {
+                width: 180px;
+                height: 180px;
+            }
+            .globin-subunit {
+                width: 72px;
+                height: 72px;
+                font-size: 0.6rem;
+            }
+            .heme-group {
+                width: 40px;
+                height: 40px;
+            }
+            .codon-group {
+                min-width: 48px;
+                padding: 4px 6px;
+            }
+            .nucleotide-base {
+                font-size: 0.9rem;
+                width: 22px;
+                height: 22px;
+            }
+        }
+
+        /* Animation for section transitions */
+        .section-content {
+            animation: fadeSlideIn 0.5s ease-out;
+        }
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Progress bar */
+        .progress-track {
+            height: 3px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #ef4444, #f59e0b);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        /* Tooltip */
+        .tooltip-custom {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 50;
+        }
+        .amino-acid-node:hover .tooltip-custom,
+        .codon-group:hover .tooltip-custom {
+            opacity: 1;
+        }
+
+        /* Fiber polymerization viz */
+        .fiber-line {
+            height: 4px;
+            background: linear-gradient(to right, rgba(239, 68, 68, 0.3), rgba(239, 68, 68, 0.8), rgba(239, 68, 68, 0.3));
+            border-radius: 2px;
+            margin: 3px 0;
+            animation: fiberGrow 1s ease-out forwards;
+            transform-origin: left;
+        }
+        @keyframes fiberGrow {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+
+        /* Chromosome visualization */
+        .chromosome-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen font-sans relative overflow-x-hidden selection:bg-red-500/40 selection:text-white">
+    <div class="scanlines"></div>
+
+    <!-- Global SVG Definitions for Characteristic Sickle-Mut Background Elements -->
+    <svg class="hidden" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <!-- Sickle RBC Gradient 1: Arterial Scarlet Shading -->
+            <linearGradient id="bgSickleGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f87171" stop-opacity="0.95"/>
+                <stop offset="45%" stop-color="#dc2626" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="#7f1d1d" stop-opacity="0.95"/>
+            </linearGradient>
+            <!-- Sickle RBC Gradient 2: Deoxygenated Deep Ruby Shading -->
+            <linearGradient id="bgSickleGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fb7185" stop-opacity="0.9"/>
+                <stop offset="50%" stop-color="#be123c" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="#4c0519" stop-opacity="0.95"/>
+            </linearGradient>
+            <!-- Normal RBC Biconcave Radial Gradient -->
+            <radialGradient id="bgRbcDiscGrad" cx="35%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#fca5a5" stop-opacity="0.9"/>
+                <stop offset="40%" stop-color="#ef4444" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="#991b1b" stop-opacity="0.95"/>
+            </radialGradient>
+        </defs>
+    </svg>
+
+    <!-- Signature SICKLE-MUT Animated Background (Deformed Sickle RBCs, Normal Discs, HbS Polymers & Genetic Telemetry) -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <!-- Ambient Neon Glow Core -->
+        <div class="absolute -top-24 -left-24 w-[32rem] h-[32rem] bg-red-600/20 rounded-full filter blur-[105px] pointer-events-none hidden md:block"></div>
+        <div class="absolute top-1/2 -right-28 w-[30rem] h-[30rem] bg-amber-600/15 rounded-full filter blur-[110px] pointer-events-none hidden md:block"></div>
+        <div class="absolute -bottom-28 left-1/3 w-[34rem] h-[34rem] bg-rose-900/20 rounded-full filter blur-[125px] pointer-events-none hidden md:block"></div>
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[24rem] h-[24rem] bg-red-800/10 rounded-full filter blur-[95px] pointer-events-none hidden md:block"></div>
+
+        <!-- Floating Sickle Erythrocyte #1 (Prominent Crescent Left) -->
+        <div class="ambient-sickle" style="left: 7%; animation-duration: 25s; animation-delay: 0s;">
+            <svg class="w-16 h-16 drop-shadow-[0_0_16px_rgba(239,68,68,0.65)]" viewBox="0 0 64 64" fill="none">
+                <path d="M 12 30 C 11 14 26 6 48 8 C 32 16 26 28 30 46 C 32 52 38 56 42 60 C 22 58 13 46 12 30 Z" fill="url(#bgSickleGrad1)"/>
+                <path d="M 15 30 C 14 17 26 11 44 11 C 30 19 26 30 29 45 C 22 43 16 37 15 30 Z" fill="#7f1d1d" opacity="0.65"/>
+            </svg>
+        </div>
+
+        <!-- Floating Sickle Erythrocyte #2 (Large Crescent Right) -->
+        <div class="ambient-sickle" style="left: 84%; animation-duration: 28s; animation-delay: 6s;">
+            <svg class="w-20 h-20 drop-shadow-[0_0_18px_rgba(220,38,38,0.7)]" viewBox="0 0 64 64" fill="none">
+                <path d="M 12 30 C 11 14 26 6 48 8 C 32 16 26 28 30 46 C 32 52 38 56 42 60 C 22 58 13 46 12 30 Z" fill="url(#bgSickleGrad2)"/>
+                <path d="M 15 30 C 14 17 26 11 44 11 C 30 19 26 30 29 45 C 22 43 16 37 15 30 Z" fill="#4c0519" opacity="0.7"/>
+            </svg>
+        </div>
+
+        <!-- Floating Sickle Erythrocyte #3 (Medium Crescent Center-Left) -->
+        <div class="ambient-sickle" style="left: 38%; animation-duration: 31s; animation-delay: 13s;">
+            <svg class="w-14 h-14 drop-shadow-[0_0_14px_rgba(244,63,94,0.6)]" viewBox="0 0 64 64" fill="none">
+                <path d="M 12 30 C 11 14 26 6 48 8 C 32 16 26 28 30 46 C 32 52 38 56 42 60 C 22 58 13 46 12 30 Z" fill="url(#bgSickleGrad1)"/>
+            </svg>
+        </div>
+
+        <!-- Floating Normal Biconcave Erythrocyte #1 (HbA Disc for comparison) -->
+        <div class="ambient-rbc-disc" style="left: 22%; animation-duration: 26s; animation-delay: 3s;">
+            <svg class="w-12 h-12 drop-shadow-[0_0_12px_rgba(239,68,68,0.55)]" viewBox="0 0 50 50">
+                <circle cx="25" cy="25" r="22" fill="url(#bgRbcDiscGrad)"/>
+                <ellipse cx="25" cy="25" rx="12" ry="9" fill="#7f1d1d" opacity="0.8"/>
+                <ellipse cx="24" cy="24" rx="8" ry="6" fill="#450a0a" opacity="0.6"/>
+            </svg>
+        </div>
+
+        <!-- Floating Normal Biconcave Erythrocyte #2 (Right Center) -->
+        <div class="ambient-rbc-disc" style="left: 70%; animation-duration: 29s; animation-delay: 9s;">
+            <svg class="w-11 h-11 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]" viewBox="0 0 50 50">
+                <circle cx="25" cy="25" r="22" fill="url(#bgRbcDiscGrad)"/>
+                <ellipse cx="25" cy="25" rx="11" ry="8" fill="#7f1d1d" opacity="0.75"/>
+            </svg>
+        </div>
+
+        <!-- Floating HbS Polymerization Helical Fiber (Serat Polimer HbS yang Mengkristal) -->
+        <div class="ambient-fiber" style="left: 52%; animation-duration: 33s; animation-delay: 5s;">
+            <svg class="w-24 h-48 drop-shadow-[0_0_15px_rgba(245,158,11,0.4)]" viewBox="0 0 60 120" fill="none">
+                <!-- Helical spine curve -->
+                <path d="M 20 5 Q 40 30 25 60 T 35 115" stroke="rgba(239,68,68,0.4)" stroke-width="2" stroke-dasharray="3 3"/>
+                <!-- Tetramer globes with Val-6 sticky patches -->
+                <circle cx="20" cy="15" r="8" fill="#dc2626" opacity="0.5"/>
+                <circle cx="23" cy="18" r="3" fill="#fbbf24" opacity="0.85"/>
+                
+                <circle cx="34" cy="42" r="9" fill="#b91c1c" opacity="0.5"/>
+                <circle cx="31" cy="45" r="3.5" fill="#f59e0b" opacity="0.9"/>
+                
+                <circle cx="24" cy="72" r="8.5" fill="#dc2626" opacity="0.5"/>
+                <circle cx="27" cy="75" r="3" fill="#fbbf24" opacity="0.85"/>
+                
+                <circle cx="33" cy="100" r="8" fill="#991b1b" opacity="0.5"/>
+                <circle cx="30" cy="103" r="3" fill="#f59e0b" opacity="0.85"/>
+                
+                <!-- Hydrophobic bond connectors -->
+                <line x1="23" y1="18" x2="31" y2="45" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.6"/>
+                <line x1="31" y1="45" x2="27" y2="75" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.6"/>
+                <line x1="27" y1="75" x2="30" y2="103" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.6"/>
+            </svg>
+        </div>
+
+        <!-- Ambient Scientific Telemetry Badges -->
+        <div class="telemetry-ambient top-[16%] left-[4%] font-mono text-[9px] sm:text-[10px] text-red-400/40 tracking-widest flex items-center gap-1.5" style="animation-duration: 6s;">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span>
+            [HBB LOCUS // CHR 11p15.4 • POINT MUTATION]
+        </div>
+
+        <div class="telemetry-ambient top-[38%] right-[5%] font-mono text-[9px] sm:text-[10px] text-amber-400/40 tracking-widest flex items-center gap-1.5" style="animation-duration: 7s; animation-delay: 2s;">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+            [GAG → GTG // Glu6Val • HYDROPHOBIC PATCH]
+        </div>
+
+        <div class="telemetry-ambient bottom-[22%] left-[6%] font-mono text-[9px] sm:text-[10px] text-red-400/35 tracking-widest flex items-center gap-1.5" style="animation-duration: 8s; animation-delay: 4s;">
+            <span>🧬</span>
+            [DEOXY-HbS POLYMER FIBERS • VASO-OCCLUSION]
+        </div>
+
+        <div class="telemetry-ambient bottom-[12%] right-[8%] font-mono text-[9px] sm:text-[10px] text-emerald-400/35 tracking-widest flex items-center gap-1.5" style="animation-duration: 6.5s; animation-delay: 1s;">
+            <span>🛡️</span>
+            [HETEROZYGOTE ADVANTAGE: MALARIA RESISTANCE]
+        </div>
+    </div>
+
+    <!-- ========== TUTORIAL OVERLAY ========== -->
+    <div id="tutorial-overlay" class="tutorial-overlay">
+        <div class="tutorial-card" id="tutorial-card">
+            <!-- Tutorial content injected by JS -->
+        </div>
+    </div>
+
+    <!-- ========== MAIN APPLICATION ========== -->
+    <div id="main-app" class="relative z-10" style="opacity: 0; transition: opacity 0.6s ease;">
+        <!-- Header -->
+        <header class="px-4 sm:px-6 py-4 flex justify-between items-center border-b border-white/10 bg-black/60 backdrop-blur-xl sticky top-0 z-50">
+            <div class="flex items-center gap-3">
+                <a href="../index.html" class="text-slate-400 hover:text-white transition-colors" title="Kembali ke Dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-display font-bold text-white tracking-wider">
+                        SICKLE-<span class="text-red-400">MUT</span>
+                    </h1>
+                    <p class="text-[9px] font-mono text-slate-500 tracking-[0.3em]">POINT MUTATION ANALYZER v1.0</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="showTutorial()" class="text-[10px] font-display font-bold tracking-widest px-3 py-1.5 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-all" title="Buka Tutorial">
+                    ? TUTORIAL
+                </button>
+                <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/10">
+                    <span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
+                    <span class="text-[10px] font-mono text-red-300">MUTATION ACTIVE</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Step Navigation -->
+        <nav class="px-4 sm:px-6 py-3 border-b border-white/5 bg-black/30 backdrop-blur-md overflow-x-auto">
+            <div class="flex gap-2 min-w-max">
+                <button class="step-btn active" onclick="goToStep(0)" id="step-btn-0">01 OVERVIEW</button>
+                <button class="step-btn" onclick="goToStep(1)" id="step-btn-1">02 DNA MUTATION</button>
+                <button class="step-btn" onclick="goToStep(2)" id="step-btn-2">03 TRANSKRIPSI</button>
+                <button class="step-btn" onclick="goToStep(3)" id="step-btn-3">04 TRANSLASI</button>
+                <button class="step-btn" onclick="goToStep(4)" id="step-btn-4">05 HEMOGLOBIN</button>
+                <button class="step-btn" onclick="goToStep(5)" id="step-btn-5">06 SEL DARAH</button>
+                <button class="step-btn" onclick="goToStep(6)" id="step-btn-6">07 PEWARISAN</button>
+            </div>
+            <div class="progress-track mt-2">
+                <div class="progress-fill" id="progress-bar" style="width: 14.28%"></div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="p-4 sm:p-6 max-w-6xl mx-auto w-full" id="main-content">
+            <!-- Content injected by JS based on active step -->
+        </main>
+
+        <!-- Footer -->
+        <footer class="p-4 text-center border-t border-white/5 bg-black/40 mt-8">
+            <p class="text-[9px] font-mono text-slate-500 tracking-widest">GEN-OS SICKLE-MUT MODULE • GENETIC LABORATORY PROJECT</p>
+            <p class="text-[8px] font-mono text-slate-600 mt-1">Referensi: NIH/NCBI, Genome.gov, Ingram (1956), Pauling et al. (1949)</p>
+        </footer>
+    </div>
+
+    <script>
+    // ====================================================================
+    // SCIENTIFIC DATA — Based on literature research
+    // ====================================================================
+    
+    // Beta-globin gene (HBB) first 7 codons
+    // DNA Template strand (3'→5'), Coding strand (5'→3'), mRNA (5'→3')
+    const GENE_DATA = {
+        normal: {
+            name: 'HbA (Normal)',
+            // Template strand 3'→5'
+            templateStrand: ['TAC', 'CAC', 'GTG', 'GAC', 'TGA', 'GGA', 'CTC', 'CTT'],
+            // Coding strand 5'→3' (complement of template)
+            codingStrand:   ['ATG', 'GTG', 'CAC', 'CTG', 'ACT', 'CCT', 'GAG', 'GAA'],
+            // mRNA 5'→3' (same as coding except T→U)
+            mRNA:           ['AUG', 'GUG', 'CAC', 'CUG', 'ACU', 'CCU', 'GAG', 'GAA'],
+            aminoAcids:     ['Met', 'Val', 'His', 'Leu', 'Thr', 'Pro', 'Glu', 'Glu'],
+            aminoFull:      ['Metionin', 'Valin', 'Histidin', 'Leusin', 'Treonin', 'Prolin', 'Asam Glutamat', 'Asam Glutamat'],
+            properties:     ['Start', 'Nonpolar', 'Polar+', 'Nonpolar', 'Polar', 'Nonpolar', 'Polar-/Hidrofilik', 'Polar-/Hidrofilik']
+        },
+        mutant: {
+            name: 'HbS (Sickle/Mutan)',
+            templateStrand: ['TAC', 'CAC', 'GTG', 'GAC', 'TGA', 'GGA', 'CAC', 'CTT'],
+            codingStrand:   ['ATG', 'GTG', 'CAC', 'CTG', 'ACT', 'CCT', 'GTG', 'GAA'],
+            mRNA:           ['AUG', 'GUG', 'CAC', 'CUG', 'ACU', 'CCU', 'GUG', 'GAA'],
+            aminoAcids:     ['Met', 'Val', 'His', 'Leu', 'Thr', 'Pro', 'Val', 'Glu'],
+            aminoFull:      ['Metionin', 'Valin', 'Histidin', 'Leusin', 'Treonin', 'Prolin', 'Valin', 'Asam Glutamat'],
+            properties:     ['Start', 'Nonpolar', 'Polar+', 'Nonpolar', 'Polar', 'Nonpolar', 'Nonpolar/Hidrofobik', 'Polar-/Hidrofilik']
+        },
+        mutationIndex: 6 // Codon ke-7 (index 6), posisi ke-6 pada protein mature
+    };
+
+    // Current state
+    let currentStep = 0;
+    let currentTutorialPage = 0;
+    const totalSteps = 7;
+
+    // ====================================================================
+    // TUTORIAL SYSTEM
+    // ====================================================================
+    const tutorialPages = [
+        {
+            title: '🧬 Selamat Datang di Simulasi Mutasi Anemia Sel Sabit',
+            icon: '🩸',
+            content: `
+                <p class="text-slate-300 leading-relaxed mb-4">
+                    Selamat datang di modul <strong class="text-red-400">SICKLE-MUT</strong>, simulasi interaktif yang menunjukkan bagaimana 
+                    <strong class="text-amber-400">satu perubahan nukleotida</strong> pada DNA dapat menyebabkan penyakit genetik serius: 
+                    <strong class="text-red-300">Anemia Sel Sabit (Sickle Cell Anemia)</strong>.
+                </p>
+                <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 mb-4">
+                    <h4 class="text-amber-400 font-bold text-sm mb-2">📚 Dasar Ilmiah</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Anemia Sel Sabit pertama kali dijelaskan oleh <strong class="text-white">Dr. James Herrick (1910)</strong>, 
+                        dan mekanisme molekulernya dipahami berkat karya <strong class="text-white">Linus Pauling et al. (1949)</strong> yang 
+                        menunjukkan SCA sebagai "penyakit molekuler" pertama, serta <strong class="text-white">Vernon Ingram (1956)</strong> 
+                        yang mengidentifikasi substitusi asam amino spesifik pada rantai β-globin.
+                    </p>
+                </div>
+                <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
+                    <h4 class="text-blue-400 font-bold text-sm mb-2">🎯 Tujuan Pembelajaran</h4>
+                    <ul class="text-slate-300 text-sm space-y-1.5 ml-4" style="list-style: disc;">
+                        <li>Memahami mekanisme <strong class="text-white">mutasi titik (point mutation)</strong> pada DNA</li>
+                        <li>Melihat dampak substitusi nukleotida pada proses <strong class="text-white">transkripsi</strong> dan <strong class="text-white">translasi</strong></li>
+                        <li>Memahami bagaimana perubahan <strong class="text-white">1 asam amino</strong> mengubah struktur & fungsi protein</li>
+                        <li>Mengetahui pola pewarisan <strong class="text-white">autosomal resesif</strong> SCA</li>
+                        <li>Memahami konsep <strong class="text-white">heterozygote advantage</strong> (keunggulan heterozigot terhadap malaria)</li>
+                    </ul>
+                </div>
+            `
+        },
+        {
+            title: '🔬 Apa Itu Anemia Sel Sabit?',
+            icon: '📖',
+            content: `
+                <div class="space-y-4">
+                    <p class="text-slate-300 leading-relaxed">
+                        <strong class="text-red-400">Anemia Sel Sabit</strong> adalah kelainan darah herediter yang disebabkan oleh 
+                        mutasi pada <strong class="text-cyan-400">gen HBB</strong> (beta-globin) di <strong class="text-purple-400">kromosom 11</strong>.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4">
+                            <h4 class="text-emerald-400 font-bold text-sm mb-2">✅ Hemoglobin Normal (HbA)</h4>
+                            <ul class="text-slate-300 text-xs space-y-1 ml-3" style="list-style: disc;">
+                                <li>Kodon ke-6: <strong class="font-mono text-emerald-300">GAG</strong></li>
+                                <li>Asam amino: <strong class="text-white">Asam Glutamat</strong></li>
+                                <li>Sifat: <strong class="text-cyan-300">Hidrofilik</strong> (suka air)</li>
+                                <li>Sel darah: <strong class="text-white">Bulat bikonkaf, fleksibel</strong></li>
+                            </ul>
+                        </div>
+                        <div class="bg-red-500/10 border border-red-500/20 rounded-xl p-4">
+                            <h4 class="text-red-400 font-bold text-sm mb-2">❌ Hemoglobin Sabit (HbS)</h4>
+                            <ul class="text-slate-300 text-xs space-y-1 ml-3" style="list-style: disc;">
+                                <li>Kodon ke-6: <strong class="font-mono text-red-300">GUG</strong></li>
+                                <li>Asam amino: <strong class="text-white">Valin</strong></li>
+                                <li>Sifat: <strong class="text-amber-300">Hidrofobik</strong> (takut air)</li>
+                                <li>Sel darah: <strong class="text-white">Sabit, kaku, mudah rusak</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800/50 border border-white/5 rounded-xl p-4">
+                        <h4 class="text-white font-bold text-sm mb-2">⚡ Inti Permasalahan</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Hanya <strong class="text-amber-400">1 dari ~3 miliar</strong> pasangan basa DNA yang berubah 
+                            (<strong class="font-mono text-pink-300">A → T</strong> pada DNA), 
+                            menyebabkan perubahan pada <strong class="text-amber-400">1 dari 146</strong> asam amino rantai β-globin. 
+                            Perubahan kecil ini mengubah sifat permukaan hemoglobin secara drastis, membuat molekul HbS saling 
+                            "menempel" membentuk serat kaku saat kadar oksigen rendah.
+                        </p>
+                    </div>
+                </div>
+            `
+        },
+        {
+            title: '🗺️ Cara Menggunakan Simulasi',
+            icon: '🎮',
+            content: `
+                <div class="space-y-4">
+                    <p class="text-slate-300 leading-relaxed">
+                        Simulasi ini terdiri dari <strong class="text-red-400">7 tahap</strong> yang dapat dinavigasi menggunakan tombol di bagian atas:
+                    </p>
+                    <div class="space-y-2">
+                        <div class="flex items-start gap-3 bg-white/[0.03] rounded-lg p-3">
+                            <span class="text-xs font-display font-bold text-red-400 bg-red-500/10 px-2 py-1 rounded">01</span>
+                            <div><strong class="text-white text-sm">Overview</strong><p class="text-slate-400 text-xs">Ringkasan gen HBB, lokasi kromosom, dan jenis mutasi</p></div>
+                        </div>
+                        <div class="flex items-start gap-3 bg-white/[0.03] rounded-lg p-3">
+                            <span class="text-xs font-display font-bold text-red-400 bg-red-500/10 px-2 py-1 rounded">02</span>
+                            <div><strong class="text-white text-sm">DNA Mutation</strong><p class="text-slate-400 text-xs">Visualisasi perbandingan sekuens DNA normal vs mutan, dengan nukleotida yang bermutasi ditandai</p></div>
+                        </div>
+                        <div class="flex items-start gap-3 bg-white/[0.03] rounded-lg p-3">
+                            <span class="text-xs font-display font-bold text-red-400 bg-red-500/10 px-2 py-1 rounded">03</span>
+                            <div><strong class="text-white text-sm">Transkripsi</strong><p class="text-slate-400 text-xs">Proses DNA → mRNA, bagaimana mutasi diteruskan ke mRNA</p></div>
+                        </div>
+                        <div class="flex items-start gap-3 bg-white/[0.03] rounded-lg p-3">
+                            <span class="text-xs font-display font-bold text-red-400 bg-red-500/10 px-2 py-1 rounded">04</span>
+                            <div><strong class="text-white text-sm">Translasi</strong><p class="text-slate-400 text-xs">Proses mRNA → Protein, perubahan asam amino Glu → Val</p></div>
+                        </div>
+                        <div class="flex items-start gap-3 bg-white/[0.03] rounded-lg p-3">
+                            <span class="text-xs font-display font-bold text-red-400 bg-red-500/10 px-2 py-1 rounded">05</span>
+                            <div><strong class="text-white text-sm">Hemoglobin</strong><p class="text-slate-400 text-xs">Struktur kuartener hemoglobin dan efek sticky patch pada polimerisasi HbS</p></div>
+                        </div>
+                        <div class="flex items-start gap-3 bg-white/[0.03] rounded-lg p-3">
+                            <span class="text-xs font-display font-bold text-red-400 bg-red-500/10 px-2 py-1 rounded">06</span>
+                            <div><strong class="text-white text-sm">Sel Darah</strong><p class="text-slate-400 text-xs">Perbandingan visual sel darah merah normal vs sabit dan dampak pada sirkulasi</p></div>
+                        </div>
+                        <div class="flex items-start gap-3 bg-white/[0.03] rounded-lg p-3">
+                            <span class="text-xs font-display font-bold text-red-400 bg-red-500/10 px-2 py-1 rounded">07</span>
+                            <div><strong class="text-white text-sm">Pewarisan</strong><p class="text-slate-400 text-xs">Diagram Punnett, pola autosomal resesif, dan heterozygote advantage terhadap malaria</p></div>
+                        </div>
+                    </div>
+                    <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3">
+                        <p class="text-emerald-300 text-xs"><strong>💡 Tips:</strong> Klik pada nukleotida, kodon, atau komponen hemoglobin untuk melihat detail interaktif. Arahkan kursor ke elemen untuk melihat tooltip informasi.</p>
+                    </div>
+                </div>
+            `
+        }
+    ];
+
+    function renderTutorial() {
+        const card = document.getElementById('tutorial-card');
+        const page = tutorialPages[currentTutorialPage];
+        card.innerHTML = `
+            <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">${page.icon}</span>
+                    <div>
+                        <h2 class="text-lg font-display font-bold text-white tracking-wider">${page.title}</h2>
+                        <p class="text-[10px] font-mono text-slate-500 mt-0.5">Halaman ${currentTutorialPage + 1} dari ${tutorialPages.length}</p>
+                    </div>
+                </div>
+                <button onclick="closeTutorial()" class="text-slate-500 hover:text-white transition-colors p-1" title="Tutup Tutorial">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="mb-6">${page.content}</div>
+            <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                <button onclick="prevTutorialPage()" class="step-btn ${currentTutorialPage === 0 ? 'opacity-30 pointer-events-none' : ''}" ${currentTutorialPage === 0 ? 'disabled' : ''}>
+                    ← SEBELUMNYA
+                </button>
+                <div class="flex gap-1.5">
+                    ${tutorialPages.map((_, i) => `<div class="w-2 h-2 rounded-full ${i === currentTutorialPage ? 'bg-red-400' : 'bg-slate-600'} transition-colors"></div>`).join('')}
+                </div>
+                ${currentTutorialPage < tutorialPages.length - 1 
+                    ? `<button onclick="nextTutorialPage()" class="step-btn active">SELANJUTNYA →</button>`
+                    : `<button onclick="closeTutorial()" class="step-btn active">MULAI SIMULASI →</button>`
+                }
+            </div>
+        `;
+    }
+
+    function nextTutorialPage() {
+        if (currentTutorialPage < tutorialPages.length - 1) {
+            currentTutorialPage++;
+            renderTutorial();
+        }
+    }
+
+    function prevTutorialPage() {
+        if (currentTutorialPage > 0) {
+            currentTutorialPage--;
+            renderTutorial();
+        }
+    }
+
+    function closeTutorial() {
+        document.getElementById('tutorial-overlay').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('tutorial-overlay').style.display = 'none';
+            document.getElementById('main-app').style.opacity = '1';
+        }, 400);
+    }
+
+    function showTutorial() {
+        currentTutorialPage = 0;
+        const overlay = document.getElementById('tutorial-overlay');
+        overlay.style.display = 'flex';
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.style.opacity = '1', 10);
+        renderTutorial();
+    }
+
+    // ====================================================================
+    // STEP RENDERING
+    // ====================================================================
+    function goToStep(step) {
+        currentStep = step;
+        // Update buttons
+        for (let i = 0; i < totalSteps; i++) {
+            const btn = document.getElementById(`step-btn-${i}`);
+            btn.classList.toggle('active', i === step);
+        }
+        // Update progress
+        document.getElementById('progress-bar').style.width = `${((step + 1) / totalSteps) * 100}%`;
+        // Render content
+        renderStep();
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderStep() {
+        const container = document.getElementById('main-content');
+        container.innerHTML = ''; // Clear
+
+        switch (currentStep) {
+            case 0: renderOverview(container); break;
+            case 1: renderDNAMutation(container); break;
+            case 2: renderTranscription(container); break;
+            case 3: renderTranslation(container); break;
+            case 4: renderHemoglobin(container); break;
+            case 5: renderBloodCells(container); break;
+            case 6: renderInheritance(container); break;
+        }
+    }
+
+    // Helper: Create nucleotide base element
+    function createBaseEl(base, isMutated = false) {
+        const el = document.createElement('span');
+        el.className = `nucleotide-base base-${base} ${isMutated ? 'base-mutated' : ''}`;
+        el.textContent = base;
+        return el;
+    }
+
+    // Helper: Section wrapper
+    function createSection(title, subtitle, content) {
+        return `
+            <div class="section-content">
+                <div class="mb-6">
+                    <h2 class="text-xl sm:text-2xl font-display font-bold text-white tracking-wider mb-1">${title}</h2>
+                    <p class="text-xs font-mono text-slate-500 tracking-wider">${subtitle}</p>
+                </div>
+                ${content}
+            </div>
+        `;
+    }
+
+    // ====================================================================
+    // STEP 0: OVERVIEW
+    // ====================================================================
+    function renderOverview(container) {
+        container.innerHTML = createSection(
+            'OVERVIEW',
+            'SICKLE CELL ANEMIA — MUTASI GEN HBB',
+            `
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <!-- Info Card -->
+                <div class="glass-panel p-5 space-y-4">
+                    <h3 class="text-sm font-display font-bold text-red-400 tracking-wider">📋 IDENTITAS GENETIK</h3>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                            <span class="text-xs text-slate-400 font-mono">NAMA PENYAKIT</span>
+                            <span class="text-sm text-white font-semibold">Anemia Sel Sabit (SCA)</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                            <span class="text-xs text-slate-400 font-mono">GEN TERLIBAT</span>
+                            <span class="chromosome-badge bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">HBB (β-Globin)</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                            <span class="text-xs text-slate-400 font-mono">LOKASI</span>
+                            <span class="chromosome-badge bg-purple-500/15 text-purple-300 border border-purple-500/30">Kromosom 11p15.4</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                            <span class="text-xs text-slate-400 font-mono">JENIS MUTASI</span>
+                            <span class="chromosome-badge bg-red-500/15 text-red-300 border border-red-500/30">Point Mutation (Substitusi)</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                            <span class="text-xs text-slate-400 font-mono">POLA PEWARISAN</span>
+                            <span class="chromosome-badge bg-amber-500/15 text-amber-300 border border-amber-500/30">Autosomal Resesif</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                            <span class="text-xs text-slate-400 font-mono">SUBSTITUSI DNA</span>
+                            <div class="flex items-center gap-2">
+                                <span class="font-mono text-sm text-emerald-400">A</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                                <span class="font-mono text-sm text-red-400">T</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                            <span class="text-xs text-slate-400 font-mono">KODON mRNA</span>
+                            <div class="flex items-center gap-2">
+                                <span class="font-mono text-sm text-emerald-400">GAG</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                                <span class="font-mono text-sm text-red-400">GUG</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <span class="text-xs text-slate-400 font-mono">ASAM AMINO</span>
+                            <div class="flex items-center gap-2">
+                                <span class="amino-badge bg-emerald-500/15 text-emerald-300 border border-emerald-500/20">Glu (Hidrofilik)</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                                <span class="amino-badge bg-red-500/15 text-red-300 border border-red-500/20">Val (Hidrofobik)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cascade Diagram -->
+                <div class="glass-panel p-5">
+                    <h3 class="text-sm font-display font-bold text-amber-400 tracking-wider mb-4">⚡ KASKADE MUTASI</h3>
+                    <p class="text-xs text-slate-400 mb-4">Bagaimana satu perubahan nukleotida menyebabkan penyakit serius:</p>
+                    
+                    <div class="space-y-3" id="cascade-diagram">
+                        <!-- Filled by JS animation -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
+                <div class="glass-panel p-4 text-center">
+                    <div class="text-2xl font-display font-bold text-red-400">1</div>
+                    <div class="text-[10px] font-mono text-slate-400 mt-1">NUKLEOTIDA BERMUTASI</div>
+                </div>
+                <div class="glass-panel p-4 text-center">
+                    <div class="text-2xl font-display font-bold text-amber-400">β6</div>
+                    <div class="text-[10px] font-mono text-slate-400 mt-1">POSISI ASAM AMINO</div>
+                </div>
+                <div class="glass-panel p-4 text-center">
+                    <div class="text-2xl font-display font-bold text-purple-400">11</div>
+                    <div class="text-[10px] font-mono text-slate-400 mt-1">NOMOR KROMOSOM</div>
+                </div>
+                <div class="glass-panel p-4 text-center">
+                    <div class="text-2xl font-display font-bold text-cyan-400">146</div>
+                    <div class="text-[10px] font-mono text-slate-400 mt-1">TOTAL ASAM AMINO β-GLOBIN</div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-end mt-6">
+                <button onclick="goToStep(1)" class="step-btn active text-sm px-6 py-3">
+                    MULAI ANALISIS DNA →
+                </button>
+            </div>
+            `
+        );
+        animateCascade();
+    }
+
+    function animateCascade() {
+        const cascadeSteps = [
+            { icon: '🧬', title: 'Mutasi Titik pada DNA', desc: 'Adenin (A) → Timin (T) pada coding strand gen HBB', color: 'red' },
+            { icon: '📝', title: 'Perubahan Kodon mRNA', desc: 'GAG → GUG pada kodon ke-6 rantai β-globin', color: 'amber' },
+            { icon: '🔗', title: 'Substitusi Asam Amino', desc: 'Asam Glutamat (hidrofilik) → Valin (hidrofobik)', color: 'purple' },
+            { icon: '🩸', title: 'Hemoglobin Abnormal (HbS)', desc: 'Sticky patch terbentuk di permukaan hemoglobin', color: 'rose' },
+            { icon: '🔴', title: 'Polimerisasi & Deformasi', desc: 'HbS membentuk serat kaku → sel darah merah mengerut menjadi sabit', color: 'red' },
+            { icon: '💔', title: 'Gejala Klinis', desc: 'Vaso-oklusi, nyeri, kerusakan organ, anemia hemolitik', color: 'crimson' }
+        ];
+
+        const diag = document.getElementById('cascade-diagram');
+        if (!diag) return;
+
+        cascadeSteps.forEach((step, i) => {
+            setTimeout(() => {
+                const el = document.createElement('div');
+                el.className = `flex items-start gap-3 p-3 rounded-lg bg-${step.color === 'crimson' ? 'red' : step.color}-500/5 border border-${step.color === 'crimson' ? 'red' : step.color}-500/15 transition-all`;
+                el.style.opacity = '0';
+                el.style.transform = 'translateX(-20px)';
+                el.innerHTML = `
+                    <span class="text-xl mt-0.5">${step.icon}</span>
+                    <div>
+                        <div class="text-sm font-bold text-white">${step.title}</div>
+                        <div class="text-xs text-slate-400">${step.desc}</div>
+                    </div>
+                `;
+                diag.appendChild(el);
+
+                // Add arrow between steps
+                if (i < cascadeSteps.length - 1) {
+                    const arrow = document.createElement('div');
+                    arrow.className = 'flex justify-center text-slate-600';
+                    arrow.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>';
+                    arrow.style.opacity = '0';
+                    diag.appendChild(arrow);
+                    setTimeout(() => { arrow.style.opacity = '1'; arrow.style.transition = 'opacity 0.3s'; }, 50);
+                }
+
+                requestAnimationFrame(() => {
+                    el.style.transition = 'all 0.5s ease';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateX(0)';
+                });
+            }, i * 300);
+        });
+    }
+
+    // ====================================================================
+    // STEP 1: DNA MUTATION
+    // ====================================================================
+    function renderDNAMutation(container) {
+        container.innerHTML = createSection(
+            'DNA MUTATION',
+            'POINT MUTATION — SUBSTITUSI NUKLEOTIDA PADA GEN HBB',
+            `
+            <div class="glass-panel p-5 mb-5">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="text-xs font-display font-bold text-emerald-400 tracking-wider">📋 PENJELASAN</span>
+                </div>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    Mutasi pada gen HBB terjadi pada <strong class="text-amber-400">kodon ke-6</strong> (posisi ke-7 termasuk start codon Met). 
+                    Pada <strong class="text-white">untai coding DNA (sense strand)</strong>, terjadi substitusi satu nukleotida: 
+                    <strong class="text-emerald-400 font-mono">A</strong> (Adenin) diganti menjadi 
+                    <strong class="text-red-400 font-mono">T</strong> (Timin). Ini adalah contoh 
+                    <strong class="text-purple-400">mutasi missense</strong> — kodon berubah sehingga mengkode asam amino berbeda.
+                </p>
+            </div>
+
+            <!-- Normal DNA -->
+            <div class="glass-panel p-5 mb-4">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+                    <h3 class="text-sm font-display font-bold text-emerald-400 tracking-wider">DNA NORMAL (HbA)</h3>
+                </div>
+                <p class="text-[10px] font-mono text-slate-500 mb-3">Gen HBB • Kromosom 11 • Untai Coding (Sense) 5'→3'</p>
+                <div class="overflow-x-auto">
+                    <div class="min-w-max">
+                        <!-- Codon number row -->
+                        <div class="flex gap-2 mb-1 px-1">
+                            ${GENE_DATA.normal.codingStrand.map((_, i) => `
+                                <div class="min-w-[56px] text-center">
+                                    <span class="text-[9px] font-mono text-slate-600">Kodon ${i + 1}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <!-- Coding strand -->
+                        <div class="flex gap-2 mb-0.5 px-1">
+                            <span class="text-[9px] font-mono text-slate-500 self-center mr-1">5'</span>
+                            ${GENE_DATA.normal.codingStrand.map((codon, i) => `
+                                <div class="codon-group ${i === GENE_DATA.mutationIndex ? 'highlight-normal' : ''}" title="Kodon ${i+1}: ${codon}">
+                                    <div class="flex gap-0.5">
+                                        ${codon.split('').map(b => `<span class="nucleotide-base base-${b}">${b}</span>`).join('')}
+                                    </div>
+                                    ${i === GENE_DATA.mutationIndex ? '<span class="tooltip-custom">Kodon ke-6 β-globin: GAG → Glu</span>' : ''}
+                                </div>
+                            `).join('')}
+                            <span class="text-[9px] font-mono text-slate-500 self-center ml-1">3'</span>
+                        </div>
+                        <!-- H-bonds -->
+                        <div class="flex gap-2 px-1">
+                            ${GENE_DATA.normal.codingStrand.map(() => `
+                                <div class="min-w-[56px] flex justify-center gap-1">
+                                    <div class="h-bond"></div><div class="h-bond"></div><div class="h-bond"></div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <!-- Template strand -->
+                        <div class="flex gap-2 mt-0.5 px-1">
+                            <span class="text-[9px] font-mono text-slate-500 self-center mr-1">3'</span>
+                            ${GENE_DATA.normal.templateStrand.map((codon, i) => `
+                                <div class="codon-group ${i === GENE_DATA.mutationIndex ? 'highlight-normal' : ''}">
+                                    <div class="flex gap-0.5">
+                                        ${codon.split('').map(b => `<span class="nucleotide-base base-${b}" style="opacity:0.7">${b}</span>`).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                            <span class="text-[9px] font-mono text-slate-500 self-center ml-1">5'</span>
+                        </div>
+                        <div class="flex gap-2 px-1 mt-1">
+                            <span class="min-w-[10px]"></span>
+                            ${GENE_DATA.normal.aminoAcids.map((aa, i) => `
+                                <div class="min-w-[56px] text-center">
+                                    <span class="amino-badge ${i === GENE_DATA.mutationIndex ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-white/5 text-slate-400 border border-white/10'}">${aa}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mutant DNA -->
+            <div class="glass-panel p-5 mb-5">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="w-3 h-3 rounded-full bg-red-400 animate-pulse"></span>
+                    <h3 class="text-sm font-display font-bold text-red-400 tracking-wider">DNA MUTAN (HbS)</h3>
+                </div>
+                <p class="text-[10px] font-mono text-slate-500 mb-3">Gen HBB Bermutasi • Untai Coding (Sense) 5'→3' • Mutasi pada kodon ke-7</p>
+                <div class="overflow-x-auto">
+                    <div class="min-w-max">
+                        <div class="flex gap-2 mb-1 px-1">
+                            ${GENE_DATA.mutant.codingStrand.map((_, i) => `
+                                <div class="min-w-[56px] text-center">
+                                    <span class="text-[9px] font-mono ${i === GENE_DATA.mutationIndex ? 'text-red-400 font-bold' : 'text-slate-600'}">Kodon ${i + 1}${i === GENE_DATA.mutationIndex ? ' ⚠️' : ''}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="flex gap-2 mb-0.5 px-1">
+                            <span class="text-[9px] font-mono text-slate-500 self-center mr-1">5'</span>
+                            ${GENE_DATA.mutant.codingStrand.map((codon, i) => {
+                                const isMutCodon = i === GENE_DATA.mutationIndex;
+                                return `
+                                <div class="codon-group ${isMutCodon ? 'highlight-mutant' : ''}">
+                                    <div class="flex gap-0.5">
+                                        ${codon.split('').map((b, bi) => {
+                                            const normalBase = GENE_DATA.normal.codingStrand[i][bi];
+                                            const isMut = isMutCodon && b !== normalBase;
+                                            return `<span class="nucleotide-base base-${b} ${isMut ? 'base-mutated' : ''}">${b}</span>`;
+                                        }).join('')}
+                                    </div>
+                                    ${isMutCodon ? '<span class="tooltip-custom">⚠️ MUTASI: GAG→GTG (A→T)</span>' : ''}
+                                </div>`;
+                            }).join('')}
+                            <span class="text-[9px] font-mono text-slate-500 self-center ml-1">3'</span>
+                        </div>
+                        <div class="flex gap-2 px-1">
+                            ${GENE_DATA.mutant.codingStrand.map(() => `
+                                <div class="min-w-[56px] flex justify-center gap-1">
+                                    <div class="h-bond"></div><div class="h-bond"></div><div class="h-bond"></div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="flex gap-2 mt-0.5 px-1">
+                            <span class="text-[9px] font-mono text-slate-500 self-center mr-1">3'</span>
+                            ${GENE_DATA.mutant.templateStrand.map((codon, i) => {
+                                const isMutCodon = i === GENE_DATA.mutationIndex;
+                                return `
+                                <div class="codon-group ${isMutCodon ? 'highlight-mutant' : ''}">
+                                    <div class="flex gap-0.5">
+                                        ${codon.split('').map((b, bi) => {
+                                            const normalBase = GENE_DATA.normal.templateStrand[i][bi];
+                                            const isMut = isMutCodon && b !== normalBase;
+                                            return `<span class="nucleotide-base base-${b} ${isMut ? 'base-mutated' : ''}" style="opacity:0.7">${b}</span>`;
+                                        }).join('')}
+                                    </div>
+                                </div>`;
+                            }).join('')}
+                            <span class="text-[9px] font-mono text-slate-500 self-center ml-1">5'</span>
+                        </div>
+                        <div class="flex gap-2 px-1 mt-1">
+                            <span class="min-w-[10px]"></span>
+                            ${GENE_DATA.mutant.aminoAcids.map((aa, i) => `
+                                <div class="min-w-[56px] text-center">
+                                    <span class="amino-badge ${i === GENE_DATA.mutationIndex ? 'bg-red-500/20 text-red-300 border border-red-500/30' : 'bg-white/5 text-slate-400 border border-white/10'}">${aa}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mutation Detail -->
+            <div class="glass-panel p-5">
+                <h3 class="text-sm font-display font-bold text-amber-400 tracking-wider mb-3">🔍 DETAIL MUTASI TITIK</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-white/[0.03] rounded-lg p-4 text-center">
+                        <div class="text-[10px] font-mono text-slate-500 mb-2">UNTAI CODING (5'→3')</div>
+                        <div class="flex items-center justify-center gap-2">
+                            <span class="font-mono text-lg text-emerald-400 font-bold">GA<span class="underline decoration-2 decoration-emerald-400">G</span></span>
+                            <span class="text-amber-400">→</span>
+                            <span class="font-mono text-lg text-red-400 font-bold">GT<span class="underline decoration-2 decoration-red-400">G</span></span>
+                        </div>
+                        <div class="text-[9px] text-slate-500 mt-1 font-mono">Posisi 2: A → T</div>
+                    </div>
+                    <div class="bg-white/[0.03] rounded-lg p-4 text-center">
+                        <div class="text-[10px] font-mono text-slate-500 mb-2">UNTAI TEMPLATE (3'→5')</div>
+                        <div class="flex items-center justify-center gap-2">
+                            <span class="font-mono text-lg text-emerald-400 font-bold">CT<span class="underline decoration-2 decoration-emerald-400">C</span></span>
+                            <span class="text-amber-400">→</span>
+                            <span class="font-mono text-lg text-red-400 font-bold">CA<span class="underline decoration-2 decoration-red-400">C</span></span>
+                        </div>
+                        <div class="text-[9px] text-slate-500 mt-1 font-mono">Posisi 2: T → A</div>
+                    </div>
+                    <div class="bg-white/[0.03] rounded-lg p-4 text-center">
+                        <div class="text-[10px] font-mono text-slate-500 mb-2">JENIS MUTASI</div>
+                        <div class="text-amber-400 font-bold text-sm">Missense Mutation</div>
+                        <div class="text-[9px] text-slate-400 mt-1">Kodon berubah → asam amino berbeda</div>
+                        <div class="text-[9px] text-slate-500 mt-0.5">Subtipe: Transversi (Purin ↔ Pirimidin)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-between mt-6">
+                <button onclick="goToStep(0)" class="step-btn text-sm px-5 py-2.5">← OVERVIEW</button>
+                <button onclick="goToStep(2)" class="step-btn active text-sm px-5 py-2.5">TRANSKRIPSI →</button>
+            </div>
+            `
+        );
+    }
+
+    // ====================================================================
+    // STEP 2: TRANSCRIPTION
+    // ====================================================================
+    function renderTranscription(container) {
+        container.innerHTML = createSection(
+            'TRANSKRIPSI',
+            'DNA → mRNA — PENYALINAN INFORMASI GENETIK',
+            `
+            <div class="glass-panel p-5 mb-5">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="text-xs font-display font-bold text-amber-400 tracking-wider">📋 PENJELASAN</span>
+                </div>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    Dalam proses transkripsi, enzim <strong class="text-cyan-400">RNA Polimerase</strong> membaca 
+                    <strong class="text-white">untai template DNA (3'→5')</strong> dan mensintesis 
+                    <strong class="text-purple-400">mRNA (5'→3')</strong> dengan aturan komplementer: 
+                    A→U, T→A, G→C, C→G. Mutasi pada DNA otomatis terbawa ke mRNA.
+                </p>
+            </div>
+
+            <!-- Normal Transcription -->
+            <div class="glass-panel p-5 mb-4">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+                    <h3 class="text-sm font-display font-bold text-emerald-400 tracking-wider">TRANSKRIPSI NORMAL</h3>
+                </div>
+                <p class="text-[10px] font-mono text-slate-500 mb-3">Template DNA 3'→5' dibaca → mRNA 5'→3' disintesis</p>
+                
+                <div class="overflow-x-auto">
+                    <div class="min-w-max space-y-2">
+                        <!-- Template strand -->
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] font-mono text-slate-500 w-20 text-right">Template 3'</span>
+                            <div class="flex gap-2">
+                                ${GENE_DATA.normal.templateStrand.map((codon, i) => `
+                                    <div class="codon-group ${i === GENE_DATA.mutationIndex ? 'highlight-normal' : ''}">
+                                        <div class="flex gap-0.5">
+                                            ${codon.split('').map(b => `<span class="nucleotide-base base-${b}" style="opacity:0.6">${b}</span>`).join('')}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <span class="text-[9px] font-mono text-slate-500">5'</span>
+                        </div>
+                        <!-- Arrow -->
+                        <div class="flex items-center gap-2">
+                            <span class="w-20"></span>
+                            <div class="flex gap-2">
+                                ${GENE_DATA.normal.templateStrand.map(() => `
+                                    <div class="min-w-[56px] flex justify-center text-slate-600 text-xs">↓</div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <!-- mRNA -->
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] font-mono text-purple-400 w-20 text-right">mRNA 5'</span>
+                            <div class="flex gap-2">
+                                ${GENE_DATA.normal.mRNA.map((codon, i) => `
+                                    <div class="codon-group ${i === GENE_DATA.mutationIndex ? 'highlight-normal' : ''}">
+                                        <div class="flex gap-0.5">
+                                            ${codon.split('').map(b => `<span class="nucleotide-base base-${b}">${b}</span>`).join('')}
+                                        </div>
+                                        <div class="text-[8px] font-mono text-slate-500 mt-1">${GENE_DATA.normal.aminoAcids[i]}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <span class="text-[9px] font-mono text-purple-400">3'</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mutant Transcription -->
+            <div class="glass-panel p-5 mb-5">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="w-3 h-3 rounded-full bg-red-400 animate-pulse"></span>
+                    <h3 class="text-sm font-display font-bold text-red-400 tracking-wider">TRANSKRIPSI MUTAN</h3>
+                </div>
+                <p class="text-[10px] font-mono text-slate-500 mb-3">Mutasi DNA terbawa ke mRNA — kodon GAG menjadi GUG</p>
+                
+                <div class="overflow-x-auto">
+                    <div class="min-w-max space-y-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] font-mono text-slate-500 w-20 text-right">Template 3'</span>
+                            <div class="flex gap-2">
+                                ${GENE_DATA.mutant.templateStrand.map((codon, i) => {
+                                    const isMut = i === GENE_DATA.mutationIndex;
+                                    return `
+                                    <div class="codon-group ${isMut ? 'highlight-mutant' : ''}">
+                                        <div class="flex gap-0.5">
+                                            ${codon.split('').map((b, bi) => {
+                                                const normalB = GENE_DATA.normal.templateStrand[i][bi];
+                                                return `<span class="nucleotide-base base-${b} ${isMut && b !== normalB ? 'base-mutated' : ''}" style="opacity:0.6">${b}</span>`;
+                                            }).join('')}
+                                        </div>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                            <span class="text-[9px] font-mono text-slate-500">5'</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-20"></span>
+                            <div class="flex gap-2">
+                                ${GENE_DATA.mutant.templateStrand.map((_, i) => `
+                                    <div class="min-w-[56px] flex justify-center text-${i === GENE_DATA.mutationIndex ? 'red-400' : 'slate-600'} text-xs">${i === GENE_DATA.mutationIndex ? '⚡↓' : '↓'}</div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] font-mono text-purple-400 w-20 text-right">mRNA 5'</span>
+                            <div class="flex gap-2">
+                                ${GENE_DATA.mutant.mRNA.map((codon, i) => {
+                                    const isMut = i === GENE_DATA.mutationIndex;
+                                    return `
+                                    <div class="codon-group ${isMut ? 'highlight-mutant' : ''}">
+                                        <div class="flex gap-0.5">
+                                            ${codon.split('').map((b, bi) => {
+                                                const normalB = GENE_DATA.normal.mRNA[i][bi];
+                                                return `<span class="nucleotide-base base-${b} ${isMut && b !== normalB ? 'base-mutated' : ''}">${b}</span>`;
+                                            }).join('')}
+                                        </div>
+                                        <div class="text-[8px] font-mono ${isMut ? 'text-red-400 font-bold' : 'text-slate-500'} mt-1">${GENE_DATA.mutant.aminoAcids[i]}${isMut ? ' ⚠️' : ''}</div>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                            <span class="text-[9px] font-mono text-purple-400">3'</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Comparison -->
+            <div class="glass-panel p-5">
+                <h3 class="text-sm font-display font-bold text-cyan-400 tracking-wider mb-3">📊 PERBANDINGAN KODON KE-6</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-4 text-center">
+                        <div class="text-[10px] font-mono text-emerald-400 mb-2">NORMAL</div>
+                        <div class="text-3xl font-mono font-bold tracking-wider">
+                            <span class="text-blue-400">G</span><span class="text-emerald-400">A</span><span class="text-blue-400">G</span>
+                        </div>
+                        <div class="mt-2 text-xs text-slate-400">Kode untuk: <strong class="text-emerald-300">Asam Glutamat (Glu)</strong></div>
+                        <div class="mt-1 text-[10px] text-cyan-400">Sifat: Bermuatan negatif, hidrofilik</div>
+                    </div>
+                    <div class="bg-red-500/5 border border-red-500/20 rounded-xl p-4 text-center">
+                        <div class="text-[10px] font-mono text-red-400 mb-2">MUTAN</div>
+                        <div class="text-3xl font-mono font-bold tracking-wider">
+                            <span class="text-blue-400">G</span><span class="text-purple-400">U</span><span class="text-blue-400">G</span>
+                        </div>
+                        <div class="mt-2 text-xs text-slate-400">Kode untuk: <strong class="text-red-300">Valin (Val)</strong></div>
+                        <div class="mt-1 text-[10px] text-amber-400">Sifat: Nonpolar, hidrofobik</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-6">
+                <button onclick="goToStep(1)" class="step-btn text-sm px-5 py-2.5">← DNA MUTATION</button>
+                <button onclick="goToStep(3)" class="step-btn active text-sm px-5 py-2.5">TRANSLASI →</button>
+            </div>
+            `
+        );
+    }
+
+    // ====================================================================
+    // STEP 3: TRANSLATION
+    // ====================================================================
+    function renderTranslation(container) {
+        const normalColors = ['#6366f1', '#8b5cf6', '#06b6d4', '#3b82f6', '#14b8a6', '#a855f7', '#10b981', '#10b981'];
+        const mutantColors = ['#6366f1', '#8b5cf6', '#06b6d4', '#3b82f6', '#14b8a6', '#a855f7', '#ef4444', '#10b981'];
+
+        container.innerHTML = createSection(
+            'TRANSLASI',
+            'mRNA → PROTEIN — PERAKITAN RANTAI POLIPEPTIDA',
+            `
+            <div class="glass-panel p-5 mb-5">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="text-xs font-display font-bold text-purple-400 tracking-wider">📋 PENJELASAN</span>
+                </div>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    Ribosom membaca kodon mRNA dan mencocokkannya dengan <strong class="text-cyan-400">tRNA (antikodon)</strong> yang membawa 
+                    asam amino spesifik. Setiap 3 nukleotida (kodon) mRNA mengkode <strong class="text-white">1 asam amino</strong>.
+                    Pada kodon ke-6, perbedaan satu nukleotida menyebabkan tRNA yang salah datang, membawa 
+                    <strong class="text-red-400">Valin</strong> alih-alih <strong class="text-emerald-400">Asam Glutamat</strong>.
+                </p>
+            </div>
+
+            <!-- Normal Protein Chain -->
+            <div class="glass-panel p-5 mb-4">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+                    <h3 class="text-sm font-display font-bold text-emerald-400 tracking-wider">RANTAI β-GLOBIN NORMAL (HbA)</h3>
+                </div>
+                <p class="text-[10px] font-mono text-slate-500 mb-3">N-terminus → ... (menampilkan 8 asam amino pertama dari 146 total)</p>
+                
+                <div class="protein-chain">
+                    ${GENE_DATA.normal.aminoAcids.map((aa, i) => `
+                        ${i > 0 ? '<div class="peptide-bond"></div>' : ''}
+                        <div class="amino-acid-node" style="background: ${normalColors[i]}22; border: 2px solid ${normalColors[i]}88; color: ${normalColors[i]}">
+                            ${aa}
+                            <div class="tooltip-custom">
+                                <div class="text-white font-bold">${GENE_DATA.normal.aminoFull[i]}</div>
+                                <div class="text-slate-400">Kodon: ${GENE_DATA.normal.mRNA[i]}</div>
+                                <div class="text-slate-400">Sifat: ${GENE_DATA.normal.properties[i]}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                    <span class="text-slate-600 text-xs font-mono ml-2">... → 146 aa</span>
+                </div>
+            </div>
+
+            <!-- Mutant Protein Chain -->
+            <div class="glass-panel p-5 mb-5">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="w-3 h-3 rounded-full bg-red-400 animate-pulse"></span>
+                    <h3 class="text-sm font-display font-bold text-red-400 tracking-wider">RANTAI β-GLOBIN MUTAN (HbS)</h3>
+                </div>
+                <p class="text-[10px] font-mono text-slate-500 mb-3">Valin menggantikan Asam Glutamat pada posisi ke-6</p>
+                
+                <div class="protein-chain">
+                    ${GENE_DATA.mutant.aminoAcids.map((aa, i) => `
+                        ${i > 0 ? '<div class="peptide-bond"></div>' : ''}
+                        <div class="amino-acid-node ${i === GENE_DATA.mutationIndex ? 'animate-pulse' : ''}" style="background: ${mutantColors[i]}22; border: 2px solid ${mutantColors[i]}88; color: ${mutantColors[i]}; ${i === GENE_DATA.mutationIndex ? 'box-shadow: 0 0 15px ' + mutantColors[i] + '66' : ''}">
+                            ${aa}
+                            <div class="tooltip-custom">
+                                <div class="text-white font-bold">${GENE_DATA.mutant.aminoFull[i]}</div>
+                                <div class="text-slate-400">Kodon: ${GENE_DATA.mutant.mRNA[i]}</div>
+                                <div class="text-slate-400">Sifat: ${GENE_DATA.mutant.properties[i]}</div>
+                                ${i === GENE_DATA.mutationIndex ? '<div class="text-red-400 font-bold mt-1">⚠️ MUTASI: Glu → Val</div>' : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                    <span class="text-slate-600 text-xs font-mono ml-2">... → 146 aa</span>
+                </div>
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="glass-panel p-5">
+                <h3 class="text-sm font-display font-bold text-amber-400 tracking-wider mb-3">📊 TABEL PERBANDINGAN TRANSLASI</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="text-left py-2 text-[10px] font-mono text-slate-500 pr-3">POSISI</th>
+                                <th class="text-center py-2 text-[10px] font-mono text-emerald-400">mRNA NORMAL</th>
+                                <th class="text-center py-2 text-[10px] font-mono text-emerald-400">AA NORMAL</th>
+                                <th class="text-center py-2 text-[10px] font-mono text-red-400">mRNA MUTAN</th>
+                                <th class="text-center py-2 text-[10px] font-mono text-red-400">AA MUTAN</th>
+                                <th class="text-center py-2 text-[10px] font-mono text-amber-400">PERUBAHAN?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${GENE_DATA.normal.mRNA.map((codon, i) => {
+                                const isMut = i === GENE_DATA.mutationIndex;
+                                return `
+                                <tr class="${isMut ? 'bg-red-500/5' : ''} border-b border-white/5">
+                                    <td class="py-2 pr-3 font-mono text-xs text-slate-400">${i === 0 ? 'Start' : 'β' + i}</td>
+                                    <td class="py-2 text-center font-mono text-xs text-emerald-300">${codon}</td>
+                                    <td class="py-2 text-center text-xs text-slate-300">${GENE_DATA.normal.aminoFull[i]}</td>
+                                    <td class="py-2 text-center font-mono text-xs ${isMut ? 'text-red-300 font-bold' : 'text-slate-400'}">${GENE_DATA.mutant.mRNA[i]}</td>
+                                    <td class="py-2 text-center text-xs ${isMut ? 'text-red-300 font-bold' : 'text-slate-300'}">${GENE_DATA.mutant.aminoFull[i]}</td>
+                                    <td class="py-2 text-center text-xs">${isMut ? '<span class="text-red-400 font-bold">⚠️ MUTASI</span>' : '<span class="text-slate-600">—</span>'}</td>
+                                </tr>`;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-6">
+                <button onclick="goToStep(2)" class="step-btn text-sm px-5 py-2.5">← TRANSKRIPSI</button>
+                <button onclick="goToStep(4)" class="step-btn active text-sm px-5 py-2.5">HEMOGLOBIN →</button>
+            </div>
+            `
+        );
+    }
+
+    // ====================================================================
+    // STEP 4: HEMOGLOBIN STRUCTURE
+    // ====================================================================
+    function renderHemoglobin(container) {
+        container.innerHTML = createSection(
+            'HEMOGLOBIN',
+            'STRUKTUR KUARTENER & EFEK MUTASI PADA PROTEIN',
+            `
+            <div class="glass-panel p-5 mb-5">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="text-xs font-display font-bold text-cyan-400 tracking-wider">📋 PENJELASAN</span>
+                </div>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    Hemoglobin dewasa (<strong class="text-white">HbA</strong>) adalah protein heterotetramer yang terdiri dari 
+                    <strong class="text-blue-400">2 rantai α-globin</strong> dan <strong class="text-emerald-400">2 rantai β-globin</strong>, 
+                    masing-masing mengikat satu <strong class="text-amber-400">gugus heme</strong> (mengandung Fe²⁺). 
+                    Satu molekul hemoglobin dapat mengikat <strong class="text-white">4 molekul O₂</strong>. 
+                    Pada HbS, substitusi Glu→Val menciptakan <strong class="text-red-400">"sticky patch"</strong> hidrofobik di permukaan β-globin.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+                <!-- Normal Hemoglobin -->
+                <div class="glass-panel p-5">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+                        <h3 class="text-sm font-display font-bold text-emerald-400 tracking-wider">HbA (NORMAL)</h3>
+                    </div>
+                    <div class="hemoglobin-viz mb-4">
+                        <div class="globin-subunit alpha-chain" style="top: 10px; left: 20px;" title="Rantai α₁-globin">α₁</div>
+                        <div class="globin-subunit alpha-chain" style="top: 10px; right: 20px; border-radius: 60% 40% 50% 50%;" title="Rantai α₂-globin">α₂</div>
+                        <div class="globin-subunit beta-chain-normal" style="bottom: 10px; left: 20px; border-radius: 50% 40% 60% 50%;" title="Rantai β₁-globin (Normal: Glu di posisi 6)">β₁</div>
+                        <div class="globin-subunit beta-chain-normal" style="bottom: 10px; right: 20px; border-radius: 40% 60% 50% 50%;" title="Rantai β₂-globin (Normal: Glu di posisi 6)">β₂</div>
+                        <div class="heme-group" title="Gugus Heme (Fe²⁺) — mengikat O₂">Fe²⁺</div>
+                    </div>
+                    <div class="text-center space-y-1">
+                        <div class="text-xs text-slate-400">Struktur: <strong class="text-white">α₂β₂</strong> (heterotetramer)</div>
+                        <div class="text-xs text-slate-400">Posisi β6: <strong class="text-emerald-300">Glu</strong> (hidrofilik) → permukaan halus</div>
+                        <div class="text-xs text-cyan-400">✅ Hemoglobin terlarut bebas dalam sitoplasma</div>
+                    </div>
+                </div>
+
+                <!-- Sickle Hemoglobin -->
+                <div class="glass-panel p-5">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="w-3 h-3 rounded-full bg-red-400 animate-pulse"></span>
+                        <h3 class="text-sm font-display font-bold text-red-400 tracking-wider">HbS (MUTAN)</h3>
+                    </div>
+                    <div class="hemoglobin-viz mb-4">
+                        <div class="globin-subunit alpha-chain" style="top: 10px; left: 20px;">α₁</div>
+                        <div class="globin-subunit alpha-chain" style="top: 10px; right: 20px; border-radius: 60% 40% 50% 50%;">α₂</div>
+                        <div class="globin-subunit beta-chain-mutant" style="bottom: 10px; left: 20px; border-radius: 50% 40% 60% 50%;" title="Rantai βS₁ (MUTAN: Val di posisi 6)">
+                            βS₁
+                            <div class="sticky-patch" style="top: -4px; right: -4px;" title="Sticky Patch (hidrofobik)"></div>
+                        </div>
+                        <div class="globin-subunit beta-chain-mutant" style="bottom: 10px; right: 20px; border-radius: 40% 60% 50% 50%;" title="Rantai βS₂ (MUTAN: Val di posisi 6)">
+                            βS₂
+                            <div class="sticky-patch" style="top: -4px; left: -4px;" title="Sticky Patch (hidrofobik)"></div>
+                        </div>
+                        <div class="heme-group" title="Gugus Heme (Fe²⁺)">Fe²⁺</div>
+                    </div>
+                    <div class="text-center space-y-1">
+                        <div class="text-xs text-slate-400">Struktur: <strong class="text-white">α₂βS₂</strong> (tetap tetramer)</div>
+                        <div class="text-xs text-slate-400">Posisi β6: <strong class="text-red-300">Val</strong> (hidrofobik) → <strong class="text-red-400">sticky patch</strong></div>
+                        <div class="text-xs text-red-400">⚠️ Molekul HbS saling menempel saat kadar O₂ rendah</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Polymerization -->
+            <div class="glass-panel p-5 mb-5">
+                <h3 class="text-sm font-display font-bold text-red-400 tracking-wider mb-3">🔗 POLIMERISASI HbS</h3>
+                <p class="text-xs text-slate-400 mb-4">Saat kadar oksigen rendah (deoksigenasi), patch hidrofobik Valin pada satu molekul HbS menempel ke pocket hidrofobik pada molekul HbS lain, membentuk serat (fiber) panjang dan kaku.</p>
+                
+                <div class="bg-black/30 rounded-xl p-4 mb-3" id="polymerization-viz">
+                    <div class="text-[10px] font-mono text-slate-500 mb-2">SIMULASI SERAT HbS (DALAM SEL DARAH MERAH)</div>
+                    <div id="fiber-container" class="space-y-0.5">
+                        <!-- Fibers will be animated here -->
+                    </div>
+                </div>
+                
+                <button onclick="animatePolymerization()" class="step-btn active text-xs px-4 py-2">
+                    ▶ JALANKAN POLIMERISASI
+                </button>
+                
+                <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="bg-white/[0.03] rounded-lg p-3 text-center">
+                        <div class="text-amber-400 font-bold text-sm">Kondisi Pemicu</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Kadar O₂ rendah, pH rendah, dehidrasi, suhu tinggi</div>
+                    </div>
+                    <div class="bg-white/[0.03] rounded-lg p-3 text-center">
+                        <div class="text-red-400 font-bold text-sm">Hasil</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Serat HbS kaku → mendistorsi bentuk sel darah merah</div>
+                    </div>
+                    <div class="bg-white/[0.03] rounded-lg p-3 text-center">
+                        <div class="text-purple-400 font-bold text-sm">Reversibel?</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Awalnya ya, tapi siklus berulang → kerusakan permanen</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-6">
+                <button onclick="goToStep(3)" class="step-btn text-sm px-5 py-2.5">← TRANSLASI</button>
+                <button onclick="goToStep(5)" class="step-btn active text-sm px-5 py-2.5">SEL DARAH →</button>
+            </div>
+            `
+        );
+    }
+
+    function animatePolymerization() {
+        const fiberContainer = document.getElementById('fiber-container');
+        if (!fiberContainer) return;
+        fiberContainer.innerHTML = '';
+
+        const fiberCount = 12;
+        for (let i = 0; i < fiberCount; i++) {
+            setTimeout(() => {
+                const fiber = document.createElement('div');
+                fiber.className = 'fiber-line';
+                fiber.style.animationDelay = `${i * 0.08}s`;
+                fiber.style.width = `${60 + Math.random() * 40}%`;
+                fiber.style.marginLeft = `${Math.random() * 20}%`;
+                fiber.style.opacity = `${0.4 + Math.random() * 0.6}`;
+                fiberContainer.appendChild(fiber);
+            }, i * 120);
+        }
+    }
+
+    // ====================================================================
+    // STEP 5: BLOOD CELLS
+    // ====================================================================
+    function renderBloodCells(container) {
+        container.innerHTML = createSection(
+            'SEL DARAH MERAH',
+            'DEFORMASI ERITROSIT & DAMPAK PADA SIRKULASI',
+            `
+            <div class="glass-panel p-5 mb-5">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="text-xs font-display font-bold text-red-400 tracking-wider">📋 PENJELASAN</span>
+                </div>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    Sel darah merah (eritrosit) normal berbentuk <strong class="text-emerald-400">cakram bikonkaf</strong> yang fleksibel, 
+                    memungkinkannya melewati kapiler sempit. Serat HbS yang kaku mengubah bentuk eritrosit menjadi 
+                    <strong class="text-red-400">sabit (sickle)</strong> — kaku, rapuh, dan mudah menggumpal, menyumbat pembuluh darah kecil.
+                </p>
+            </div>
+
+            <!-- Visual Comparison -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                <!-- Normal RBC -->
+                <div class="glass-panel p-6 text-center">
+                    <h3 class="text-sm font-display font-bold text-emerald-400 tracking-wider mb-4">ERITROSIT NORMAL</h3>
+                    <div class="flex justify-center gap-4 mb-4">
+                        <div class="rbc-normal" title="Sel darah merah normal — bikonkaf, fleksibel"></div>
+                        <div class="rbc-normal" style="width:55px; height:55px;" title="Sel darah merah normal"></div>
+                        <div class="rbc-normal" style="width:50px; height:50px;" title="Sel darah merah normal"></div>
+                    </div>
+                    <div class="space-y-1.5 text-left">
+                        <div class="flex items-center gap-2 text-xs text-slate-300">
+                            <span class="text-emerald-400">✓</span> Bentuk cakram bikonkaf
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-slate-300">
+                            <span class="text-emerald-400">✓</span> Sangat fleksibel & elastis
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-slate-300">
+                            <span class="text-emerald-400">✓</span> Umur hidup: ~120 hari
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-slate-300">
+                            <span class="text-emerald-400">✓</span> Mudah melewati kapiler sempit
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-slate-300">
+                            <span class="text-emerald-400">✓</span> Mengangkut O₂ secara efisien
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sickle RBC -->
+                <div class="glass-panel p-6 text-center">
+                    <h3 class="text-sm font-display font-bold text-red-400 tracking-wider mb-4">ERITROSIT SABIT</h3>
+                    <div class="flex justify-center items-center gap-3 mb-4">
+                        <div class="rbc-sickle" title="Sel darah merah sabit — kaku, rapuh"></div>
+                        <div class="rbc-sickle" style="width:60px; height:30px; transform: rotate(10deg);" title="Sel darah merah sabit"></div>
+                        <div class="rbc-sickle" style="width:55px; height:28px; transform: rotate(-25deg);" title="Sel darah merah sabit"></div>
+                    </div>
+                    <div class="space-y-1.5 text-left">
+                        <div class="flex items-center gap-2 text-xs text-slate-300">
+                            <span class="text-red-400">✗</span> Bentuk sabit / bulan sabit
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-slate-300">
+                            <span class="text-red-400">✗</span> Kaku & mudah pecah
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-slate-300">
+                            <span class="text-red-400">✗</span> Umur hidup: ~10-20 hari
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-slate-300">
+                            <span class="text-red-400">✗</span> Tersumbat di kapiler (vaso-oklusi)
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-slate-300">
+                            <span class="text-red-400">✗</span> Pasokan O₂ terganggu → nyeri
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blood Vessel Simulation -->
+            <div class="glass-panel p-5 mb-5">
+                <h3 class="text-sm font-display font-bold text-red-400 tracking-wider mb-3">🩸 SIMULASI ALIRAN DARAH</h3>
+                <p class="text-xs text-slate-400 mb-3">Klik tombol di bawah untuk melihat perbedaan aliran sel darah normal vs sabit dalam pembuluh darah</p>
+                
+                <div class="grid grid-cols-1 gap-4">
+                    <!-- Normal Flow -->
+                    <div>
+                        <div class="text-[10px] font-mono text-emerald-400 mb-1">ALIRAN NORMAL — Lancar</div>
+                        <div class="blood-vessel" id="vessel-normal">
+                            <div class="vessel-wall top"></div>
+                            <div class="vessel-wall bottom"></div>
+                        </div>
+                    </div>
+                    <!-- Sickle Flow -->
+                    <div>
+                        <div class="text-[10px] font-mono text-red-400 mb-1">ALIRAN SABIT — Vaso-oklusi (Penyumbatan)</div>
+                        <div class="blood-vessel" id="vessel-sickle" style="background: linear-gradient(to bottom, rgba(30,41,59,0.9), rgba(127,29,29,0.2) 20%, rgba(127,29,29,0.35) 50%, rgba(127,29,29,0.2) 80%, rgba(30,41,59,0.9));">
+                            <div class="vessel-wall top"></div>
+                            <div class="vessel-wall bottom"></div>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="startBloodFlow()" class="step-btn active text-xs px-4 py-2 mt-3">
+                    ▶ JALANKAN SIMULASI ALIRAN
+                </button>
+            </div>
+
+            <!-- Clinical Impact -->
+            <div class="glass-panel p-5">
+                <h3 class="text-sm font-display font-bold text-amber-400 tracking-wider mb-3">⚕️ DAMPAK KLINIS</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div class="bg-red-500/5 border border-red-500/15 rounded-xl p-4">
+                        <div class="text-red-400 font-bold text-sm mb-1">💔 Anemia Hemolitik</div>
+                        <p class="text-[11px] text-slate-400">Sel sabit pecah lebih cepat (10-20 hari vs 120 hari normal) → kekurangan sel darah merah kronis</p>
+                    </div>
+                    <div class="bg-amber-500/5 border border-amber-500/15 rounded-xl p-4">
+                        <div class="text-amber-400 font-bold text-sm mb-1">⚡ Krisis Nyeri</div>
+                        <p class="text-[11px] text-slate-400">Sel sabit menyumbat kapiler → jaringan kekurangan oksigen → nyeri hebat (vaso-occlusive crisis)</p>
+                    </div>
+                    <div class="bg-purple-500/5 border border-purple-500/15 rounded-xl p-4">
+                        <div class="text-purple-400 font-bold text-sm mb-1">🫁 Kerusakan Organ</div>
+                        <p class="text-[11px] text-slate-400">Penyumbatan berulang → kerusakan limpa, ginjal, paru-paru, otak, dan organ vital lainnya</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-6">
+                <button onclick="goToStep(4)" class="step-btn text-sm px-5 py-2.5">← HEMOGLOBIN</button>
+                <button onclick="goToStep(6)" class="step-btn active text-sm px-5 py-2.5">PEWARISAN →</button>
+            </div>
+            `
+        );
+    }
+
+    let bloodFlowAnimationIds = [];
+    function startBloodFlow() {
+        // Clear previous animations
+        bloodFlowAnimationIds.forEach(id => clearInterval(id));
+        bloodFlowAnimationIds = [];
+        
+        const vesselNormal = document.getElementById('vessel-normal');
+        const vesselSickle = document.getElementById('vessel-sickle');
+        if (!vesselNormal || !vesselSickle) return;
+
+        // Clear existing cells except walls
+        vesselNormal.querySelectorAll('.floating-rbc, .sickle-clump').forEach(el => el.remove());
+        vesselSickle.querySelectorAll('.floating-rbc, .sickle-clump').forEach(el => el.remove());
+
+        // Normal RBCs - smooth flow
+        function addNormalRBC() {
+            const cell = document.createElement('div');
+            cell.className = 'floating-rbc';
+            const size = 18 + Math.random() * 10;
+            const topPos = 25 + Math.random() * 85;
+            cell.style.cssText = `
+                width: ${size}px; height: ${size}px; border-radius: 50%;
+                background: radial-gradient(ellipse at 40% 40%, #fca5a5, #ef4444, #991b1b);
+                box-shadow: inset -2px -2px 6px rgba(0,0,0,0.3);
+                top: ${topPos}px; left: -30px;
+                animation: floatInVessel ${4 + Math.random() * 3}s linear forwards;
+            `;
+            vesselNormal.appendChild(cell);
+            setTimeout(() => cell.remove(), 8000);
+        }
+
+        // Sickle RBCs - some get stuck
+        function addSickleRBC() {
+            const cell = document.createElement('div');
+            cell.className = 'floating-rbc';
+            const isSickle = Math.random() > 0.3;
+            const topPos = 25 + Math.random() * 85;
+            
+            if (isSickle) {
+                const w = 20 + Math.random() * 10;
+                const stuck = Math.random() > 0.5;
+                cell.style.cssText = `
+                    width: ${w}px; height: ${w * 0.5}px; 
+                    border-radius: 60% 10% 60% 10%;
+                    background: linear-gradient(135deg, #fca5a5, #b91c1c, #7f1d1d);
+                    box-shadow: inset -2px -2px 5px rgba(0,0,0,0.4);
+                    top: ${topPos}px; left: -30px;
+                    transform: rotate(${-30 + Math.random() * 60}deg);
+                    ${stuck 
+                        ? `animation: none; left: ${30 + Math.random() * 60}%; opacity: 0.9;` 
+                        : `animation: floatInVessel ${7 + Math.random() * 5}s linear forwards;`
+                    }
+                `;
+            } else {
+                const size = 14 + Math.random() * 8;
+                cell.style.cssText = `
+                    width: ${size}px; height: ${size}px; border-radius: 50%;
+                    background: radial-gradient(ellipse at 40% 40%, #fca5a5, #ef4444, #991b1b);
+                    box-shadow: inset -2px -2px 6px rgba(0,0,0,0.3);
+                    top: ${topPos}px; left: -30px;
+                    animation: floatInVessel ${6 + Math.random() * 4}s linear forwards;
+                `;
+            }
+            vesselSickle.appendChild(cell);
+            if (!cell.style.cssText.includes('animation: none')) {
+                setTimeout(() => cell.remove(), 13000);
+            }
+        }
+
+        // Start spawning
+        const id1 = setInterval(addNormalRBC, 400);
+        const id2 = setInterval(addSickleRBC, 500);
+        bloodFlowAnimationIds.push(id1, id2);
+
+        // Initial burst
+        for (let i = 0; i < 5; i++) {
+            setTimeout(addNormalRBC, i * 200);
+            setTimeout(addSickleRBC, i * 250);
+        }
+    }
+
+    // ====================================================================
+    // STEP 6: INHERITANCE
+    // ====================================================================
+    function renderInheritance(container) {
+        container.innerHTML = createSection(
+            'PEWARISAN',
+            'AUTOSOMAL RESESIF & HETEROZYGOTE ADVANTAGE',
+            `
+            <div class="glass-panel p-5 mb-5">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="text-xs font-display font-bold text-purple-400 tracking-wider">📋 PENJELASAN</span>
+                </div>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    Anemia Sel Sabit diwariskan secara <strong class="text-amber-400">autosomal resesif</strong>. 
+                    Gen HBB terletak di <strong class="text-purple-400">kromosom 11</strong> (autosom, bukan kromosom seks).
+                    Individu harus mewarisi <strong class="text-red-400">dua salinan alel mutan (HbS)</strong> dari kedua orang tua 
+                    untuk menderita SCA. Pembawa sifat (<strong class="text-amber-400">heterozigot, HbAS</strong>) umumnya sehat 
+                    dan memiliki keuntungan evolusi: resistensi terhadap malaria.
+                </p>
+            </div>
+
+            <!-- Genotype Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+                <div class="glass-panel p-4 border-l-4 border-l-emerald-400">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="font-mono text-lg font-bold text-emerald-400">HbAA</span>
+                    </div>
+                    <div class="text-sm text-white font-bold mb-1">Homozigot Normal</div>
+                    <p class="text-[11px] text-slate-400">Dua salinan alel normal. Hemoglobin A. Sel darah merah normal sepenuhnya.</p>
+                    <div class="mt-2 flex gap-1">
+                        <div class="rbc-normal" style="width:24px; height:24px;"></div>
+                        <div class="rbc-normal" style="width:24px; height:24px;"></div>
+                    </div>
+                </div>
+                <div class="glass-panel p-4 border-l-4 border-l-amber-400">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="font-mono text-lg font-bold text-amber-400">HbAS</span>
+                    </div>
+                    <div class="text-sm text-white font-bold mb-1">Heterozigot (Carrier)</div>
+                    <p class="text-[11px] text-slate-400">Satu alel normal + satu mutan. "Sickle Cell Trait". Umumnya asimtomatik, memiliki ~40% HbS.</p>
+                    <div class="mt-2 flex gap-1 items-center">
+                        <div class="rbc-normal" style="width:24px; height:24px;"></div>
+                        <div class="rbc-sickle" style="width:28px; height:14px; transform: rotate(-10deg);"></div>
+                    </div>
+                </div>
+                <div class="glass-panel p-4 border-l-4 border-l-red-400">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="font-mono text-lg font-bold text-red-400">HbSS</span>
+                    </div>
+                    <div class="text-sm text-white font-bold mb-1">Homozigot Mutan</div>
+                    <p class="text-[11px] text-slate-400">Dua salinan alel mutan. Anemia Sel Sabit penuh. Gejala klinis berat.</p>
+                    <div class="mt-2 flex gap-1 items-center">
+                        <div class="rbc-sickle" style="width:28px; height:14px; transform: rotate(-10deg);"></div>
+                        <div class="rbc-sickle" style="width:24px; height:12px; transform: rotate(15deg);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Punnett Square -->
+            <div class="glass-panel p-5 mb-5">
+                <h3 class="text-sm font-display font-bold text-cyan-400 tracking-wider mb-2">📊 DIAGRAM PUNNETT</h3>
+                <p class="text-xs text-slate-400 mb-3">Pilih genotipe orang tua untuk melihat probabilitas keturunan:</p>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+                    <button onclick="setPunnett('HbAS','HbAS')" class="step-btn active text-[10px]" id="punnett-btn-1">Carrier × Carrier</button>
+                    <button onclick="setPunnett('HbAS','HbAA')" class="step-btn text-[10px]" id="punnett-btn-2">Carrier × Normal</button>
+                    <button onclick="setPunnett('HbAS','HbSS')" class="step-btn text-[10px]" id="punnett-btn-3">Carrier × SCA</button>
+                    <button onclick="setPunnett('HbSS','HbSS')" class="step-btn text-[10px]" id="punnett-btn-4">SCA × SCA</button>
+                </div>
+
+                <div id="punnett-container">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
+            <!-- Heterozygote Advantage -->
+            <div class="glass-panel p-5 mb-5">
+                <h3 class="text-sm font-display font-bold text-amber-400 tracking-wider mb-3">🦟 HETEROZYGOTE ADVANTAGE — Resistensi Malaria</h3>
+                <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                    Meskipun homozigot HbSS menyebabkan penyakit serius, alel HbS tetap bertahan dalam populasi manusia karena 
+                    <strong class="text-amber-400">heterozigot (HbAS) memiliki keuntungan selektif</strong>: 
+                    resistensi terhadap malaria falciparum.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="advantage-card">
+                        <div class="text-sm font-bold text-white mb-1">🔬 Mekanisme</div>
+                        <p class="text-[11px] text-slate-400">Parasit <em>Plasmodium falciparum</em> sulit berkembang dalam sel darah merah yang mengandung campuran HbA dan HbS. Sel yang terinfeksi lebih cepat dibersihkan oleh limpa.</p>
+                    </div>
+                    <div class="advantage-card">
+                        <div class="text-sm font-bold text-white mb-1">🌍 Distribusi Geografis</div>
+                        <p class="text-[11px] text-slate-400">Frekuensi alel HbS tinggi di daerah endemik malaria: Afrika sub-Sahara, Mediterania, Timur Tengah, India — bukti seleksi alam.</p>
+                    </div>
+                    <div class="advantage-card">
+                        <div class="text-sm font-bold text-white mb-1">⚖️ Balanced Polymorphism</div>
+                        <p class="text-[11px] text-slate-400">Seleksi alam mempertahankan alel HbS pada frekuensi stabil: heterozigot diuntungkan, meskipun homozigot dirugikan — keseimbangan evolusioner.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="glass-panel p-5 bg-gradient-to-br from-red-500/5 to-amber-500/5 border-red-500/20">
+                <h3 class="text-sm font-display font-bold text-white tracking-wider mb-3">📌 RINGKASAN SIMULASI</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-300">
+                    <div class="space-y-2">
+                        <div class="flex gap-2"><span class="text-red-400 font-bold">1.</span> Mutasi titik (A→T) pada gen HBB di kromosom 11</div>
+                        <div class="flex gap-2"><span class="text-red-400 font-bold">2.</span> Kodon mRNA berubah: GAG → GUG</div>
+                        <div class="flex gap-2"><span class="text-red-400 font-bold">3.</span> Asam amino berubah: Glu (hidrofilik) → Val (hidrofobik)</div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex gap-2"><span class="text-red-400 font-bold">4.</span> Hemoglobin S (HbS) membentuk sticky patch</div>
+                        <div class="flex gap-2"><span class="text-red-400 font-bold">5.</span> HbS berpolimerisasi → serat kaku → sel darah mengerut</div>
+                        <div class="flex gap-2"><span class="text-red-400 font-bold">6.</span> Vaso-oklusi, anemia hemolitik, kerusakan organ</div>
+                    </div>
+                </div>
+                <div class="mt-3 pt-3 border-t border-white/10">
+                    <p class="text-[11px] text-amber-300">
+                        <strong>Kesimpulan:</strong> Anemia Sel Sabit adalah contoh klasik bagaimana <strong class="text-white">satu perubahan nukleotida</strong> 
+                        dalam genom (dari ~3 miliar pasangan basa) dapat menyebabkan perubahan pada satu asam amino (dari 146 total) yang berdampak masif pada 
+                        struktur protein, fungsi sel, dan kesehatan organisme secara keseluruhan.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-6">
+                <button onclick="goToStep(5)" class="step-btn text-sm px-5 py-2.5">← SEL DARAH</button>
+                <button onclick="goToStep(0)" class="step-btn active text-sm px-5 py-2.5">🔄 KEMBALI KE AWAL</button>
+            </div>
+            `
+        );
+
+        // Render default Punnett
+        setPunnett('HbAS', 'HbAS');
+    }
+
+    function setPunnett(parent1, parent2) {
+        // Update buttons
+        const btnMap = { 'HbAS,HbAS': 1, 'HbAS,HbAA': 2, 'HbAS,HbSS': 3, 'HbSS,HbSS': 4 };
+        const key = `${parent1},${parent2}`;
+        for (let i = 1; i <= 4; i++) {
+            const btn = document.getElementById(`punnett-btn-${i}`);
+            if (btn) btn.classList.toggle('active', btnMap[key] === i);
+        }
+
+        // Get gametes
+        function getGametes(genotype) {
+            if (genotype === 'HbAA') return ['A', 'A'];
+            if (genotype === 'HbAS') return ['A', 'S'];
+            if (genotype === 'HbSS') return ['S', 'S'];
+            return ['A', 'A'];
+        }
+
+        const g1 = getGametes(parent1);
+        const g2 = getGametes(parent2);
+
+        // Build Punnett square
+        const results = [];
+        g1.forEach(a1 => {
+            g2.forEach(a2 => {
+                const alleles = [a1, a2].sort().reverse(); // A before S
+                results.push(alleles.join(''));
+            });
+        });
+
+        // Count outcomes
+        const counts = {};
+        results.forEach(r => { counts[r] = (counts[r] || 0) + 1; });
+
+        function getGenotypeInfo(g) {
+            if (g === 'AA') return { label: 'HbAA', desc: 'Normal', color: 'emerald', bgClass: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300' };
+            if (g === 'AS') return { label: 'HbAS', desc: 'Carrier', color: 'amber', bgClass: 'bg-amber-500/10 border-amber-500/30 text-amber-300' };
+            if (g === 'SS') return { label: 'HbSS', desc: 'SCA', color: 'red', bgClass: 'bg-red-500/10 border-red-500/30 text-red-300' };
+            return { label: g, desc: '', color: 'slate', bgClass: 'bg-white/5 text-slate-300' };
+        }
+
+        const punnettContainer = document.getElementById('punnett-container');
+        if (!punnettContainer) return;
+
+        punnettContainer.innerHTML = `
+            <div class="mb-3 text-xs text-slate-400 text-center">
+                <strong class="text-blue-400">♂ Ayah: ${parent1}</strong> × <strong class="text-pink-400">♀ Ibu: ${parent2}</strong>
+            </div>
+            <!-- Punnett Grid -->
+            <div class="grid grid-cols-3 gap-2 max-w-sm mx-auto mb-4">
+                <!-- Header -->
+                <div class="punnett-cell bg-transparent"></div>
+                <div class="punnett-cell bg-pink-500/10 border border-pink-500/20 text-pink-300 text-sm">♀ ${g2[0]}</div>
+                <div class="punnett-cell bg-pink-500/10 border border-pink-500/20 text-pink-300 text-sm">♀ ${g2[1]}</div>
+                <!-- Row 1 -->
+                <div class="punnett-cell bg-blue-500/10 border border-blue-500/20 text-blue-300 text-sm">♂ ${g1[0]}</div>
+                ${[0, 1].map(j => {
+                    const r = [g1[0], g2[j]].sort().reverse().join('');
+                    const info = getGenotypeInfo(r);
+                    return `<div class="punnett-cell ${info.bgClass} border flex-col" title="${info.label}: ${info.desc}">
+                        <span class="font-bold">${info.label}</span>
+                        <span class="text-[9px] opacity-70">${info.desc}</span>
+                    </div>`;
+                }).join('')}
+                <!-- Row 2 -->
+                <div class="punnett-cell bg-blue-500/10 border border-blue-500/20 text-blue-300 text-sm">♂ ${g1[1]}</div>
+                ${[0, 1].map(j => {
+                    const r = [g1[1], g2[j]].sort().reverse().join('');
+                    const info = getGenotypeInfo(r);
+                    return `<div class="punnett-cell ${info.bgClass} border flex-col" title="${info.label}: ${info.desc}">
+                        <span class="font-bold">${info.label}</span>
+                        <span class="text-[9px] opacity-70">${info.desc}</span>
+                    </div>`;
+                }).join('')}
+            </div>
+
+            <!-- Results -->
+            <div class="bg-black/20 rounded-xl p-4">
+                <div class="text-[10px] font-mono text-slate-500 mb-2">PROBABILITAS KETURUNAN</div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    ${Object.entries(counts).map(([g, c]) => {
+                        const info = getGenotypeInfo(g);
+                        const pct = (c / 4 * 100);
+                        return `
+                        <div class="flex items-center gap-3 p-2 rounded-lg ${info.bgClass} border">
+                            <div>
+                                <div class="font-mono font-bold text-sm">${info.label}</div>
+                                <div class="text-[10px] opacity-70">${info.desc}</div>
+                            </div>
+                            <div class="ml-auto">
+                                <div class="font-display font-bold text-lg">${pct}%</div>
+                                <div class="text-[9px] opacity-70">${c}/4</div>
+                            </div>
+                        </div>`;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    // ====================================================================
+    // INITIALIZATION
+    // ====================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+        renderTutorial();
+        renderStep();
+        // Tutorial is shown first, main app fades in after close
+        document.getElementById('tutorial-overlay').style.transition = 'opacity 0.4s ease';
+    });
+    </script>
+</body>
+
+</html>
