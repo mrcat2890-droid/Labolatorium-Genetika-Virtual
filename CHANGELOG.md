@@ -6,6 +6,20 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📱 Resolusi Bug Responsivitas Sentuhan Mobile (Touch Tap DNA Raycasting)
+- **Akar Masalah (Root Cause):**
+  - Pada browser smartphone (iOS WebKit & Android Chromium), Three.js `OrbitControls` memanggil `event.preventDefault()` saat interaksi sentuhan layar (`touchmove`/`touchstart`) untuk mengendalikan rotasi orbital kamera 3D.
+  - Sesuai spesifikasi W3C DOM UI Events, pemanggilan `preventDefault()` pada event sentuhan membatalkan (*suppress*) pembuatan event sintetis `click`. Akibatnya, pendengar event lama yang hanya mengandalkan `window.addEventListener('click')` tidak pernah terpicu saat pengguna mengetuk komponen DNA di layar sentuh ponsel.
+  - Lapisan teks anotasi `#annotations-overlay` sebelumnya dapat mengonsumsi target sentuhan jika tidak diberi properti `pointer-events: none !important;` secara menyeluruh pada semua elemen anaknya.
+- **Implementasi Solusi Presisi:**
+  - **Deteksi Sentuhan Dwi-Lapis (Dual-Layer Pointer & Touch Events):** Menambahkan `pointerdown`/`pointerup` global dan listener langsung `touchstart`/`touchend` pada `renderer.domElement` dengan batas toleransi pergeseran mikro jari ($\Delta d < 18\text{px}$) dan durasi ketukan singkat ($\Delta t < 450\text{ms}$) guna membedakan ketukan tap sengaja (*intentional tap*) dari gestur rotasi/cubit kamera (*drag/pinch*).
+  - **Koordinat Raycast Presisi Relatif Canvas:** Menggunakan `renderer.domElement.getBoundingClientRect()` untuk kalkulasi normalisasi vektor `mouse.x` dan `mouse.y`, menjamin presisi koordinat tembak kursor terlepas dari *safe area insets* ponsel berponi, status bar browser, atau rasio layar tinggi (19.5:9, 21:9).
+  - **Debounce Anti-Konflik Internal (280 ms):** Menjamin `performRaycastSelection` hanya dieksekusi satu kali secara steril meskipun browser memicu event pointer, touch, dan delayed click sintetis secara beruntun.
+  - **Filter Elemen UI Bersih (`isUiElement`):** Memastikan ketukan pada tombol antarmuka, bottom dock, modal tutorial, atau drawer tidak mengintersepsi objek 3D di baliknya.
+  - **Penutupan Drawer Sentuhan Mulus:** Menambahkan pendengar `touchend` pada `#modal-backdrop` untuk penutupan *drawer bottom sheet* secara responsif tanpa jeda.
+- **Hasil Pengujian Otomatis:**
+  - Terverifikasi pada resolusi layar smartphone (390 × 844 px): ketukan pada basa nitrogen (misal: Adenina) atau atom CPK (misal: Fosfor P) membuka panel inspektor drawer bawah secara instan dan mulus.
+
 ### 🧬 Upgrade Ultra-Realistis Model DNA 3D Kristalografi (PDB 1BNA // Watson-Crick // Rosalind Franklin)
 - **Multi-Mode Scientific Representation (B-DNA Kristalografi Ilmiah):**
   - **Mode 1: Bio-Illustrative (Watson-Crick Modern Enhanced):**

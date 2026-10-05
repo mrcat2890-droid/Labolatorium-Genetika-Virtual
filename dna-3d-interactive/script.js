@@ -1157,9 +1157,12 @@ function closeAllDrawers() {
         else { controlsPanel.classList.remove('drawer-open'); openDrawer(inspectorPanel); }
     });
 });
-if (btnCloseControls) btnCloseControls.addEventListener('click', (e) => { e.stopPropagation(); controlsPanel.classList.remove('drawer-open'); modalBackdrop.classList.add('hidden'); });
-if (btnCloseInspector) btnCloseInspector.addEventListener('click', (e) => { e.stopPropagation(); inspectorPanel.classList.remove('drawer-open'); modalBackdrop.classList.add('hidden'); });
-if (modalBackdrop) modalBackdrop.addEventListener('click', closeAllDrawers);
+if (btnCloseControls) btnCloseControls.addEventListener('click', (e) => { e.stopPropagation(); closeAllDrawers(); });
+if (btnCloseInspector) btnCloseInspector.addEventListener('click', (e) => { e.stopPropagation(); closeAllDrawers(); });
+if (modalBackdrop) {
+    modalBackdrop.addEventListener('click', closeAllDrawers);
+    modalBackdrop.addEventListener('touchend', (e) => { e.stopPropagation(); closeAllDrawers(); });
+}
 
 // -----------------------------------------------------------------------------
 // 15. TOGGLE ANOTASI & FILTER KOMPONEN
@@ -1255,24 +1258,48 @@ function showComponentDetails(type) {
     }
 }
 
-window.addEventListener('click', (event) => {
-    if (event.target.closest('#controls-panel') || event.target.closest('#app-header') ||
-        event.target.closest('#inspector-panel') || event.target.closest('#mobile-dock') ||
-        event.target.closest('#modal-backdrop') || event.target.closest('#interaction-hint') ||
-        event.target.closest('#tutorial-modal')) return;
-
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    raycaster.setFromCamera(mouse, camera);
-
-    const visibleMeshes = [];
+function getActiveVisibleInteractiveMeshes() {
+    const list = [];
     dnaGroup.traverse(child => {
-        if (child.isMesh && child.visible && child.parent && child.parent.visible) {
-            visibleMeshes.push(child);
+        if (child.isMesh && child.userData && child.userData.type) {
+            let isParentVisible = true;
+            let p = child;
+            while (p && p !== dnaGroup) {
+                if (p.visible === false) {
+                    isParentVisible = false;
+                    break;
+                }
+                p = p.parent;
+            }
+            if (isParentVisible) list.push(child);
         }
     });
+    return list;
+}
 
-    const intersects = raycaster.intersectObjects(visibleMeshes, false);
+let lastSelectionHandledTime = 0;
+let pointerDownX = 0;
+let pointerDownY = 0;
+let pointerDownTime = 0;
+
+function isUiElement(target) {
+    if (!target || !target.closest) return false;
+    return !!target.closest('#controls-panel, #app-header, #inspector-panel, #mobile-dock, #modal-backdrop, #interaction-hint, #tutorial-modal');
+}
+
+function performRaycastSelection(clientX, clientY) {
+    const now = performance.now();
+    if (now - lastSelectionHandledTime < 280) return false;
+    lastSelectionHandledTime = now;
+
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+
+    const interactiveMeshes = getActiveVisibleInteractiveMeshes();
+    const intersects = raycaster.intersectObjects(interactiveMeshes, false);
+
     if (intersects.length > 0) {
         const clicked = intersects[0].object;
         const type = clicked.userData.type;
@@ -1282,8 +1309,55 @@ window.addEventListener('click', (event) => {
             const origScale = tg.scale.clone();
             animateVector(tg.scale, origScale.clone().multiplyScalar(1.25), 200, easeOutBack);
             setTimeout(() => animateVector(tg.scale, origScale, 300, easeInOutCubic), 220);
+            return true;
         }
     }
+    return false;
+}
+
+// 1. Deteksi Pointer (Mobile Touch & Mouse)
+window.addEventListener('pointerdown', (e) => {
+    if (isUiElement(e.target)) return;
+    pointerDownX = e.clientX;
+    pointerDownY = e.clientY;
+    pointerDownTime = performance.now();
+}, { passive: true });
+
+window.addEventListener('pointerup', (e) => {
+    if (isUiElement(e.target)) return;
+    const moveDist = Math.hypot(e.clientX - pointerDownX, e.clientY - pointerDownY);
+    const timeElapsed = performance.now() - pointerDownTime;
+
+    // Jari bergeser < 18px & durasi < 450ms menandakan ketukan/tap disengaja
+    if (moveDist < 18 && timeElapsed < 450) {
+        performRaycastSelection(e.clientX, e.clientY);
+    }
+}, { passive: true });
+
+// 2. Handler Sentuhan Langsung pada Canvas untuk Layar Sentuh Mobile (Mencegah Intersepsi OrbitControls)
+renderer.domElement.addEventListener('touchstart', (e) => {
+    if (e.touches && e.touches.length === 1) {
+        pointerDownX = e.touches[0].clientX;
+        pointerDownY = e.touches[0].clientY;
+        pointerDownTime = performance.now();
+    }
+}, { passive: true });
+
+renderer.domElement.addEventListener('touchend', (e) => {
+    if (e.changedTouches && e.changedTouches.length === 1) {
+        const touch = e.changedTouches[0];
+        const moveDist = Math.hypot(touch.clientX - pointerDownX, touch.clientY - pointerDownY);
+        const timeElapsed = performance.now() - pointerDownTime;
+        if (moveDist < 18 && timeElapsed < 450) {
+            performRaycastSelection(touch.clientX, touch.clientY);
+        }
+    }
+}, { passive: true });
+
+// 3. Fallback Click Event untuk Desktop
+window.addEventListener('click', (event) => {
+    if (isUiElement(event.target)) return;
+    performRaycastSelection(event.clientX, event.clientY);
 });
 
 window.addEventListener('mousemove', (event) => {
@@ -1294,14 +1368,8 @@ window.addEventListener('mousemove', (event) => {
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     raycaster.setFromCamera(mouse, camera);
 
-    const visibleMeshes = [];
-    dnaGroup.traverse(child => {
-        if (child.isMesh && child.visible && child.parent && child.parent.visible) {
-            visibleMeshes.push(child);
-        }
-    });
-
-    const intersects = raycaster.intersectObjects(visibleMeshes, false);
+    const interactiveMeshes = getActiveVisibleInteractiveMeshes();
+    const intersects = raycaster.intersectObjects(interactiveMeshes, false);
     container.style.cursor = (intersects.length > 0) ? 'pointer' : 'grab';
 });
 
