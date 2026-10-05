@@ -6,6 +6,20 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🩸 Perbaikan Layout Teks Terpotong & Mesin Simulasi Aliran Darah Canvas 60 FPS (SICKLE-MUT)
+- **Eliminasi Teks & Tooltip Terpotong (*Vertical Overflow Clipping*):**
+  - Menambahkan ruang kepala vertikal `pt-10 pb-2` pada kontainer `overflow-x-auto` di modul sekuens DNA normal dan mutan, serta `pt-11` pada rantai asam amino translasi, sehingga tooltip floating (`.tooltip-custom`) memiliki area vertikal leluasa dan tidak lagi terpotong garis tepi batas atas kontainer.
+  - Memperbarui gaya visual `.tooltip-custom` dengan kontras tinggi (`rgba(18, 8, 14, 0.98)`), bayangan specular `box-shadow: 0 4px 20px rgba(0,0,0,0.8)`, z-index tinggi, dan panah penunjuk (*pointer arrow* `::after`) yang presisi mengarah ke nukleotida/asam amino terkait.
+  - Mengeliminasi atribut bawaan browser `title="..."` pada kodon yang memicu benturan visual antara tooltip OS dan tooltip kustom aplikasi.
+  - Merestrukturisasi subtitle sekuens DNA dari teks paragraf biasa yang rentan patah kata canggung (seperti *"ke-"* dan *"7"* pada baris terpisah) menjadi barisan badge pil responsif (*flex-wrap pill badges*) yang rapi dan adaptif di semua resolusi.
+- **Transformasi Mesin Simulasi Aliran Darah ke HTML5 Canvas (60 FPS & Hemodinamika Presisi):**
+  - Menggantikan sistem animasi DOM `setInterval` + CSS keyframes (yang mengalami anomali jarak `translateX` berhenti di awal dan terputus-putus) dengan **mesin simulasi berbasis HTML5 Canvas akselerasi GPU 60 FPS**.
+  - **Aliran Darah Normal (HbA):** Sel darah merah bikonkaf fleksibel mengalir penuh dari ujung kiri (`x = -35`) melintasi seluruh pembuluh darah hingga ujung kanan (`x = width + 35`) secara kontinu dengan profil kecepatan laminar Poiseuille (sel di tengah mengalir lebih cepat) dan osilasi sinusoidal halus.
+  - **Aliran Darah Sabit (HbS - Vaso-Oklusi):** Memodelkan penyempitan mikrovaskular kapiler (*bifurcation / bottleneck* pada 50%–68% lebar pembuluh). Sel eritrosit sabit berbentuk bulan sabit kaku dengan sticky patch Valin-6 terjepit di zona penyempitan, membentuk trombus penyumbat (*vaso-occlusive clot*) secara dinamis.
+  - Menampilkan efek hemodinamik nyata di mana sel-sel yang datang di belakang trombus melambat, berdesakan, dan menumpuk, disertai telemetri status real-time (*"ALIRAN AWAL"* → *"TERJEPIT DI BIFURKASI"* → *"VASO-OKLUSI MASIF"*).
+  - Menambahkan kendali interaktif pengguna: tombol `⏸ JEDA ALIRAN` / `▶ LANJUTKAN ALIRAN`, dan tombol `🔄 RESET ALIRAN` untuk mengulang pembentukan oklusi dari awal secara langsung.
+  - Mengintegrasikan manajemen siklus hidup animasi: auto-play saat membuka Step 5 dan pembatalan loop `cancelAnimationFrame` secara bersih saat berpindah ke tahapan lain demi efisiensi baterai dan CPU.
+
 ### 📱 Audit Responsivitas Seluler, Mode Mobile & Perbaikan Anomali Tampilan (SICKLE-MUT)
 - **Navigasi Step Touch-Centric & Auto-Scroll Terfokus:**
   - Menambahkan dukungan inersia sentuh `-webkit-overflow-scrolling: touch` pada bar navigasi 7 tahapan simulasi.

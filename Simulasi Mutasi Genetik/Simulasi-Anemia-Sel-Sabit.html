@@ -640,16 +640,27 @@
             bottom: calc(100% + 8px);
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.95);
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: rgba(18, 8, 14, 0.98);
+            border: 1px solid rgba(239, 68, 68, 0.45);
             border-radius: 8px;
-            padding: 8px 12px;
+            padding: 6px 11px;
             font-size: 0.7rem;
             white-space: nowrap;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.2s ease;
-            z-index: 50;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 60;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 10px rgba(239, 68, 68, 0.2);
+        }
+        .tooltip-custom::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(239, 68, 68, 0.45) transparent transparent transparent;
         }
         .amino-acid-node:hover .tooltip-custom,
         .codon-group:hover .tooltip-custom {
@@ -1097,6 +1108,9 @@
     // STEP RENDERING
     // ====================================================================
     function goToStep(step) {
+        if (typeof stopBloodSimulation === 'function') {
+            stopBloodSimulation();
+        }
         currentStep = step;
         // Update buttons & auto-scroll active button into view on mobile
         for (let i = 0; i < totalSteps; i++) {
@@ -1127,7 +1141,12 @@
             case 2: renderTranscription(container); break;
             case 3: renderTranslation(container); break;
             case 4: renderHemoglobin(container); break;
-            case 5: renderBloodCells(container); break;
+            case 5: 
+                renderBloodCells(container); 
+                if (typeof initBloodSimulation === 'function') {
+                    setTimeout(initBloodSimulation, 30);
+                }
+                break;
             case 6: renderInheritance(container); break;
         }
     }
@@ -1330,14 +1349,18 @@
                     <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
                     <h3 class="text-sm font-display font-bold text-emerald-400 tracking-wider">DNA NORMAL (HbA)</h3>
                 </div>
-                <p class="text-[10px] font-mono text-slate-500 mb-3">Gen HBB • Kromosom 11 • Untai Coding (Sense) 5'→3'</p>
-                <div class="overflow-x-auto">
+                <div class="flex flex-wrap items-center gap-1.5 text-[10px] font-mono text-slate-400 mb-3">
+                    <span class="bg-white/5 border border-white/10 px-2 py-0.5 rounded text-slate-300">Gen HBB (11p15.4)</span>
+                    <span class="bg-white/5 border border-white/10 px-2 py-0.5 rounded text-slate-300">Untai Coding 5'→3'</span>
+                    <span class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold px-2 py-0.5 rounded whitespace-nowrap">Kodon Normal ke-6: GAG (Glu)</span>
+                </div>
+                <div class="overflow-x-auto pt-10 pb-2">
                     <div class="min-w-max">
                         <!-- Codon number row -->
                         <div class="flex gap-2 mb-1 px-1">
                             ${GENE_DATA.normal.codingStrand.map((_, i) => `
                                 <div class="min-w-[56px] text-center">
-                                    <span class="text-[9px] font-mono text-slate-600">Kodon ${i + 1}</span>
+                                    <span class="text-[9px] font-mono text-slate-500">Kodon ${i + 1}</span>
                                 </div>
                             `).join('')}
                         </div>
@@ -1345,7 +1368,7 @@
                         <div class="flex gap-2 mb-0.5 px-1">
                             <span class="text-[9px] font-mono text-slate-500 self-center mr-1">5'</span>
                             ${GENE_DATA.normal.codingStrand.map((codon, i) => `
-                                <div class="codon-group ${i === GENE_DATA.mutationIndex ? 'highlight-normal' : ''}" title="Kodon ${i+1}: ${codon}">
+                                <div class="codon-group ${i === GENE_DATA.mutationIndex ? 'highlight-normal' : ''}">
                                     <div class="flex gap-0.5">
                                         ${codon.split('').map(b => `<span class="nucleotide-base base-${b}">${b}</span>`).join('')}
                                     </div>
@@ -1393,13 +1416,17 @@
                     <span class="w-3 h-3 rounded-full bg-red-400 animate-pulse"></span>
                     <h3 class="text-sm font-display font-bold text-red-400 tracking-wider">DNA MUTAN (HbS)</h3>
                 </div>
-                <p class="text-[10px] font-mono text-slate-500 mb-3">Gen HBB Bermutasi • Untai Coding (Sense) 5'→3' • Mutasi pada kodon ke-7</p>
-                <div class="overflow-x-auto">
+                <div class="flex flex-wrap items-center gap-1.5 text-[10px] font-mono text-slate-400 mb-3">
+                    <span class="bg-white/5 border border-white/10 px-2 py-0.5 rounded text-slate-300">Gen HBB Bermutasi</span>
+                    <span class="bg-white/5 border border-white/10 px-2 py-0.5 rounded text-slate-300">Untai Coding 5'→3'</span>
+                    <span class="bg-red-500/15 border border-red-500/30 text-red-300 font-bold px-2 py-0.5 rounded whitespace-nowrap">Mutasi: Kodon ke-6 GAG→GTG</span>
+                </div>
+                <div class="overflow-x-auto pt-10 pb-2">
                     <div class="min-w-max">
                         <div class="flex gap-2 mb-1 px-1">
                             ${GENE_DATA.mutant.codingStrand.map((_, i) => `
                                 <div class="min-w-[56px] text-center">
-                                    <span class="text-[9px] font-mono ${i === GENE_DATA.mutationIndex ? 'text-red-400 font-bold' : 'text-slate-600'}">Kodon ${i + 1}${i === GENE_DATA.mutationIndex ? ' ⚠️' : ''}</span>
+                                    <span class="text-[9px] font-mono ${i === GENE_DATA.mutationIndex ? 'text-red-400 font-bold' : 'text-slate-500'}">Kodon ${i + 1}${i === GENE_DATA.mutationIndex ? ' ⚠️' : ''}</span>
                                 </div>
                             `).join('')}
                         </div>
@@ -1693,7 +1720,7 @@
                 </div>
                 <p class="text-[10px] font-mono text-slate-500 mb-3">N-terminus → ... (menampilkan 8 asam amino pertama dari 146 total)</p>
                 
-                <div class="protein-chain">
+                <div class="protein-chain pt-11">
                     ${GENE_DATA.normal.aminoAcids.map((aa, i) => `
                         ${i > 0 ? '<div class="peptide-bond"></div>' : ''}
                         <div class="amino-acid-node" style="background: ${normalColors[i]}22; border: 2px solid ${normalColors[i]}88; color: ${normalColors[i]}">
@@ -1717,7 +1744,7 @@
                 </div>
                 <p class="text-[10px] font-mono text-slate-500 mb-3">Valin menggantikan Asam Glutamat pada posisi ke-6</p>
                 
-                <div class="protein-chain">
+                <div class="protein-chain pt-11">
                     ${GENE_DATA.mutant.aminoAcids.map((aa, i) => `
                         ${i > 0 ? '<div class="peptide-bond"></div>' : ''}
                         <div class="amino-acid-node ${i === GENE_DATA.mutationIndex ? 'animate-pulse' : ''}" style="background: ${mutantColors[i]}22; border: 2px solid ${mutantColors[i]}88; color: ${mutantColors[i]}; ${i === GENE_DATA.mutationIndex ? 'box-shadow: 0 0 15px ' + mutantColors[i] + '66' : ''}">
@@ -1982,30 +2009,43 @@
 
             <!-- Blood Vessel Simulation -->
             <div class="glass-panel p-5 mb-5">
-                <h3 class="text-sm font-display font-bold text-red-400 tracking-wider mb-3">🩸 SIMULASI ALIRAN DARAH</h3>
-                <p class="text-xs text-slate-400 mb-3">Klik tombol di bawah untuk melihat perbedaan aliran sel darah normal vs sabit dalam pembuluh darah</p>
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                    <div>
+                        <h3 class="text-sm font-display font-bold text-red-400 tracking-wider">🩸 SIMULASI ALIRAN DARAH (HEMODINAMIKA REAL-TIME)</h3>
+                        <p class="text-xs text-slate-400">Komparasi aliran mikrovaskular: Eritrosit normal fleksibel vs eritrosit sabit kaku (vaso-oklusi)</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="toggleBloodSimulation()" id="btn-flow-toggle" class="step-btn active text-xs px-3.5 py-1.5 w-full sm:w-auto">
+                            ⏸ JEDA ALIRAN
+                        </button>
+                        <button onclick="resetBloodSimulation()" class="step-btn text-xs px-3.5 py-1.5 w-full sm:w-auto">
+                            🔄 RESET ALIRAN
+                        </button>
+                    </div>
+                </div>
                 
                 <div class="grid grid-cols-1 gap-4">
                     <!-- Normal Flow -->
                     <div>
-                        <div class="text-[10px] font-mono text-emerald-400 mb-1">ALIRAN NORMAL — Lancar</div>
-                        <div class="blood-vessel" id="vessel-normal">
-                            <div class="vessel-wall top"></div>
-                            <div class="vessel-wall bottom"></div>
+                        <div class="flex items-center justify-between text-[10px] font-mono mb-1.5">
+                            <span class="text-emerald-400 font-bold">ALIRAN NORMAL (HbA) — Perfusi Kapiler Lancar</span>
+                            <span class="text-emerald-400/90 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">60 FPS • LAMINAR 100%</span>
+                        </div>
+                        <div class="blood-vessel relative overflow-hidden" id="vessel-normal-wrap" style="height: 140px;">
+                            <canvas id="canvas-normal" class="w-full h-full block"></canvas>
                         </div>
                     </div>
                     <!-- Sickle Flow -->
                     <div>
-                        <div class="text-[10px] font-mono text-red-400 mb-1">ALIRAN SABIT — Vaso-oklusi (Penyumbatan)</div>
-                        <div class="blood-vessel" id="vessel-sickle" style="background: linear-gradient(to bottom, rgba(30,41,59,0.9), rgba(127,29,29,0.2) 20%, rgba(127,29,29,0.35) 50%, rgba(127,29,29,0.2) 80%, rgba(30,41,59,0.9));">
-                            <div class="vessel-wall top"></div>
-                            <div class="vessel-wall bottom"></div>
+                        <div class="flex items-center justify-between text-[10px] font-mono mb-1.5">
+                            <span class="text-red-400 font-bold">ALIRAN SABIT (HbS) — Vaso-Oklusi & Pembentukan Trombus</span>
+                            <span id="sickle-telemetry-badge" class="text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded">MEMULAI ALIRAN...</span>
+                        </div>
+                        <div class="blood-vessel relative overflow-hidden" id="vessel-sickle-wrap" style="height: 140px;">
+                            <canvas id="canvas-sickle" class="w-full h-full block"></canvas>
                         </div>
                     </div>
                 </div>
-                <button onclick="startBloodFlow()" class="step-btn active text-xs px-4 py-2 mt-3 w-full sm:w-auto">
-                    ▶ JALANKAN SIMULASI ALIRAN
-                </button>
             </div>
 
             <!-- Clinical Impact -->
@@ -2035,85 +2075,427 @@
         );
     }
 
-    let bloodFlowAnimationIds = [];
+    // ====================================================================
+    // REAL-TIME CANVAS BLOOD FLOW SIMULATION (60 FPS POISEUILLE & VASO-OCCLUSION)
+    // ====================================================================
+    let bloodAnimFrame = null;
+    let bloodSimRunning = false;
+    let bloodSimPaused = false;
+    let normalCells = [];
+    let sickleCells = [];
+    let bloodTime = 0;
+
+    function stopBloodSimulation() {
+        if (bloodAnimFrame) {
+            cancelAnimationFrame(bloodAnimFrame);
+            bloodAnimFrame = null;
+        }
+        bloodSimRunning = false;
+        window.removeEventListener('resize', handleBloodResize);
+    }
+
+    function toggleBloodSimulation() {
+        const btn = document.getElementById('btn-flow-toggle');
+        bloodSimPaused = !bloodSimPaused;
+        if (btn) {
+            btn.innerHTML = bloodSimPaused ? '▶ LANJUTKAN ALIRAN' : '⏸ JEDA ALIRAN';
+            btn.classList.toggle('active', !bloodSimPaused);
+        }
+    }
+
+    function resetBloodSimulation() {
+        stopBloodSimulation();
+        initBloodSimulation();
+        const btn = document.getElementById('btn-flow-toggle');
+        if (btn) {
+            btn.innerHTML = '⏸ JEDA ALIRAN';
+            btn.classList.add('active');
+        }
+    }
+
+    // Alias compatibility
     function startBloodFlow() {
-        // Clear previous animations
-        bloodFlowAnimationIds.forEach(id => clearInterval(id));
-        bloodFlowAnimationIds = [];
+        resetBloodSimulation();
+    }
+
+    function handleBloodResize() {
+        if (!bloodSimRunning) return;
+        const c1 = document.getElementById('canvas-normal');
+        const c2 = document.getElementById('canvas-sickle');
+        if (c1 && c2) {
+            setupCanvasSize(c1);
+            setupCanvasSize(c2);
+        }
+    }
+
+    function setupCanvasSize(canvas) {
+        const rect = canvas.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(rect.width * dpr);
+        canvas.height = Math.round(rect.height * dpr);
+        const ctx = canvas.getContext('2d');
+        ctx.resetTransform();
+        ctx.scale(dpr, dpr);
+        return { w: rect.width, h: rect.height, ctx };
+    }
+
+    function initBloodSimulation() {
+        stopBloodSimulation();
         
-        const vesselNormal = document.getElementById('vessel-normal');
-        const vesselSickle = document.getElementById('vessel-sickle');
-        if (!vesselNormal || !vesselSickle) return;
+        const canvasNormal = document.getElementById('canvas-normal');
+        const canvasSickle = document.getElementById('canvas-sickle');
+        if (!canvasNormal || !canvasSickle) return;
 
-        // Clear existing cells except walls
-        vesselNormal.querySelectorAll('.floating-rbc, .sickle-clump').forEach(el => el.remove());
-        vesselSickle.querySelectorAll('.floating-rbc, .sickle-clump').forEach(el => el.remove());
+        setupCanvasSize(canvasNormal);
+        setupCanvasSize(canvasSickle);
 
-        // Normal RBCs - smooth flow
-        function addNormalRBC() {
-            const cell = document.createElement('div');
-            cell.className = 'floating-rbc';
-            const size = 18 + Math.random() * 10;
-            const topPos = 25 + Math.random() * 85;
-            cell.style.cssText = `
-                width: ${size}px; height: ${size}px; border-radius: 50%;
-                background: radial-gradient(ellipse at 40% 40%, #fca5a5, #ef4444, #991b1b);
-                box-shadow: inset -2px -2px 6px rgba(0,0,0,0.3);
-                top: ${topPos}px; left: -30px;
-                animation: floatInVessel ${4 + Math.random() * 3}s linear forwards;
-            `;
-            vesselNormal.appendChild(cell);
-            setTimeout(() => cell.remove(), 8000);
+        const width = canvasNormal.getBoundingClientRect().width || 500;
+        const height = canvasNormal.getBoundingClientRect().height || 140;
+
+        // Initialize Normal Cells across the entire width of the vessel
+        normalCells = [];
+        const normalCount = Math.max(16, Math.round(width / 28));
+        for (let i = 0; i < normalCount; i++) {
+            const r = 10 + Math.random() * 4;
+            const y = 26 + Math.random() * (height - 52);
+            // Parabolic Poiseuille laminar velocity: faster in middle, slower near walls
+            const distFromCenter = Math.abs(y - height / 2) / (height / 2);
+            const laminarFactor = 1.0 - (distFromCenter * 0.45);
+            normalCells.push({
+                x: -30 + (i * ((width + 60) / normalCount)) + (Math.random() * 15 - 7.5),
+                y: y,
+                baseY: y,
+                r: r,
+                speed: (2.0 + Math.random() * 0.8) * laminarFactor,
+                rot: Math.random() * Math.PI * 2,
+                vrot: (Math.random() - 0.5) * 0.03,
+                aspect: 0.85 + Math.random() * 0.15,
+                phase: Math.random() * Math.PI * 2
+            });
         }
 
-        // Sickle RBCs - some get stuck
-        function addSickleRBC() {
-            const cell = document.createElement('div');
-            cell.className = 'floating-rbc';
-            const isSickle = Math.random() > 0.3;
-            const topPos = 25 + Math.random() * 85;
-            
-            if (isSickle) {
-                const w = 20 + Math.random() * 10;
-                const stuck = Math.random() > 0.5;
-                cell.style.cssText = `
-                    width: ${w}px; height: ${w * 0.5}px; 
-                    border-radius: 60% 10% 60% 10%;
-                    background: linear-gradient(135deg, #fca5a5, #b91c1c, #7f1d1d);
-                    box-shadow: inset -2px -2px 5px rgba(0,0,0,0.4);
-                    top: ${topPos}px; left: -30px;
-                    transform: rotate(${-30 + Math.random() * 60}deg);
-                    ${stuck 
-                        ? `animation: none; left: ${30 + Math.random() * 60}%; opacity: 0.9;` 
-                        : `animation: floatInVessel ${7 + Math.random() * 5}s linear forwards;`
+        // Initialize Sickle Vessel Cells
+        sickleCells = [];
+        const sickleCount = Math.max(20, Math.round(width / 24));
+        for (let i = 0; i < sickleCount; i++) {
+            const isSickle = Math.random() < 0.65;
+            const r = isSickle ? (13 + Math.random() * 4) : (9 + Math.random() * 3);
+            const y = 28 + Math.random() * (height - 56);
+            sickleCells.push({
+                isSickle: isSickle,
+                x: -30 + (i * ((width + 60) / sickleCount)),
+                y: y,
+                baseY: y,
+                r: r,
+                speed: isSickle ? (1.3 + Math.random() * 0.5) : (2.1 + Math.random() * 0.7),
+                rot: (Math.random() - 0.5) * 1.2,
+                vrot: (Math.random() - 0.5) * 0.02,
+                stuck: false,
+                clotX: 0,
+                clotY: 0,
+                phase: Math.random() * Math.PI * 2
+            });
+        }
+
+        bloodSimRunning = true;
+        bloodSimPaused = false;
+        bloodTime = 0;
+        window.addEventListener('resize', handleBloodResize);
+
+        function renderFrame() {
+            if (!bloodSimRunning) return;
+
+            const c1 = document.getElementById('canvas-normal');
+            const c2 = document.getElementById('canvas-sickle');
+            if (!c1 || !c2) {
+                stopBloodSimulation();
+                return;
+            }
+
+            const rect1 = c1.getBoundingClientRect();
+            const rect2 = c2.getBoundingClientRect();
+            const w1 = rect1.width;
+            const h1 = rect1.height;
+            const w2 = rect2.width;
+            const h2 = rect2.height;
+
+            if (w1 <= 0 || h1 <= 0) {
+                bloodAnimFrame = requestAnimationFrame(renderFrame);
+                return;
+            }
+
+            const ctx1 = c1.getContext('2d');
+            const ctx2 = c2.getContext('2d');
+
+            if (!bloodSimPaused) {
+                bloodTime += 0.03;
+            }
+
+            // -------------------------------------------------------------
+            // 1. DRAW NORMAL VESSEL (HbA)
+            // -------------------------------------------------------------
+            ctx1.clearRect(0, 0, w1, h1);
+
+            // Vessel Lumen & Plasma Gradient
+            const plasmaGrad1 = ctx1.createLinearGradient(0, 0, 0, h1);
+            plasmaGrad1.addColorStop(0, 'rgba(20, 10, 18, 0.95)');
+            plasmaGrad1.addColorStop(0.12, 'rgba(127, 29, 29, 0.25)');
+            plasmaGrad1.addColorStop(0.5, 'rgba(185, 28, 28, 0.18)');
+            plasmaGrad1.addColorStop(0.88, 'rgba(127, 29, 29, 0.25)');
+            plasmaGrad1.addColorStop(1, 'rgba(20, 10, 18, 0.95)');
+            ctx1.fillStyle = plasmaGrad1;
+            ctx1.fillRect(0, 0, w1, h1);
+
+            // Flow Direction Streamlines (Faint plasma flow)
+            ctx1.strokeStyle = 'rgba(239, 68, 68, 0.12)';
+            ctx1.lineWidth = 1;
+            ctx1.setLineDash([12, 18]);
+            ctx1.lineDashOffset = -bloodTime * 35;
+            for (let ly of [h1 * 0.3, h1 * 0.5, h1 * 0.7]) {
+                ctx1.beginPath();
+                ctx1.moveTo(0, ly);
+                ctx1.lineTo(w1, ly);
+                ctx1.stroke();
+            }
+            ctx1.setLineDash([]);
+
+            // Endothelial Wall Top & Bottom
+            ctx1.fillStyle = 'rgba(239, 68, 68, 0.5)';
+            ctx1.fillRect(0, 14, w1, 2.5);
+            ctx1.fillRect(0, h1 - 16.5, w1, 2.5);
+            ctx1.shadowColor = '#ef4444';
+            ctx1.shadowBlur = 6;
+            ctx1.fillRect(0, 14.5, w1, 1);
+            ctx1.fillRect(0, h1 - 15.5, w1, 1);
+            ctx1.shadowBlur = 0;
+
+            // Render and Update Normal RBCs
+            normalCells.forEach(cell => {
+                if (!bloodSimPaused) {
+                    cell.x += cell.speed;
+                    cell.rot += cell.vrot;
+                    // Gentle vertical bobbing
+                    cell.y = cell.baseY + Math.sin(bloodTime * 2 + cell.phase) * 3;
+
+                    // When reaching right end (completely out of vessel), recycle to left
+                    if (cell.x > w1 + 35) {
+                        cell.x = -35;
+                        cell.baseY = 26 + Math.random() * (h1 - 52);
+                        cell.y = cell.baseY;
+                        const dist = Math.abs(cell.y - h1 / 2) / (h1 / 2);
+                        cell.speed = (2.0 + Math.random() * 0.8) * (1.0 - dist * 0.45);
                     }
-                `;
-            } else {
-                const size = 14 + Math.random() * 8;
-                cell.style.cssText = `
-                    width: ${size}px; height: ${size}px; border-radius: 50%;
-                    background: radial-gradient(ellipse at 40% 40%, #fca5a5, #ef4444, #991b1b);
-                    box-shadow: inset -2px -2px 6px rgba(0,0,0,0.3);
-                    top: ${topPos}px; left: -30px;
-                    animation: floatInVessel ${6 + Math.random() * 4}s linear forwards;
-                `;
+                }
+
+                // Draw Normal Biconcave RBC
+                ctx1.save();
+                ctx1.translate(cell.x, cell.y);
+                ctx1.rotate(cell.rot);
+                ctx1.scale(1, cell.aspect);
+
+                const r = cell.r;
+                const rGrad = ctx1.createRadialGradient(-r * 0.25, -r * 0.25, r * 0.1, 0, 0, r);
+                rGrad.addColorStop(0, '#fca5a5');
+                rGrad.addColorStop(0.35, '#ef4444');
+                rGrad.addColorStop(0.85, '#b91c1c');
+                rGrad.addColorStop(1, '#7f1d1d');
+
+                ctx1.fillStyle = rGrad;
+                ctx1.beginPath();
+                ctx1.arc(0, 0, r, 0, Math.PI * 2);
+                ctx1.fill();
+
+                // Inner central pallor (lekukan biconcave)
+                const cGrad = ctx1.createRadialGradient(0, 0, 0, 0, 0, r * 0.55);
+                cGrad.addColorStop(0, 'rgba(127, 29, 29, 0.6)');
+                cGrad.addColorStop(0.7, 'rgba(185, 28, 28, 0.2)');
+                cGrad.addColorStop(1, 'transparent');
+                ctx1.fillStyle = cGrad;
+                ctx1.beginPath();
+                ctx1.arc(0, 0, r * 0.55, 0, Math.PI * 2);
+                ctx1.fill();
+
+                ctx1.restore();
+            });
+
+            // -------------------------------------------------------------
+            // 2. DRAW SICKLE VESSEL (HbS - VASO-OCCLUSION)
+            // -------------------------------------------------------------
+            ctx2.clearRect(0, 0, w2, h2);
+
+            // Vessel Lumen & Plasma Gradient
+            const plasmaGrad2 = ctx2.createLinearGradient(0, 0, 0, h2);
+            plasmaGrad2.addColorStop(0, 'rgba(24, 8, 14, 0.98)');
+            plasmaGrad2.addColorStop(0.15, 'rgba(159, 18, 57, 0.28)');
+            plasmaGrad2.addColorStop(0.5, 'rgba(80, 7, 36, 0.32)');
+            plasmaGrad2.addColorStop(0.85, 'rgba(159, 18, 57, 0.28)');
+            plasmaGrad2.addColorStop(1, 'rgba(24, 8, 14, 0.98)');
+            ctx2.fillStyle = plasmaGrad2;
+            ctx2.fillRect(0, 0, w2, h2);
+
+            // Bottleneck geometry (constriction zone at 50% - 68% width)
+            const bStartX = w2 * 0.50;
+            const bMidX = w2 * 0.58;
+            const bEndX = w2 * 0.68;
+            const maxConstriction = 12; // narrows by 12px on top and bottom
+
+            // Draw tapered vessel walls
+            ctx2.beginPath();
+            // Top wall
+            ctx2.moveTo(0, 14);
+            ctx2.lineTo(bStartX, 14);
+            ctx2.quadraticCurveTo(bMidX, 14 + maxConstriction, bEndX, 14);
+            ctx2.lineTo(w2, 14);
+            // Bottom wall
+            ctx2.moveTo(0, h2 - 16.5);
+            ctx2.lineTo(bStartX, h2 - 16.5);
+            ctx2.quadraticCurveTo(bMidX, h2 - 16.5 - maxConstriction, bEndX, h2 - 16.5);
+            ctx2.lineTo(w2, h2 - 16.5);
+
+            ctx2.strokeStyle = 'rgba(239, 68, 68, 0.55)';
+            ctx2.lineWidth = 2.5;
+            ctx2.shadowColor = '#ef4444';
+            ctx2.shadowBlur = 6;
+            ctx2.stroke();
+            ctx2.shadowBlur = 0;
+
+            // Constriction zone marker / subtle highlight
+            const zoneGrad = ctx2.createRadialGradient(bMidX, h2 / 2, 5, bMidX, h2 / 2, 60);
+            zoneGrad.addColorStop(0, 'rgba(245, 158, 11, 0.12)');
+            zoneGrad.addColorStop(0.6, 'rgba(239, 68, 68, 0.08)');
+            zoneGrad.addColorStop(1, 'transparent');
+            ctx2.fillStyle = zoneGrad;
+            ctx2.fillRect(bStartX - 20, 16, bEndX - bStartX + 40, h2 - 32);
+
+            // Calculate current clot front and back bounds
+            let clotMinX = 99999;
+            let stuckCount = 0;
+            sickleCells.forEach(c => {
+                if (c.stuck) {
+                    stuckCount++;
+                    if (c.x < clotMinX) clotMinX = c.x;
+                }
+            });
+
+            // Update Telemetry Badge
+            const badge = document.getElementById('sickle-telemetry-badge');
+            if (badge) {
+                if (stuckCount === 0) {
+                    badge.textContent = 'ALIRAN DARAH AWAL (MENDEKATI KAPILER)';
+                    badge.className = 'text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded';
+                } else if (stuckCount < 6) {
+                    badge.textContent = `⚠️ SEL SABIT TERJEPIT DI BIFURKASI (${stuckCount} SEL)`;
+                    badge.className = 'text-amber-300 bg-amber-500/20 border border-amber-500/40 px-2 py-0.5 rounded animate-pulse';
+                } else {
+                    badge.textContent = `🚨 VASO-OKLUSI MASIF: TROMBUS ERITROSIT SABIT (${stuckCount} SEL)`;
+                    badge.className = 'text-red-300 bg-red-500/25 border border-red-500/50 px-2 py-0.5 rounded font-bold animate-pulse';
+                }
             }
-            vesselSickle.appendChild(cell);
-            if (!cell.style.cssText.includes('animation: none')) {
-                setTimeout(() => cell.remove(), 13000);
-            }
+
+            // Render and Update Sickle Cells
+            sickleCells.forEach(cell => {
+                if (!bloodSimPaused) {
+                    if (cell.stuck) {
+                        // Micro fluid shudder when lodged in a clot
+                        cell.x = cell.clotX + Math.sin(bloodTime * 4 + cell.phase) * 0.4;
+                        cell.y = cell.clotY + Math.cos(bloodTime * 3 + cell.phase) * 0.4;
+                    } else {
+                        // Check if entering clot area or bottleneck
+                        const inBottleneck = (cell.x >= bStartX && cell.x <= bEndX);
+                        const hittingClot = (stuckCount > 0 && cell.x >= clotMinX - cell.r * 1.6 && cell.x <= bEndX + 20);
+
+                        if (cell.isSickle && (inBottleneck || hittingClot) && stuckCount < 14) {
+                            // High chance to get caught and lodge into the clot
+                            if (Math.random() < 0.28 || hittingClot) {
+                                cell.stuck = true;
+                                cell.clotX = cell.x;
+                                cell.clotY = Math.min(Math.max(cell.y, 28 + maxConstriction), h2 - 32 - maxConstriction);
+                                cell.y = cell.clotY;
+                                stuckCount++;
+                            }
+                        }
+
+                        if (!cell.stuck) {
+                            // If behind a formed clot, slow down dramatically (vaso-occlusive backup)
+                            if (stuckCount >= 5 && cell.x < clotMinX) {
+                                const distToClot = clotMinX - cell.x;
+                                const speedMult = Math.min(1.0, Math.max(0.08, distToClot / 120));
+                                cell.x += cell.speed * speedMult;
+                            } else {
+                                cell.x += cell.speed;
+                            }
+
+                            cell.rot += cell.vrot;
+                            cell.y = cell.baseY + Math.sin(bloodTime * 1.5 + cell.phase) * 2;
+
+                            // When exiting the right edge, wrap back to the left
+                            if (cell.x > w2 + 35) {
+                                cell.x = -35;
+                                cell.baseY = 28 + Math.random() * (h2 - 56);
+                                cell.y = cell.baseY;
+                                cell.stuck = false;
+                            }
+                        }
+                    }
+                }
+
+                // DRAW THE CELL
+                if (cell.isSickle) {
+                    // Sickle Cell Drawing
+                    ctx2.save();
+                    ctx2.translate(cell.x, cell.y);
+                    ctx2.rotate(cell.rot);
+
+                    const r = cell.r;
+                    ctx2.beginPath();
+                    // Sharp crescent shape
+                    ctx2.moveTo(-r, 0);
+                    ctx2.bezierCurveTo(-r * 0.45, -r * 0.85, r * 0.45, -r * 0.85, r, 0);
+                    ctx2.bezierCurveTo(r * 0.4, -r * 0.35, -r * 0.4, -r * 0.35, -r, 0);
+                    ctx2.closePath();
+
+                    const sGrad = ctx2.createLinearGradient(-r, -r, r, r);
+                    sGrad.addColorStop(0, '#f87171');
+                    sGrad.addColorStop(0.45, '#b91c1c');
+                    sGrad.addColorStop(1, '#4c0519');
+                    ctx2.fillStyle = sGrad;
+                    ctx2.fill();
+
+                    ctx2.strokeStyle = cell.stuck ? '#fbbf24' : 'rgba(239, 68, 68, 0.7)';
+                    ctx2.lineWidth = cell.stuck ? 1.5 : 1;
+                    ctx2.stroke();
+
+                    // Hydrophobic sticky patch (Valine-6 amber glow)
+                    ctx2.fillStyle = '#fbbf24';
+                    ctx2.beginPath();
+                    ctx2.arc(r * 0.28, -r * 0.46, 2, 0, Math.PI * 2);
+                    ctx2.fill();
+
+                    ctx2.restore();
+                } else {
+                    // Flexible RBC in sickle vessel (may squeeze through or back up)
+                    ctx2.save();
+                    ctx2.translate(cell.x, cell.y);
+                    ctx2.rotate(cell.rot);
+
+                    const r = cell.r;
+                    const rGrad = ctx2.createRadialGradient(-r * 0.25, -r * 0.25, r * 0.1, 0, 0, r);
+                    rGrad.addColorStop(0, '#fca5a5');
+                    rGrad.addColorStop(0.4, '#ef4444');
+                    rGrad.addColorStop(1, '#7f1d1d');
+                    ctx2.fillStyle = rGrad;
+                    ctx2.beginPath();
+                    ctx2.arc(0, 0, r, 0, Math.PI * 2);
+                    ctx2.fill();
+
+                    ctx2.restore();
+                }
+            });
+
+            bloodAnimFrame = requestAnimationFrame(renderFrame);
         }
 
-        // Start spawning
-        const id1 = setInterval(addNormalRBC, 400);
-        const id2 = setInterval(addSickleRBC, 500);
-        bloodFlowAnimationIds.push(id1, id2);
-
-        // Initial burst
-        for (let i = 0; i < 5; i++) {
-            setTimeout(addNormalRBC, i * 200);
-            setTimeout(addSickleRBC, i * 250);
-        }
+        bloodAnimFrame = requestAnimationFrame(renderFrame);
     }
 
     // ====================================================================
