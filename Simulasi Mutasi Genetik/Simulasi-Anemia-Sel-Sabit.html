@@ -451,21 +451,27 @@
 
         /* Step Nav */
         .step-btn {
-            padding: 8px 16px;
+            padding: 8px 14px;
             border-radius: 8px;
             font-family: 'Orbitron', sans-serif;
             font-size: 0.65rem;
             font-weight: 700;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.2px;
             transition: all 0.3s ease;
             cursor: pointer;
             border: 1px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            min-height: 38px;
+            touch-action: manipulation;
         }
         .step-btn.active {
-            background: rgba(239, 68, 68, 0.2);
-            border-color: rgba(239, 68, 68, 0.5);
+            background: rgba(239, 68, 68, 0.25);
+            border-color: rgba(239, 68, 68, 0.55);
             color: #fca5a5;
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.25);
         }
         .step-btn:not(.active) {
             background: rgba(255, 255, 255, 0.05);
@@ -560,32 +566,48 @@
                 -webkit-backdrop-filter: none !important;
             }
             .glass-panel {
-                background-color: rgba(15, 23, 42, 0.94) !important;
+                background-color: rgba(18, 8, 14, 0.94) !important;
+                padding: 1rem !important;
             }
             .glass-panel-secondary {
-                background-color: rgba(15, 23, 42, 0.96) !important;
+                background-color: rgba(18, 8, 14, 0.96) !important;
+            }
+            .tutorial-card {
+                padding: 1.25rem 1rem !important;
+                border-radius: 1.25rem !important;
+                max-height: 88dvh !important;
             }
             .hemoglobin-viz {
-                width: 180px;
-                height: 180px;
+                width: 170px;
+                height: 170px;
             }
             .globin-subunit {
-                width: 72px;
-                height: 72px;
-                font-size: 0.6rem;
+                width: 68px;
+                height: 68px;
+                font-size: 0.58rem;
             }
             .heme-group {
-                width: 40px;
-                height: 40px;
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
             }
             .codon-group {
-                min-width: 48px;
-                padding: 4px 6px;
+                min-width: 44px;
+                padding: 4px 4px;
             }
             .nucleotide-base {
-                font-size: 0.9rem;
-                width: 22px;
-                height: 22px;
+                font-size: 0.85rem;
+                width: 20px;
+                height: 20px;
+            }
+            .step-btn {
+                padding: 6px 11px;
+                font-size: 0.6rem;
+                letter-spacing: 0.8px;
+                min-height: 36px;
+            }
+            .blood-vessel {
+                height: 120px;
             }
         }
 
@@ -820,8 +842,8 @@
         </header>
 
         <!-- Step Navigation -->
-        <nav class="px-4 sm:px-6 py-3 border-b border-white/5 bg-black/30 backdrop-blur-md overflow-x-auto">
-            <div class="flex gap-2 min-w-max">
+        <nav class="px-3 sm:px-6 py-2.5 border-b border-white/5 bg-black/40 backdrop-blur-md overflow-x-auto" style="-webkit-overflow-scrolling: touch;">
+            <div class="flex gap-1.5 sm:gap-2 min-w-max pb-1" id="step-nav-bar">
                 <button class="step-btn active" onclick="goToStep(0)" id="step-btn-0">01 OVERVIEW</button>
                 <button class="step-btn" onclick="goToStep(1)" id="step-btn-1">02 DNA MUTATION</button>
                 <button class="step-btn" onclick="goToStep(2)" id="step-btn-2">03 TRANSKRIPSI</button>
@@ -830,13 +852,13 @@
                 <button class="step-btn" onclick="goToStep(5)" id="step-btn-5">06 SEL DARAH</button>
                 <button class="step-btn" onclick="goToStep(6)" id="step-btn-6">07 PEWARISAN</button>
             </div>
-            <div class="progress-track mt-2">
+            <div class="progress-track mt-1">
                 <div class="progress-fill" id="progress-bar" style="width: 14.28%"></div>
             </div>
         </nav>
 
         <!-- Main Content Area -->
-        <main class="p-4 sm:p-6 max-w-6xl mx-auto w-full" id="main-content">
+        <main class="p-3 sm:p-6 max-w-6xl mx-auto w-full" id="main-content">
             <!-- Content injected by JS based on active step -->
         </main>
 
@@ -1076,10 +1098,16 @@
     // ====================================================================
     function goToStep(step) {
         currentStep = step;
-        // Update buttons
+        // Update buttons & auto-scroll active button into view on mobile
         for (let i = 0; i < totalSteps; i++) {
             const btn = document.getElementById(`step-btn-${i}`);
-            btn.classList.toggle('active', i === step);
+            if (btn) {
+                const isActive = (i === step);
+                btn.classList.toggle('active', isActive);
+                if (isActive) {
+                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            }
         }
         // Update progress
         document.getElementById('progress-bar').style.width = `${((step + 1) / totalSteps) * 100}%`;
@@ -1139,27 +1167,27 @@
                     <h3 class="text-sm font-display font-bold text-red-400 tracking-wider">📋 IDENTITAS GENETIK</h3>
                     
                     <div class="space-y-3">
-                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                        <div class="flex items-center justify-between py-2 border-b border-white/5 flex-wrap gap-1 sm:flex-nowrap">
                             <span class="text-xs text-slate-400 font-mono">NAMA PENYAKIT</span>
                             <span class="text-sm text-white font-semibold">Anemia Sel Sabit (SCA)</span>
                         </div>
-                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                        <div class="flex items-center justify-between py-2 border-b border-white/5 flex-wrap gap-1 sm:flex-nowrap">
                             <span class="text-xs text-slate-400 font-mono">GEN TERLIBAT</span>
                             <span class="chromosome-badge bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">HBB (β-Globin)</span>
                         </div>
-                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                        <div class="flex items-center justify-between py-2 border-b border-white/5 flex-wrap gap-1 sm:flex-nowrap">
                             <span class="text-xs text-slate-400 font-mono">LOKASI</span>
                             <span class="chromosome-badge bg-purple-500/15 text-purple-300 border border-purple-500/30">Kromosom 11p15.4</span>
                         </div>
-                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                        <div class="flex items-center justify-between py-2 border-b border-white/5 flex-wrap gap-1 sm:flex-nowrap">
                             <span class="text-xs text-slate-400 font-mono">JENIS MUTASI</span>
                             <span class="chromosome-badge bg-red-500/15 text-red-300 border border-red-500/30">Point Mutation (Substitusi)</span>
                         </div>
-                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                        <div class="flex items-center justify-between py-2 border-b border-white/5 flex-wrap gap-1 sm:flex-nowrap">
                             <span class="text-xs text-slate-400 font-mono">POLA PEWARISAN</span>
                             <span class="chromosome-badge bg-amber-500/15 text-amber-300 border border-amber-500/30">Autosomal Resesif</span>
                         </div>
-                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                        <div class="flex items-center justify-between py-2 border-b border-white/5 flex-wrap gap-1 sm:flex-nowrap">
                             <span class="text-xs text-slate-400 font-mono">SUBSTITUSI DNA</span>
                             <div class="flex items-center gap-2">
                                 <span class="font-mono text-sm text-emerald-400">A</span>
@@ -1167,7 +1195,7 @@
                                 <span class="font-mono text-sm text-red-400">T</span>
                             </div>
                         </div>
-                        <div class="flex items-center justify-between py-2 border-b border-white/5">
+                        <div class="flex items-center justify-between py-2 border-b border-white/5 flex-wrap gap-1 sm:flex-nowrap">
                             <span class="text-xs text-slate-400 font-mono">KODON mRNA</span>
                             <div class="flex items-center gap-2">
                                 <span class="font-mono text-sm text-emerald-400">GAG</span>
@@ -1175,7 +1203,7 @@
                                 <span class="font-mono text-sm text-red-400">GUG</span>
                             </div>
                         </div>
-                        <div class="flex items-center justify-between py-2">
+                        <div class="flex items-center justify-between py-2 flex-wrap gap-1 sm:flex-nowrap">
                             <span class="text-xs text-slate-400 font-mono">ASAM AMINO</span>
                             <div class="flex items-center gap-2">
                                 <span class="amino-badge bg-emerald-500/15 text-emerald-300 border border-emerald-500/20">Glu (Hidrofilik)</span>
@@ -1198,28 +1226,28 @@
             </div>
 
             <!-- Quick Stats -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
-                <div class="glass-panel p-4 text-center">
-                    <div class="text-2xl font-display font-bold text-red-400">1</div>
-                    <div class="text-[10px] font-mono text-slate-400 mt-1">NUKLEOTIDA BERMUTASI</div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 mt-5">
+                <div class="glass-panel p-3 sm:p-4 text-center">
+                    <div class="text-xl sm:text-2xl font-display font-bold text-red-400">1</div>
+                    <div class="text-[9px] sm:text-[10px] font-mono text-slate-400 mt-1 leading-tight">NUKLEOTIDA BERMUTASI</div>
                 </div>
-                <div class="glass-panel p-4 text-center">
-                    <div class="text-2xl font-display font-bold text-amber-400">β6</div>
-                    <div class="text-[10px] font-mono text-slate-400 mt-1">POSISI ASAM AMINO</div>
+                <div class="glass-panel p-3 sm:p-4 text-center">
+                    <div class="text-xl sm:text-2xl font-display font-bold text-amber-400">β6</div>
+                    <div class="text-[9px] sm:text-[10px] font-mono text-slate-400 mt-1 leading-tight">POSISI ASAM AMINO</div>
                 </div>
-                <div class="glass-panel p-4 text-center">
-                    <div class="text-2xl font-display font-bold text-purple-400">11</div>
-                    <div class="text-[10px] font-mono text-slate-400 mt-1">NOMOR KROMOSOM</div>
+                <div class="glass-panel p-3 sm:p-4 text-center">
+                    <div class="text-xl sm:text-2xl font-display font-bold text-purple-400">11</div>
+                    <div class="text-[9px] sm:text-[10px] font-mono text-slate-400 mt-1 leading-tight">NOMOR KROMOSOM</div>
                 </div>
-                <div class="glass-panel p-4 text-center">
-                    <div class="text-2xl font-display font-bold text-cyan-400">146</div>
-                    <div class="text-[10px] font-mono text-slate-400 mt-1">TOTAL ASAM AMINO β-GLOBIN</div>
+                <div class="glass-panel p-3 sm:p-4 text-center">
+                    <div class="text-xl sm:text-2xl font-display font-bold text-cyan-400">146</div>
+                    <div class="text-[9px] sm:text-[10px] font-mono text-slate-400 mt-1 leading-tight">TOTAL ASAM AMINO β-GLOBIN</div>
                 </div>
             </div>
 
             <!-- Navigation Buttons -->
             <div class="flex justify-end mt-6">
-                <button onclick="goToStep(1)" class="step-btn active text-sm px-6 py-3">
+                <button onclick="goToStep(1)" class="step-btn active text-sm px-6 py-3 w-full sm:w-auto">
                     MULAI ANALISIS DNA →
                 </button>
             </div>
@@ -1356,6 +1384,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="text-[10px] font-mono text-emerald-400/80 flex sm:hidden items-center justify-center gap-1.5 mt-2 bg-emerald-500/10 border border-emerald-500/20 rounded-lg py-1 px-2.5"><span>👉</span> Geser ke samping untuk melihat seluruh sekuens DNA <span>👈</span></div>
             </div>
 
             <!-- Mutant DNA -->
@@ -1426,6 +1455,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="text-[10px] font-mono text-red-400/80 flex sm:hidden items-center justify-center gap-1.5 mt-2 bg-red-500/10 border border-red-500/20 rounded-lg py-1 px-2.5"><span>👉</span> Geser ke samping untuk melihat kodon mutan ke-6 & 7 <span>👈</span></div>
             </div>
 
             <!-- Mutation Detail -->
@@ -1460,9 +1490,9 @@
             </div>
 
             <!-- Navigation -->
-            <div class="flex justify-between mt-6">
-                <button onclick="goToStep(0)" class="step-btn text-sm px-5 py-2.5">← OVERVIEW</button>
-                <button onclick="goToStep(2)" class="step-btn active text-sm px-5 py-2.5">TRANSKRIPSI →</button>
+            <div class="flex flex-col-reverse sm:flex-row justify-between gap-2.5 mt-6">
+                <button onclick="goToStep(0)" class="step-btn text-sm px-5 py-2.5 w-full sm:w-auto">← OVERVIEW</button>
+                <button onclick="goToStep(2)" class="step-btn active text-sm px-5 py-2.5 w-full sm:w-auto">TRANSKRIPSI →</button>
             </div>
             `
         );
@@ -1538,6 +1568,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="text-[10px] font-mono text-emerald-400/80 flex sm:hidden items-center justify-center gap-1.5 mt-2 bg-emerald-500/10 border border-emerald-500/20 rounded-lg py-1 px-2.5"><span>👉</span> Geser ke samping untuk melihat seluruh sekuens mRNA normal <span>👈</span></div>
             </div>
 
             <!-- Mutant Transcription -->
@@ -1597,6 +1628,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="text-[10px] font-mono text-red-400/80 flex sm:hidden items-center justify-center gap-1.5 mt-2 bg-red-500/10 border border-red-500/20 rounded-lg py-1 px-2.5"><span>👉</span> Geser ke samping untuk melihat kodon mutan mRNA <span>👈</span></div>
             </div>
 
             <!-- Key Comparison -->
@@ -1622,9 +1654,9 @@
                 </div>
             </div>
 
-            <div class="flex justify-between mt-6">
-                <button onclick="goToStep(1)" class="step-btn text-sm px-5 py-2.5">← DNA MUTATION</button>
-                <button onclick="goToStep(3)" class="step-btn active text-sm px-5 py-2.5">TRANSLASI →</button>
+            <div class="flex flex-col-reverse sm:flex-row justify-between gap-2.5 mt-6">
+                <button onclick="goToStep(1)" class="step-btn text-sm px-5 py-2.5 w-full sm:w-auto">← DNA MUTATION</button>
+                <button onclick="goToStep(3)" class="step-btn active text-sm px-5 py-2.5 w-full sm:w-auto">TRANSLASI →</button>
             </div>
             `
         );
@@ -1706,7 +1738,7 @@
             <div class="glass-panel p-5">
                 <h3 class="text-sm font-display font-bold text-amber-400 tracking-wider mb-3">📊 TABEL PERBANDINGAN TRANSLASI</h3>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
+                    <table class="w-full min-w-[500px] text-sm">
                         <thead>
                             <tr class="border-b border-white/10">
                                 <th class="text-left py-2 text-[10px] font-mono text-slate-500 pr-3">POSISI</th>
@@ -1721,7 +1753,7 @@
                             ${GENE_DATA.normal.mRNA.map((codon, i) => {
                                 const isMut = i === GENE_DATA.mutationIndex;
                                 return `
-                                <tr class="${isMut ? 'bg-red-500/5' : ''} border-b border-white/5">
+                                <tr class="${isMut ? 'bg-red-500/10' : ''} border-b border-white/5">
                                     <td class="py-2 pr-3 font-mono text-xs text-slate-400">${i === 0 ? 'Start' : 'β' + i}</td>
                                     <td class="py-2 text-center font-mono text-xs text-emerald-300">${codon}</td>
                                     <td class="py-2 text-center text-xs text-slate-300">${GENE_DATA.normal.aminoFull[i]}</td>
@@ -1733,11 +1765,12 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="text-[10px] font-mono text-slate-400 flex sm:hidden items-center justify-center gap-1.5 mt-2.5 bg-white/[0.03] border border-white/10 rounded-lg py-1 px-2.5"><span>👉</span> Geser tabel ke samping untuk melihat detail lengkap <span>👈</span></div>
             </div>
 
-            <div class="flex justify-between mt-6">
-                <button onclick="goToStep(2)" class="step-btn text-sm px-5 py-2.5">← TRANSKRIPSI</button>
-                <button onclick="goToStep(4)" class="step-btn active text-sm px-5 py-2.5">HEMOGLOBIN →</button>
+            <div class="flex flex-col-reverse sm:flex-row justify-between gap-2.5 mt-6">
+                <button onclick="goToStep(2)" class="step-btn text-sm px-5 py-2.5 w-full sm:w-auto">← TRANSKRIPSI</button>
+                <button onclick="goToStep(4)" class="step-btn active text-sm px-5 py-2.5 w-full sm:w-auto">HEMOGLOBIN →</button>
             </div>
             `
         );
@@ -1824,7 +1857,7 @@
                     </div>
                 </div>
                 
-                <button onclick="animatePolymerization()" class="step-btn active text-xs px-4 py-2">
+                <button onclick="animatePolymerization()" class="step-btn active text-xs px-4 py-2 w-full sm:w-auto">
                     ▶ JALANKAN POLIMERISASI
                 </button>
                 
@@ -1844,9 +1877,9 @@
                 </div>
             </div>
 
-            <div class="flex justify-between mt-6">
-                <button onclick="goToStep(3)" class="step-btn text-sm px-5 py-2.5">← TRANSLASI</button>
-                <button onclick="goToStep(5)" class="step-btn active text-sm px-5 py-2.5">SEL DARAH →</button>
+            <div class="flex flex-col-reverse sm:flex-row justify-between gap-2.5 mt-6">
+                <button onclick="goToStep(3)" class="step-btn text-sm px-5 py-2.5 w-full sm:w-auto">← TRANSLASI</button>
+                <button onclick="goToStep(5)" class="step-btn active text-sm px-5 py-2.5 w-full sm:w-auto">SEL DARAH →</button>
             </div>
             `
         );
@@ -1970,7 +2003,7 @@
                         </div>
                     </div>
                 </div>
-                <button onclick="startBloodFlow()" class="step-btn active text-xs px-4 py-2 mt-3">
+                <button onclick="startBloodFlow()" class="step-btn active text-xs px-4 py-2 mt-3 w-full sm:w-auto">
                     ▶ JALANKAN SIMULASI ALIRAN
                 </button>
             </div>
@@ -1994,9 +2027,9 @@
                 </div>
             </div>
 
-            <div class="flex justify-between mt-6">
-                <button onclick="goToStep(4)" class="step-btn text-sm px-5 py-2.5">← HEMOGLOBIN</button>
-                <button onclick="goToStep(6)" class="step-btn active text-sm px-5 py-2.5">PEWARISAN →</button>
+            <div class="flex flex-col-reverse sm:flex-row justify-between gap-2.5 mt-6">
+                <button onclick="goToStep(4)" class="step-btn text-sm px-5 py-2.5 w-full sm:w-auto">← HEMOGLOBIN</button>
+                <button onclick="goToStep(6)" class="step-btn active text-sm px-5 py-2.5 w-full sm:w-auto">PEWARISAN →</button>
             </div>
             `
         );
@@ -2146,11 +2179,11 @@
                 <h3 class="text-sm font-display font-bold text-cyan-400 tracking-wider mb-2">📊 DIAGRAM PUNNETT</h3>
                 <p class="text-xs text-slate-400 mb-3">Pilih genotipe orang tua untuk melihat probabilitas keturunan:</p>
                 
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-                    <button onclick="setPunnett('HbAS','HbAS')" class="step-btn active text-[10px]" id="punnett-btn-1">Carrier × Carrier</button>
-                    <button onclick="setPunnett('HbAS','HbAA')" class="step-btn text-[10px]" id="punnett-btn-2">Carrier × Normal</button>
-                    <button onclick="setPunnett('HbAS','HbSS')" class="step-btn text-[10px]" id="punnett-btn-3">Carrier × SCA</button>
-                    <button onclick="setPunnett('HbSS','HbSS')" class="step-btn text-[10px]" id="punnett-btn-4">SCA × SCA</button>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 mb-4">
+                    <button onclick="setPunnett('HbAS','HbAS')" class="step-btn active text-[9px] sm:text-[10px] px-2 py-2 w-full" id="punnett-btn-1">Carrier × Carrier</button>
+                    <button onclick="setPunnett('HbAS','HbAA')" class="step-btn text-[9px] sm:text-[10px] px-2 py-2 w-full" id="punnett-btn-2">Carrier × Normal</button>
+                    <button onclick="setPunnett('HbAS','HbSS')" class="step-btn text-[9px] sm:text-[10px] px-2 py-2 w-full" id="punnett-btn-3">Carrier × SCA</button>
+                    <button onclick="setPunnett('HbSS','HbSS')" class="step-btn text-[9px] sm:text-[10px] px-2 py-2 w-full" id="punnett-btn-4">SCA × SCA</button>
                 </div>
 
                 <div id="punnett-container">
@@ -2206,9 +2239,9 @@
                 </div>
             </div>
 
-            <div class="flex justify-between mt-6">
-                <button onclick="goToStep(5)" class="step-btn text-sm px-5 py-2.5">← SEL DARAH</button>
-                <button onclick="goToStep(0)" class="step-btn active text-sm px-5 py-2.5">🔄 KEMBALI KE AWAL</button>
+            <div class="flex flex-col-reverse sm:flex-row justify-between gap-2.5 mt-6">
+                <button onclick="goToStep(5)" class="step-btn text-sm px-5 py-2.5 w-full sm:w-auto">← SEL DARAH</button>
+                <button onclick="goToStep(0)" class="step-btn active text-sm px-5 py-2.5 w-full sm:w-auto">🔄 KEMBALI KE AWAL</button>
             </div>
             `
         );

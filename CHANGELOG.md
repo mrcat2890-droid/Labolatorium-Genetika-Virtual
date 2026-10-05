@@ -6,6 +6,22 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📱 Audit Responsivitas Seluler, Mode Mobile & Perbaikan Anomali Tampilan (SICKLE-MUT)
+- **Navigasi Step Touch-Centric & Auto-Scroll Terfokus:**
+  - Menambahkan dukungan inersia sentuh `-webkit-overflow-scrolling: touch` pada bar navigasi 7 tahapan simulasi.
+  - Memperbesar target sentuh tombol tahapan (`.step-btn`) dengan tinggi minimal 38px, `touch-action: manipulation`, dan flex-centering untuk meminimalisir kesalahan ketuk jari pada layar sentuh.
+  - Mengintegrasikan mekanisme auto-scroll cerdas (`scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })`) pada fungsi `goToStep(step)` sehingga tombol tahapan aktif selalu otomatis terpusat di layar pengguna saat beralih tahap di ponsel.
+- **Pencegahan Distorsi & Squishing Tabel Komparasi Molekuler:**
+  - Menetapkan batas lebar minimum `min-w-[500px]` pada tabel komparasi 6 kolom translasi mRNA/asam amino di dalam container `overflow-x-auto` agar data tidak terjepit (*text squishing*) atau bertumpuk pada layar selebar 360px–390px.
+  - Menambahkan indikator mikro gestur seluler (*swipe cue visual badge*) bertuliskan *"👉 Geser ke samping untuk melihat seluruh sekuens DNA / mRNA 👈"* dan *"👉 Geser tabel ke samping untuk melihat detail lengkap 👈"* yang muncul otomatis hanya pada perangkat seluler (`flex sm:hidden`).
+- **Penataan Ulang Tata Letak Tombol Aksi (Ergonomi Satu Tangan):**
+  - Mengubah susunan tombol navigasi bawah (*prev/next*) menjadi responsif vertikal `flex flex-col-reverse sm:flex-row gap-2.5` dengan lebar penuh `w-full sm:w-auto` untuk memudahkan jangkauan jempol satu tangan pada layar ponsel.
+  - Menjadikan tombol interaksi utama seperti `▶ JALANKAN POLIMERISASI` dan `▶ JALANKAN SIMULASI ALIRAN` berukuran penuh (`w-full sm:w-auto`) agar tidak terpotong atau canggung di layar kecil.
+- **Kerapian Kartu Ringkasan & Grid Punnett Seluler:**
+  - Merestrukturisasi badge identitas genetik Step 0 (Overview) menjadi `flex-wrap gap-1 sm:flex-nowrap` sehingga label panjang lokus HBB dan tipe mutasi tidak meluap keluar batas (*overflow clipping*).
+  - Menyesuaikan kisi tombol selektor diagram Punnett (`grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2`) dengan teks `text-[9px] sm:text-[10px]` dan `w-full` agar simetris 2x2 yang rapi di smartphone.
+  - Mengoptimalkan padding kontainer `.glass-panel` seluler menjadi `1rem` untuk memaksimalkan ruang baca konten tanpa menyisakan margin kosong berlebih.
+
 ### 🩸 Desain Latar Kustom, Palet Warna Khas, & Elemen Karakteristik Modul SICKLE-MUT (Anemia Sel Sabit)
 - **Transformasi Palet Warna Khas Hematologic Darkfield & Biolab Matrix Grid:**
   - Mengeliminasi latar belakang generik flat hitam `#030712` dan menggantinya dengan palet tematik **Deep Hematologic Darkfield Obsidian (`#060205`)**.
