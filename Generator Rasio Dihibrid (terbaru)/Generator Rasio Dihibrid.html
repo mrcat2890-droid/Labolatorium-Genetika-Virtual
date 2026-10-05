@@ -271,6 +271,14 @@
             background: #34d399;
         }
     
+        .seed-icon {
+            filter: drop-shadow(0 4px 10px rgba(0, 245, 155, 0.35));
+            transition: transform 0.2s ease;
+        }
+        .seed-icon:hover {
+            transform: scale(1.15);
+        }
+
         /* Mobile Performance Optimizations */
         @media (max-width: 768px) {
             body {
@@ -298,10 +306,25 @@
             .punnett-cell {
                 background: rgba(6, 32, 40, 0.95) !important;
                 box-shadow: none !important;
+                transition: none !important;
             }
 
-            .punnett-cell svg {
+            .punnett-cell:hover {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+
+            .seed-icon {
                 filter: none !important;
+                transition: none !important;
+            }
+
+            .seed-icon:hover {
+                transform: none !important;
+            }
+
+            #punnett-grid {
+                contain: layout inline-size;
             }
 
             .scanlines {
@@ -322,6 +345,32 @@
 
 <body class="flex flex-col min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 relative overflow-x-hidden">
     <div class="scanlines"></div>
+
+    <!-- Global Reusable SVG Gradients for Seeds (Accelerates rendering & eliminates duplicate defs) -->
+    <svg class="hidden" aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;">
+        <defs>
+            <radialGradient id="grad-seed-y-r" cx="35%" cy="30%" r="65%">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="55%" stop-color="#ffd600"/>
+                <stop offset="100%" stop-color="#ff9100"/>
+            </radialGradient>
+            <radialGradient id="grad-seed-g-r" cx="35%" cy="30%" r="65%">
+                <stop offset="0%" stop-color="#d1fae5"/>
+                <stop offset="55%" stop-color="#00f59b"/>
+                <stop offset="100%" stop-color="#059669"/>
+            </radialGradient>
+            <radialGradient id="grad-seed-y-w" cx="35%" cy="30%" r="65%">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="55%" stop-color="#ffd600"/>
+                <stop offset="100%" stop-color="#ff9100"/>
+            </radialGradient>
+            <radialGradient id="grad-seed-g-w" cx="35%" cy="30%" r="65%">
+                <stop offset="0%" stop-color="#d1fae5"/>
+                <stop offset="55%" stop-color="#00f59b"/>
+                <stop offset="100%" stop-color="#059669"/>
+            </radialGradient>
+        </defs>
+    </svg>
 
     <!-- Signature Dihybrid Animated Background (Seeds & Gametes) -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
@@ -904,38 +953,17 @@
 
         // --- ENHANCED SVG SEED VISUALIZATIONS ---
         function getSeedSVG(phenotype, sizeClass = "w-10 h-10 md:w-12 md:h-12") {
-            let fillGradId = "grad-round-yellow";
-            let isRound = true;
-
-            if (phenotype.includes("Kuning")) {
-                fillGradId = isRound ? "grad-yellow" : "grad-yellow-wrinkled";
-            } else {
-                fillGradId = isRound ? "grad-green" : "grad-green-wrinkled";
-            }
-
-            if (phenotype.includes("Kisut")) {
-                isRound = false;
-            }
-
+            const isYellow = phenotype.includes("Kuning");
+            const isRound = !phenotype.includes("Kisut");
+            const gradId = `grad-seed-${isYellow ? 'y' : 'g'}-${isRound ? 'r' : 'w'}`;
+            const strokeColor = isYellow ? "#ff9100" : "#059669";
             const roundPath = "M50 8 C25 8 8 25 8 50 C8 75 25 92 50 92 C75 92 92 75 92 50 C92 25 75 8 50 8 Z";
             const wrinkledPath = "M50 10 C30 10 14 26 14 42 C11 54 22 64 16 74 C11 84 30 90 50 93 C70 90 89 84 84 74 C78 64 89 54 86 42 C86 26 70 10 50 10 Z";
 
-            const isYellow = phenotype.includes("Kuning");
-            const mainColor = isYellow ? "#ffd600" : "#00f59b";
-            const strokeColor = isYellow ? "#ff9100" : "#059669";
-            const highlightColor = isYellow ? "#ffffff" : "#d1fae5";
-
             return `
-            <svg viewBox="0 0 100 100" class="${sizeClass} mx-auto drop-shadow-[0_4px_12px_${isYellow ? 'rgba(255,214,0,0.5)' : 'rgba(0,245,155,0.5)'}] transition-transform duration-300 hover:scale-125">
-                <defs>
-                    <radialGradient id="grad-seed-${isYellow ? 'y' : 'g'}-${isRound ? 'r' : 'w'}" cx="35%" cy="30%" r="65%">
-                        <stop offset="0%" stop-color="${highlightColor}"/>
-                        <stop offset="55%" stop-color="${mainColor}"/>
-                        <stop offset="100%" stop-color="${strokeColor}"/>
-                    </radialGradient>
-                </defs>
+            <svg viewBox="0 0 100 100" class="${sizeClass} mx-auto seed-icon">
                 <path d="${isRound ? roundPath : wrinkledPath}" 
-                      fill="url(#grad-seed-${isYellow ? 'y' : 'g'}-${isRound ? 'r' : 'w'})" 
+                      fill="url(#${gradId})" 
                       stroke="${strokeColor}" stroke-width="3.5"/>
                 ${isRound 
                     ? `<ellipse cx="38" cy="28" rx="14" ry="7" transform="rotate(-30 38 28)" fill="#ffffff" opacity="0.45"/>`
@@ -993,7 +1021,7 @@
             startAnalysis();
         }
 
-        // Main Simulation Flow
+        // Main Simulation Flow (Instant Render, 0ms latency)
         function startAnalysis() {
             let p1 = document.getElementById('p1').value;
             let p2 = document.getElementById('p2').value;
@@ -1003,26 +1031,13 @@
                 return;
             }
 
-            const loader = document.getElementById('loading-overlay');
+            processDihybrid(p1, p2);
+            playSound('finish');
+
             const results = document.getElementById('result-container');
-            const loadText = document.getElementById('loading-text');
-
-            loader.classList.remove('hidden');
-            loader.classList.add('flex');
-            results.classList.add('hidden');
-            playSound('process');
-
-            setTimeout(() => { if (loadText) loadText.innerText = "Membentuk 4 Macam Gamet Independen..."; }, 400);
-            setTimeout(() => { if (loadText) loadText.innerText = "Mengisi 16 Kotak Papan Punnett..."; }, 800);
-
-            setTimeout(() => {
-                processDihybrid(p1, p2);
-                loader.classList.add('hidden');
-                loader.classList.remove('flex');
+            if (results) {
                 results.classList.remove('hidden');
-                playSound('finish');
-                results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 1100);
+            }
         }
 
         function processDihybrid(rawP1, rawP2) {
@@ -1043,11 +1058,11 @@
             const g2 = getGametes(p2);
 
             const grid = document.getElementById('punnett-grid');
-            grid.innerHTML = '<div class="p-2 border border-slate-800 bg-slate-900/60 text-slate-500 font-mono text-[10px] rounded-lg flex items-center justify-center">♀ \\ ♂</div>';
+            let gridHTML = '<div class="p-2 border border-slate-800 bg-slate-900/60 text-slate-500 font-mono text-[10px] rounded-lg flex items-center justify-center">♀ \\ ♂</div>';
 
             // Top Gamete Headers (P2 Sperm / Male Gametes)
             g2.forEach(g => {
-                grid.innerHTML += `
+                gridHTML += `
                     <div class="bg-slate-900/90 text-amber-400 font-mono font-bold py-2 rounded-lg border border-slate-700/80 shadow-sm flex flex-col items-center justify-center">
                         <span class="text-xs">${g}</span>
                     </div>
@@ -1059,7 +1074,7 @@
 
             for (let i = 0; i < 4; i++) {
                 // Left Gamete Header (P1 Ovum / Female Gametes)
-                grid.innerHTML += `
+                gridHTML += `
                     <div class="flex flex-col items-center justify-center bg-slate-900/90 text-emerald-400 font-mono font-bold py-2 rounded-lg border border-slate-700/80 shadow-sm">
                         <span class="text-xs">${g1[i]}</span>
                     </div>
@@ -1074,22 +1089,25 @@
                     phenoCounts[pLabel]++;
                     genoCounts[fullGen] = (genoCounts[fullGen] || 0) + 1;
 
-                    grid.innerHTML += `
+                    gridHTML += `
                         <div class="punnett-cell rounded-xl p-2.5 flex flex-col items-center justify-between group relative cursor-pointer">
                             ${getSeedSVG(pLabel, "w-8 h-8 md:w-11 md:h-11")}
-                            <span class="text-xs font-mono font-bold text-white mt-1 drop-shadow">${fullGen}</span>
+                            <span class="text-xs font-mono font-bold text-white mt-1">${fullGen}</span>
                             <span class="text-[10px] font-mono text-emerald-200 font-semibold tracking-wider">${pLabel}</span>
                         </div>
                     `;
                 }
             }
 
+            // Batch update Punnett grid in a single DOM operation
+            grid.innerHTML = gridHTML;
+
             updateStatsAndReport(phenoCounts, genoCounts, p1, p2);
         }
 
         function updateStatsAndReport(counts, genoCounts, p1, p2) {
             const statsDiv = document.getElementById('stats-bars');
-            statsDiv.innerHTML = '';
+            let statsHTML = '';
             
             const order = ["Bulat Kuning", "Bulat Hijau", "Kisut Kuning", "Kisut Hijau"];
 
@@ -1110,7 +1128,7 @@
                     textCol = "text-teal-300";
                 }
 
-                statsDiv.innerHTML += `
+                statsHTML += `
                     <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-700/80 space-y-1.5 shadow-sm">
                         <div class="flex justify-between items-center text-xs">
                             <span class="font-bold ${textCol} flex items-center gap-1.5 font-sans">
@@ -1119,11 +1137,14 @@
                             <span class="font-mono font-bold text-white">${val}/16 (${pct.toFixed(1)}%)</span>
                         </div>
                         <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-700">
-                            <div class="bg-gradient-to-r ${colorClass} h-full rounded-full transition-all duration-1000 shadow-sm" style="width: ${pct}%"></div>
+                            <div class="bg-gradient-to-r ${colorClass} h-full rounded-full transition-all duration-300 shadow-sm" style="width: ${pct}%"></div>
                         </div>
                     </div>
                 `;
             });
+
+            // Batch update stats bars
+            statsDiv.innerHTML = statsHTML;
 
             // Genotype badges
             let genoHTML = '';
