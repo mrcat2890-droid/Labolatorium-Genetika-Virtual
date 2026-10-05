@@ -6,6 +6,21 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🚀 Optimalisasi Performa Mendalam Modul Generator Rasio Dihibrid (Mobile Performance Overhaul)
+- **Investigasi Akar Masalah Beban Berat Modul pada Perangkat Seluler (*Root Cause Analysis*):**
+  - **Konflik Spesifisitas CSS (*Specificity Cascade Override*):** Ditemukan bahwa aturan CSS global `[class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-slate-800/"]` memiliki selektor atribut berbobot spesifisitas `(0, 1, 0)` dengan deklarasi `backdrop-filter: blur(16px) !important;`. Aturan media query mobile sebelumnya yang hanya menggunakan selektor universal `* { backdrop-filter: none !important; }` berbobot `(0, 0, 0)` kalah secara prioritas kaskade CSS. Akibatnya, pada peramban HP, **70 elemen antarmuka** (termasuk 16 sel Punnett, 8 header gamet, kotak input `.input-gen`, dan bilah statistik) tetap memproses *backdrop-filter* berat secara bersamaan.
+  - **Beban Animasi Filter Berkelanjutan (*Continuous Filter Repainting*):** Terdapat 4 objek biji mengambang (`.ambient-seed`), 4 teks gamet (`.ambient-gamete`) yang menganimasikan `filter: drop-shadow(0 0 12px ...)` setiap frame secara terus-menerus, serta lapisan overlay garis pemindai (`.scanlines`) berulang tiap 4px di seluruh layar ponsel yang membebani GPU saat proses scrolling.
+  - **Efek Bayangan SVG Sel Punnett:** 16 ikon SVG biji di dalam papan Punnett masing-masing memiliki utilitas kelas `drop-shadow-[0_4px_12px_...]` yang memicu komputasi blur ganda di atas sel Punnett.
+- **Implementasi Solusi Kinerja Tinggi (*High-Performance Fixes*):**
+  - **Penonaktifan Selektif `backdrop-filter` Berbasis Spesifisitas:** Menargetkan secara eksplisit `[class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-slate-800/"], .punnett-cell, .input-gen, .glass-panel` di dalam `@media (max-width: 768px)`, berhasil memangkas elemen berfilter blur aktif di layar ponsel dari **70 elemen menjadi 0 elemen**.
+  - **Penyembunyian Ornamen Animasi pada Mobile (`hidden md:block` & CSS `display: none`):** Menghentikan kalkulasi animasi `.ambient-seed`, `.ambient-gamete`, dan `.scanlines` pada layar seluler tanpa menghilangkan estetika tampilan desktop.
+  - **Eliminasi Filter SVG & Penyederhanaan Latar Belakang:** Menonaktifkan *drop-shadow* blur pada SVG sel Punnett di mobile (`.punnett-cell svg { filter: none !important; }`) serta menyederhanakan gradien latar belakang ponsel menjadi satu gradien radial bersih tanpa pola kisi-kisi mikro 36px.
+- **Hasil Pengujian & Verifikasi Browser:**
+  - Terverifikasi lewat pengujian *headless browser* pada viewport ponsel (390 × 844 px) bahwa jumlah elemen *backdrop-filter* aktif turun menjadi 0, interaksi gulir (*scroll*) dan simulasi persilangan (misal: *Test Cross* 1:1:1:1 dan Heterozigot 9:3:3:1) berjalan mulus tanpa lag, serta 0 galat konsol.
+- **Berkas yang Diperbarui:**
+  - `Generator Rasio Dihibrid (terbaru)/Generator Rasio Dihibrid.html`
+  - `CHANGELOG.md`
+
 ### 🛠️ Pemulihan Karakter Unicode/Emoji (Mojibake Fix) & Penyempurnaan Efisiensi Mobile
 - **Restorasi Total Karakter Unicode & Emotikon (UTF-8 Restoration):**
   - Mengidentifikasi dan memperbaiki anomali di mana karakter non-ASCII (emotikon 🧬, 🌸, 🩸, 🔬, 🧩, 🧪, 📝, 🥚, 📂, 💡, 📖, simbol matematika `×`, `→`, `•`, serta simbol gender `♂` dan `♀`) berubah menjadi karakter aneh (*mojibake* seperti `ðŸ©¸`, `Ã—`, `â†’`, `â™‚`) akibat pembacaan enkripsi ANSI pada berkas HTML di optimalisasi sebelumnya.

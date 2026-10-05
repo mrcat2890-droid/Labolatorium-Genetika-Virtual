@@ -273,15 +273,48 @@
     
         /* Mobile Performance Optimizations */
         @media (max-width: 768px) {
-            *, *::before, *::after {
+            body {
+                background-image: radial-gradient(circle at 50% 15%, rgba(0, 245, 155, 0.12) 0%, transparent 65%) !important;
+                background-size: 100% 100% !important;
+            }
+
+            *, *::before, *::after,
+            [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-slate-800/"],
+            .punnett-cell, .input-gen, .glass-panel, header, main, div, section {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
             }
-            .glass-panel {
-                background-color: rgba(15, 23, 42, 0.88) !important;
+
+            [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-slate-800/"] {
+                background-color: rgba(5, 25, 32, 0.94) !important;
+                box-shadow: none !important;
             }
-            .glass-panel-secondary {
-                background-color: rgba(15, 23, 42, 0.92) !important;
+
+            .glass-panel {
+                background: rgba(3, 18, 24, 0.94) !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+            }
+
+            .punnett-cell {
+                background: rgba(6, 32, 40, 0.95) !important;
+                box-shadow: none !important;
+            }
+
+            .punnett-cell svg {
+                filter: none !important;
+            }
+
+            .scanlines {
+                display: none !important;
+            }
+
+            .ambient-seed, .ambient-gamete {
+                display: none !important;
+                animation: none !important;
+            }
+
+            #loading-overlay.hidden * {
+                animation: none !important;
             }
         }
     </style>
@@ -299,31 +332,31 @@
 
         <!-- Floating Dihybrid Seeds (9:3:3:1 Phenotypes: Round Yellow, Round Green, Wrinkled Yellow, Wrinkled Green) -->
         <!-- Round Yellow Seed (Biji Bulat Kuning) -->
-        <div class="ambient-seed" style="left: 10%; animation-duration: 22s; animation-delay: 0s;">
+        <div class="ambient-seed hidden md:block" style="left: 10%; animation-duration: 22s; animation-delay: 0s;">
             <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-300 to-amber-500 shadow-[0_0_15px_rgba(251,191,36,0.5)] border border-amber-200/50"></div>
         </div>
         <!-- Round Green Seed (Biji Bulat Hijau) -->
-        <div class="ambient-seed" style="left: 82%; animation-duration: 26s; animation-delay: 4s;">
+        <div class="ambient-seed hidden md:block" style="left: 82%; animation-duration: 26s; animation-delay: 4s;">
             <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-300 to-emerald-600 shadow-[0_0_15px_rgba(52,211,153,0.5)] border border-emerald-200/50"></div>
         </div>
         <!-- Wrinkled Yellow Seed (Biji Kisut Kuning) -->
-        <div class="ambient-seed" style="left: 28%; animation-duration: 29s; animation-delay: 11s;">
+        <div class="ambient-seed hidden md:block" style="left: 28%; animation-duration: 29s; animation-delay: 11s;">
             <svg class="w-8 h-8 text-amber-400 drop-shadow-[0_0_12px_rgba(245,158,11,0.5)]" viewBox="0 0 40 40" fill="currentColor">
                 <path d="M20 3 C27 4, 34 8, 36 15 C38 22, 35 30, 29 35 C22 39, 14 38, 8 33 C2 27, 2 18, 6 11 C10 4, 15 2, 20 3 Z" />
             </svg>
         </div>
         <!-- Wrinkled Green Seed (Biji Kisut Hijau) -->
-        <div class="ambient-seed" style="left: 70%; animation-duration: 24s; animation-delay: 7s;">
+        <div class="ambient-seed hidden md:block" style="left: 70%; animation-duration: 24s; animation-delay: 7s;">
             <svg class="w-7 h-7 text-emerald-400 drop-shadow-[0_0_12px_rgba(16,185,129,0.5)]" viewBox="0 0 40 40" fill="currentColor">
                 <path d="M20 4 C26 5, 33 9, 35 16 C37 23, 33 30, 28 34 C21 38, 13 37, 7 32 C2 26, 3 17, 7 11 C11 5, 15 3, 20 4 Z" />
             </svg>
         </div>
 
         <!-- Ambient Floating Gamete Combinations (Mendel Assortment: YR, Yr, yR, yr) -->
-        <div class="ambient-gamete text-amber-300/25 text-2xl" style="top: 22%; left: 5%; animation-duration: 9s; animation-delay: 0s;">YR</div>
-        <div class="ambient-gamete text-emerald-300/25 text-xl" style="top: 40%; right: 6%; animation-duration: 8s; animation-delay: 2s;">Yr</div>
-        <div class="ambient-gamete text-emerald-400/25 text-xl" style="bottom: 25%; left: 8%; animation-duration: 10s; animation-delay: 4s;">yR</div>
-        <div class="ambient-gamete text-amber-400/25 text-lg" style="bottom: 35%; right: 8%; animation-duration: 8.5s; animation-delay: 1.5s;">yr</div>
+        <div class="ambient-gamete hidden md:block text-amber-300/25 text-2xl" style="top: 22%; left: 5%; animation-duration: 9s; animation-delay: 0s;">YR</div>
+        <div class="ambient-gamete hidden md:block text-emerald-300/25 text-xl" style="top: 40%; right: 6%; animation-duration: 8s; animation-delay: 2s;">Yr</div>
+        <div class="ambient-gamete hidden md:block text-emerald-400/25 text-xl" style="bottom: 25%; left: 8%; animation-duration: 10s; animation-delay: 4s;">yR</div>
+        <div class="ambient-gamete hidden md:block text-amber-400/25 text-lg" style="bottom: 35%; right: 8%; animation-duration: 8.5s; animation-delay: 1.5s;">yr</div>
     </div>
 
     <!-- ==================== TOP NAVIGATION HEADER ==================== -->
