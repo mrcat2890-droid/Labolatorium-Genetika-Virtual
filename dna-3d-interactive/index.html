@@ -47,8 +47,12 @@
                 <h1>STRUKTUR HELIKS GANDA DNA</h1>
                 <p class="subtitle">Eksplorasi Molekuler Interaktif 360° Watson-Crick</p>
             </div>
-            <!-- Tombol Toggle Cepat di Header untuk Layar Tablet / HP -->
+            <!-- Tombol Aksi di Header (Desktop & Mobile) -->
             <div class="header-actions">
+                <button id="btn-open-tutorial" class="header-btn header-btn-tutorial" title="Buka Panduan Tutorial Interaktif">
+                    <span class="header-btn-icon">💡</span>
+                    <span class="header-btn-text">Tutorial</span>
+                </button>
                 <button id="btn-toggle-controls-panel" class="header-btn" title="Buka Panel Kontrol">
                     <span class="header-btn-icon">⚙️</span>
                     <span class="header-btn-text">Menu</span>
@@ -61,7 +65,7 @@
         </div>
     </header>
 
-    <!-- Backdrop Gelap untuk Mobile Drawer -->
+    <!-- Backdrop Gelap untuk Mobile Drawer & Modal -->
     <div id="modal-backdrop" class="modal-backdrop hidden"></div>
 
     <!-- Panel Kontrol Kiri / Bottom Sheet Mobile -->
@@ -71,9 +75,56 @@
 
         <div class="panel-header-flex">
             <div class="panel-section-title">
-                <span class="icon">⚡</span> KONTROL PEMISAHAN
+                <span class="icon">🧬</span> MODE REPRESENTASI B-DNA
             </div>
             <button id="btn-close-controls" class="btn-icon-close" title="Tutup Menu">&times;</button>
+        </div>
+
+        <p class="section-hint">Pilih standar visualisasi kristalografi ilmiah:</p>
+        <div class="mode-selector-grid">
+            <button class="mode-btn active" data-mode="bio">
+                <span class="mode-icon">🧪</span>
+                <div class="mode-info">
+                    <span class="mode-name">Bio-Illustrative</span>
+                    <span class="mode-sub">Cincin Planar Purin-Pirimidin &amp; Pita Ribosa</span>
+                </div>
+            </button>
+            <button class="mode-btn" data-mode="cpk">
+                <span class="mode-icon">🔮</span>
+                <div class="mode-info">
+                    <span class="mode-name">CPK Space-Filling</span>
+                    <span class="mode-sub">Permukaan Atomik Padat (Van der Waals)</span>
+                </div>
+            </button>
+            <button class="mode-btn" data-mode="ballstick">
+                <span class="mode-icon">⚛️</span>
+                <div class="mode-info">
+                    <span class="mode-name">Ball &amp; Stick</span>
+                    <span class="mode-sub">Kerangka Ikatan Kimia Kovalen 3D</span>
+                </div>
+            </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Dinamika Termal & Skala Metrik Biofisika -->
+        <div class="panel-section-title">
+            <span class="icon">🌡️</span> BIOFISIKA &amp; METRIK
+        </div>
+        <p class="section-hint">Parameter dinamis molekul dalam larutan sel:</p>
+        <div class="toggle-group">
+            <button id="btn-toggle-thermal" class="ctrl-btn active">
+                <span id="thermal-status-icon">🌊</span> Dinamika Termal (37°C): <b id="thermal-status-text">AKTIF</b>
+            </button>
+            <button id="btn-toggle-metrics" class="ctrl-btn">
+                <span id="metric-status-icon">📐</span> Skala Metrik (nm / Å): <b id="metric-status-text">SEMBUNYI</b>
+            </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="panel-section-title">
+            <span class="icon">⚡</span> KONTROL PEMISAHAN
         </div>
 
         <!-- Tombol Aksi Utama Pemisahan -->
@@ -96,7 +147,7 @@
 
         <!-- Anotasi Ilmiah Seperti Gambar Referensi -->
         <div class="panel-section-title">
-            <span class="icon">🏷️</span> ANOTASI & LABEL
+            <span class="icon">🏷️</span> ANOTASI &amp; LABEL
         </div>
         <div class="toggle-group">
             <button id="btn-toggle-labels" class="ctrl-btn active">
@@ -139,16 +190,29 @@
             </button>
         </div>
 
-        <!-- Legenda Basa Nitrogen -->
+        <!-- Legenda Basa Nitrogen & Klasifikasi Kimia -->
         <div class="legend-box">
-            <div class="legend-title">LEGENDA MOLEKUL</div>
+            <div class="legend-title">LEGENDA &amp; KLASIFIKASI BIOKIMIA</div>
             <div class="legend-grid">
-                <div class="legend-item"><span class="color-dot dot-a"></span> <b>A</b> Adenin (Biru)</div>
-                <div class="legend-item"><span class="color-dot dot-t"></span> <b>T</b> Timin (Kuning)</div>
-                <div class="legend-item"><span class="color-dot dot-g"></span> <b>G</b> Guanin (Hijau)</div>
-                <div class="legend-item"><span class="color-dot dot-c"></span> <b>C</b> Sitosin (Merah)</div>
-                <div class="legend-item"><span class="color-dot dot-backbone"></span> <b>P-S</b> Gula-Fosfat</div>
-                <div class="legend-item"><span class="color-dot dot-hbond"></span> <b>···</b> Ikatan H</div>
+                <div class="legend-item"><span class="color-dot dot-a"></span> <b>A</b> Adenin (Purin: 2 Cincin)</div>
+                <div class="legend-item"><span class="color-dot dot-t"></span> <b>T</b> Timin (Pirimidin: 1 Cincin)</div>
+                <div class="legend-item"><span class="color-dot dot-g"></span> <b>G</b> Guanin (Purin: 2 Cincin)</div>
+                <div class="legend-item"><span class="color-dot dot-c"></span> <b>C</b> Sitosin (Pirimidin: 1 Cincin)</div>
+                <div class="legend-item"><span class="color-dot dot-backbone"></span> <b>P-S</b> Gula Deoksiribosa-Fosfat</div>
+                <div class="legend-item"><span class="color-dot dot-hbond"></span> <b>···</b> Ikatan Hidrogen (A=T, G≡C)</div>
+            </div>
+            <div class="legend-polarity-row">
+                <div class="polarity-chip"><b>5'</b> Fosfat Bebas</div>
+                <div class="polarity-arrow">⇄</div>
+                <div class="polarity-chip"><b>3'</b> -OH Bebas (Antiparalel)</div>
+            </div>
+            <div class="legend-cpk-row" id="legend-cpk-row">
+                <span class="cpk-label">Standar CPK:</span>
+                <span class="cpk-item"><i style="background:#3b4252;"></i>C</span>
+                <span class="cpk-item"><i style="background:#1d4ed8;"></i>N</span>
+                <span class="cpk-item"><i style="background:#dc2626;"></i>O</span>
+                <span class="cpk-item"><i style="background:#d97706;"></i>P</span>
+                <span class="cpk-item"><i style="background:#e2e8f0;"></i>H</span>
             </div>
         </div>
     </aside>
@@ -213,11 +277,11 @@
     <div id="annotations-overlay">
         <div class="annotation-callout callout-major-1" id="callout-major-1">
             <div class="bracket-bracket"></div>
-            <div class="callout-text">Major Groove</div>
+            <div class="callout-text">Major Groove<br><b>(Lekukan Mayor ~2.2 nm)</b></div>
         </div>
         <div class="annotation-callout callout-minor-1" id="callout-minor-1">
             <div class="bracket-bracket"></div>
-            <div class="callout-text">Minor Groove</div>
+            <div class="callout-text">Minor Groove<br><b>(Lekukan Minor ~1.2 nm)</b></div>
         </div>
         <div class="annotation-callout callout-backbone" id="callout-backbone">
             <div class="callout-pointer"></div>
@@ -230,6 +294,38 @@
         <div class="annotation-callout callout-cg" id="callout-cg">
             <div class="callout-pointer"></div>
             <div class="callout-text">Hydrogen Bonds<br><b>C-G Base Pair</b> (3 Ikatan)</div>
+        </div>
+
+        <!-- Anotasi Skala Metrik Ilmiah (Dapat di-toggle) -->
+        <div class="annotation-callout callout-metric hidden" id="callout-metric-diameter">
+            <div class="metric-ruler-line horizontal"></div>
+            <div class="callout-text metric-badge">⌀ Diameter Heliks: <b>2.0 nm (20 Å)</b></div>
+        </div>
+        <div class="annotation-callout callout-metric hidden" id="callout-metric-rise">
+            <div class="metric-ruler-line vertical"></div>
+            <div class="callout-text metric-badge">↕ Jarak Pasang Basa (Rise): <b>0.34 nm (3.4 Å)</b></div>
+        </div>
+        <div class="annotation-callout callout-metric hidden" id="callout-metric-pitch">
+            <div class="bracket-bracket metric-bracket"></div>
+            <div class="callout-text metric-badge">↻ 1 Putaran Penuh (Pitch): <b>3.4 nm (10.5 pb)</b></div>
+        </div>
+
+        <!-- Penanda Polaritas Antiparalel 5' dan 3' (Ujung Untai) -->
+        <div class="annotation-callout callout-polarity" id="callout-pol-s1-top">
+            <span class="polarity-badge badge-5p">5'</span>
+            <div class="callout-text">Untai 1 (Fosfat)</div>
+        </div>
+        <div class="annotation-callout callout-polarity" id="callout-pol-s1-bottom">
+            <span class="polarity-badge badge-3p">3'</span>
+            <div class="callout-text">Untai 1 (-OH)</div>
+        </div>
+        <div class="annotation-callout callout-polarity" id="callout-pol-s2-top">
+            <span class="polarity-badge badge-3p">3'</span>
+            <div class="callout-text">Untai 2 (-OH)</div>
+        </div>
+        <div class="annotation-callout callout-polarity" id="callout-pol-s2-bottom">
+            <span class="polarity-badge badge-5p">5'</span>
+            <div class="callout-text">Untai 2 (Fosfat)</div>
         </div>
     </div>
 
@@ -268,6 +364,105 @@
             <span><b>Ketuk Objek:</b> Inspeksi Molekul</span>
         </div>
     </footer>
+
+    <!-- Modal Tutorial Edukasi Interaktif 3D -->
+    <div id="tutorial-modal" class="tutorial-modal-overlay hidden">
+        <div class="tutorial-card glass-panel">
+            <div class="tutorial-header">
+                <div class="tutorial-badge-row">
+                    <span class="pulse-dot"></span>
+                    <span class="tutorial-badge">PANDUAN EKSPLORASI DNA 3D // WATSON-CRICK</span>
+                </div>
+                <button id="btn-close-tutorial" class="btn-icon-close" title="Tutup Tutorial">&times;</button>
+            </div>
+
+            <div class="tutorial-body">
+                <!-- Slide 1 -->
+                <div class="tutorial-slide active" data-slide="1">
+                    <div class="tut-icon-banner">🧬</div>
+                    <h3 class="tut-slide-title">1. Arsitektur Heliks Ganda B-DNA Asli</h3>
+                    <p class="tut-slide-lead">Struktur materi genetik utama makhluk hidup dirumuskan oleh James Watson dan Francis Crick (1953) berdasarkan data kristalografi sinar-X Foto 51 karya Rosalind Franklin &amp; Raymond Gosling.</p>
+                    <div class="tut-grid">
+                        <div class="tut-box">
+                            <span class="tut-box-icon">📐</span>
+                            <b>Dimensi Metrik Presisi:</b>
+                            <p>Diameter heliks <b>2.0 nm (20 Å)</b>, jarak antar pasang basa (rise) <b>0.34 nm (3.4 Å)</b>, dan satu putaran (pitch) <b>3.4 nm (~10.5 pb)</b>.</p>
+                        </div>
+                        <div class="tut-box">
+                            <span class="tut-box-icon">🌀</span>
+                            <b>Lekukan Mayor &amp; Minor:</b>
+                            <p>Asimetri sudut heliks menciptakan <b>Major Groove (~2.2 nm)</b> yang kaya kode kimiawi faktor transkripsi dan <b>Minor Groove (~1.2 nm)</b>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="tutorial-slide hidden" data-slide="2">
+                    <div class="tut-icon-banner">🧪</div>
+                    <h3 class="tut-slide-title">2. Basa Nitrogen &amp; Polaritas Antiparalel</h3>
+                    <p class="tut-slide-lead">Kestabilan dan kerapian diameter DNA dijaga oleh penggabungan konstan antara basa purin (berukuran besar) dan basa pirimidin (berukuran lebih kecil).</p>
+                    <div class="tut-grid">
+                        <div class="tut-box">
+                            <span class="tut-box-icon">💎</span>
+                            <b>Purin vs Pirimidin:</b>
+                            <p><b>Purin (A &amp; G)</b> memiliki 2 cincin terpadu (cincin 6 + 5), sedangkan <b>Pirimidin (T &amp; C)</b> memiliki 1 cincin heksagonal tunggal.</p>
+                        </div>
+                        <div class="tut-box">
+                            <span class="tut-box-icon">🔗</span>
+                            <b>Ikatan Hidrogen &amp; Chargaff:</b>
+                            <p><b>Adenin = Timin</b> dihubungkan 2 ikatan H, sedangkan <b>Guanin ≡ Sitosin</b> dihubungkan 3 ikatan H yang lebih kokoh secara termodinamika.</p>
+                        </div>
+                        <div class="tut-box tut-box-wide">
+                            <span class="tut-box-icon">⇄</span>
+                            <b>Polaritas Antiparalel 5' → 3':</b>
+                            <p>Kedua untai berjalan dengan orientasi berlawanan. Ujung <b>5'</b> memiliki gugus fosfat bebas, sedangkan ujung <b>3'</b> memiliki gugus hidroksil (-OH) bebas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="tutorial-slide hidden" data-slide="3">
+                    <div class="tut-icon-banner">🔬</div>
+                    <h3 class="tut-slide-title">3. Tiga Mode Tampilan &amp; Fitur Interaktif</h3>
+                    <p class="tut-slide-lead">Simulasi ini menyediakan 3 representasi ilmiah yang lazim digunakan dalam perangkat lunak riset biofisika (ChimeraX, PyMOL, dan RCSB PDB).</p>
+                    <div class="tut-grid">
+                        <div class="tut-box">
+                            <span class="tut-box-icon">✨</span>
+                            <b>Mode Bio-Illustrative:</b>
+                            <p>Lempeng cincin aromatik ber-shading kristal cair PBR, pita deoksiribosa-fosfat kontinu, dan cap huruf kimia.</p>
+                        </div>
+                        <div class="tut-box">
+                            <span class="tut-box-icon">🔮</span>
+                            <b>CPK Space-Filling:</b>
+                            <p>Permukaan atom Van der Waals riil tanpa lubang di inti heliks, memperlihatkan alur alaminya.</p>
+                        </div>
+                        <div class="tut-box">
+                            <span class="tut-box-icon">⚛️</span>
+                            <b>Ball &amp; Stick:</b>
+                            <p>Membedah kerangka atomik ikatan kovalen cincin pentosa dan gugus fosfat.</p>
+                        </div>
+                        <div class="tut-box">
+                            <span class="tut-box-icon">⚡</span>
+                            <b>Pemisahan &amp; Termal:</b>
+                            <p>Gunakan tombol <b>Unzip</b> (membelah heliks), <b>Uraikan</b> (membedah komponen), dan <b>Dinamika Termal</b> untuk osilasi mikroskopis.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tutorial-footer">
+                <div class="tutorial-dots">
+                    <span class="dot active" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                    <span class="dot" data-index="3"></span>
+                </div>
+                <div class="tutorial-nav-btns">
+                    <button id="tutorial-btn-prev" class="tut-nav-btn secondary" disabled>Sebelumnya</button>
+                    <button id="tutorial-btn-next" class="tut-nav-btn primary">Lanjut →</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Three.js & OrbitControls via CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>

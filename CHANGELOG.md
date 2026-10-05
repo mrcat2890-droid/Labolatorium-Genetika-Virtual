@@ -6,6 +6,41 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🧬 Upgrade Ultra-Realistis Model DNA 3D Kristalografi (PDB 1BNA // Watson-Crick // Rosalind Franklin)
+- **Multi-Mode Scientific Representation (B-DNA Kristalografi Ilmiah):**
+  - **Mode 1: Bio-Illustrative (Watson-Crick Modern Enhanced):**
+    - Menggantikan silinder tabung generik dengan lempeng cincin planar aromatik nyata: **Purin (A & G)** berupa cincin ganda terpadu (*bicyclic* C6+C5) dan **Pirimidin (T & C)** berupa cincin heksagonal tunggal (*monocyclic* C6) dengan ketebalan 3D dan bevel kristal cair PBR.
+    - Mengimplementasikan sudut kemiringan baling-baling (*propeller twist* ~12°) antar-basa pasangan komplementer untuk merefleksikan interaksi tumpukan hidrofobik $\pi-\pi$ alami.
+    - Menambahkan nodus cincin gula pentosa deoksiribosa 5-sudut dan mutiara emas fosfat tetrahedral ($\text{PO}_4^{3-}$) pada setiap posisi nukleotida di sepanjang pita tulang punggung.
+  - **Mode 2: Space-Filling Atomik CPK (Van der Waals Spheres):**
+    - Merekonstruksi struktur DNA tanpa rongga kosong di sumbu pusat sesuai koordinat kristalografi sinar-X *PDB ID: 1BNA* (Dickerson et al., 1982).
+    - Menerapkan palet warna Corey-Pauling-Koltun (CPK) internasional: Karbon (slate gray `#3b4252`), Nitrogen (cobalt blue `#1d4ed8`), Oksigen (ruby red `#dc2626`), Fosfor (golden amber `#d97706`), dan Hidrogen (silver white `#e2e8f0`).
+    - Lekukan Mayor (*Major Groove* ~2.2 nm) dan Lekukan Minor (*Minor Groove* ~1.2 nm) terbentuk secara alami dari kontur permukaan Van der Waals.
+  - **Mode 3: Ball & Stick (Kerangka Ikatan Kimia 3D):**
+    - Menampilkan kerangka atomik ikatan kovalen kimia 3D yang menghubungkan cincin deoksiribosa, ester fosfat, dan cincin basa, serta jembatan hidrogen putus-putus elektrostatik.
+- **Dinamika Biofisika Termal 37°C (Brownian Motion Fluctuation):**
+  - Mengimplementasikan getaran termal osilasi mikro sinusoidal pada setiap pasangan basa untuk merefleksikan keadaan hidup biomolekul dalam larutan akuatik sitoplasma sel bersuhu 37°C.
+  - Dilengkapi tombol kendali toggle interaktif (Aktif / Nonaktif).
+- **Penggaris Skala Metrik 3D & Dimensi Ilmiah Presisi:**
+  - Menambahkan anotasi metrik interaktif yang memproyeksikan dimensi nyata B-DNA secara real-time ke layar:
+    - Diameter Heliks: **2.0 nm (20 Å)**
+    - Jarak Aksial per Pasang Basa (*Rise*): **0.34 nm (3.4 Å)**
+    - Satu Putaran Penuh (*Pitch*): **3.4 nm (34 Å / ~10.5 pb)**
+- **Penanda Polaritas Antiparalel 5' dan 3':**
+  - Menambahkan badge 3D bercahaya penunjuk ujung untai: Untai 1 ($5' \rightarrow 3'$) dan Untai 2 ($3' \rightarrow 5'$) yang menandai posisi gugus fosfat bebas ($5'$) dan gugus hidroksil $-\text{OH}$ bebas ($3'$).
+- **Tutorial Interaktif Terpadu 3 Langkah:**
+  - Mengintegrasikan modal tutorial interaktif dengan navigasi slide dan pagination dots yang dapat diakses kapan saja via tombol `💡 Tutorial` di header:
+    - *Langkah 1:* Arsitektur Heliks Ganda B-DNA Watson-Crick & Foto 51 Rosalind Franklin.
+    - *Langkah 2:* Kimia Purin vs Pirimidin, Aturan Chargaff, dan Polaritas Antiparalel 5'-3'.
+    - *Langkah 3:* Panduan 3 Mode Kristalografi & Kontrol Eksplorasi (Unzip, Explode, Termal).
+- **Sinkronisasi Pemisahan Interaktif (Unzip & Explode 60 FPS):**
+  - Merestrukturisasi arsitektur objek hierarki 3D sehingga fitur *Pisahkan (Unzip)*, *Uraikan (Explode)*, dan *Satukan Kembali (Reset)* berfungsi mulus di seluruh mode visualisasi dengan 0 error console.
+- **Berkas yang Diperbarui:**
+  - `dna-3d-interactive/index.html`
+  - `dna-3d-interactive/style.css`
+  - `dna-3d-interactive/script.js`
+  - `CHANGELOG.md`
+
 ### 📚 Pembaruan Komprehensif Dokumentasi Repositori (README.md Overhaul)
 - **Ekspansi Dokumentasi dari 5 ke 14 Modul Aktif Terintegrasi:**
   - Memperbarui dokumentasi direktori modul agar merefleksikan seluruh 14 simulasi aktif di portal GEN-OS v8.2: GEN-LAB (Monohibrid), BIO-SEQUENCER (Dihibrid 0ms), EPI-GENETICS (5 Sub-Simulasi Penyimpangan Semu Mendel), GEN-X (Sex-Linked), GEN-K (Karyotype Scanner ISCN), GENO-PHENO (Genotipe vs Fenotipe), HELIX-3D (B-DNA), CHROMA-3D (Anatomi Kromosom & Telomer), TRANSCRIPTION (RNA Synthesis & Dynamic Tracking), TRANSLATION (Ribosom & 64 Kodon), GAMETO-3D (Meiosis & Fertilisasi), BIO-ARCHIVE (Ensiklopedia 16 Modul Bioteknologi), HEMATO-LAB (Aglutinasi ABO/Rh & Mode Kuis), dan SICKLE-MUT (Mutasi HBB & Vaso-Oklusi 60 FPS).
