@@ -6,6 +6,20 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📚 Pembaruan Komprehensif Dokumentasi Repositori (README.md Overhaul)
+- **Ekspansi Dokumentasi dari 5 ke 14 Modul Aktif Terintegrasi:**
+  - Memperbarui dokumentasi direktori modul agar merefleksikan seluruh 14 simulasi aktif di portal GEN-OS v8.2: GEN-LAB (Monohibrid), BIO-SEQUENCER (Dihibrid 0ms), EPI-GENETICS (5 Sub-Simulasi Penyimpangan Semu Mendel), GEN-X (Sex-Linked), GEN-K (Karyotype Scanner ISCN), GENO-PHENO (Genotipe vs Fenotipe), HELIX-3D (B-DNA), CHROMA-3D (Anatomi Kromosom & Telomer), TRANSCRIPTION (RNA Synthesis & Dynamic Tracking), TRANSLATION (Ribosom & 64 Kodon), GAMETO-3D (Meiosis & Fertilisasi), BIO-ARCHIVE (Ensiklopedia 16 Modul Bioteknologi), HEMATO-LAB (Aglutinasi ABO/Rh & Mode Kuis), dan SICKLE-MUT (Mutasi HBB & Vaso-Oklusi 60 FPS).
+- **Dokumentasi Peningkatan Performa & Fitur Baru (Upgrade Highlights):**
+  - Mendokumentasikan transformasi arsitektur antarmuka Cyberpunk Darkfield & Frosted Glassmorphism anti-washout.
+  - Mendokumentasikan optimalisasi mobile GPU 60 FPS (`backdrop-filter` fallback selektif dan penyembunyian ornamen blur berat).
+  - Mendokumentasikan integrasi tutorial interaktif pada setiap modul, mesin simulasi Canvas 60 FPS, dan batch DOM rendering 0 ms.
+- **Penyelarasan Konteks Kurikulum & Indikator Berpikir Kritis:**
+  - Menyertakan tabel pemetaan 5 indikator berpikir kritis (Facione, 2015: Interpretasi, Analisis, Evaluasi, Inferensi, Eksplanasi) dengan fitur konkret di dalam simulasi GEN-OS.
+  - Memperbarui panduan penyematan iframe ke E-Module Flipbook serta petunjuk eksekusi lokal mandiri.
+- **Berkas yang Diperbarui:**
+  - `README.md`
+  - `CHANGELOG.md`
+
 ### 🩸 Perbaikan Layout Teks Terpotong & Mesin Simulasi Aliran Darah Canvas 60 FPS (SICKLE-MUT)
 - **Eliminasi Teks & Tooltip Terpotong (*Vertical Overflow Clipping*):**
   - Menambahkan ruang kepala vertikal `pt-10 pb-2` pada kontainer `overflow-x-auto` di modul sekuens DNA normal dan mutan, serta `pt-11` pada rantai asam amino translasi, sehingga tooltip floating (`.tooltip-custom`) memiliki area vertikal leluasa dan tidak lagi terpotong garis tepi batas atas kontainer.
