@@ -1451,11 +1451,21 @@ function toScreenPosition(vector3D, domElement, offsetX = 0, offsetY = 0) {
     if (!domElement) return;
     const worldPos = vector3D.clone().applyMatrix4(dnaGroup.matrixWorld);
     worldPos.project(camera);
-    const x = (worldPos.x * 0.5 + 0.5) * window.innerWidth + offsetX;
-    const y = (-(worldPos.y * 0.5) + 0.5) * window.innerHeight + offsetY;
+    let x = (worldPos.x * 0.5 + 0.5) * window.innerWidth + offsetX;
+    let y = (-(worldPos.y * 0.5) + 0.5) * window.innerHeight + offsetY;
     if (worldPos.z > 1.0) {
         domElement.style.opacity = '0';
     } else {
+        const isMobile = window.innerWidth <= 768;
+        const elWidth = domElement.offsetWidth || (isMobile ? 100 : 130);
+        const elHeight = domElement.offsetHeight || (isMobile ? 30 : 38);
+        const minX = 6;
+        const maxX = Math.max(minX, window.innerWidth - elWidth - 6);
+        const minY = isMobile ? 65 : 10;
+        const maxY = Math.max(minY, window.innerHeight - elHeight - (isMobile ? 68 : 15));
+        x = Math.max(minX, Math.min(maxX, x));
+        y = Math.max(minY, Math.min(maxY, y));
+
         domElement.style.opacity = '1';
         domElement.style.transform = `translate(${x}px, ${y}px)`;
     }

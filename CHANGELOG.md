@@ -6,6 +6,27 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 📱 Perbaikan Layout & Modal Meluber Keluar Layar Mobile (DNA 3D Interactive)
+- **Eliminasi Overflow Header pada Layar Sempit:**
+  - Menyembunyikan tombol duplikat `⚙️ Menu` dan `🔬 Detail` di `#app-header` khusus pada mode mobile (`max-width: 768px`) karena fungsi navigasi tersebut sudah tersedia lengkap dan ergonomis pada dock bawah jempol (`#mobile-dock`).
+  - Mencegah tombol aksi header saling bertabrakan atau terpotong di tepi kanan layar ponsel, serta memberikan ruang napas yang luas bagi judul modul dan tombol `💡 Tutorial`.
+  - Menjadikan baris navigasi atas (`.header-nav-row`) bersifat adaptif `flex-wrap: wrap` dengan batas `max-width` dan `overflow: hidden` pada kontainer.
+- **Optimalisasi Presisi Lebar Mobile Dock Bawah:**
+  - Menetapkan lebar `#mobile-dock` berbasis `width: calc(100vw - 20px); max-width: 410px;` dengan distribusi tombol seimbang `flex: 1 1 0; min-width: 0;`.
+  - Menyesuaikan *padding* dan *gap* tombol dock pada ponsel berdimensi ramping (hingga 320px–360px) sehingga keempat tombol (`⚡ Pisahkan`, `💥 Uraikan`, `⚙️ Menu`, `🔬 Detail`) tertata rapi 100% di dalam layar tanpa ada teks atau tombol yang terpotong garis tepi layar.
+- **Refaktorisasi Modal Tutorial dan Bottom Drawers Anti-Clipping:**
+  - Modal `#tutorial-modal` dirombak menggunakan struktur tata letak flex vertikal terpusat (`display: flex; flex-direction: column; overflow: hidden;`) dengan batas ketinggian dinamis `max-height: 86vh / 86dvh`.
+  - Area isi `.tutorial-body` kini dapat digulir (*scrollable*) mandiri secara halus dengan `-webkit-overflow-scrolling: touch`, sementara header (lencana judul & tombol tutup `×`) serta footer (titik pagination & tombol navigasi) terkunci tetap di dalam batas layar.
+  - Membatasi ukuran lencana judul tutorial (`font-size: clamp(0.6rem, 2.5vw, 0.72rem); text-overflow: ellipsis;`) agar tombol tutup `×` tidak terdesak ke luar viewport.
+  - Menambahkan pembatasan luapan `overflow-y: auto !important; overflow-x: hidden !important; overscroll-behavior: contain;` pada `.responsive-drawer` (`#controls-panel` dan `#inspector-panel`).
+- **Clamping Koordinat Proyeksi Anotasi 3D:**
+  - Mengimplementasikan kalkulasi pembatasan posisi koordinat layar (*clamping*) pada fungsi `toScreenPosition` di `script.js` dan properti `overflow: hidden !important;` pada `#annotations-overlay`. Kotak anotasi lekukan mayor/minor, pasangan basa, dan polaritas 5'-3' dipastikan selalu berada di dalam zona aman layar ponsel tanpa meluber keluar tepi kanan atau tertutup header/dock.
+- **Berkas yang Diperbarui:**
+  - `dna-3d-interactive/index.html`
+  - `dna-3d-interactive/style.css`
+  - `dna-3d-interactive/script.js`
+  - `CHANGELOG.md`
+
 ### 🎨 Desain Visual Kustom & Elemen Khas Sitogenetika Modul TRISOMY-21 (Sindrom Down)
 - **Palet Warna Kustom & Darkfield Sitogenetika:**
   - Mengimplementasikan latar belakang kustom *Deep Cytogenetics Darkfield Obsidian* (`#030718`) dengan paduan 4 lapis *radial gradient* bernuansa neon: Biru Safir Laboratorium (`#2563eb`), Emas Kesadaran Sindrom Down (*Awareness Gold* `#f59e0b`), Sian Pewarnaan Giemsa (`#06b6d4`), dan Nila Spindel Meiosis (`#6366f1`).
