@@ -6,6 +6,27 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🎨 Desain Visual Kustom & Elemen Khas Sitogenetika Modul TRISOMY-21 (Sindrom Down)
+- **Palet Warna Kustom & Darkfield Sitogenetika:**
+  - Mengimplementasikan latar belakang kustom *Deep Cytogenetics Darkfield Obsidian* (`#030718`) dengan paduan 4 lapis *radial gradient* bernuansa neon: Biru Safir Laboratorium (`#2563eb`), Emas Kesadaran Sindrom Down (*Awareness Gold* `#f59e0b`), Sian Pewarnaan Giemsa (`#06b6d4`), dan Nila Spindel Meiosis (`#6366f1`).
+  - Menambahkan grid matriks kariotipe 34px × 34px dan lapisan *CRT scanlines overlay* untuk memberikan atmosfer instrumen laboratorium sitogenetika klinis modern.
+  - Memadukan skema warna resmi Hari Sindrom Down Sedunia (Royal Blue & Amber Gold) pada aksen gradien judul `TRISOMY-21` dan tombol navigasi aktif.
+- **Elemen Ciri Khas Biologis & Sitogenetika Sindrom Down:**
+  - **Trio Kromosom Akrosentrik 21 Melayang (*Floating Triplet Chromosomes*):** Menampilkan visualisasi 3 kromosom akrosentrik (2 kromosom homolog biru/sian + 1 kromosom ekstra ke-3 bercahaya emas dengan lencana penanda `+21`), memvisualisasikan kelebihan materi genetik (*gene dosage* +50%) secara artistik dan saintifik.
+  - **Aparatus Spindel Meiosis Nondisjunction:** Visualisasi vektor mikrotubulus pembelahan sel dengan sentrosom kutub (aster) dan kegagalan segregasi kromosom homologous/sister chromatid yang bermigrasi asimetris ke satu kutub gamet ($n+1$).
+  - **Batang Ideogram Pita G-Banding Kromosom 21:** Menampilkan peta pita kromosom akrosentrik ber-satelit (NOR) dengan sorotan pita emas pada *Down Syndrome Critical Region* (DSCR) di lokus 21q22.13.
+  - **Pita Kesadaran Biru-Kuning (*Down Syndrome Awareness Ribbon*):** Simbol global pita kesadaran Sindrom Down yang melayang secara halus (*floating ambient animation*).
+  - **Lencana Telemetri Sitogenetika Mengambang:** Menampilkan penanda ilmiah melayang seperti *[CHR 21 // 21q22.13 DSCR]*, *[MEIOTIC NONDISJUNCTION • 47,XX,+21]*, *[GENE DOSAGE: DYRK1A • APP • SOD1 (+50%)]*, *[ROBERTSOMIAN TRANSLOCATION rob(14;21)]*, dan *[MOSAIC TRISOMY 21]*.
+- **Peningkatan Estetika Kaca Frosted & Keterbacaan Teks:**
+  - Panel antarmuka ditingkatkan ke kaca *Frosted Sapphire-Gold Obsidian Glass* (`rgba(10, 16, 32, 0.88)`) dengan aksen garis spekular gradien di tepi atas (*top border highlight*).
+  - Tipografi berkontras tinggi anti-washout dengan teks `#f1f5f9` dan bayangan teks lembut (*text-shadow*) untuk keterbacaan maksimal di atas latar dinamis.
+  - Navigasi langkah (*Step Navigation*) responsif sentuhan dengan auto-scroll horizontal terpusat (*scrollIntoView center*) saat berpindah tahapan di perangkat mobile.
+  - Koreksi presisi nomenklatur sitogenetika: Memperbaiki kesalahan ketik label dari "METAMORFOSE" menjadi "METAFASE" pada pengontrol tahapan Meiosis I dan peta pita G-banding kariotipe metafase agar 100% akurat sesuai kaidah sitogenetika.
+  - Optimasi render GPU untuk perangkat seluler dengan fallback warna solid yang ringan demi menjaga target 60 FPS.
+- **Berkas yang Diperbarui:**
+  - `Simulasi Mutasi Genetik/Simulasi-Sindrom-Down.html`
+  - `CHANGELOG.md`
+
 ### 🔬 Peluncuran Modul TRISOMY-21: Autosomal Mutation Analyzer (Sindrom Down)
 - **Latar Belakang & Landasan Ilmiah:**
   - Mengimplementasikan modul simulasi mutasi kromosom autosom (aneuploidi) untuk Sindrom Down (Trisomi 21) secara independen, melengkapi simulasi mutasi genetik tingkat molekuler (Anemia Sel Sabit / SICKLE-MUT).

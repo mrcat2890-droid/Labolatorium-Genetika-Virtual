@@ -56,32 +56,165 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; }
-        body { background-color: #030712; color: #e2e8f0; margin: 0; font-family: 'Rajdhani', sans-serif; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        
+        /* Signature Trisomy-21 Cytogenetics Darkfield Palette & Karyotype Matrix Grid */
+        body {
+            background-color: #030718;
+            background-image:
+                radial-gradient(ellipse at 12% 16%, rgba(37, 99, 235, 0.22) 0%, transparent 48%),
+                radial-gradient(ellipse at 88% 75%, rgba(245, 158, 11, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 50% 40%, rgba(6, 182, 212, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 35% 92%, rgba(99, 102, 241, 0.15) 0%, transparent 55%),
+                linear-gradient(rgba(59, 130, 246, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.035) 1px, transparent 1px);
+            background-size: 100%, 100%, 100%, 100%, 34px 34px, 34px 34px;
+            color: #cbd5e1;
+            margin: 0;
+            font-family: 'Rajdhani', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
 
+        /* Scanlines Overlay */
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 40;
+            background: linear-gradient(rgba(18, 16, 24, 0) 50%, rgba(0, 0, 0, 0.24) 50%);
+            background-size: 100% 4px;
+            opacity: 0.16;
+        }
+
+        /* Trisomy-21 Signature Floating Background Animations */
+        @keyframes trisomyDriftAndTumble {
+            0% { transform: translateY(105vh) rotate(-18deg) scale(0.85); opacity: 0; }
+            15% { opacity: 0.5; }
+            50% { transform: translateY(50vh) rotate(10deg) scale(1.04); opacity: 0.8; }
+            85% { opacity: 0.5; }
+            100% { transform: translateY(-14vh) rotate(32deg) scale(0.9); opacity: 0; }
+        }
+
+        @keyframes spindleDrift {
+            0% { transform: translateY(105vh) rotate(-8deg) scale(0.9); opacity: 0; }
+            20% { opacity: 0.4; }
+            50% { transform: translateY(48vh) rotate(4deg) scale(1.02); opacity: 0.7; }
+            80% { opacity: 0.4; }
+            100% { transform: translateY(-12vh) rotate(14deg) scale(0.9); opacity: 0; }
+        }
+
+        @keyframes ideogramDrift {
+            0% { transform: translateY(105vh) rotate(5deg) scale(0.9); opacity: 0; }
+            25% { opacity: 0.35; }
+            50% { transform: translateY(52vh) rotate(-6deg) scale(1.05); opacity: 0.65; }
+            75% { opacity: 0.35; }
+            100% { transform: translateY(-12vh) rotate(8deg) scale(0.9); opacity: 0; }
+        }
+
+        @keyframes ribbonDrift {
+            0% { transform: translateY(105vh) rotate(-20deg) scale(0.85); opacity: 0; }
+            20% { opacity: 0.45; }
+            50% { transform: translateY(46vh) rotate(15deg) scale(1.05); opacity: 0.75; }
+            80% { opacity: 0.45; }
+            100% { transform: translateY(-12vh) rotate(35deg) scale(0.9); opacity: 0; }
+        }
+
+        @keyframes telemetryPulse {
+            0%, 100% { opacity: 0.28; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.03); filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.55)); }
+        }
+
+        .ambient-trisomy {
+            position: absolute;
+            pointer-events: none;
+            animation: trisomyDriftAndTumble linear infinite;
+        }
+
+        .ambient-spindle {
+            position: absolute;
+            pointer-events: none;
+            animation: spindleDrift linear infinite;
+        }
+
+        .ambient-ideogram {
+            position: absolute;
+            pointer-events: none;
+            animation: ideogramDrift linear infinite;
+        }
+
+        .ambient-ribbon {
+            position: absolute;
+            pointer-events: none;
+            animation: ribbonDrift linear infinite;
+        }
+
+        .telemetry-ambient {
+            position: absolute;
+            pointer-events: none;
+            animation: telemetryPulse ease-in-out infinite;
+        }
+
+        /* Custom Scrollbar with Sapphire Gold Accent */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #030718; }
+        ::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.4); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
+
+        /* High-End Frosted Glassmorphism Panel (Trisomy Sapphire-Gold Glass Effect) */
         .glass-panel {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.75) 100%);
-            backdrop-filter: blur(20px) saturate(150%);
-            -webkit-backdrop-filter: blur(20px) saturate(150%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(10, 16, 32, 0.88);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1.5px solid rgba(99, 102, 241, 0.32);
             border-radius: 1rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.7), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+            position: relative;
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.65), rgba(245, 158, 11, 0.5), transparent);
+            pointer-events: none;
+            border-radius: 1rem 1rem 0 0;
+        }
+
+        /* Frosted Glass Translucency for Sub-panels and Internal Cards */
+        [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-slate-800/"] {
+            background-color: rgba(13, 20, 38, 0.82) !important;
+            backdrop-filter: blur(16px) saturate(160%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+            border-color: rgba(99, 102, 241, 0.22) !important;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
+        }
+
+        /* High Contrast Typography Overrides - Anti-Washout */
+        p, .text-slate-300 {
+            color: #f1f5f9 !important;
+        }
+        .text-slate-400 {
+            color: #cbd5e1 !important;
+        }
+        h1, h2, h3, h4 {
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
         }
 
         /* Tutorial Overlay */
         .tutorial-overlay {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 100;
+            position: fixed; inset: 0; background: rgba(3, 7, 24, 0.88);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 100;
             display: flex; align-items: center; justify-content: center; padding: 1rem;
         }
         .tutorial-card {
             max-width: 740px; width: 100%; max-height: 90vh; overflow-y: auto;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.97), rgba(30, 41, 59, 0.95));
-            border: 1px solid rgba(99, 102, 241, 0.35); border-radius: 1.5rem; padding: 2rem;
-            box-shadow: 0 0 60px rgba(99, 102, 241, 0.2), 0 25px 50px rgba(0,0,0,0.6);
+            background: linear-gradient(135deg, rgba(10, 16, 32, 0.98), rgba(15, 23, 48, 0.96));
+            border: 1.5px solid rgba(59, 130, 246, 0.45); border-radius: 1.5rem; padding: 2rem;
+            box-shadow: 0 0 60px rgba(59, 130, 246, 0.25), 0 25px 50px rgba(0,0,0,0.7);
         }
 
         /* Step Nav Buttons */
@@ -90,16 +223,17 @@
             font-size: 0.65rem; font-weight: 700; letter-spacing: 1.2px;
             transition: all 0.3s ease; cursor: pointer; border: 1px solid transparent; white-space: nowrap;
             min-height: 40px; display: inline-flex; align-items: center; justify-content: center;
+            touch-action: manipulation;
         }
         .step-btn.active {
-            background: rgba(99, 102, 241, 0.25); border-color: rgba(99, 102, 241, 0.6);
-            color: #a5b4fc; box-shadow: 0 0 18px rgba(99, 102, 241, 0.3);
+            background: rgba(59, 130, 246, 0.28); border-color: rgba(245, 158, 11, 0.7);
+            color: #fef08a; box-shadow: 0 0 18px rgba(59, 130, 246, 0.35), 0 0 10px rgba(245, 158, 11, 0.2);
         }
         .step-btn:not(.active) {
             background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); color: #94a3b8;
         }
         .step-btn:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.25); color: #f1f5f9;
+            background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.35); color: #f1f5f9;
         }
 
         .progress-track { height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
@@ -216,7 +350,19 @@
         }
 
         @media (max-width: 768px) {
-            .glass-panel { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+            *, *::before, *::after {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            .glass-panel {
+                background-color: rgba(10, 16, 32, 0.95) !important;
+                padding: 1rem !important;
+            }
+            .tutorial-card {
+                padding: 1.25rem 1rem !important;
+                border-radius: 1.25rem !important;
+                max-height: 88dvh !important;
+            }
             .risk-bar-container { height: 140px; }
             .risk-bar { min-width: 18px; }
             .dots-grid { grid-template-columns: repeat(25, 1fr); }
@@ -226,6 +372,223 @@
 </head>
 
 <body>
+    <!-- Scanlines Screen Overlay -->
+    <div class="scanlines"></div>
+
+    <!-- SVG Gradients Definition for Ambient Background -->
+    <svg class="hidden" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <!-- Sapphire Blue Chromosome Gradient -->
+            <linearGradient id="bgChrSapphire" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#93c5fd" stop-opacity="0.95"/>
+                <stop offset="45%" stop-color="#3b82f6" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="#1d4ed8" stop-opacity="0.95"/>
+            </linearGradient>
+
+            <!-- Giemsa Cyan Chromosome Gradient -->
+            <linearGradient id="bgChrCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#7dd3fc" stop-opacity="0.95"/>
+                <stop offset="45%" stop-color="#0284c7" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="#075985" stop-opacity="0.95"/>
+            </linearGradient>
+
+            <!-- Trisomy Extra Chromosome Awareness Gold Gradient -->
+            <linearGradient id="bgChrGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fef08a" stop-opacity="0.95"/>
+                <stop offset="35%" stop-color="#fbbf24" stop-opacity="0.9"/>
+                <stop offset="75%" stop-color="#f59e0b" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="#b45309" stop-opacity="0.95"/>
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <!-- Signature TRISOMY-21 Animated Background (Acrocentric Triplet Chromosomes, Meiotic Spindle, G-Banding Ideograms, Telemetry) -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <!-- Ambient Neon Glow Core -->
+        <div class="absolute -top-24 -left-24 w-[34rem] h-[34rem] bg-blue-600/20 rounded-full filter blur-[110px] pointer-events-none hidden md:block"></div>
+        <div class="absolute top-1/2 -right-28 w-[32rem] h-[32rem] bg-amber-500/18 rounded-full filter blur-[115px] pointer-events-none hidden md:block"></div>
+        <div class="absolute -bottom-28 left-1/3 w-[36rem] h-[36rem] bg-cyan-600/15 rounded-full filter blur-[125px] pointer-events-none hidden md:block"></div>
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[26rem] h-[26rem] bg-indigo-700/15 rounded-full filter blur-[100px] pointer-events-none hidden md:block"></div>
+
+        <!-- Floating Triplet Chromosome 21 #1 (Prominent Trio Left - 2 Blue + 1 Gold Extra #21) -->
+        <div class="ambient-trisomy" style="left: 6%; animation-duration: 27s; animation-delay: 0s;">
+            <svg class="w-18 h-32 drop-shadow-[0_0_18px_rgba(59,130,246,0.65)]" viewBox="0 0 72 120" fill="none">
+                <!-- Chr 21 #A (Sapphire) -->
+                <g transform="translate(4, 8) rotate(-7, 10, 50)">
+                    <circle cx="10" cy="5" r="3.2" fill="#60a5fa" opacity="0.85"/>
+                    <line x1="10" y1="8" x2="10" y2="13" stroke="#60a5fa" stroke-width="1.8"/>
+                    <ellipse cx="10" cy="15" rx="3" ry="1.8" fill="#1e3a8a"/>
+                    <rect x="6.5" y="17" width="7" height="74" rx="3.5" fill="url(#bgChrSapphire)"/>
+                    <rect x="7" y="32" width="6" height="8" fill="#172554" opacity="0.9"/>
+                    <rect x="7" y="52" width="6" height="14" fill="#1d4ed8" opacity="0.8"/>
+                    <rect x="7" y="74" width="6" height="9" fill="#3b82f6" opacity="0.9"/>
+                </g>
+                <!-- Chr 21 #B (Cyan) -->
+                <g transform="translate(26, 12) rotate(2, 10, 50)">
+                    <circle cx="10" cy="5" r="3.2" fill="#38bdf8" opacity="0.85"/>
+                    <line x1="10" y1="8" x2="10" y2="13" stroke="#38bdf8" stroke-width="1.8"/>
+                    <ellipse cx="10" cy="15" rx="3" ry="1.8" fill="#0369a1"/>
+                    <rect x="6.5" y="17" width="7" height="74" rx="3.5" fill="url(#bgChrCyan)"/>
+                    <rect x="7" y="32" width="6" height="8" fill="#082f49" opacity="0.9"/>
+                    <rect x="7" y="52" width="6" height="14" fill="#0284c7" opacity="0.8"/>
+                    <rect x="7" y="74" width="6" height="9" fill="#0ea5e9" opacity="0.9"/>
+                </g>
+                <!-- Chr 21 #C (Extra 3rd Chromosome in Radiant Awareness Gold) -->
+                <g transform="translate(47, 4) rotate(11, 10, 50)">
+                    <circle cx="10" cy="5" r="3.6" fill="#fde047" opacity="0.95"/>
+                    <line x1="10" y1="8.5" x2="10" y2="13" stroke="#fde047" stroke-width="2"/>
+                    <ellipse cx="10" cy="15" rx="3.2" ry="1.8" fill="#78350f"/>
+                    <rect x="6.5" y="17" width="7.2" height="75" rx="3.6" fill="url(#bgChrGold)"/>
+                    <rect x="7" y="32" width="6.2" height="8" fill="#451a03" opacity="0.9"/>
+                    <rect x="7" y="52" width="6.2" height="15" fill="#d97706" opacity="0.85"/>
+                    <rect x="7" y="74" width="6.2" height="10" fill="#fef08a" opacity="0.95"/>
+                    <!-- "+21" Badge -->
+                    <circle cx="19" cy="20" r="5" fill="#f59e0b" filter="drop-shadow(0 0 5px #fbbf24)"/>
+                    <text x="19" y="22.5" text-anchor="middle" font-family="'Fira Code', monospace" font-size="7" font-weight="bold" fill="#000">+</text>
+                </g>
+            </svg>
+        </div>
+
+        <!-- Floating Triplet Chromosome 21 #2 (Right Upper Quadrant) -->
+        <div class="ambient-trisomy" style="left: 82%; animation-duration: 30s; animation-delay: 8s;">
+            <svg class="w-16 h-28 drop-shadow-[0_0_16px_rgba(245,158,11,0.55)]" viewBox="0 0 72 120" fill="none">
+                <g transform="translate(4, 8) rotate(-5, 10, 50)">
+                    <circle cx="10" cy="5" r="3.2" fill="#60a5fa" opacity="0.85"/>
+                    <line x1="10" y1="8" x2="10" y2="13" stroke="#60a5fa" stroke-width="1.8"/>
+                    <ellipse cx="10" cy="15" rx="3" ry="1.8" fill="#1e3a8a"/>
+                    <rect x="6.5" y="17" width="7" height="74" rx="3.5" fill="url(#bgChrSapphire)"/>
+                </g>
+                <g transform="translate(26, 11) rotate(1, 10, 50)">
+                    <circle cx="10" cy="5" r="3.2" fill="#38bdf8" opacity="0.85"/>
+                    <line x1="10" y1="8" x2="10" y2="13" stroke="#38bdf8" stroke-width="1.8"/>
+                    <ellipse cx="10" cy="15" rx="3" ry="1.8" fill="#0369a1"/>
+                    <rect x="6.5" y="17" width="7" height="74" rx="3.5" fill="url(#bgChrCyan)"/>
+                </g>
+                <g transform="translate(47, 5) rotate(10, 10, 50)">
+                    <circle cx="10" cy="5" r="3.6" fill="#fde047" opacity="0.95"/>
+                    <line x1="10" y1="8.5" x2="10" y2="13" stroke="#fde047" stroke-width="2"/>
+                    <ellipse cx="10" cy="15" rx="3.2" ry="1.8" fill="#78350f"/>
+                    <rect x="6.5" y="17" width="7.2" height="75" rx="3.6" fill="url(#bgChrGold)"/>
+                    <circle cx="19" cy="20" r="5" fill="#f59e0b"/>
+                    <text x="19" y="22.5" text-anchor="middle" font-family="'Fira Code', monospace" font-size="7" font-weight="bold" fill="#000">+</text>
+                </g>
+            </svg>
+        </div>
+
+        <!-- Floating Triplet Chromosome 21 #3 (Center Lower Drift) -->
+        <div class="ambient-trisomy" style="left: 44%; animation-duration: 33s; animation-delay: 16s;">
+            <svg class="w-14 h-26 drop-shadow-[0_0_14px_rgba(99,102,241,0.5)]" viewBox="0 0 72 120" fill="none">
+                <g transform="translate(5, 7) rotate(-6, 10, 50)">
+                    <rect x="6.5" y="17" width="7" height="74" rx="3.5" fill="url(#bgChrSapphire)"/>
+                </g>
+                <g transform="translate(26, 10) rotate(2, 10, 50)">
+                    <rect x="6.5" y="17" width="7" height="74" rx="3.5" fill="url(#bgChrCyan)"/>
+                </g>
+                <g transform="translate(46, 4) rotate(9, 10, 50)">
+                    <rect x="6.5" y="17" width="7.2" height="75" rx="3.6" fill="url(#bgChrGold)"/>
+                </g>
+            </svg>
+        </div>
+
+        <!-- Floating Meiotic Spindle Nondisjunction Apparatus #1 (Left-Center) -->
+        <div class="ambient-spindle" style="left: 20%; animation-duration: 31s; animation-delay: 4s;">
+            <svg class="w-28 h-40 drop-shadow-[0_0_16px_rgba(99,102,241,0.45)]" viewBox="0 0 100 140" fill="none">
+                <!-- Upper Polar Centrosome / Aster -->
+                <circle cx="50" cy="14" r="4.5" fill="#818cf8"/>
+                <circle cx="50" cy="14" r="8" stroke="#818cf8" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>
+                <line x1="50" y1="14" x2="36" y2="6" stroke="#a5b4fc" stroke-width="1" opacity="0.4"/>
+                <line x1="50" y1="14" x2="64" y2="6" stroke="#a5b4fc" stroke-width="1" opacity="0.4"/>
+
+                <!-- Lower Polar Centrosome / Aster -->
+                <circle cx="50" cy="126" r="4.5" fill="#818cf8"/>
+                <circle cx="50" cy="126" r="8" stroke="#818cf8" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>
+
+                <!-- Microtubule Spindle Fibers (Nondisjunction Asymmetry) -->
+                <path d="M 50 14 Q 22 70 50 126" stroke="rgba(99,102,241,0.3)" stroke-width="1.5" stroke-dasharray="3 3"/>
+                <path d="M 50 14 Q 35 70 50 126" stroke="rgba(59,130,246,0.45)" stroke-width="1.5"/>
+                <path d="M 50 14 Q 65 70 50 126" stroke="rgba(59,130,246,0.45)" stroke-width="1.5"/>
+                <path d="M 50 14 Q 78 70 50 126" stroke="rgba(99,102,241,0.3)" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+                <!-- 2 Chromosomes Segregated to Top Pole (n+1 Disomic Gamete) -->
+                <g transform="translate(35, 38) rotate(-14)">
+                    <rect x="0" y="0" width="5.5" height="22" rx="2.7" fill="#3b82f6"/>
+                </g>
+                <g transform="translate(50, 36) rotate(12)">
+                    <rect x="0" y="0" width="5.5" height="22" rx="2.7" fill="#f59e0b"/>
+                </g>
+                <circle cx="46" cy="48" r="2.5" fill="#ef4444" opacity="0.9"/>
+                <text x="50" y="96" text-anchor="middle" font-family="'Fira Code', monospace" font-size="6.5" fill="rgba(245,158,11,0.7)" font-weight="bold">MEIOTIC ERROR</text>
+            </svg>
+        </div>
+
+        <!-- Floating Meiotic Spindle Nondisjunction Apparatus #2 (Right-Center) -->
+        <div class="ambient-spindle" style="left: 68%; animation-duration: 35s; animation-delay: 13s;">
+            <svg class="w-24 h-36 drop-shadow-[0_0_14px_rgba(6,182,212,0.4)]" viewBox="0 0 100 140" fill="none">
+                <circle cx="50" cy="14" r="4" fill="#38bdf8"/>
+                <circle cx="50" cy="126" r="4" fill="#38bdf8"/>
+                <path d="M 50 14 Q 28 70 50 126" stroke="rgba(6,182,212,0.35)" stroke-width="1.2" stroke-dasharray="3 3"/>
+                <path d="M 50 14 Q 72 70 50 126" stroke="rgba(6,182,212,0.35)" stroke-width="1.2" stroke-dasharray="3 3"/>
+                <g transform="translate(42, 38)">
+                    <rect x="0" y="0" width="5" height="20" rx="2.5" fill="#0284c7"/>
+                </g>
+                <g transform="translate(52, 37)">
+                    <rect x="0" y="0" width="5" height="20" rx="2.5" fill="#f59e0b"/>
+                </g>
+            </svg>
+        </div>
+
+        <!-- Floating Chromosome 21 G-Banding Ideogram Bar (Showing DSCR 21q22.13) -->
+        <div class="ambient-ideogram" style="left: 56%; animation-duration: 32s; animation-delay: 6s;">
+            <svg class="w-10 h-44 drop-shadow-[0_0_14px_rgba(6,182,212,0.45)]" viewBox="0 0 40 160" fill="none">
+                <rect x="12" y="8" width="16" height="144" rx="8" fill="rgba(10,16,32,0.85)" stroke="#06b6d4" stroke-width="1.5"/>
+                <path d="M 12 36 Q 20 40 12 44" fill="#030718"/>
+                <path d="M 28 36 Q 20 40 28 44" fill="#030718"/>
+                <circle cx="20" cy="14" r="3.5" fill="#38bdf8"/>
+                <rect x="13.5" y="52" width="13" height="12" fill="#1e3a8a"/>
+                <rect x="13.5" y="74" width="13" height="22" fill="#0369a1"/>
+                <!-- DSCR 21q22.13 Highlight Band in Radiant Gold -->
+                <rect x="13" y="104" width="14" height="18" fill="#f59e0b" opacity="0.95"/>
+                <rect x="13.5" y="130" width="13" height="14" fill="#1e40af"/>
+                <text x="20" y="116" text-anchor="middle" font-family="'Fira Code', monospace" font-size="5.5" fill="#000" font-weight="bold">DSCR</text>
+            </svg>
+        </div>
+
+        <!-- Floating Down Syndrome Blue & Gold Awareness Ribbon (Universal Symbol) -->
+        <div class="ambient-ribbon" style="left: 32%; animation-duration: 29s; animation-delay: 11s;">
+            <svg class="w-14 h-22 drop-shadow-[0_0_16px_rgba(245,158,11,0.55)]" viewBox="0 0 60 90" fill="none">
+                <path d="M 14 76 C 10 50 18 32 30 14 C 36 22 42 34 46 50" stroke="#2563eb" stroke-width="6.5" stroke-linecap="round"/>
+                <path d="M 46 76 C 50 50 42 32 30 14 C 24 22 18 34 14 50" stroke="#fbbf24" stroke-width="6.5" stroke-linecap="round"/>
+                <circle cx="30" cy="36" r="3.5" fill="#ffffff" opacity="0.75"/>
+            </svg>
+        </div>
+
+        <!-- Ambient Scientific Telemetry Badges -->
+        <div class="telemetry-ambient top-[15%] left-[3%] font-mono text-[9px] sm:text-[10px] text-blue-400/40 tracking-widest flex items-center gap-1.5" style="animation-duration: 6.5s;">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping"></span>
+            [CHR 21 // 21q22.13 DSCR • AUTOSOMAL ANEUPLOIDY]
+        </div>
+
+        <div class="telemetry-ambient top-[36%] right-[4%] font-mono text-[9px] sm:text-[10px] text-amber-400/40 tracking-widest flex items-center gap-1.5" style="animation-duration: 7s; animation-delay: 2s;">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+            [MEIOTIC NONDISJUNCTION • 47,XX,+21 / 47,XY,+21]
+        </div>
+
+        <div class="telemetry-ambient bottom-[28%] left-[4%] font-mono text-[9px] sm:text-[10px] text-cyan-400/35 tracking-widest flex items-center gap-1.5" style="animation-duration: 7.5s; animation-delay: 4s;">
+            <span>🔬</span>
+            [GENE DOSAGE: DYRK1A • APP • SOD1 • RCAN1 (+50%)]
+        </div>
+
+        <div class="telemetry-ambient bottom-[16%] right-[5%] font-mono text-[9px] sm:text-[10px] text-purple-400/35 tracking-widest flex items-center gap-1.5" style="animation-duration: 6.8s; animation-delay: 1.5s;">
+            <span>🧬</span>
+            [ROBERTSOMIAN TRANSLOCATION rob(14;21)(q10;q10)]
+        </div>
+
+        <div class="telemetry-ambient bottom-[6%] left-[34%] font-mono text-[9px] sm:text-[10px] text-emerald-400/35 tracking-widest flex items-center gap-1.5" style="animation-duration: 8s; animation-delay: 3s;">
+            <span>🛡️</span>
+            [MOSAIC TRISOMY 21 • 46,XX / 47,XX,+21]
+        </div>
+    </div>
+
     <!-- TUTORIAL OVERLAY -->
     <div id="tutorial-overlay" class="tutorial-overlay">
         <div class="tutorial-card" id="tutorial-card"></div>
@@ -239,21 +602,23 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
                 </a>
                 <div>
-                    <h1 class="text-lg sm:text-xl font-display font-bold text-white tracking-wider">TRISOMY-<span class="text-indigo-400">21</span></h1>
-                    <p class="text-[9px] font-mono text-slate-500 tracking-[0.3em]">AUTOSOMAL MUTATION ANALYZER v2.0</p>
+                    <h1 class="text-lg sm:text-xl font-display font-bold text-white tracking-wider">
+                        TRISOMY-<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-amber-400">21</span>
+                    </h1>
+                    <p class="text-[9px] font-mono text-slate-400 tracking-[0.3em]">AUTOSOMAL MUTATION ANALYZER v2.0</p>
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <button onclick="showTutorial()" class="text-[10px] font-display font-bold tracking-widest px-3 py-1.5 rounded-lg border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 transition-all" title="Buka Tutorial">? TUTORIAL</button>
-                <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/10">
-                    <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
-                    <span class="text-[10px] font-mono text-indigo-300">ANEUPLOIDY DETECTED</span>
+                <button onclick="showTutorial()" class="text-[10px] font-display font-bold tracking-widest px-3 py-1.5 rounded-lg border border-amber-500/40 text-amber-300 hover:bg-amber-500/10 transition-all shadow-[0_0_12px_rgba(245,158,11,0.15)]" title="Buka Tutorial">? TUTORIAL</button>
+                <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/25">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                    <span class="text-[10px] font-mono text-blue-200">AUTOSOMAL ANEUPLOIDY DETECTED</span>
                 </div>
             </div>
         </header>
 
-        <nav class="px-4 sm:px-6 py-3 border-b border-white/5 bg-black/30 backdrop-blur-md overflow-x-auto">
-            <div class="flex gap-2 min-w-max">
+        <nav class="px-4 sm:px-6 py-3 border-b border-white/5 bg-black/30 backdrop-blur-md overflow-x-auto" style="-webkit-overflow-scrolling: touch;">
+            <div class="flex gap-2 min-w-max" id="step-nav-bar">
                 <button class="step-btn active" onclick="goToStep(0)" id="step-btn-0">01 OVERVIEW</button>
                 <button class="step-btn" onclick="goToStep(1)" id="step-btn-1">02 TIPE TRISOMI</button>
                 <button class="step-btn" onclick="goToStep(2)" id="step-btn-2">03 MEIOSIS</button>
@@ -476,7 +841,13 @@
         currentStep = step;
         for (let i = 0; i < totalSteps; i++) {
             const btn = document.getElementById(`step-btn-${i}`);
-            if (btn) btn.classList.toggle('active', i === step);
+            if (btn) {
+                const isActive = (i === step);
+                btn.classList.toggle('active', isActive);
+                if (isActive) {
+                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            }
         }
         document.getElementById('progress-bar').style.width = `${((step + 1) / totalSteps) * 100}%`;
         renderStep();
@@ -889,7 +1260,7 @@
                 </div>
 
                 <div class="flex items-center gap-1.5 flex-wrap">
-                    ${['1. METAMORFOSE I', '2. ANAFASE I', '3. ANAFASE II', '4. 4 GAMET', '5. FERTILISASI'].map((st, i) => `
+                    ${['1. METAFASE I', '2. ANAFASE I', '3. ANAFASE II', '4. 4 GAMET', '5. FERTILISASI'].map((st, i) => `
                         <button onclick="setMeiosisStage(${i})" id="stage-btn-${i}" class="px-2.5 py-1.5 rounded-md font-mono text-[10px] font-bold transition-all ${meiosisStage === i ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30' : 'bg-white/[0.04] text-slate-400 hover:text-white'}">
                             ${st}
                         </button>
@@ -1267,7 +1638,7 @@
 
         let html = `
             <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
-                <span class="font-mono text-xs text-slate-400">PETA SITOGENETIKA METAMORFOSE G-BANDING</span>
+                <span class="font-mono text-xs text-slate-400">PETA SITOGENETIKA METAFASE G-BANDING</span>
                 <span class="font-mono text-amber-300 font-bold text-sm bg-amber-500/10 px-3 py-1 rounded border border-amber-500/20">
                     KARIOTIPE: 47,${karyoSex},+21
                 </span>
