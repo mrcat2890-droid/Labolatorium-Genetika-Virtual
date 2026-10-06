@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GEN-OS BIO-CORE: 3D CHROMOSOME INTERACTIVE STYLESHEET
+   GEN-OS BIO-CORE: 3D CHROMOSOME INTERACTIVE STYLESHEET (ULTRA-REALISTIS)
    Universal Responsive Multi-Device Architecture:
    Smartphone (9:16, 19.5:9, 21:9), Tablet (3:4, 4:3), Foldable, Desktop, Ultrawide
    ========================================================================== */
@@ -13,21 +13,23 @@
     --neon-blue: #0284c7;
     --neon-cyan: #38bdf8;
     --neon-purple: #818cf8;
+    --neon-pink: #e879f9;
     --neon-green: #22c55e;
     
     /* Warna Anatomi Kromosom */
     --color-parm: #06b6d4;        /* Cyan Terang (Lengan Pendek p) */
     --color-qarm: #3b82f6;        /* Biru Royal (Lengan Panjang q) */
-    --color-centromere: #f59e0b;  /* Amber Hangat (Sentromer) */
-    --color-kinetochore: #ef4444; /* Merah Koral (Kinetokor) */
-    --color-telomere: #eab308;    /* Kuning Emas (Telomer) */
+    --color-centromere: #f59e0b;  /* Amber Hangat (Sentromer / Kohesin) */
+    --color-kinetochore: #ef4444; /* Merah Koral (Kinetokor Trilaminar) */
+    --color-telomere: #eab308;    /* Kuning Emas (Telomer T-Loop) */
     --color-band: #1e293b;        /* Pita Gelap Heterokromatin */
+    --color-spindle: #38bdf8;     /* Serat Spindel K-Fibers */
 
     --text-primary: #f8fafc;
     --text-secondary: #cbd5e1;
     --text-muted: #94a3b8;
 
-    /* Safe Area Insets */
+    /* Safe Area Insets untuk HP Berponi (Notch / Dynamic Island) */
     --sat: env(safe-area-inset-top, 0px);
     --sab: env(safe-area-inset-bottom, 0px);
     --sal: env(safe-area-inset-left, 0px);
@@ -110,7 +112,7 @@ body, html {
 }
 
 .header-content {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(20, 6, 30, 0.42);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(20, 6, 30, 0.45);
     border: 1px solid rgba(232, 121, 249, 0.32);
     border-radius: 14px;
     padding: 10px 18px;
@@ -142,11 +144,19 @@ body, html {
     flex-direction: column;
 }
 
+.header-nav-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+}
+
 .header-back-link {
     text-decoration: none;
     color: #e2e8f0;
     background: rgba(15, 23, 42, 0.85);
-    border: 1px solid rgba(56, 189, 248, 0.35);
+    border: 1px solid rgba(232, 121, 249, 0.35);
     padding: 3px 10px;
     border-radius: 8px;
     font-size: 0.75rem;
@@ -157,20 +167,19 @@ body, html {
 }
 
 .header-back-link:hover {
-    background: var(--neon-cyan);
-    color: #041024;
-    box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+    background: var(--neon-pink);
+    color: #1a0426;
+    box-shadow: 0 0 10px rgba(232, 121, 249, 0.5);
 }
 
 .logo-badge {
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    background: rgba(56, 189, 248, 0.12);
-    border: 1px solid rgba(56, 189, 248, 0.35);
+    background: rgba(232, 121, 249, 0.12);
+    border: 1px solid rgba(232, 121, 249, 0.35);
     border-radius: 20px;
     padding: 2px 9px;
-    margin-bottom: 4px;
     width: fit-content;
 }
 
@@ -178,8 +187,8 @@ body, html {
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background-color: var(--neon-cyan);
-    box-shadow: 0 0 10px var(--neon-cyan);
+    background-color: var(--neon-pink);
+    box-shadow: 0 0 10px var(--neon-pink);
     animation: pulse 1.8s infinite;
 }
 
@@ -193,7 +202,7 @@ body, html {
     font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 1.2px;
-    color: var(--neon-cyan);
+    color: var(--neon-pink);
 }
 
 h1 {
@@ -202,7 +211,7 @@ h1 {
     font-weight: 800;
     letter-spacing: 0.8px;
     color: #ffffff;
-    text-shadow: 0 0 15px rgba(56, 189, 248, 0.45);
+    text-shadow: 0 0 15px rgba(232, 121, 249, 0.45);
     line-height: 1.2;
 }
 
@@ -213,14 +222,14 @@ h1 {
 }
 
 .header-actions {
-    display: none;
+    display: flex;
     align-items: center;
     gap: 8px;
 }
 
 .header-btn {
     background: rgba(15, 28, 54, 0.85);
-    border: 1px solid rgba(56, 189, 248, 0.3);
+    border: 1px solid rgba(232, 121, 249, 0.3);
     border-radius: 9px;
     padding: 6px 12px;
     color: #fff;
@@ -233,9 +242,16 @@ h1 {
     transition: all 0.2s;
 }
 
+.header-btn-tutorial {
+    background: linear-gradient(135deg, rgba(232, 121, 249, 0.38) 0%, rgba(168, 85, 247, 0.22) 100%);
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 12px rgba(232, 121, 249, 0.25);
+    color: #ffffff;
+}
+
 .header-btn:hover, .header-btn:active {
-    background: rgba(56, 189, 248, 0.25);
-    border-color: var(--neon-cyan);
+    background: rgba(232, 121, 249, 0.25);
+    border-color: var(--neon-pink);
 }
 
 /* ==========================================================================
@@ -285,19 +301,19 @@ h1 {
     position: absolute;
     top: calc(95px + var(--sat));
     left: calc(20px + var(--sal));
-    width: 320px;
+    width: 325px;
     max-height: calc(100vh - 160px - var(--sat) - var(--sab));
     overflow-y: auto;
     padding: 18px;
     scrollbar-width: thin;
-    scrollbar-color: var(--neon-cyan) transparent;
+    scrollbar-color: var(--neon-pink) transparent;
 }
 
 #controls-panel::-webkit-scrollbar, #inspector-panel::-webkit-scrollbar {
     width: 4px;
 }
 #controls-panel::-webkit-scrollbar-thumb, #inspector-panel::-webkit-scrollbar-thumb {
-    background: var(--neon-cyan);
+    background: var(--neon-pink);
     border-radius: 4px;
 }
 
@@ -306,7 +322,7 @@ h1 {
     font-size: 0.74rem;
     font-weight: 700;
     letter-spacing: 1px;
-    color: var(--neon-cyan);
+    color: var(--neon-pink);
     display: flex;
     align-items: center;
     gap: 6px;
@@ -321,8 +337,121 @@ h1 {
 
 .divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(232, 121, 249, 0.3), transparent);
     margin: 14px 0;
+}
+
+/* Mode Selector Grid */
+.mode-selector-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.mode-btn {
+    background: rgba(15, 28, 54, 0.75);
+    border: 1px solid rgba(232, 121, 249, 0.25);
+    border-radius: 10px;
+    padding: 9px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    text-align: left;
+    color: var(--text-primary);
+    width: 100%;
+}
+
+.mode-btn:hover {
+    background: rgba(232, 121, 249, 0.18);
+    border-color: var(--neon-pink);
+    transform: translateX(2px);
+}
+
+.mode-btn.active {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.38) 0%, rgba(232, 121, 249, 0.25) 100%);
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 14px rgba(232, 121, 249, 0.35), inset 0 0 8px rgba(232, 121, 249, 0.2);
+}
+
+.mode-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.mode-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.mode-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.mode-btn.active .mode-name {
+    color: var(--neon-pink);
+}
+
+.mode-sub {
+    font-size: 0.68rem;
+    color: var(--text-secondary);
+    margin-top: 1px;
+    line-height: 1.3;
+}
+
+/* Morphology Selector Grid */
+.morphology-selector-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.morph-btn {
+    background: rgba(15, 28, 54, 0.7);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    border-radius: 9px;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    color: var(--text-primary);
+}
+
+.morph-btn:hover {
+    background: rgba(56, 189, 248, 0.18);
+    border-color: var(--neon-cyan);
+}
+
+.morph-btn.active {
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.35) 0%, rgba(56, 189, 248, 0.2) 100%);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+}
+
+.morph-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.morph-btn.active .morph-name {
+    color: var(--neon-cyan);
+}
+
+.morph-sub {
+    font-size: 0.66rem;
+    color: var(--text-secondary);
+    margin-top: 1px;
 }
 
 /* Tombol Aksi */
@@ -415,11 +544,11 @@ h1 {
 }
 
 .chip.active {
-    background: rgba(56, 189, 248, 0.25);
-    border-color: var(--neon-cyan);
+    background: rgba(232, 121, 249, 0.25);
+    border-color: var(--neon-pink);
     color: #ffffff;
     font-weight: 600;
-    box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+    box-shadow: 0 0 10px rgba(232, 121, 249, 0.3);
 }
 
 .chip-centromere.active { border-color: var(--color-centromere); background: rgba(245, 158, 11, 0.35); }
@@ -428,12 +557,13 @@ h1 {
 .chip-parm.active { border-color: var(--color-parm); background: rgba(6, 182, 212, 0.35); }
 .chip-qarm.active { border-color: var(--color-qarm); background: rgba(59, 130, 246, 0.35); }
 .chip-bands.active { border-color: #cbd5e1; background: rgba(255, 255, 255, 0.25); }
+.chip-spindle.active { border-color: var(--color-spindle); background: rgba(56, 189, 248, 0.35); }
 
 /* Tombol Kontrol */
 .ctrl-btn {
     width: 100%;
     background: rgba(15, 28, 54, 0.7);
-    border: 1px solid rgba(56, 189, 248, 0.2);
+    border: 1px solid rgba(232, 121, 249, 0.2);
     border-radius: 8px;
     padding: 8px 12px;
     color: var(--text-primary);
@@ -447,14 +577,14 @@ h1 {
 }
 
 .ctrl-btn:hover {
-    background: rgba(56, 189, 248, 0.2);
-    border-color: var(--neon-cyan);
+    background: rgba(232, 121, 249, 0.2);
+    border-color: var(--neon-pink);
 }
 
 .ctrl-btn.active {
-    border-color: var(--neon-cyan);
-    background: rgba(56, 189, 248, 0.2);
-    color: var(--neon-cyan);
+    border-color: var(--neon-pink);
+    background: rgba(232, 121, 249, 0.2);
+    color: var(--neon-pink);
 }
 
 /* Legenda Warna */
@@ -507,6 +637,17 @@ h1 {
 .dot-telomere { background-color: var(--color-telomere); box-shadow: 0 0 8px var(--color-telomere); }
 .dot-band { background-color: #94a3b8; box-shadow: 0 0 8px #94a3b8; }
 
+.legend-spindle-row {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.12);
+    font-size: 0.68rem;
+    color: var(--text-muted);
+}
+.spindle-legend-chip b {
+    color: #38bdf8;
+}
+
 /* Panel Inspektur Kanan Desktop */
 #inspector-panel {
     position: absolute;
@@ -517,7 +658,7 @@ h1 {
     overflow-y: auto;
     padding: 20px;
     scrollbar-width: thin;
-    scrollbar-color: var(--neon-cyan) transparent;
+    scrollbar-color: var(--neon-pink) transparent;
 }
 
 .panel-header-inspector {
@@ -532,9 +673,9 @@ h1 {
     font-size: 0.74rem;
     font-weight: 700;
     letter-spacing: 1.4px;
-    color: var(--neon-cyan);
-    background: rgba(56, 189, 248, 0.15);
-    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: var(--neon-pink);
+    background: rgba(232, 121, 249, 0.15);
+    border: 1px solid rgba(232, 121, 249, 0.35);
     padding: 4px 10px;
     border-radius: 6px;
 }
@@ -598,8 +739,8 @@ h1 {
     width: 16px;
     height: 36px;
     border-radius: 6px;
-    background-color: var(--neon-cyan);
-    box-shadow: 0 0 12px var(--neon-cyan);
+    background-color: var(--neon-pink);
+    box-shadow: 0 0 12px var(--neon-pink);
 }
 
 #detail-title {
@@ -610,12 +751,14 @@ h1 {
 
 .meta-tag {
     font-size: 0.7rem;
-    color: var(--neon-cyan);
-    background: rgba(56, 189, 248, 0.15);
+    color: var(--neon-pink);
+    background: rgba(232, 121, 249, 0.15);
     padding: 2px 8px;
     border-radius: 4px;
     display: inline-block;
     margin-top: 2px;
+    word-break: break-word;
+    white-space: normal;
 }
 
 .detail-card {
@@ -629,10 +772,11 @@ h1 {
 .detail-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     padding: 5px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     font-size: 0.78rem;
+    gap: 8px;
 }
 
 .detail-row:last-child {
@@ -641,20 +785,23 @@ h1 {
 
 .detail-row .label {
     color: var(--text-secondary);
+    flex-shrink: 0;
 }
 
 .detail-row .value {
     color: #ffffff;
     font-weight: 600;
+    text-align: right;
+    word-break: break-word;
 }
 
 .detail-row .code-font {
     font-family: monospace;
-    color: var(--neon-cyan);
+    color: var(--neon-pink);
 }
 
 .highlight-text {
-    color: #38bdf8 !important;
+    color: #e879f9 !important;
 }
 
 .detail-section {
@@ -673,6 +820,7 @@ h1 {
     font-size: 0.8rem;
     color: var(--text-secondary);
     line-height: 1.45;
+    word-break: break-word;
 }
 
 /* ==========================================================================
@@ -684,14 +832,21 @@ h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none;
+    overflow: hidden !important;
+    pointer-events: none !important;
     z-index: 10;
     transition: opacity 0.3s ease;
+    box-sizing: border-box;
+}
+
+#annotations-overlay,
+#annotations-overlay * {
+    pointer-events: none !important;
 }
 
 #annotations-overlay.hidden {
     opacity: 0;
-    pointer-events: none;
+    pointer-events: none !important;
 }
 
 .annotation-callout {
@@ -704,15 +859,16 @@ h1 {
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
     transition: transform 0.1s linear, opacity 0.3s;
     white-space: nowrap;
-    transform: translate(var(--x, 0px), calc(var(--y, 0px) - 50%));
+    max-width: calc(100vw - 20px);
+    box-sizing: border-box;
 }
 
 .bracket-bracket {
     width: 16px;
     height: 64px;
-    border-left: 2px solid rgba(56, 189, 248, 0.85);
-    border-top: 2px solid rgba(56, 189, 248, 0.85);
-    border-bottom: 2px solid rgba(56, 189, 248, 0.85);
+    border-left: 2px solid rgba(232, 121, 249, 0.85);
+    border-top: 2px solid rgba(232, 121, 249, 0.85);
+    border-bottom: 2px solid rgba(232, 121, 249, 0.85);
     position: relative;
 }
 .bracket-bracket::after {
@@ -723,13 +879,13 @@ h1 {
     transform: translateY(-50%);
     width: 12px;
     height: 2px;
-    background: rgba(56, 189, 248, 0.85);
+    background: rgba(232, 121, 249, 0.85);
 }
 
 .callout-pointer {
     width: 30px;
     height: 1px;
-    background: rgba(56, 189, 248, 0.85);
+    background: rgba(232, 121, 249, 0.85);
     position: relative;
 }
 .callout-pointer::before {
@@ -740,63 +896,35 @@ h1 {
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: #38bdf8;
-    box-shadow: 0 0 6px #38bdf8;
+    background: #e879f9;
+    box-shadow: 0 0 6px #e879f9;
 }
 
 .callout-text {
     font-weight: 500;
     line-height: 1.25;
 }
-.callout-text b {
-    color: #38bdf8;
-}
 
-/* Callout Modifier for Left Side */
-.callout-left {
-    flex-direction: row-reverse;
-    transform: translate(calc(var(--x, 0px) - 100%), calc(var(--y, 0px) - 50%));
-}
-.callout-left .callout-pointer::before {
-    left: auto;
-    right: 0;
-}
-.callout-left .bracket-bracket {
-    border-left: none;
-    border-right: 2px solid rgba(56, 189, 248, 0.85);
-}
-.callout-left .bracket-bracket::after {
-    left: auto;
-    right: -2px;
-}
-.callout-left .callout-text {
-    text-align: right;
-}
-
-/* ==========================================================================
-   DESKTOP INTERACTION HINT & MOBILE DOCK
-   ========================================================================== */
+/* Petunjuk Navigasi Desktop */
 #interaction-hint {
     position: absolute;
-    bottom: calc(16px + var(--sab));
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: center;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 15;
     pointer-events: none;
 }
 
 .hint-pill {
-    background: rgba(6, 18, 38, 0.88);
-    border: 1px solid rgba(56, 189, 248, 0.3);
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 30px;
-    padding: 7px 20px;
-    backdrop-filter: blur(12px);
+    padding: 7px 18px;
+    font-size: 0.76rem;
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 0.78rem;
+    gap: 10px;
+    backdrop-filter: blur(12px);
     color: var(--text-secondary);
     box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     pointer-events: auto;
@@ -815,17 +943,235 @@ h1 {
     display: none;
 }
 
-/* Modal Backdrop untuk Mobile Drawer */
+/* Modal Backdrop untuk Mobile Drawer & Modal */
 .modal-backdrop {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(2, 6, 18, 0.55);
-    backdrop-filter: blur(4px);
+    background: rgba(2, 6, 18, 0.65);
+    backdrop-filter: blur(5px);
     z-index: 22;
     transition: opacity 0.3s ease;
+}
+
+/* ==========================================================================
+   MODAL TUTORIAL EDUKASI INTERAKTIF (3 LANGKAH)
+   ========================================================================== */
+.tutorial-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: rgba(2, 6, 18, 0.78);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    animation: fadeInModal 0.25s ease-out forwards;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.tutorial-card {
+    width: 100%;
+    max-width: 600px;
+    background: linear-gradient(135deg, rgba(20, 6, 32, 0.95) 0%, rgba(8, 2, 16, 0.98) 100%);
+    border: 1px solid rgba(232, 121, 249, 0.4);
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85), 0 0 35px rgba(232, 121, 249, 0.25);
+    border-radius: 20px;
+    padding: 20px 18px;
+    max-height: 86vh;
+    max-height: 86dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.tutorial-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(232, 121, 249, 0.2);
+    flex-shrink: 0;
+    gap: 8px;
+}
+
+.tutorial-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+}
+
+.tutorial-badge {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    color: var(--neon-pink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tutorial-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding-right: 4px;
+}
+
+.tut-icon-banner {
+    font-size: 2rem;
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+.tut-slide-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+.tut-slide-lead {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    text-align: center;
+    margin-bottom: 14px;
+}
+
+.tut-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.tut-box {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    box-sizing: border-box;
+}
+
+.tut-box-wide {
+    grid-column: 1 / -1;
+}
+
+.tut-box-icon {
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+}
+
+.tut-box b {
+    font-size: 0.76rem;
+    color: var(--neon-pink);
+}
+
+.tut-box p {
+    font-size: 0.72rem;
+    color: #cbd5e1;
+    line-height: 1.4;
+}
+
+.tutorial-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+    gap: 8px;
+}
+
+.tutorial-dots {
+    display: flex;
+    gap: 7px;
+}
+
+.tutorial-dots .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.tutorial-dots .dot.active {
+    background: var(--neon-pink);
+    box-shadow: 0 0 10px var(--neon-pink);
+    width: 20px;
+    border-radius: 6px;
+}
+
+.tutorial-nav-btns {
+    display: flex;
+    gap: 8px;
+}
+
+.tut-nav-btn {
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+}
+
+.tut-nav-btn.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+}
+
+.tut-nav-btn.secondary:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.tut-nav-btn.secondary:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.tut-nav-btn.primary {
+    background: linear-gradient(135deg, #a855f7 0%, #e879f9 100%);
+    color: #1a0426;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(232, 121, 249, 0.4);
+}
+
+.tut-nav-btn.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(232, 121, 249, 0.6);
 }
 
 /* ==========================================================================
@@ -855,40 +1201,77 @@ h1 {
 
 /* ==========================================================================
    RESPONSIVITAS UNIVERSAL: SMARTPHONE (< 768px)
+   Anti-Overflow, Layout Presisi & Sentuhan Responsif
    ========================================================================== */
 @media (max-width: 768px) {
+    /* 1. Header Bebas Overflow */
     #app-header {
         top: calc(8px + var(--sat));
-        left: calc(10px + var(--sal));
-        right: calc(10px + var(--sar));
+        left: calc(8px + var(--sal));
+        right: calc(8px + var(--sar));
+        max-width: calc(100vw - 16px - var(--sal) - var(--sar));
+        box-sizing: border-box;
     }
     .header-content {
         width: 100%;
-        padding: 8px 12px;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 7px 10px;
         border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        overflow: hidden;
+    }
+    .header-left {
+        min-width: 0;
+        flex: 1 1 auto;
+        overflow: hidden;
     }
     .logo-badge {
-        padding: 1px 7px;
+        padding: 1px 6px;
         margin-bottom: 2px;
     }
     .badge-text {
         font-size: 0.58rem;
     }
     h1 {
-        font-size: 0.88rem;
-        letter-spacing: 0.4px;
+        font-size: 0.82rem;
+        letter-spacing: 0.2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.25;
     }
     .subtitle {
         display: none;
     }
     .header-actions {
         display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+    }
+    /* Sembunyikan tombol duplikat Menu & Detail di header mobile karena sudah ada di dock bawah */
+    #btn-toggle-controls-panel,
+    #btn-toggle-inspector-panel {
+        display: none !important;
+    }
+    #btn-open-tutorial {
+        padding: 5px 9px;
+        font-size: 0.72rem;
+        border-radius: 8px;
+    }
+    .header-btn-icon {
+        font-size: 0.85rem;
     }
 
     #interaction-hint {
-        display: none;
+        display: none !important;
     }
 
+    /* 2. Panel Berubah Menjadi BOTTOM SHEET Sentuhan Mulus */
     .responsive-drawer {
         position: fixed !important;
         top: auto !important;
@@ -897,12 +1280,18 @@ h1 {
         right: 0 !important;
         width: 100% !important;
         max-width: 100vw !important;
-        max-height: 72vh !important;
+        max-height: 75vh !important;
+        max-height: 75dvh !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        box-sizing: border-box !important;
         border-radius: 22px 22px 0 0 !important;
         border-bottom: none !important;
         border-left: none !important;
         border-right: none !important;
-        padding: 12px 18px calc(24px + var(--sab)) 18px !important;
+        padding: 12px 16px calc(24px + var(--sab)) 16px !important;
         transform: translateY(105%) !important;
         transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
         z-index: 30 !important;
@@ -916,6 +1305,7 @@ h1 {
         background: rgba(255, 255, 255, 0.35);
         border-radius: 3px;
         margin: 0 auto 12px auto;
+        flex-shrink: 0;
     }
 
     #btn-close-controls {
@@ -930,70 +1320,159 @@ h1 {
         flex-wrap: nowrap;
     }
 
+    /* 3. Mobile Quick Action Dock (Navigasi Bawah Jempol Presisi Penuh) */
     #mobile-dock {
         display: flex;
         position: fixed;
-        bottom: calc(12px + var(--sab));
+        bottom: calc(10px + var(--sab));
         left: 50%;
         transform: translateX(-50%);
         z-index: 21;
-        background: rgba(6, 18, 38, 0.88);
-        border: 1px solid rgba(56, 189, 248, 0.35);
-        border-radius: 30px;
-        padding: 6px 12px;
-        backdrop-filter: blur(14px);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55), 0 0 20px rgba(56, 189, 248, 0.2);
-        gap: 8px;
-        width: auto;
-        max-width: calc(100vw - 24px);
+        background: rgba(14, 4, 24, 0.92);
+        border: 1px solid rgba(232, 121, 249, 0.35);
+        border-radius: 28px;
+        padding: 5px 8px;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65), 0 0 20px rgba(232, 121, 249, 0.2);
+        gap: 5px;
+        width: calc(100vw - 20px);
+        max-width: 410px;
+        box-sizing: border-box;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .dock-btn {
-        background: rgba(15, 28, 54, 0.7);
-        border: 1px solid rgba(56, 189, 248, 0.2);
-        border-radius: 20px;
-        padding: 7px 12px;
+        flex: 1 1 0;
+        min-width: 0;
+        background: rgba(20, 6, 32, 0.75);
+        border: 1px solid rgba(232, 121, 249, 0.25);
+        border-radius: 18px;
+        padding: 7px 4px;
         color: #ffffff;
         font-family: 'Inter', sans-serif;
-        font-size: 0.74rem;
+        font-size: 0.68rem;
         font-weight: 600;
         display: flex;
         align-items: center;
-        gap: 6px;
+        justify-content: center;
+        gap: 4px;
         cursor: pointer;
-        white-space: nowrap;
         transition: all 0.2s;
+        box-sizing: border-box;
+    }
+
+    .dock-btn .dock-icon {
+        font-size: 0.88rem;
+        flex-shrink: 0;
+    }
+
+    .dock-btn .dock-label {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 0.68rem;
     }
 
     .dock-btn:active {
         transform: scale(0.94);
-        background: rgba(56, 189, 248, 0.3);
+        background: rgba(232, 121, 249, 0.3);
     }
 
     .dock-btn-primary {
-        background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
-        color: #041426;
+        background: linear-gradient(135deg, #a855f7 0%, #e879f9 100%);
+        color: #1a0426;
         border: none;
         font-weight: 700;
-        box-shadow: 0 2px 10px rgba(56, 189, 248, 0.4);
+        box-shadow: 0 2px 10px rgba(232, 121, 249, 0.4);
     }
 
-    .dock-icon {
-        font-size: 0.95rem;
-    }
-
+    /* 4. Skala Anotasi Layar Kecil */
     .annotation-callout {
-        font-size: 0.7rem;
+        font-size: 0.68rem;
         transform-origin: left center;
+        max-width: calc(100vw - 16px) !important;
+        box-sizing: border-box !important;
+        white-space: nowrap;
     }
     .bracket-bracket {
-        height: 48px;
-        width: 12px;
+        height: 44px;
+        width: 10px;
+    }
+}
+
+@media (max-width: 640px) {
+    .tutorial-modal-overlay {
+        padding: 8px;
+    }
+    .tutorial-card {
+        padding: 14px 12px;
+        border-radius: 16px;
+        max-height: 86vh;
+        max-height: 86dvh;
+    }
+    .tutorial-badge {
+        font-size: 0.6rem;
+        letter-spacing: 0.2px;
+    }
+    .tut-slide-title {
+        font-size: 0.88rem;
+    }
+    .tut-slide-lead {
+        font-size: 0.73rem;
+        margin-bottom: 10px;
+    }
+    .tut-grid {
+        grid-template-columns: 1fr;
+        gap: 7px;
+    }
+    .tut-box {
+        padding: 8px 10px;
+    }
+    .tut-nav-btn {
+        padding: 7px 11px;
+        font-size: 0.72rem;
+    }
+    .tutorial-dots .dot {
+        width: 7px;
+        height: 7px;
+    }
+    .tutorial-dots .dot.active {
+        width: 16px;
+    }
+}
+
+@media (max-width: 360px) {
+    #app-header {
+        left: 6px;
+        right: 6px;
+    }
+    .header-content {
+        padding: 5px 7px;
+    }
+    h1 {
+        font-size: 0.75rem;
+    }
+    #mobile-dock {
+        width: calc(100vw - 12px);
+        padding: 4px 5px;
+        gap: 3px;
+    }
+    .dock-btn {
+        padding: 6px 2px;
+        gap: 2px;
+    }
+    .dock-btn .dock-label {
+        font-size: 0.62rem;
+    }
+    .dock-btn .dock-icon {
+        font-size: 0.8rem;
     }
 }
 
 /* ==========================================================================
-   ADAPTIF MOBILE ORIENTASI LANDSCAPE
+   ADAPTIF MOBILE ORIENTASI LANDSCAPE (Layar Pendek e.g. Max-Height: 480px)
    ========================================================================== */
 @media (max-height: 480px) and (orientation: landscape) {
     #app-header {

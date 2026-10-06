@@ -6,7 +6,46 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
-### 📱 Perbaikan Layout & Modal Meluber Keluar Layar Mobile (DNA 3D Interactive)
+### 🧬 Upgrade Ultra-Realistis 3D Anatomi Kromosom Metafase (chromosome-3d-interactive)
+- **Arsitektur Lup Kromatin SEM Ultra-Realistis Berdasarkan Literatur Ilmiah:**
+  - Mengimplementasikan *bump & normal mapping* prosedural berbasis kanvas mikro yang merekonstruksi tekstur permukaan kromatin nyata (*Earnshaw & Laemmli 1983; Maeshima et al. 2016*). Menampilkan jutaan butiran nodul lup kromatin radial 30–100 nm dan lipatan kromonema helikal, menggantikan tabung poligon plastik polos.
+  - Penambahan celah inter-kromatid (*inter-chromatid cleft*) longitudinal dan cincin protein kohesin sentromerik yang mengikat erat kromatid saudara (*sister chromatids*).
+- **Tiga Mode Representasi Sitogenetika Komprehensif:**
+  - **SEM Ultra-Realistis:** Penampakan mikroskop elektron pemayung (*Scanning Electron Microscopy*) dengan kilau beludru kromatin (*velvet sheen*), *clearcoat*, dan pencahayaan studio sinematik.
+  - **Fluorescent Karyotype (G-Banding & FISH Probes):** Pewarnaan DAPI biru berfluoresensi pada lengan kromatid, pola pita Giemsa horizontal (pita heterokromatin gelap kaya A-T vs pita eukromatin terang kaya G-C standar ISCN 2020), pendaran fluorofor Cy3/FITC pada probe telomer, dan pendaran rhodamine merah pada kinetokor.
+  - **Hierarki Kromatin (1400 nm $\rightarrow$ 11 nm):** Visualisasi transisi hierarki pengemasan DNA: 1400 nm kromosom metafase duplikasi $\rightarrow$ 700 nm kromatid kondensasi $\rightarrow$ 300 nm domain lup topologi $\rightarrow$ 30 nm serat solenoid $\rightarrow$ 11 nm untaian nukleosom oktamer histon.
+- **Tiga Variasi Morfologi Standar Sitogenetika Medis ISCN 2020:**
+  - **Metasentris:** Rasio panjang lengan $p \approx q$ (contoh: Kromosom 1, 3).
+  - **Submetasentris:** Rasio panjang lengan $p < q$ (contoh: Kromosom 2, 4, X).
+  - **Akrosentris + Satelit NOR:** Lengan $p$ sangat pendek dilengkapi konstriksi sekunder (*secondary constriction*) tangkai *Nucleolar Organizer Region* (NOR pembawa gen rRNA) dan kenop bulat terminal (*trabant / satellite*) khas kromosom 13, 14, 15, 21, dan 22.
+- **Struktur Kinetokor Trilaminar & Aparatus Spindel Mitosis (K-Fibers):**
+  - Pemodelan kinetokor berlapis tiga (*Rieder 1982; Cheeseman & Desai 2008*): pelat dalam (*inner plate* CENP-C/T), zona tengah, dan pelat luar (*outer plate* jaringan KMN: Ndc80, Mis12, Knl1).
+  - Aparatus serat spindel mitosis kinetokor (*K-fibers*) dinamis berupa berkas 20–30 mikrotubulus tubulin yang menambat pada pelat kinetokor dan mengarah ke kutub spindel sel dengan pengontrol sakelar *toggle* aktif/nonaktif.
+- **Fisika Hidrodinamik Anafase & Osilasi Termal Sitoplasma:**
+  - Simulasi pemisahan anafase kromatid saudara yang memperhitungkan hambatan viskositas cairan sitoplasma (*hydrodynamic drag*), menghasilkan kelengkungan kromatid fleksibel membentuk huruf V (metasentris) atau J (submetasentris/akrosentris).
+  - Simulasi getaran termal Brownian sitoplasma yang membuat kromosom tampak hidup dan dinamis.
+- **Tutorial Edukasi Interaktif 3 Langkah Terpadu:**
+  - Panduan modal 3 langkah terpadu (*Kondensasi Kromatin*, *Sentromer & Kinetokor*, *Mode Sitogenetika & Morfologi*) dengan navigasi pagination dots dan transisi halus.
+
+### 📱 Perbaikan 4 Titik Tata Letak & Modal Meluber Keluar Layar (chromosome-3d-interactive)
+- **1. Eliminasi Overflow Header pada Layar Ponsel:**
+  - Menyembunyikan tombol duplikat `⚙️ Menu` dan `🔬 Detail` di header pada mode mobile (`max-width: 768px`) dan memusatkan kontrol pada tombol `💡 Tutorial` serta dock navigasi bawah.
+  - Judul modul dilengkapi `overflow: hidden; text-overflow: ellipsis; white-space: nowrap;` dengan baris navigasi atas adaptif.
+- **2. Presisi Lebar Mobile Quick Dock Bawah (Anti-Clipping 4 Tombol):**
+  - Mengatur kontainer `#mobile-dock` dengan lebar `width: calc(100vw - 20px); max-width: 410px;` dan tombol `flex: 1 1 0; min-width: 0; padding: 7px 4px; gap: 4px; text-overflow: ellipsis;`.
+  - Keempat tombol dock (`⚡ Anafase`, `💥 Uraikan`, `⚙️ Menu`, `🔬 Detail`) dijamin tampil utuh dan pas pada seluruh ponsel beresolusi 320px–375px tanpa ada tombol yang terpotong di tepi.
+- **3. Penataan Modal & Drawer dengan Scroll Kontainer Mandiri (Anti-Cutoff):**
+  - Modal `#tutorial-modal` menggunakan struktur flex column `max-height: 86vh/86dvh` dengan header dan footer terkunci, sementara `.tutorial-body` dapat di-scroll mandiri dengan `-webkit-overflow-scrolling: touch`.
+  - Drawer kontrol (`#controls-panel`) dan inspektor (`#inspector-panel`) pada mobile bertindak sebagai *bottom sheet* dengan `max-height: 75vh/75dvh; overflow-y: auto !important; overflow-x: hidden !important; overscroll-behavior: contain;`.
+- **4. Clamping Koordinat Proyeksi Anotasi 3D:**
+  - Menetapkan batas koordinat aman (*viewport boundary clamping*) pada fungsi `toScreenPosition` di `script.js` ($x \in [8, \text{innerWidth} - \text{width} - 8]$, $y \in [64, \text{innerHeight} - \text{height} - 72]$) serta `#annotations-overlay` dengan `overflow: hidden !important; pointer-events: none !important;`. Label anotasi tidak pernah keluar layar ponsel.
+- **Perbaikan Sentuhan Layar Handphone (Touch Tap Responsiveness):**
+  - Mengimplementasikan deteksi sentuhan *dual-layer* (`touchstart` + `touchmove` + `touchend` dengan toleransi pergeseran $\le 14\text{px}$ dan batas durasi $< 450\text{ms}$) berbasis `getBoundingClientRect()`. Menuntaskan masalah interaksi sentuhan tidak merespons akibat OrbitControls pada peramban ponsel.
+- **Berkas yang Diperbarui:**
+  - `chromosome-3d-interactive/index.html`
+  - `chromosome-3d-interactive/style.css`
+  - `chromosome-3d-interactive/script.js`
+  - `CHANGELOG.md`
 - **Eliminasi Overflow Header pada Layar Sempit:**
   - Menyembunyikan tombol duplikat `⚙️ Menu` dan `🔬 Detail` di `#app-header` khusus pada mode mobile (`max-width: 768px`) karena fungsi navigasi tersebut sudah tersedia lengkap dan ergonomis pada dock bawah jempol (`#mobile-dock`).
   - Mencegah tombol aksi header saling bertabrakan atau terpotong di tepi kanan layar ponsel, serta memberikan ruang napas yang luas bagi judul modul dan tombol `💡 Tutorial`.

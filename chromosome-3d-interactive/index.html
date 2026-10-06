@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Model Kromosom 3D Ultra-Realistis (Struktur Anatomi Kromosom Metafase)</title>
+    <title>Model Kromosom 3D Ultra-Realistis (Struktur Anatomi &amp; Sitogenetika Metafase)</title>
     <link rel="stylesheet" href="style.css">
     <!-- Font Inter & Orbitron -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,6 @@
         <!-- Floating Chromatin Fiber Loops & Nucleosome Beads -->
         <div class="ambient-chromatin-particle" style="left: 10%; animation-duration: 24s; animation-delay: 0s;">
             <svg class="w-10 h-10 text-fuchsia-400 drop-shadow-[0_0_12px_rgba(232,121,249,0.5)]" viewBox="0 0 40 40" fill="none">
-                <!-- Octagonal Histone Octamer Core with DNA Wrap -->
                 <circle cx="20" cy="20" r="10" fill="#a855f7" opacity="0.3"/>
                 <ellipse cx="20" cy="20" rx="14" ry="7" stroke="#e879f9" stroke-width="2" stroke-dasharray="3 2" opacity="0.7"/>
             </svg>
@@ -45,18 +44,22 @@
     <header id="app-header">
         <div class="header-content">
             <div class="header-left">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                <div class="header-nav-row">
                     <a href="../index.html" class="header-back-link" title="Kembali ke Beranda GEN-OS">← Beranda</a>
-                    <div class="logo-badge" style="margin-bottom:0;">
+                    <div class="logo-badge">
                         <span class="pulse-dot"></span>
                         <span class="badge-text">GEN-OS 3D BIO-CORE</span>
                     </div>
                 </div>
                 <h1>STRUKTUR ANATOMI KROMOSOM</h1>
-                <p class="subtitle">Eksplorasi 3D Kromosom Metafase Berdasarkan Sitogenetika Medis</p>
+                <p class="subtitle">Eksplorasi 3D Kromosom Metafase Berdasarkan Sitogenetika Medis ISCN</p>
             </div>
-            <!-- Tombol Toggle Cepat di Header untuk Layar Tablet / HP -->
+            <!-- Tombol Aksi di Header (Desktop & Mobile) -->
             <div class="header-actions">
+                <button id="btn-open-tutorial" class="header-btn header-btn-tutorial" title="Buka Panduan Tutorial Interaktif">
+                    <span class="header-btn-icon">💡</span>
+                    <span class="header-btn-text">Tutorial</span>
+                </button>
                 <button id="btn-toggle-controls-panel" class="header-btn" title="Buka Panel Kontrol">
                     <span class="header-btn-icon">⚙️</span>
                     <span class="header-btn-text">Menu</span>
@@ -79,16 +82,86 @@
 
         <div class="panel-header-flex">
             <div class="panel-section-title">
-                <span class="icon">⚡</span> KONTROL PEMISAHAN & MITOSIS
+                <span class="icon">🔬</span> MODE REPRESENTASI SITOGENETIKA
             </div>
             <button id="btn-close-controls" class="btn-icon-close" title="Tutup Menu">&times;</button>
+        </div>
+
+        <p class="section-hint">Pilih standar visualisasi mikroskopis sitogenetika:</p>
+        <div class="mode-selector-grid">
+            <button class="mode-btn active" data-mode="sem">
+                <span class="mode-icon">🧪</span>
+                <div class="mode-info">
+                    <span class="mode-name">SEM Ultra-Realistis</span>
+                    <span class="mode-sub">Permukaan Butir Kromatin 30 nm &amp; Cincin Kohesin</span>
+                </div>
+            </button>
+            <button class="mode-btn" data-mode="fluorescent">
+                <span class="mode-icon">🔮</span>
+                <div class="mode-info">
+                    <span class="mode-name">Fluorescent Karyotype</span>
+                    <span class="mode-sub">Pita G-Bands ISCN, DAPI &amp; Probe Telomer FISH</span>
+                </div>
+            </button>
+            <button class="mode-btn" data-mode="hierarchical">
+                <span class="mode-icon">🧬</span>
+                <div class="mode-info">
+                    <span class="mode-name">Hierarki Kromatin</span>
+                    <span class="mode-sub">Dari 1400 nm Kromosom $\rightarrow$ Nukleosom 11 nm</span>
+                </div>
+            </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Morfologi Kromosom (ISCN 2020 Standards) -->
+        <div class="panel-section-title">
+            <span class="icon">📐</span> MORFOLOGI KROMOSOM
+        </div>
+        <p class="section-hint">Klasifikasi posisi sentromer sitogenetika manusia:</p>
+        <div class="morphology-selector-grid">
+            <button class="morph-btn active" data-morph="metacentric">
+                <span class="morph-name">Metasentris</span>
+                <span class="morph-sub">Lengan p $\approx$ q (Chr 1, 3)</span>
+            </button>
+            <button class="morph-btn" data-morph="submetacentric">
+                <span class="morph-name">Submetasentris</span>
+                <span class="morph-sub">Lengan p &lt; q (Chr 2, 4, X)</span>
+            </button>
+            <button class="morph-btn" data-morph="acrocentric">
+                <span class="morph-name">Akrosentris + Satelit</span>
+                <span class="morph-sub">Satelit NOR (Chr 14, 21, 22)</span>
+            </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Biofisika & Aparatus Spindel -->
+        <div class="panel-section-title">
+            <span class="icon">⚡</span> BIOFISIKA &amp; APARATUS SPINDEL
+        </div>
+        <p class="section-hint">Parameter dinamis mitosis dan serat mikrotubulus:</p>
+        <div class="toggle-group">
+            <button id="btn-toggle-spindle" class="ctrl-btn active">
+                <span id="spindle-status-icon">🕸️</span> Serat Spindel (K-Fibers): <b id="spindle-status-text">AKTIF</b>
+            </button>
+            <button id="btn-toggle-thermal" class="ctrl-btn active">
+                <span id="thermal-status-icon">🌊</span> Dinamika Termal Sitoplasma: <b id="thermal-status-text">AKTIF</b>
+            </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Kontrol Pemisahan & Mitosis -->
+        <div class="panel-section-title">
+            <span class="icon">💥</span> KONTROL PEMISAHAN &amp; MITOSIS
         </div>
 
         <!-- Tombol Aksi Utama Pemisahan Kromosom -->
         <div class="btn-group-primary">
             <button id="btn-anaphase" class="action-btn btn-neon-blue">
                 <span class="btn-icon">⚡</span>
-                <span class="btn-text">Pisahkan Kromatid Saudara (Anafase)</span>
+                <span class="btn-text">Pisahkan Kromatid (Anafase Fleksibel)</span>
             </button>
             <button id="btn-explode" class="action-btn btn-neon-purple">
                 <span class="btn-icon">💥</span>
@@ -104,7 +177,7 @@
 
         <!-- Anotasi Ilmiah 3D -->
         <div class="panel-section-title">
-            <span class="icon">🏷️</span> ANOTASI & LABEL ANATOMI
+            <span class="icon">🏷️</span> ANOTASI &amp; LABEL ANATOMI
         </div>
         <div class="toggle-group">
             <button id="btn-toggle-labels" class="ctrl-btn active">
@@ -116,7 +189,7 @@
 
         <!-- Filter / Isolasi Bagian Kromosom -->
         <div class="panel-section-title">
-            <span class="icon">🔬</span> ISOLASI KOMPONEN
+            <span class="icon">🔍</span> ISOLASI KOMPONEN
         </div>
         <p class="section-hint">Ketuk untuk menonjolkan bagian tertentu:</p>
         
@@ -129,6 +202,7 @@
                 <button class="chip chip-parm" data-filter="parm">Lengan Pendek (p)</button>
                 <button class="chip chip-qarm" data-filter="qarm">Lengan Panjang (q)</button>
                 <button class="chip chip-bands" data-filter="bands">Pita G-Bands</button>
+                <button class="chip chip-spindle" data-filter="spindle">Spindel (K-Fibers)</button>
             </div>
         </div>
 
@@ -153,10 +227,13 @@
             <div class="legend-grid">
                 <div class="legend-item"><span class="color-dot dot-arm-p"></span> <b>p</b> Lengan Pendek</div>
                 <div class="legend-item"><span class="color-dot dot-arm-q"></span> <b>q</b> Lengan Panjang</div>
-                <div class="legend-item"><span class="color-dot dot-centromere"></span> <b>Cen</b> Sentromer</div>
-                <div class="legend-item"><span class="color-dot dot-kinetochore"></span> <b>Kin</b> Kinetokor</div>
-                <div class="legend-item"><span class="color-dot dot-telomere"></span> <b>Tel</b> Telomer (Ujung)</div>
-                <div class="legend-item"><span class="color-dot dot-band"></span> <b>Band</b> Pita Giemsa</div>
+                <div class="legend-item"><span class="color-dot dot-centromere"></span> <b>Cen</b> Sentromer (Kohesin)</div>
+                <div class="legend-item"><span class="color-dot dot-kinetochore"></span> <b>Kin</b> Kinetokor Trilaminar</div>
+                <div class="legend-item"><span class="color-dot dot-telomere"></span> <b>Tel</b> Telomer (T-Loop)</div>
+                <div class="legend-item"><span class="color-dot dot-band"></span> <b>Band</b> Pita Giemsa G/R</div>
+            </div>
+            <div class="legend-spindle-row">
+                <span class="spindle-legend-chip">🕸️ <b>K-Fibers:</b> 20-30 Mikrotubulus per Kinetokor</span>
             </div>
         </div>
     </aside>
@@ -173,7 +250,7 @@
         <div id="inspector-placeholder" class="inspector-empty">
             <div class="microscope-icon">🔬</div>
             <h3>PILIH BAGIAN KROMOSOM</h3>
-            <p>Ketuk salah satu bagian kromosom (Sentromer, Kinetokor, Telomer, Lengan p/q, atau Pita Banding) untuk menginspeksi struktur mikroskopis dan fungsi biologisnya.</p>
+            <p>Ketuk salah satu bagian kromosom (Sentromer, Kinetokor, Telomer, Lengan p/q, Spindel K-Fibers, atau Pita G-Bands) untuk menginspeksi struktur mikroskopis dan signifikansi biologisnya.</p>
         </div>
 
         <div id="inspector-details" class="hidden">
@@ -205,12 +282,12 @@
             </div>
 
             <div class="detail-section">
-                <h4>DESKRIPSI & MORFOLOGI</h4>
+                <h4>DESKRIPSI &amp; MORFOLOGI</h4>
                 <p id="detail-desc">Penjelasan mengenai bagian ini.</p>
             </div>
 
             <div class="detail-section">
-                <h4>FUNGSI GENETIKA & MITOSIS</h4>
+                <h4>FUNGSI GENETIKA &amp; MITOSIS</h4>
                 <p id="detail-function">Peran penting dalam pewarisan sifat dan pembelahan sel.</p>
             </div>
         </div>
@@ -224,11 +301,11 @@
         </div>
         <div class="annotation-callout callout-centromere" id="callout-centromere">
             <div class="callout-pointer"></div>
-            <div class="callout-text"><b>Sentromer</b><br>Konstriksi Primer</div>
+            <div class="callout-text"><b>Sentromer</b><br>Konstriksi Primer (Kohesin)</div>
         </div>
         <div class="annotation-callout callout-kinetochore callout-left" id="callout-kinetochore">
             <div class="callout-pointer"></div>
-            <div class="callout-text"><b>Kinetokor</b><br>Kompleks Protein Spindel</div>
+            <div class="callout-text"><b>Kinetokor Trilaminar</b><br>Plat Protein Spindel KMN</div>
         </div>
         <div class="annotation-callout callout-qarm" id="callout-qarm">
             <div class="bracket-bracket"></div>
@@ -236,7 +313,11 @@
         </div>
         <div class="annotation-callout callout-telomere callout-left" id="callout-telomere">
             <div class="callout-pointer"></div>
-            <div class="callout-text"><b>Telomer</b><br>Tudung Pelindung Ujung</div>
+            <div class="callout-text"><b>Telomer (T-Loop)</b><br>Tudung Pelindung (TTAGGG)ₙ</div>
+        </div>
+        <div class="annotation-callout callout-satellite callout-right hidden" id="callout-satellite">
+            <div class="callout-pointer"></div>
+            <div class="callout-text"><b>Satelit &amp; Konstriksi Sekunder</b><br>Daerah NOR (rRNA Genomik)</div>
         </div>
     </div>
 
@@ -244,7 +325,7 @@
     <nav id="mobile-dock" class="mobile-dock-container">
         <button id="dock-btn-anaphase" class="dock-btn">
             <span class="dock-icon">⚡</span>
-            <span class="dock-label">Pisahkan</span>
+            <span class="dock-label">Anafase</span>
         </button>
         <button id="dock-btn-explode" class="dock-btn">
             <span class="dock-icon">💥</span>
@@ -268,7 +349,7 @@
     <footer id="interaction-hint">
         <div class="hint-pill">
             <span class="hint-icon">🖱️</span>
-            <span><b>Klik / Sentuh & Geser:</b> Rotasi 360°</span>
+            <span><b>Klik / Sentuh &amp; Geser:</b> Rotasi 360°</span>
             <span class="hint-divider">|</span>
             <span><b>Pinch / Scroll:</b> Zoom</span>
             <span class="hint-divider">|</span>
@@ -276,11 +357,95 @@
         </div>
     </footer>
 
+    <!-- Modal Tutorial Edukasi Interaktif 3D Kromosom (3 Langkah Terpadu) -->
+    <div id="tutorial-modal" class="tutorial-modal-overlay hidden">
+        <div class="tutorial-card glass-panel">
+            <div class="tutorial-header">
+                <div class="tutorial-badge-row">
+                    <span class="pulse-dot"></span>
+                    <span class="tutorial-badge">PANDUAN ANATOMI KROMOSOM // SITOGENETIKA</span>
+                </div>
+                <button id="btn-close-tutorial" class="btn-icon-close" title="Tutup Tutorial">&times;</button>
+            </div>
+
+            <div class="tutorial-body">
+                <!-- Slide 1 -->
+                <div class="tutorial-slide active" data-slide="1">
+                    <div class="tut-icon-banner">🔬</div>
+                    <h3 class="tut-slide-title">1. Arsitektur Kromatid &amp; Kondensasi Kromatin</h3>
+                    <p class="tut-slide-lead">Kromosom metafase tersusun atas dua kromatid saudara (*sister chromatids*) identik hasil replikasi DNA yang terkondensasi padat melalui perancah protein kondensin I/II (*Earnshaw &amp; Laemmli 1983; Maeshima et al. 2016*).</p>
+                    <div class="tut-grid">
+                        <div class="tut-box">
+                            <span class="tut-box-icon">📐</span>
+                            <b>Lengan p &amp; Lengan q:</b>
+                            <p>Lengan pendek <b>p (petite)</b> dan lengan panjang <b>q (queue)</b> dipisahkan oleh konstriksi primer sentromer.</p>
+                        </div>
+                        <div class="tut-box">
+                            <span class="tut-box-icon">🛡️</span>
+                            <b>Telomer &amp; T-Loop:</b>
+                            <p>Tudung heksanukleotida <b>(TTAGGG)ₙ</b> dan kompleks shelterin di setiap ujung lengan mencegah degradasi enzimatik dan fusi kromosom.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="tutorial-slide hidden" data-slide="2">
+                    <div class="tut-icon-banner">⚡</div>
+                    <h3 class="tut-slide-title">2. Sentromer, Kinetokor, &amp; Tarikan Anafase</h3>
+                    <p class="tut-slide-lead">Penyatuan kromatid saudara dipertahankan oleh cincin protein kohesin pada sentromer hingga pos pemeriksaan spindel mitosis (SAC) terpenuhi.</p>
+                    <div class="tut-grid">
+                        <div class="tut-box">
+                            <span class="tut-box-icon">🎯</span>
+                            <b>Kinetokor Trilaminar:</b>
+                            <p>Kompleks multi-protein berlapis tiga (KMN network) tempat menambat 20-30 mikrotubulus benang spindel (*K-fibers*).</p>
+                        </div>
+                        <div class="tut-box">
+                            <span class="tut-box-icon">🌊</span>
+                            <b>Pemisahan Anafase Hidrodinamik:</b>
+                            <p>Gunakan tombol <b>Anafase</b> untuk membelah sentromer; kromatid akan melengkung fleksibel (membentuk huruf V/J) akibat gesekan cairan sitoplasma.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="tutorial-slide hidden" data-slide="3">
+                    <div class="tut-icon-banner">🎨</div>
+                    <h3 class="tut-slide-title">3. Tiga Mode Visual &amp; Variasi Morfologi</h3>
+                    <p class="tut-slide-lead">Modul ini menyediakan 3 representasi ilmiah sitogenetika serta 3 variasi morfologi kromosom sesuai standar medis ISCN 2020.</p>
+                    <div class="tut-grid">
+                        <div class="tut-box">
+                            <span class="tut-box-icon">🧪</span>
+                            <b>SEM &amp; Fluoresens G-Bands:</b>
+                            <p>Beralih antara tekstur mikroskop elektron nyata dan pola pita Giemsa (heterokromatin vs eukromatin) dengan pendaran FISH.</p>
+                        </div>
+                        <div class="tut-box">
+                            <span class="tut-box-icon">🧬</span>
+                            <b>Morfologi ISCN &amp; Satelit NOR:</b>
+                            <p>Eksplorasi tipe <b>Metasentris</b>, <b>Submetasentris</b>, dan <b>Akrosentris</b> (dilengkapi konstriksi sekunder &amp; satelit trabant pengkode rRNA).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tutorial-footer">
+                <div class="tutorial-dots">
+                    <span class="dot active" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                    <span class="dot" data-index="3"></span>
+                </div>
+                <div class="tutorial-nav-btns">
+                    <button id="tutorial-btn-prev" class="tut-nav-btn secondary" disabled>Sebelumnya</button>
+                    <button id="tutorial-btn-next" class="tut-nav-btn primary">Lanjut →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Three.js & OrbitControls via CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     
-    <!-- Script Logika 3D Kromosom & Animasi Anafase Mandiri -->
+    <!-- Script Logika 3D Kromosom Ultra-Realistis & Adaptif Multi-Device -->
     <script src="script.js"></script>
 </body>
 </html>
