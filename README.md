@@ -3,7 +3,7 @@
 <div align="center">
 
 ![GEN-OS Biological Interface](https://img.shields.io/badge/GEN--OS-v8.2_Biological_Interface-00f3ff?style=for-the-badge&logo=dna&logoColor=black)
-![Active Modules](https://img.shields.io/badge/Active_Modules-14_Simulations-00ff41?style=for-the-badge)
+![Active Modules](https://img.shields.io/badge/Active_Modules-15_Simulations-00ff41?style=for-the-badge)
 ![Tech Stack](https://img.shields.io/badge/Stack-Vanilla_JS_•_Tailwind_•_Canvas_60FPS-a855f7?style=for-the-badge)
 ![Research Project](https://img.shields.io/badge/Skripsi_S1-Tadris_Biologi_UIN_Palangka_Raya-f59e0b?style=for-the-badge)
 
@@ -42,9 +42,9 @@ Konsep-konsep dalam materi **Genetika dan Bioteknologi** di tingkat SMA (seperti
 
 ---
 
-## 🧬 Direktori Lengkap 14 Modul Laboratorium Virtual
+## 🧬 Direktori Lengkap 15 Modul Laboratorium Virtual
 
-Dashboard utama `index.html` memuat **14 modul aktif** yang siap digunakan secara mandiri maupun disematkan ke dalam media flipbook:
+Dashboard utama `index.html` memuat **15 modul aktif** yang siap digunakan secara mandiri maupun disematkan ke dalam media flipbook:
 
 ```
 GEN-OS v8.2 DIRECTORY
@@ -61,7 +61,8 @@ GEN-OS v8.2 DIRECTORY
 ├── [11] GAMETO-3D        : Meiosis Engine (Gametogenesis & Fertilisasi Seluler)
 ├── [12] BIO-ARCHIVE      : Classified Database (Ensiklopedia 16 Modul Bioteknologi)
 ├── [13] HEMATO-LAB       : Blood Type Analyzer (Uji Aglutinasi ABO/Rh & Mode Kuis)
-└── [14] SICKLE-MUT       : Point Mutation Analyzer (Mutasi HBB & Vaso-Oklusi 60 FPS)
+├── [14] SICKLE-MUT       : Point Mutation Analyzer (Mutasi HBB & Vaso-Oklusi 60 FPS)
+└── [15] TRISOMY-21       : Autosomal Mutation Analyzer (Sindrom Down & Nondisjunction)
 ```
 
 ---
@@ -218,6 +219,35 @@ GEN-OS v8.2 DIRECTORY
      - **Aliran Darah Sabit ($HbS$):** Deformasi sabit kaku menyumbat daerah bifurkasi/penyempitan mikrovaskular kapiler, memicu fenomena penumpukan trombus (*vaso-occlusive crisis*) secara dinamis.
      - Kontrol interaktif: Jeda/Lanjutkan dan Reset aliran.
   7. **Pewarisan & Seleksi Alam:** Diagram Punnett kombinasi parental ($HbAA, HbAS, HbSS$) dan penjelasan keunggulan heterozigot (*Heterozygote Advantage*) terhadap resistensi parasit malaria (*Plasmodium falciparum*).
+
+
+#### 15. 🔬 TRISOMY-21 — Autosomal Mutation Analyzer (Mutasi Autosom Sindrom Down)
+* **Berkas:** Simulasi Mutasi Genetik/Simulasi-Sindrom-Down.html
+* **Materi:** Mutasi kromosom autosom (Aneuploidi: Trisomi 21 / Sindrom Down) dan sitogenetika manusia.
+* **Arsitektur 7 Tahap Komprehensif Berbasis Literatur Ilmiah (Lejeune 1959, ISCN 2020, Nature Reviews, Antonarakis et al.):**
+  1. **Overview & Skala Genom:** Identitas sitogenetika kromosom 21 (autosom akrosentrik terkecil, ~47 Mb, ~234 gen pengkode protein), konsep dosis gen (*gene dosage hypothesis* 150%), dan komparasi skala ukuran genom autosom 1 vs 13 vs 21 untuk menjelaskan kelangsungan hidup penderita (viabilitas).
+  2. **Tipe Trisomi:** 3 varian sitogenetik utama:
+     - *Trisomi 21 Penuh* (~95% kasus, nondisjunction meiotik, murni sporadis).
+     - *Translokasi Robertsonian* (~3-4% kasus, fusi lengan panjang kr. 14 dan 21, satu-satunya varian yang dapat diwariskan dari orang tua karier seimbang).
+     - *Sindrom Down Mosaik* (~1-2% kasus, nondisjunction mitosis pasca-fertilisasi embrio, campuran galur sel 46 dan 47 kromosom).
+  3. **Simulator Interaktif Meiosis & Nondisjunction (5 Tahapan Beranimasi):**
+     - Skenario Meiosis Normal vs Nondisjunction Meiosis I vs Nondisjunction Meiosis II.
+     - Kontrol tahapan berurutan (*Metafase I → Anafase I → Anafase II → 4 Gamet → Fertilisasi*) dengan fitur pemutaran otomatis (*Auto Play*).
+     - Perhitungan telemetri pembentukan gamet (, n+1, n-1$) dan pembentukan zigot diploid abnormal (+1 = 47$).
+  4. **Pemindai Kariotipe ISCN 2020 & Inspektor Gen DSCR:**
+     - Tampilan kariotipe lengkap 22 pasang autosom + gonosom perempuan (,XX,+21$) dan laki-laki (,XY,+21$).
+     - Inspeksi interaktif lokus gen kritis *Down Syndrome Critical Region (DSCR)* pada lengan 21q22: *DYRK1A* (neurogenesis & defisit kognitif), *APP* (beta-amiloid & Alzheimer dini), *SOD1* (stres oksidatif), *RCAN1/DSCR1* (kalsineurin & jantung), dan *ETS2* (skelet & brakisefali).
+  5. **Fenotipe & Patogenesis Klinis:**
+     - Analisis 9 ciri fenotipik utama: fisura palpebra miring, lipatan epikantus, jembatan hidung datar, lipatan palmar tunggal (*simian crease*), clinodactyly, hipotonia, defek septum atrioventrikular (AVSD), perawakan pendek, dan disabilitas intelektual.
+     - Kondisi medis penyerta: disfungsi tiroid, atresia duodenum, dan peningkatan harapan hidup (>60 tahun di era modern).
+  6. **Risiko Usia Ibu & Visualisator Dot-Matrix 1.000 Kelahiran:**
+     - Kurva risiko epidemiologis berbasis data maternal (usia 20 hingga 45 tahun).
+     - Penggeser usia interaktif yang memperbarui probabilitas dan matriks visual 1.000 kelahiran bayi secara real-time.
+     - Penjelasan molekuler degradasi cincin kohesin (*cohesin decay*: REC8 & SMC1B) pada oosit yang terhenti di profase I (dictyate) selama beberapa dekade.
+  7. **Ringkasan, Kaskade Kronologis & Komparasi Mutasi:**
+     - Animasi kaskade sekuensial kronologis patogenesis.
+     - Matriks perbandingan menyeluruh antara mutasi gen molekuler (*SCA*) vs mutasi kromosom (*Down Syndrome*).
+     - Daftar referensi jurnal internasional.
 
 ---
 

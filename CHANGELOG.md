@@ -6,6 +6,31 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🔬 Peluncuran Modul TRISOMY-21: Autosomal Mutation Analyzer (Sindrom Down)
+- **Latar Belakang & Landasan Ilmiah:**
+  - Mengimplementasikan modul simulasi mutasi kromosom autosom (aneuploidi) untuk Sindrom Down (Trisomi 21) secara independen, melengkapi simulasi mutasi genetik tingkat molekuler (Anemia Sel Sabit / SICKLE-MUT).
+  - Berdasarkan literatur sitogenetika internasional: Lejeune et al. (1959), Down (1866), ISCN 2020, Nature Reviews Disease Primers (Antonarakis et al., 2020), dan pedoman NDSS/NIH.
+- **Arsitektur 7 Tahapan Investigasi Ilmiah:**
+  - **Tahap 1 (Overview & Skala Genom):** Profil sitogenetika kromosom 21 (autosom akrosentrik terkecil ~47 Mb, ~234 gen pengkode protein), konsep dosis gen 150%, dan analisis komparasi skala ukuran kromosom 1 vs 13 vs 21 untuk menguraikan mengapa Trisomi 21 viabel sedangkan trisomi kromosom besar letal embrionik dini.
+  - **Tahap 2 (Tipe Trisomi):** Eksplorasi 3 varian sitogenetik: Trisomi 21 Penuh (~95%), Translokasi Robertsonian der(14;21) (~3-4%, satu-satunya tipe yang dapat diwariskan dari orang tua karier seimbang 45 kromosom), dan Mosaik (~1-2%, nondisjunction mitosis awal pasca-fertilisasi). Dilengkapi panel detail interaktif dan tabel komparasi parameter klinis.
+  - **Tahap 3 (Simulator Meiosis & Nondisjunction 5 Tahap):** Mesin simulasi segregasi kromosom interaktif dengan 3 skenario (Normal, Nondisjunction Meiosis I, Nondisjunction Meiosis II) dan 5 tahapan (Metafase I → Anafase I → Anafase II → 4 Gamet → Fertilisasi). Dilengkapi tombol putar otomatis (Auto Play), reset, serta perhitungan telemetri pembentukan gamet (n, n+1, n-1) dan zigot (2n+1 = 47).
+  - **Tahap 4 (Kariotipe ISCN 2020 & Inspektor Gen DSCR):** Visualisasi kariotipe 47 kromosom (47,XX,+21 dan 47,XY,+21) dengan inspektor klik interaktif untuk setiap autosom dan gonosom. Sorotan khusus pada kromosom 21 dengan analisis lokus gen Down Syndrome Critical Region (DSCR) di lengan 21q22: *DYRK1A*, *APP*, *SOD1*, *RCAN1/DSCR1*, *ETS2*, dan *CBS*.
+  - **Tahap 5 (Fenotipe & Patogenesis Klinis):** Spektrum fenotipik kraniofasial (lipatan epikantus, jembatan hidung datar, fisura palpebra miring), muskuloskeletal (hipotonia, simian crease, clinodactyly), kardiovaskular (AVSD ~40-50%), kognitif, kondisi medis penyerta (tiroid, saluran cerna, neuropatologi Alzheimer), dan peningkatan harapan hidup (>60 tahun).
+  - **Tahap 6 (Risiko Usia Ibu & Visualisator Dot-Matrix 1.000 Kelahiran):** Grafik batang probabilitas epidemiologis maternal age (usia 20-45 tahun), slider interaktif dengan visualisasi 1.000 titik kelahiran bayi secara real-time, serta penjelasan degradasi kompleks kohesin (REC8 & SMC1B) pada oosit yang terhenti di profase I (dictyate).
+  - **Tahap 7 (Ringkasan, Kaskade Kronologis & Komparasi SCA vs Down Syndrome):** Animasi kaskade beruntun alur patogenesis, tabel komparasi komprehensif mutasi gen vs mutasi kromosom, dan sitasi literatur ilmiah terakreditasi.
+- **Tutorial Interaktif Terpadu:**
+  - Modal panduan edukasi 3 slide dengan navigasi mulus dan tombol akses cepat ? TUTORIAL di header.
+- **Integrasi Antarmuka & Responsivitas:**
+  - Penambahan kartu modul #15 pada dashboard portal utama index.html dengan pembaruan counter modul menjadi 15 ACTIVE MODULES.
+  - Desain Cyberpunk Darkfield & Frosted Glassmorphism yang konsisten dengan estetika GEN-OS v8.2.
+  - Diuji secara menyeluruh bebas galat konsol pada browser Chromium.
+- **Berkas yang Diperbarui / Ditambahkan:**
+  - Simulasi Mutasi Genetik/Simulasi-Sindrom-Down.html
+  - index.html
+  - README.md
+  - CHANGELOG.md
+
+
 ### 📱 Resolusi Bug Responsivitas Sentuhan Mobile (Touch Tap DNA Raycasting)
 - **Akar Masalah (Root Cause):**
   - Pada browser smartphone (iOS WebKit & Android Chromium), Three.js `OrbitControls` memanggil `event.preventDefault()` saat interaksi sentuhan layar (`touchmove`/`touchstart`) untuk mengendalikan rotasi orbital kamera 3D.

@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>GEN-OS // TRISOMY-21: Simulasi Sindrom Down</title>
+    <meta name="description"
+        content="Simulasi interaktif mutasi autosom Sindrom Down (Trisomi 21): visualisasi nondisjunction meiosis, kariotipe 47 kromosom, tipe trisomi, translokasi, mosaik, dan risiko usia ibu.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        ds: {
+                            dark: '#030712',
+                            panel: 'rgba(15, 23, 42, 0.85)',
+                            border: 'rgba(99, 102, 241, 0.25)',
+                            indigo: '#6366f1',
+                            purple: '#a855f7',
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            rose: '#f43f5e',
+                            blue: '#3b82f6',
+                            teal: '#14b8a6'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['Fira Code', 'JetBrains Mono', 'Courier Prime', 'monospace'],
+                        display: ['Orbitron', 'sans-serif'],
+                        sans: ['Rajdhani', 'sans-serif']
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2.5s infinite ease-in-out',
+                        'float': 'float 3s ease-in-out infinite',
+                        'spin-slow': 'spin 8s linear infinite'
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(99, 102, 241, 0.25)' },
+                            '50%': { boxShadow: '0 0 30px rgba(99, 102, 241, 0.6)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body { background-color: #030712; color: #e2e8f0; margin: 0; font-family: 'Rajdhani', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        .glass-panel {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.75) 100%);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Tutorial Overlay */
+        .tutorial-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 100;
+            display: flex; align-items: center; justify-content: center; padding: 1rem;
+        }
+        .tutorial-card {
+            max-width: 740px; width: 100%; max-height: 90vh; overflow-y: auto;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.97), rgba(30, 41, 59, 0.95));
+            border: 1px solid rgba(99, 102, 241, 0.35); border-radius: 1.5rem; padding: 2rem;
+            box-shadow: 0 0 60px rgba(99, 102, 241, 0.2), 0 25px 50px rgba(0,0,0,0.6);
+        }
+
+        /* Step Nav Buttons */
+        .step-btn {
+            padding: 9px 15px; border-radius: 8px; font-family: 'Orbitron', sans-serif;
+            font-size: 0.65rem; font-weight: 700; letter-spacing: 1.2px;
+            transition: all 0.3s ease; cursor: pointer; border: 1px solid transparent; white-space: nowrap;
+            min-height: 40px; display: inline-flex; align-items: center; justify-content: center;
+        }
+        .step-btn.active {
+            background: rgba(99, 102, 241, 0.25); border-color: rgba(99, 102, 241, 0.6);
+            color: #a5b4fc; box-shadow: 0 0 18px rgba(99, 102, 241, 0.3);
+        }
+        .step-btn:not(.active) {
+            background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); color: #94a3b8;
+        }
+        .step-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.25); color: #f1f5f9;
+        }
+
+        .progress-track { height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(to right, #6366f1, #a855f7, #ec4899); border-radius: 2px; transition: width 0.5s ease; }
+        .section-content { animation: fadeSlideIn 0.45s ease-out; }
+        @keyframes fadeSlideIn { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+
+        /* Karyotype Grid */
+        .karyotype-pair {
+            display: flex; align-items: flex-end; gap: 4px; padding: 6px 10px;
+            border-radius: 8px; transition: all 0.3s ease; position: relative; cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .karyotype-pair:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+        }
+        .karyotype-pair.selected {
+            background: rgba(99, 102, 241, 0.18);
+            border-color: rgba(99, 102, 241, 0.7);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+        .karyotype-pair.trisomy { 
+            border: 2px solid rgba(239, 68, 68, 0.6); background: rgba(239, 68, 68, 0.12);
+            animation: pulseGlowRed 2.2s infinite;
+        }
+        @keyframes pulseGlowRed {
+            0%, 100% { box-shadow: 0 0 10px rgba(239,68,68,0.25); }
+            50% { box-shadow: 0 0 24px rgba(239,68,68,0.65); }
+        }
+        .karyotype-label {
+            font-family: 'Fira Code', monospace; font-size: 0.6rem; color: #94a3b8;
+            text-align: center; margin-top: 4px;
+        }
+
+        /* Meiosis Stages */
+        .meiosis-canvas-box {
+            background: radial-gradient(circle at center, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1rem;
+            min-height: 280px; position: relative; overflow: hidden;
+        }
+        .spindle-fiber {
+            position: absolute; stroke: rgba(148, 163, 184, 0.25); stroke-dasharray: 4,4;
+        }
+
+        /* Phenotype Feature Card */
+        .pheno-feature {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px; padding: 14px; transition: all 0.3s ease;
+        }
+        .pheno-feature:hover {
+            border-color: rgba(99,102,241,0.4); background: rgba(99,102,241,0.08);
+            transform: translateY(-2px);
+        }
+
+        /* Risk Chart */
+        .risk-bar-container { display: flex; align-items: flex-end; gap: 3px; height: 180px; padding: 0 8px; }
+        .risk-bar {
+            flex: 1; border-radius: 4px 4px 0 0; transition: all 0.5s ease;
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+            padding-top: 4px; cursor: pointer; position: relative; min-width: 26px;
+        }
+        .risk-bar:hover { filter: brightness(1.25); transform: scaleY(1.05); transform-origin: bottom; }
+        .risk-bar-label {
+            position: absolute; bottom: -28px; font-family: 'Fira Code', monospace;
+            font-size: 0.55rem; color: #94a3b8; white-space: nowrap;
+        }
+        .risk-bar-value {
+            font-family: 'Fira Code', monospace; font-size: 0.52rem; color: white;
+            font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        }
+
+        /* 1,000 Dots Visualizer */
+        .dots-grid {
+            display: grid; grid-template-columns: repeat(50, 1fr); gap: 2px;
+            max-width: 650px; margin: 0 auto;
+        }
+        .dot-birth {
+            width: 7px; height: 7px; border-radius: 50%; background: rgba(71, 85, 105, 0.4);
+            transition: all 0.2s ease;
+        }
+        .dot-birth.affected {
+            background: #ef4444; box-shadow: 0 0 6px #ef4444; animation: pulseGlowRed 1.8s infinite;
+        }
+
+        /* Type Cards */
+        .type-card {
+            border-radius: 14px; padding: 22px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer; position: relative; overflow: hidden;
+        }
+        .type-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            border-radius: 14px 14px 0 0;
+        }
+        .type-card:hover { transform: translateY(-4px); }
+        .type-card.type-trisomy { 
+            background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.3);
+        }
+        .type-card.type-trisomy::before { background: linear-gradient(to right, #6366f1, #818cf8); }
+        .type-card.type-translocation { 
+            background: rgba(168,85,247,0.08); border: 1px solid rgba(168,85,247,0.3);
+        }
+        .type-card.type-translocation::before { background: linear-gradient(to right, #a855f7, #c084fc); }
+        .type-card.type-mosaic { 
+            background: rgba(20,184,166,0.08); border: 1px solid rgba(20,184,166,0.3);
+        }
+        .type-card.type-mosaic::before { background: linear-gradient(to right, #14b8a6, #2dd4bf); }
+
+        .info-badge {
+            padding: 4px 10px; border-radius: 6px;
+            font-family: 'Fira Code', monospace; font-size: 0.7rem; font-weight: 600;
+            letter-spacing: 0.05em; white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .glass-panel { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+            .risk-bar-container { height: 140px; }
+            .risk-bar { min-width: 18px; }
+            .dots-grid { grid-template-columns: repeat(25, 1fr); }
+            .dot-birth { width: 6px; height: 6px; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- TUTORIAL OVERLAY -->
+    <div id="tutorial-overlay" class="tutorial-overlay">
+        <div class="tutorial-card" id="tutorial-card"></div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="main-app" class="transition-opacity duration-500">
+        <header class="px-4 sm:px-6 py-4 flex justify-between items-center border-b border-white/10 bg-black/60 backdrop-blur-xl sticky top-0 z-40">
+            <div class="flex items-center gap-3">
+                <a href="../index.html" class="text-slate-400 hover:text-white transition-colors" title="Kembali ke Dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </a>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-display font-bold text-white tracking-wider">TRISOMY-<span class="text-indigo-400">21</span></h1>
+                    <p class="text-[9px] font-mono text-slate-500 tracking-[0.3em]">AUTOSOMAL MUTATION ANALYZER v2.0</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="showTutorial()" class="text-[10px] font-display font-bold tracking-widest px-3 py-1.5 rounded-lg border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 transition-all" title="Buka Tutorial">? TUTORIAL</button>
+                <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/10">
+                    <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+                    <span class="text-[10px] font-mono text-indigo-300">ANEUPLOIDY DETECTED</span>
+                </div>
+            </div>
+        </header>
+
+        <nav class="px-4 sm:px-6 py-3 border-b border-white/5 bg-black/30 backdrop-blur-md overflow-x-auto">
+            <div class="flex gap-2 min-w-max">
+                <button class="step-btn active" onclick="goToStep(0)" id="step-btn-0">01 OVERVIEW</button>
+                <button class="step-btn" onclick="goToStep(1)" id="step-btn-1">02 TIPE TRISOMI</button>
+                <button class="step-btn" onclick="goToStep(2)" id="step-btn-2">03 MEIOSIS</button>
+                <button class="step-btn" onclick="goToStep(3)" id="step-btn-3">04 KARIOTIPE</button>
+                <button class="step-btn" onclick="goToStep(4)" id="step-btn-4">05 FENOTIPE</button>
+                <button class="step-btn" onclick="goToStep(5)" id="step-btn-5">06 RISIKO</button>
+                <button class="step-btn" onclick="goToStep(6)" id="step-btn-6">07 RINGKASAN</button>
+            </div>
+            <div class="progress-track mt-2">
+                <div class="progress-fill" id="progress-bar" style="width: 14.28%"></div>
+            </div>
+        </nav>
+
+        <main class="p-4 sm:p-6 max-w-6xl mx-auto w-full" id="main-content"></main>
+
+        <footer class="p-4 text-center border-t border-white/5 bg-black/40 mt-8">
+            <p class="text-[9px] font-mono text-slate-500 tracking-widest">GEN-OS TRISOMY-21 MODULE • GENETIC LABORATORY PROJECT</p>
+            <p class="text-[8px] font-mono text-slate-600 mt-1">Referensi: NDSS, NIH/NCBI, Genome.gov, Cleveland Clinic, Khan Academy, IntechOpen, ISCN 2020</p>
+        </footer>
+    </div>
+
+    <script>
+    // ============================================================
+    // SCIENTIFIC DATA
+    // ============================================================
+    const CHROMOSOME_DATA = [
+        { id: 1,  sizeMb: 248, type: 'Metasentrik', genes: 2058 },
+        { id: 2,  sizeMb: 242, type: 'Submetasentrik', genes: 1309 },
+        { id: 3,  sizeMb: 198, type: 'Metasentrik', genes: 1078 },
+        { id: 4,  sizeMb: 190, type: 'Submetasentrik', genes: 752 },
+        { id: 5,  sizeMb: 182, type: 'Submetasentrik', genes: 876 },
+        { id: 6,  sizeMb: 171, type: 'Submetasentrik', genes: 1048 },
+        { id: 7,  sizeMb: 159, type: 'Submetasentrik', genes: 989 },
+        { id: 8,  sizeMb: 145, type: 'Submetasentrik', genes: 677 },
+        { id: 9,  sizeMb: 138, type: 'Submetasentrik', genes: 786 },
+        { id: 10, sizeMb: 133, type: 'Submetasentrik', genes: 733 },
+        { id: 11, sizeMb: 135, type: 'Submetasentrik', genes: 1298 },
+        { id: 12, sizeMb: 133, type: 'Submetasentrik', genes: 1034 },
+        { id: 13, sizeMb: 114, type: 'Akrosentrik', genes: 327 },
+        { id: 14, sizeMb: 107, type: 'Akrosentrik', genes: 830 },
+        { id: 15, sizeMb: 102, type: 'Akrosentrik', genes: 613 },
+        { id: 16, sizeMb: 90,  type: 'Metasentrik', genes: 873 },
+        { id: 17, sizeMb: 83,  type: 'Submetasentrik', genes: 1197 },
+        { id: 18, sizeMb: 80,  type: 'Submetasentrik', genes: 270 },
+        { id: 19, sizeMb: 59,  type: 'Metasentrik', genes: 1472 },
+        { id: 20, sizeMb: 64,  type: 'Metasentrik', genes: 544 },
+        { id: 21, sizeMb: 47,  type: 'Akrosentrik', genes: 234 },
+        { id: 22, sizeMb: 51,  type: 'Akrosentrik', genes: 488 }
+    ];
+
+    const CHR21_CRITICAL_GENES = [
+        { symbol: 'DYRK1A', locus: '21q22.13', name: 'Dual-specificity Tyrosine Phosphorylation-Regulated Kinase 1A', role: 'Regulasi neurogenesis & perkembangan otak. Berkontribusi pada defisit kognitif dan mikrosefali.' },
+        { symbol: 'APP', locus: '21q21.3', name: 'Amyloid Beta Precursor Protein', role: 'Dosis gen berlebih memicu penumpukan plak beta-amiloid di otak, menyebabkan neuropatologi serupa Alzheimer pada usia 40+.' },
+        { symbol: 'SOD1', locus: '21q22.11', name: 'Superoxide Dismutase 1', role: 'Kelebihan enzim menyebabkan peroksidasi lipid, stres oksidatif seluler, dan penuaan sel yang dipercepat.' },
+        { symbol: 'RCAN1', locus: '21q22.12', name: 'Regulator of Calcineurin 1 (DSCR1)', role: 'Mengatur jalur sinyal kalsineurin. Terlibat dalam perkembangan defek septum jantung dan pembentukan kraniofasial.' },
+        { symbol: 'ETS2', locus: '21q22.2', name: 'ETS Proto-Oncogene 2', role: 'Faktor transkripsi skeletal. Overekspresi memicu brakisefali, kelainan tulang tengkorak, dan predisposisi leukemia.' },
+        { symbol: 'CBS', locus: '21q22.3', name: 'Cystathionine-Beta-Synthase', role: 'Metabolisme asam amino sulfur & homosistein. Mempengaruhi profil biokimia jaringan otak.' }
+    ];
+
+    const MATERNAL_AGE_RISK = [
+        { age: 20, risk: 1/1500, label: '1:1.500', ratePerThousand: 0.67 },
+        { age: 25, risk: 1/1250, label: '1:1.250', ratePerThousand: 0.8 },
+        { age: 30, risk: 1/900,  label: '1:900',   ratePerThousand: 1.1 },
+        { age: 32, risk: 1/720,  label: '1:720',   ratePerThousand: 1.4 },
+        { age: 35, risk: 1/350,  label: '1:350',   ratePerThousand: 2.9 },
+        { age: 37, risk: 1/240,  label: '1:240',   ratePerThousand: 4.2 },
+        { age: 38, risk: 1/170,  label: '1:170',   ratePerThousand: 5.9 },
+        { age: 40, risk: 1/100,  label: '1:100',   ratePerThousand: 10.0 },
+        { age: 42, risk: 1/60,   label: '1:60',    ratePerThousand: 16.7 },
+        { age: 45, risk: 1/30,   label: '1:30',    ratePerThousand: 33.3 }
+    ];
+
+    let currentStep = 0;
+    let currentTutorialPage = 0;
+    const totalSteps = 7;
+    let activeType = 'trisomy';
+    let meiosisMode = 'normal';
+    let meiosisStage = 0;
+    let meiosisAutoInterval = null;
+    let selectedKaryoChr = 21;
+    let karyoSex = 'XX';
+
+    // ============================================================
+    // TUTORIAL
+    // ============================================================
+    const tutorialPages = [
+        {
+            title: '🧬 Selamat Datang di TRISOMY-21 Laboratory',
+            icon: '🔬',
+            content: `
+                <p class="text-slate-200 leading-relaxed mb-4">
+                    Selamat datang di modul <strong class="text-indigo-400">TRISOMY-21</strong>, simulator ilmiah interaktif yang memodelkan 
+                    mekanisme <strong class="text-amber-400">mutasi autosom</strong> pada kromosom nomor 21 penyebab 
+                    <strong class="text-indigo-300">Sindrom Down</strong> — kelainan kromosom manusia paling umum di dunia.
+                </p>
+                <div class="bg-indigo-500/10 border border-indigo-500/25 rounded-xl p-4 mb-4">
+                    <h4 class="text-indigo-400 font-bold text-sm mb-2">📚 Landasan Teori Sitogenetika</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Sindrom Down pertama kali didokumentasikan klinis oleh <strong class="text-white">Dr. John Langdon Down (1866)</strong>, 
+                        dan penyebab sitogenetiknya diidentifikasi oleh <strong class="text-white">Jérôme Lejeune (1959)</strong> sebagai 
+                        keberadaan <strong class="text-amber-400">47 kromosom</strong> akibat trisomi kromosom 21. 
+                        Kromosom 21 adalah autosom terkecil manusia (~47 juta pasang basa, ~1-1.5% total genom).
+                    </p>
+                </div>
+                <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
+                    <h4 class="text-blue-400 font-bold text-sm mb-2">🎯 Capaian Kompetensi Belajar</h4>
+                    <ul class="text-slate-300 text-sm space-y-1.5 ml-4" style="list-style: disc;">
+                        <li>Memahami konsep <strong class="text-white">aneuploidi autosom</strong> vs mutasi titik genetik (seperti SCA).</li>
+                        <li>Menganalisis 3 varian sitogenetik: <strong class="text-white">Trisomi Penuh</strong> (~95%), <strong class="text-white">Translokasi Robertsonian</strong> (~3-4%), dan <strong class="text-white">Mosaik</strong> (~1-2%).</li>
+                        <li>Memvisualisasikan mekanisme gagal berpisah (<strong class="text-white">nondisjunction</strong>) pada Meiosis I vs Meiosis II.</li>
+                        <li>Membaca kariotipe standar internasional ISCN 2020 (<strong class="text-white">47,XX,+21</strong> & <strong class="text-white">47,XY,+21</strong>).</li>
+                        <li>Mengkaji korelasi epidemiologis antara <strong class="text-white">usia ibu</strong> dan degradasi aparatus pembelahan oosit.</li>
+                    </ul>
+                </div>`
+        },
+        {
+            title: '📖 Aneuploidi: Mutasi Gen vs Mutasi Kromosom',
+            icon: '📋',
+            content: `
+                <div class="space-y-4">
+                    <p class="text-slate-300 leading-relaxed">
+                        Di dalam biologi seluler, mutasi dibedakan menjadi mutasi tingkat gen dan mutasi tingkat kromosom:
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="bg-red-500/10 border border-red-500/20 rounded-xl p-3">
+                            <div class="text-red-400 font-bold text-xs uppercase mb-1">Mutasi Gen (Point Mutation)</div>
+                            <div class="text-white font-bold text-sm mb-1">Contoh: Anemia Sel Sabit (SCA)</div>
+                            <p class="text-slate-400 text-xs">Perubahan terjadi pada 1 pasang basa nitrogen DNA (A→T pada kodon 6 gen HBB). Jumlah total kromosom tetap normal 46.</p>
+                        </div>
+                        <div class="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-3">
+                            <div class="text-indigo-400 font-bold text-xs uppercase mb-1">Mutasi Kromosom (Aneuploidi)</div>
+                            <div class="text-white font-bold text-sm mb-1">Contoh: Sindrom Down (Trisomi 21)</div>
+                            <p class="text-slate-400 text-xs">Perubahan terjadi pada jumlah seluruh kromosom (kelebihan 1 kromosom autosom 21 lengkap). Jumlah kromosom menjadi 47 (2n+1).</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800/60 border border-white/10 rounded-xl p-4">
+                        <h4 class="text-amber-400 font-bold text-sm mb-2">⚡ Mengapa Hanya Trisomi 21 yang Banyak Bertahan Hidup?</h4>
+                        <p class="text-slate-300 text-xs leading-relaxed">
+                            Trisomi pada kromosom besar (seperti kromosom 1, 2, atau 3) menyebabkan ketidakseimbangan dosis ribuan gen 
+                            yang berakibat <strong class="text-red-400">letal embrionik dini</strong> (keguguran spontan). 
+                            Kromosom 21 hanya mengandung ~234 gen protein-coding, sehingga embrio masih mampu berkembang hingga lahir (<strong class="text-emerald-400">viabel</strong>), meski disertai spektrum kelainan perkembangan.
+                        </p>
+                    </div>
+                </div>`
+        },
+        {
+            title: '🎮 Fitur Laboratorium & Panduan Navigasi',
+            icon: '🧭',
+            content: `
+                <div class="space-y-4">
+                    <p class="text-slate-300 leading-relaxed">Simulasi terbagi menjadi <strong class="text-indigo-400">7 modul investigasi ilmiah</strong>:</p>
+                    <div class="space-y-2">
+                        ${[
+                            ['01','Overview','Profil sitogenetika, perbandingan normal vs trisomi, dan skala genom'],
+                            ['02','Tipe Trisomi','3 varian sitogenetik: Trisomi 21 Penuh, Translokasi Robertsonian, dan Mosaik'],
+                            ['03','Meiosis','Simulator interaktif bertahap: animasi nondisjunction Meiosis I & II serta fertilisasi'],
+                            ['04','Kariotipe','Pemindai kariotipe ISCN 47 kromosom & inspektor lokus gen kritis DSCR'],
+                            ['05','Fenotipe','Spektrum klinis: kraniofasial, kardiovaskular AVSD, hipotonia, dan patogenesis'],
+                            ['06','Risiko','Kalkulator risiko usia ibu & visualisasi matriks 1.000 kelahiran'],
+                            ['07','Ringkasan','Kaskade kronologis, komparasi SCA vs Down Syndrome, dan literatur ilmiah']
+                        ].map(([num, title, desc]) => `
+                        <div class="flex items-start gap-3 bg-white/[0.03] rounded-lg p-2.5">
+                            <span class="text-xs font-display font-bold text-indigo-400 bg-indigo-500/15 px-2 py-1 rounded shrink-0">${num}</span>
+                            <div><strong class="text-white text-xs">${title}</strong><p class="text-slate-400 text-[11px]">${desc}</p></div>
+                        </div>`).join('')}
+                    </div>
+                    <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3">
+                        <p class="text-emerald-300 text-xs"><strong>💡 Tips Interaksi:</strong> Gunakan kontrol stage di tab Meiosis untuk melihat segregasi kromosom secara berurutan, klik kromosom apa saja pada lembar Kariotipe untuk memeriksa data genom, dan geser penggeser usia pada tab Risiko.</p>
+                    </div>
+                </div>`
+        }
+    ];
+
+    function renderTutorial() {
+        const card = document.getElementById('tutorial-card');
+        const page = tutorialPages[currentTutorialPage];
+        card.innerHTML = `
+            <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">${page.icon}</span>
+                    <div>
+                        <h2 class="text-lg font-display font-bold text-white tracking-wider">${page.title}</h2>
+                        <p class="text-[10px] font-mono text-slate-500 mt-0.5">Panduan Edukasi • Halaman ${currentTutorialPage + 1} dari ${tutorialPages.length}</p>
+                    </div>
+                </div>
+                <button onclick="closeTutorial()" class="text-slate-500 hover:text-white transition-colors p-1" title="Tutup">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="mb-6">${page.content}</div>
+            <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                <button onclick="prevTutorialPage()" class="step-btn ${currentTutorialPage === 0 ? 'opacity-30 pointer-events-none' : ''}" ${currentTutorialPage === 0 ? 'disabled' : ''}>← SEBELUMNYA</button>
+                <div class="flex gap-1.5">${tutorialPages.map((_,i) => `<div class="w-2.5 h-2.5 rounded-full ${i === currentTutorialPage ? 'bg-indigo-400' : 'bg-slate-700'} transition-colors"></div>`).join('')}</div>
+                ${currentTutorialPage < tutorialPages.length - 1
+                    ? '<button onclick="nextTutorialPage()" class="step-btn active">SELANJUTNYA →</button>'
+                    : '<button onclick="closeTutorial()" class="step-btn active">MULAI SIMULASI →</button>'
+                }
+            </div>`;
+    }
+    function nextTutorialPage() { if (currentTutorialPage < tutorialPages.length - 1) { currentTutorialPage++; renderTutorial(); } }
+    function prevTutorialPage() { if (currentTutorialPage > 0) { currentTutorialPage--; renderTutorial(); } }
+    function closeTutorial() {
+        const overlay = document.getElementById('tutorial-overlay');
+        overlay.style.opacity = '0';
+        setTimeout(() => { overlay.style.display = 'none'; }, 300);
+    }
+    function showTutorial() {
+        currentTutorialPage = 0;
+        const overlay = document.getElementById('tutorial-overlay');
+        overlay.style.display = 'flex';
+        overlay.style.opacity = '1';
+        renderTutorial();
+    }
+
+    // ============================================================
+    // STEP NAVIGATION
+    // ============================================================
+    function goToStep(step) {
+        clearInterval(meiosisAutoInterval);
+        currentStep = step;
+        for (let i = 0; i < totalSteps; i++) {
+            const btn = document.getElementById(`step-btn-${i}`);
+            if (btn) btn.classList.toggle('active', i === step);
+        }
+        document.getElementById('progress-bar').style.width = `${((step + 1) / totalSteps) * 100}%`;
+        renderStep();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderStep() {
+        const c = document.getElementById('main-content');
+        c.innerHTML = '';
+        switch (currentStep) {
+            case 0: renderOverview(c); break;
+            case 1: renderTypes(c); break;
+            case 2: renderMeiosis(c); break;
+            case 3: renderKaryotype(c); break;
+            case 4: renderPhenotype(c); break;
+            case 5: renderRisk(c); break;
+            case 6: renderSummary(c); break;
+        }
+    }
+
+    function S(title, sub, content) {
+        return `<div class="section-content"><div class="mb-6"><h2 class="text-xl sm:text-2xl font-display font-bold text-white tracking-wider mb-1">${title}</h2><p class="text-xs font-mono text-slate-500 tracking-wider">${sub}</p></div>${content}</div>`;
+    }
+
+    function nav(prevStep, prevLabel, nextStep, nextLabel) {
+        return `<div class="flex justify-between items-center mt-8 pt-4 border-t border-white/5">
+            <button onclick="goToStep(${prevStep})" class="step-btn px-5">← ${prevLabel}</button>
+            <button onclick="goToStep(${nextStep})" class="step-btn active px-5">${nextLabel} →</button>
+        </div>`;
+    }
+
+    // ============================================================
+    // STEP 0: OVERVIEW
+    // ============================================================
+    function renderOverview(c) {
+        c.innerHTML = S('OVERVIEW', 'SINDROM DOWN — MUTASI AUTOSOM TRISOMI 21', `
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+                <div class="glass-panel p-5 space-y-3">
+                    <h3 class="text-sm font-display font-bold text-indigo-400 tracking-wider flex items-center gap-2">
+                        <span>📋</span> IDENTITAS SITOGENETIKA
+                    </h3>
+                    ${[
+                        ['NAMA KELAINAN', 'Sindrom Down (Down Syndrome / DS)'],
+                        ['NOMENKLATUR RESMI', '<span class="font-mono text-amber-300 font-bold">Trisomi 21 (Trisomy 21)</span>'],
+                        ['KLASIFIKASI MUTASI', '<span class="info-badge bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">Aneuploidi Autosom (2n + 1)</span>'],
+                        ['KROMOSOM TERDAMPAK', '<span class="info-badge bg-purple-500/15 text-purple-300 border border-purple-500/30">Kromosom 21 (Grup G, Akrosentrik)</span>'],
+                        ['FORMULA KARIOTIPE', '<span class="font-mono text-amber-300">47,XX,+21</span> (♀) / <span class="font-mono text-amber-300">47,XY,+21</span> (♂)'],
+                        ['TOTAL KROMOSOM', '<span class="font-mono text-red-400 font-bold text-base">47</span> (Normal manusia: 46)'],
+                        ['INSIDENSI POPULASI', '~1 dari 700 - 800 kelahiran hidup'],
+                        ['PENEMU SITOGENETIK', 'Jérôme Lejeune dkk. (1959)']
+                    ].map(([k,v]) => `<div class="flex items-center justify-between py-2 border-b border-white/5"><span class="text-xs text-slate-400 font-mono">${k}</span><span class="text-sm text-white">${v}</span></div>`).join('')}
+                </div>
+
+                <div class="glass-panel p-5 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-sm font-display font-bold text-amber-400 tracking-wider mb-4 flex items-center gap-2">
+                            <span>⚡</span> KOMPARASI DOSIS GENOM: DISOMI vs TRISOMI
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-4 text-center">
+                                <div class="text-3xl font-display font-bold text-emerald-400 mb-1">46</div>
+                                <div class="text-xs text-white font-bold">DISOMI NORMAL (2n)</div>
+                                <div class="text-[10px] text-slate-400 mt-1">22 Pasang Autosom + 1 Pasang Gonosom</div>
+                                <div class="flex justify-center gap-1.5 my-3">
+                                    <div class="w-3.5 h-10 bg-emerald-500/50 rounded-sm border border-emerald-400/40"></div>
+                                    <div class="w-3.5 h-10 bg-emerald-500/50 rounded-sm border border-emerald-400/40"></div>
+                                </div>
+                                <div class="text-[9px] text-emerald-400 font-mono font-semibold">2 Salinan Kr. 21 (100% Dosis Gen)</div>
+                            </div>
+                            <div class="bg-red-500/5 border border-red-500/25 rounded-xl p-4 text-center">
+                                <div class="text-3xl font-display font-bold text-red-400 mb-1">47</div>
+                                <div class="text-xs text-white font-bold">TRISOMI 21 (2n + 1)</div>
+                                <div class="text-[10px] text-slate-400 mt-1">22 Pasang Autosom + 1 Ekstra #21 + Gonosom</div>
+                                <div class="flex justify-center gap-1.5 my-3">
+                                    <div class="w-3.5 h-10 bg-red-500/50 rounded-sm border border-red-400/40"></div>
+                                    <div class="w-3.5 h-10 bg-red-500/50 rounded-sm border border-red-400/40"></div>
+                                    <div class="w-3.5 h-10 bg-red-500/80 rounded-sm border border-red-400 animate-pulse"></div>
+                                </div>
+                                <div class="text-[9px] text-red-400 font-mono font-semibold">3 Salinan Kr. 21 (150% Overekspresi)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 bg-white/[0.03] border border-white/5 rounded-lg p-3">
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            <strong class="text-amber-400">Gene Dosage Effect (Hipotesis Dosis Gen):</strong> Keberadaan 3 salinan kromosom 21 menyebabkan sintesis produk protein dari gen-gen di kromosom tersebut meningkat sebesar <strong class="text-white">~50%</strong>. Kelebihan produk genetik ini mengganggu homeostasis seluler, neurogenesis, dan morfogenesis embrio.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chromosome Size Scale: Why Chromosome 21 is Viable -->
+            <div class="glass-panel p-5 mb-5">
+                <h3 class="text-sm font-display font-bold text-cyan-400 tracking-wider mb-2 flex items-center gap-2">
+                    <span>🔬</span> ANALISIS UKURAN GENOM: MENGAPA TRISOMI 21 KOMPATIBEL DENGAN KEHIDUPAN?
+                </h3>
+                <p class="text-xs text-slate-300 mb-4 leading-relaxed">
+                    Trisomi pada sebagian besar autosom manusia bersifat <strong class="text-red-400">letal embrionik</strong> (keguguran dini) karena mengganggu ribuan gen esensial. Kromosom 21 adalah autosom dengan materi genetik paling sedikit, sehingga trisomi-nya masih mampu bertahan hidup hingga dewasa.
+                </p>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-xs font-mono mb-1">
+                            <span class="text-slate-400">Kromosom 1 (Autosom Terbesar)</span>
+                            <span class="text-slate-300">248 Mb • 2.058 Gen • <strong class="text-red-400">Trisomi 1 = 100% Letal Embrio Dini</strong></span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
+                            <div class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full rounded-full" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-mono mb-1">
+                            <span class="text-slate-400">Kromosom 13 (Sindrom Patau)</span>
+                            <span class="text-slate-300">114 Mb • 327 Gen • <strong class="text-amber-400">Trisomi 13 = Viabilitas Sangat Rendah</strong></span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
+                            <div class="bg-gradient-to-r from-amber-500 to-orange-500 h-full rounded-full" style="width: 46%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-mono mb-1">
+                            <span class="text-indigo-400 font-bold">Kromosom 21 (Sindrom Down)</span>
+                            <span class="text-emerald-400 font-bold">47 Mb • ~234 Gen • <strong>Trisomi 21 = Viabel (Harapan Hidup >60 Thn)</strong></span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
+                            <div class="bg-gradient-to-r from-emerald-400 to-teal-400 h-full rounded-full animate-pulse" style="width: 19%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                ${[
+                    ['47', 'KROMOSOM TOTAL', 'indigo'],
+                    ['21', 'NOMOR KROMOSOM', 'purple'],
+                    ['~1:700', 'INSIDENSI KELAHIRAN', 'amber'],
+                    ['~90%', 'ASAL NONDISJUNCTION IBU', 'cyan']
+                ].map(([v,l,col]) => `<div class="glass-panel p-4 text-center"><div class="text-2xl font-display font-bold text-${col}-400">${v}</div><div class="text-[10px] font-mono text-slate-400 mt-1">${l}</div></div>`).join('')}
+            </div>
+
+            ${nav(0, 'OVERVIEW', 1, 'TIPE TRISOMI')}`
+        );
+    }
+
+    // ============================================================
+    // STEP 1: TYPES
+    // ============================================================
+    function renderTypes(c) {
+        c.innerHTML = S('TIPE TRISOMI', 'TIGA VARIAN SITOGENETIK SINDROM DOWN', `
+            <div class="glass-panel p-5 mb-5">
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    Sindrom Down timbul melalui tiga jalur sitogenetika yang berbeda secara mekanisme pembentukan kromosom. 
+                    Klik masing-masing kartu di bawah untuk melihat rincian molekuler dan implikasi klinisnya:
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
+                <!-- Type 1: Trisomy 21 Penuh -->
+                <div class="type-card type-trisomy ${activeType === 'trisomy' ? 'ring-2 ring-indigo-500' : ''}" onclick="selectType('trisomy')">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-2xl">🔵</span>
+                        <div>
+                            <h3 class="text-sm font-display font-bold text-indigo-300 tracking-wider">TRISOMI 21 PENUH</h3>
+                            <span class="text-[10px] font-mono text-indigo-400">~95% KASUS • NON-DISJUNCTION</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="flex justify-center gap-2 mb-2">
+                            ${Array(3).fill(0).map(() => `<div class="flex flex-col items-center gap-0.5"><div class="w-3.5 h-8 bg-indigo-500/70 rounded-sm"></div><div class="w-4 h-2 bg-white/30 rounded-sm"></div><div class="w-3.5 h-6 bg-indigo-500/70 rounded-sm"></div></div>`).join('')}
+                        </div>
+                        <div class="text-[9px] font-mono text-center text-indigo-300">3 × Kromosom 21 Bebas Mandiri</div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                        Seluruh sel somatik dalam tubuh memiliki <strong class="text-white">47 kromosom</strong>. Disebabkan oleh kegagalan pemisahan kromosom 21 (nondisjunction) selama gametogenesis (meiosis) salah satu orang tua.
+                    </p>
+                    <div class="bg-indigo-500/10 rounded-lg p-2.5 text-[11px] text-slate-300 space-y-1">
+                        <div>• ~90% berasal dari meiosis oosit ibu</div>
+                        <div>• ~10% berasal dari spermatogenesis ayah</div>
+                        <div>• <strong class="text-emerald-400">Tidak diwariskan</strong> (kejadian sporadis baru)</div>
+                    </div>
+                </div>
+
+                <!-- Type 2: Translokasi Robertsonian -->
+                <div class="type-card type-translocation ${activeType === 'translocation' ? 'ring-2 ring-purple-500' : ''}" onclick="selectType('translocation')">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-2xl">🟣</span>
+                        <div>
+                            <h3 class="text-sm font-display font-bold text-purple-300 tracking-wider">TRANSLOKASI</h3>
+                            <span class="text-[10px] font-mono text-purple-400">~3-4% KASUS • ROBERTSONIAN</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="flex justify-center items-end gap-2 mb-2">
+                            <div class="flex flex-col items-center gap-0.5">
+                                <div class="w-3.5 h-8 bg-purple-500/70 rounded-sm"></div>
+                                <div class="w-4 h-2 bg-white/30 rounded-sm"></div>
+                                <div class="w-3.5 h-6 bg-purple-500/70 rounded-sm"></div>
+                            </div>
+                            <div class="flex flex-col items-center gap-0.5">
+                                <div class="w-3.5 h-8 bg-purple-500/70 rounded-sm"></div>
+                                <div class="w-4 h-2 bg-white/30 rounded-sm"></div>
+                                <div class="w-3.5 h-6 bg-purple-500/70 rounded-sm"></div>
+                            </div>
+                            <div class="text-purple-400 text-xs self-center mx-1 font-bold">+</div>
+                            <div class="flex flex-col items-center gap-0.5 relative">
+                                <div class="w-3.5 h-12 bg-amber-500/60 rounded-sm"></div>
+                                <div class="w-4 h-2 bg-white/30 rounded-sm"></div>
+                                <div class="w-3.5 h-7 bg-purple-400/80 rounded-sm border border-purple-300"></div>
+                                <span class="absolute -right-2 top-0 text-[8px] font-mono text-amber-300">14</span>
+                                <span class="absolute -right-2 bottom-0 text-[8px] font-mono text-purple-300">21</span>
+                            </div>
+                        </div>
+                        <div class="text-[9px] font-mono text-center text-purple-300">2 × Kr. 21 + 1 Menempel di Kr. 14</div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                        Lengan panjang kromosom 21 melekat pada kromosom akrosentrik lain (tersering <strong class="text-amber-300">kromosom 14</strong>). Jumlah kromosom bisa tetap 46, namun materi genetik kromosom 21 tetap berlebih 3 dosis.
+                    </p>
+                    <div class="bg-purple-500/10 rounded-lg p-2.5 text-[11px] text-slate-300 space-y-1">
+                        <div>• <strong class="text-amber-300 font-semibold">Satu-satunya tipe yang bisa diwariskan</strong></div>
+                        <div>• Orang tua bisa menjadi karier seimbang (45 kromosom)</div>
+                        <div>• Memerlukan konseling genetik silsilah keluarga</div>
+                    </div>
+                </div>
+
+                <!-- Type 3: Mosaik -->
+                <div class="type-card type-mosaic ${activeType === 'mosaic' ? 'ring-2 ring-teal-500' : ''}" onclick="selectType('mosaic')">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-2xl">🟢</span>
+                        <div>
+                            <h3 class="text-sm font-display font-bold text-teal-300 tracking-wider">MOSAIK</h3>
+                            <span class="text-[10px] font-mono text-teal-400">~1-2% KASUS • PASCA-FERTILISASI</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="flex justify-center gap-1.5 flex-wrap mb-2">
+                            ${[46, 47, 46, 47, 46].map((num) => {
+                                const isTri = num === 47;
+                                return `<div class="w-8 h-8 rounded-full border ${isTri ? 'border-red-400/60 bg-red-500/20 text-red-300' : 'border-emerald-400/60 bg-emerald-500/20 text-emerald-300'} flex items-center justify-center font-mono text-[9px] font-bold">
+                                    ${num}
+                                </div>`;
+                            }).join('')}
+                        </div>
+                        <div class="text-[9px] font-mono text-center text-teal-300">Campuran Galur Sel 46 & 47 Kromosom</div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                        Kesalahan terjadi <strong class="text-teal-300">setelah pembuahan</strong> pada pembelahan mitosis awal embrio. Sebagian jaringan tubuh memiliki sel 46 kromosom normal dan sebagian memiliki sel 47 trisomik.
+                    </p>
+                    <div class="bg-teal-500/10 rounded-lg p-2.5 text-[11px] text-slate-300 space-y-1">
+                        <div>• Manifestasi klinis sering kali lebih ringan</div>
+                        <div>• Persentase sel trisomi bervariasi antar-organ</div>
+                        <div>• Kejadian murni sporadis pasca-konsepsi</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deep Dive Panel for Selected Type -->
+            <div id="type-detail-panel" class="glass-panel p-5 mb-5">
+                <!-- Injected by renderTypeDetail -->
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="glass-panel p-5">
+                <h3 class="text-sm font-display font-bold text-cyan-400 tracking-wider mb-3">📊 MATRIKS PERBANDINGAN TIGA TIPE</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="text-left py-2.5 text-[10px] font-mono text-slate-400">PARAMETER SITOGENETIKA</th>
+                                <th class="text-center py-2.5 text-[10px] font-mono text-indigo-400">TRISOMI 21 PENUH</th>
+                                <th class="text-center py-2.5 text-[10px] font-mono text-purple-400">TRANSLOKASI ROBERTSONIAN</th>
+                                <th class="text-center py-2.5 text-[10px] font-mono text-teal-400">SINDROM DOWN MOSAIK</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-xs">
+                            ${[
+                                ['Frekuensi Kasus', '~95%', '~3-4%', '~1-2%'],
+                                ['Jumlah Kromosom', '47', '46 (materi kr. 21 ekstra)', '46 & 47 (campuran galur sel)'],
+                                ['Formula Kariotipe', '47,XX,+21 / 47,XY,+21', '46,XX,rob(14;21),+21', '47,XX,+21[n] / 46,XX[m]'],
+                                ['Waktu Terjadinya Kesalahan', 'Saat Meiosis I / II (Gamet)', 'Sebelum / saat konsepsi', 'Mitosis awal pasca-fertilisasi'],
+                                ['Potensi Pewarisan Keluarga', 'Tidak (Sporadis)', 'Ya (dari orang tua karier seimbang)', 'Tidak (Sporadis)'],
+                                ['Pengaruh Usia Ibu', 'Sangat Kuat', 'Tidak Signifikan (independen)', 'Lemah / Bervariasi'],
+                                ['Distribusi Sel Trisomi', '100% sel tubuh penderita', '100% sel tubuh penderita', 'Sebagian sel (tergantung jaringan)']
+                            ].map(([label,...vals]) => `
+                                <tr class="border-b border-white/5 hover:bg-white/[0.02]">
+                                    <td class="py-2.5 text-slate-400 font-mono">${label}</td>
+                                    ${vals.map(v => `<td class="py-2.5 text-center text-slate-200">${v}</td>`).join('')}
+                                </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            ${nav(0, 'OVERVIEW', 2, 'MEIOSIS')}`
+        );
+        renderTypeDetail();
+    }
+
+    function selectType(t) {
+        activeType = t;
+        renderTypes(document.getElementById('main-content'));
+    }
+
+    function renderTypeDetail() {
+        const p = document.getElementById('type-detail-panel');
+        if (!p) return;
+
+        if (activeType === 'trisomy') {
+            p.innerHTML = `
+                <h3 class="text-sm font-display font-bold text-indigo-400 tracking-wider mb-2">🔍 MEKANISME: TRISOMI 21 PENUH (NONDISJUNCTION MEIOTIK)</h3>
+                <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                    Pada trisomi 21 penuh, mutasi terjadi saat pembentukan sel telur (oogenesis) atau sel sperma (spermatogenesis). 
+                    Pasangan kromosom 21 gagal berpisah pada Meiosis I (~75% kasus oogenesis) atau kromatid saudara gagal berpisah pada Meiosis II (~25% kasus).
+                </p>
+                <div class="bg-slate-900/60 border border-indigo-500/20 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-around gap-4 text-center">
+                    <div>
+                        <div class="text-xs font-mono text-indigo-300">Oosit / Sperma Normal</div>
+                        <div class="font-bold text-sm text-white mt-1">n = 23 (1 salinan #21)</div>
+                    </div>
+                    <div class="text-slate-500 text-lg">+</div>
+                    <div>
+                        <div class="text-xs font-mono text-red-400">Gamet Nondisjunction</div>
+                        <div class="font-bold text-sm text-red-300 mt-1">n + 1 = 24 (2 salinan #21)</div>
+                    </div>
+                    <div class="text-slate-500 text-lg">=</div>
+                    <div class="bg-indigo-500/15 border border-indigo-500/30 p-3 rounded-lg">
+                        <div class="text-xs font-mono text-amber-300">Zigot Trisomi 21</div>
+                        <div class="font-bold text-base text-white mt-1">2n + 1 = 47 Kromosom</div>
+                    </div>
+                </div>
+            `;
+        } else if (activeType === 'translocation') {
+            p.innerHTML = `
+                <h3 class="text-sm font-display font-bold text-purple-400 tracking-wider mb-2">🔍 MEKANISME: TRANSLOKASI ROBERTSONIAN (FUSI KROMOSOM)</h3>
+                <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                    Kromosom 21 dan kromosom 14 keduanya merupakan kromosom <strong class="text-white">akrosentrik</strong> (sentromer dekat ujung, lengan p sangat pendek). 
+                    Pada translokasi Robertsonian, kedua lengan pendek patah dan hilang, lalu kedua lengan panjang bergabung menjadi satu kromosom hibrida besar <strong class="text-purple-300 font-mono">der(14;21)</strong>.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3.5">
+                        <div class="text-xs font-bold text-amber-300 mb-1">Orang Tua Karier Seimbang (Carrier)</div>
+                        <p class="text-[11px] text-slate-400 mb-2">Memiliki 45 kromosom: satu kr. 14 normal, satu kr. 21 normal, dan satu kr. translokasi 14;21. Materi genetik lengkap dan seimbang, sehingga individu carrier <strong class="text-emerald-400">sehat tanpa gejala</strong>.</p>
+                        <span class="font-mono text-xs text-slate-300 bg-black/40 px-2 py-1 rounded">Formula: 45,XX,rob(14;21)(q10;q10)</span>
+                    </div>
+                    <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3.5">
+                        <div class="text-xs font-bold text-red-400 mb-1">Anak dengan Sindrom Down Translokasi</div>
+                        <p class="text-[11px] text-slate-400 mb-2">Mewarisi kr. translokasi 14;21 dari orang tua carrier, ditambah satu kr. 21 normal dari masing-masing orang tua. Total materi kromosom 21 menjadi 3 salinan.</p>
+                        <span class="font-mono text-xs text-red-300 bg-black/40 px-2 py-1 rounded">Formula: 46,XX,+21,rob(14;21)</span>
+                    </div>
+                </div>
+            `;
+        } else {
+            p.innerHTML = `
+                <h3 class="text-sm font-display font-bold text-teal-400 tracking-wider mb-2">🔍 MEKANISME: SINDROM DOWN MOSAIK (NONDISJUNCTION MITOSIS EMBRIO)</h3>
+                <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                    Pembuahan berawal dari sel telur dan sperma normal (zigot 46 kromosom normal). Namun, pada salah satu pembelahan <strong class="text-teal-300">mitosis awal</strong> di fase embriogenesis (misalnya pada tahap 2 sel, 4 sel, atau 8 sel), kromatid kromosom 21 gagal berpisah.
+                </p>
+                <div class="bg-slate-900/60 border border-teal-500/20 rounded-xl p-4">
+                    <div class="text-xs font-mono text-center text-slate-400 mb-3">Pohon Pembelahan Seluler Embrio</div>
+                    <div class="flex justify-center items-center gap-6 text-center">
+                        <div class="bg-emerald-500/10 border border-emerald-500/30 p-3 rounded-xl">
+                            <div class="font-mono text-xs text-emerald-400 font-bold">Galur Sel Normal</div>
+                            <div class="text-sm text-white font-bold mt-1">46 Kromosom</div>
+                            <div class="text-[10px] text-slate-400 mt-1">Membentuk jaringan sehat</div>
+                        </div>
+                        <div class="text-teal-400 text-xl font-bold">+</div>
+                        <div class="bg-red-500/10 border border-red-500/30 p-3 rounded-xl">
+                            <div class="font-mono text-xs text-red-400 font-bold">Galur Sel Trisomi</div>
+                            <div class="text-sm text-white font-bold mt-1">47 Kromosom</div>
+                            <div class="text-[10px] text-slate-400 mt-1">Kelebihan dosis gen 21</div>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-slate-400 text-center mt-3">Tingkat keparahan fenotipe sangat bergantung pada persentase dan organ target tempat sel 47 kromosom berada (misalnya otak, jantung, atau darah).</p>
+                </div>
+            `;
+        }
+    }
+
+    // ============================================================
+    // STEP 2: MEIOSIS INTERACTIVE SIMULATION
+    // ============================================================
+    function renderMeiosis(c) {
+        c.innerHTML = S('MEIOSIS & NONDISJUNCTION', 'SIMULATOR TAHAPAN KEGAGALAN PEMISAHAN KROMOSOM', `
+            <div class="glass-panel p-5 mb-5">
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    <strong class="text-amber-400">Nondisjunction</strong> adalah kegagalan pemisahan materi genetik selama pembelahan sel gamet. 
+                    Pilih skenario segregasi dan kendalikan tahapan pembelahan menggunakan kontrol tahapan di bawah:
+                </p>
+            </div>
+
+            <!-- Mode Selector -->
+            <div class="flex flex-wrap justify-center gap-3 mb-5">
+                <button onclick="setMeiosisMode('normal')" id="meiosis-btn-normal" class="step-btn ${meiosisMode === 'normal' ? 'active' : ''} text-xs">
+                    ✅ MEIOSIS NORMAL
+                </button>
+                <button onclick="setMeiosisMode('nondis1')" id="meiosis-btn-nondis1" class="step-btn ${meiosisMode === 'nondis1' ? 'active' : ''} text-xs">
+                    ⚠️ NONDISJUNCTION MEIOSIS I
+                </button>
+                <button onclick="setMeiosisMode('nondis2')" id="meiosis-btn-nondis2" class="step-btn ${meiosisMode === 'nondis2' ? 'active' : ''} text-xs">
+                    ⚠️ NONDISJUNCTION MEIOSIS II
+                </button>
+            </div>
+
+            <!-- Stage Stepper Controls -->
+            <div class="glass-panel p-4 mb-5 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleMeiosisAuto()" id="meiosis-play-btn" class="step-btn active text-xs px-4">
+                        ▶ PUTAR OTOMATIS
+                    </button>
+                    <button onclick="resetMeiosisStage()" class="step-btn text-xs px-3">
+                        ⏮ RESET
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-1.5 flex-wrap">
+                    ${['1. METAMORFOSE I', '2. ANAFASE I', '3. ANAFASE II', '4. 4 GAMET', '5. FERTILISASI'].map((st, i) => `
+                        <button onclick="setMeiosisStage(${i})" id="stage-btn-${i}" class="px-2.5 py-1.5 rounded-md font-mono text-[10px] font-bold transition-all ${meiosisStage === i ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30' : 'bg-white/[0.04] text-slate-400 hover:text-white'}">
+                            ${st}
+                        </button>
+                    `).join('')}
+                </div>
+            </div>
+
+            <!-- Interactive Stage Display Canvas / Area -->
+            <div id="meiosis-interactive-area" class="glass-panel p-6 mb-5">
+                <!-- Rendered dynamically -->
+            </div>
+
+            <!-- Comparative Summary Table -->
+            <div class="glass-panel p-5">
+                <h3 class="text-sm font-display font-bold text-cyan-400 tracking-wider mb-3">📊 DISTRIBUSI GAMET HASIL NONDISJUNCTION</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="text-left py-2 text-[10px] font-mono text-slate-500">SKENARIO PEMBELAHAN</th>
+                                <th class="text-center py-2 text-[10px] font-mono text-slate-400">GAMET 1</th>
+                                <th class="text-center py-2 text-[10px] font-mono text-slate-400">GAMET 2</th>
+                                <th class="text-center py-2 text-[10px] font-mono text-slate-400">GAMET 3</th>
+                                <th class="text-center py-2 text-[10px] font-mono text-slate-400">GAMET 4</th>
+                                <th class="text-center py-2 text-[10px] font-mono text-indigo-400">PROPORSI TRISOMI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-white/5 ${meiosisMode === 'normal' ? 'bg-emerald-500/10' : ''}">
+                                <td class="py-2.5 text-emerald-400 font-mono font-bold">Meiosis Normal</td>
+                                <td class="py-2.5 text-center text-emerald-300">n (23)</td>
+                                <td class="py-2.5 text-center text-emerald-300">n (23)</td>
+                                <td class="py-2.5 text-center text-emerald-300">n (23)</td>
+                                <td class="py-2.5 text-center text-emerald-300">n (23)</td>
+                                <td class="py-2.5 text-center text-emerald-400 font-bold">0% (100% Normal)</td>
+                            </tr>
+                            <tr class="border-b border-white/5 ${meiosisMode === 'nondis1' ? 'bg-red-500/10' : ''}">
+                                <td class="py-2.5 text-red-400 font-mono font-bold">Nondisjunction Meiosis I</td>
+                                <td class="py-2.5 text-center text-red-400 font-bold">n+1 (24)</td>
+                                <td class="py-2.5 text-center text-red-400 font-bold">n+1 (24)</td>
+                                <td class="py-2.5 text-center text-amber-300">n-1 (22)</td>
+                                <td class="py-2.5 text-center text-amber-300">n-1 (22)</td>
+                                <td class="py-2.5 text-center text-red-400 font-bold">50% Trisomi (50% Monosomi)</td>
+                            </tr>
+                            <tr class="${meiosisMode === 'nondis2' ? 'bg-amber-500/10' : ''}">
+                                <td class="py-2.5 text-amber-400 font-mono font-bold">Nondisjunction Meiosis II</td>
+                                <td class="py-2.5 text-center text-red-400 font-bold">n+1 (24)</td>
+                                <td class="py-2.5 text-center text-amber-300">n-1 (22)</td>
+                                <td class="py-2.5 text-center text-emerald-300">n (23)</td>
+                                <td class="py-2.5 text-center text-emerald-300">n (23)</td>
+                                <td class="py-2.5 text-center text-amber-400 font-bold">25% Trisomi (50% Normal)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            ${nav(1, 'TIPE TRISOMI', 3, 'KARIOTIPE')}`
+        );
+        renderMeiosisStageView();
+    }
+
+    function setMeiosisMode(mode) {
+        meiosisMode = mode;
+        meiosisStage = 0;
+        clearInterval(meiosisAutoInterval);
+        renderMeiosis(document.getElementById('main-content'));
+    }
+
+    function setMeiosisStage(stage) {
+        meiosisStage = stage;
+        for (let i = 0; i < 5; i++) {
+            const b = document.getElementById(`stage-btn-${i}`);
+            if (b) {
+                b.className = `px-2.5 py-1.5 rounded-md font-mono text-[10px] font-bold transition-all ${meiosisStage === i ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30' : 'bg-white/[0.04] text-slate-400 hover:text-white'}`;
+            }
+        }
+        renderMeiosisStageView();
+    }
+
+    function resetMeiosisStage() {
+        clearInterval(meiosisAutoInterval);
+        const playBtn = document.getElementById('meiosis-play-btn');
+        if (playBtn) playBtn.textContent = '▶ PUTAR OTOMATIS';
+        setMeiosisStage(0);
+    }
+
+    function toggleMeiosisAuto() {
+        const playBtn = document.getElementById('meiosis-play-btn');
+        if (meiosisAutoInterval) {
+            clearInterval(meiosisAutoInterval);
+            meiosisAutoInterval = null;
+            if (playBtn) playBtn.textContent = '▶ PUTAR OTOMATIS';
+        } else {
+            if (playBtn) playBtn.textContent = '⏸ JEDA';
+            meiosisAutoInterval = setInterval(() => {
+                if (meiosisStage < 4) {
+                    setMeiosisStage(meiosisStage + 1);
+                } else {
+                    setMeiosisStage(0);
+                }
+            }, 2600);
+        }
+    }
+
+    function renderMeiosisStageView() {
+        const box = document.getElementById('meiosis-interactive-area');
+        if (!box) return;
+
+        const stageDescriptions = [
+            {
+                name: 'Tahap 1: Metafase I (Pasangan Kromosom Homolog)',
+                desc: 'Sel induk diploid (2n=46). Pasangan kromosom homolog #21 berbaris di lempeng metafase ekuatorial sel, diikat oleh benang spindel dari dua sentrosom kutub berlawanan.'
+            },
+            {
+                name: 'Tahap 2: Anafase I (Segregasi Kromosom Homolog)',
+                desc: meiosisMode === 'normal' 
+                    ? 'NORMAL: Benang spindel memendek dan memisahkan kromosom homolog secara seimbang ke kutub atas dan kutub bawah.'
+                    : meiosisMode === 'nondis1'
+                    ? '⚠️ NONDISJUNCTION MEIOSIS I: Kegagalan pemisahan homolog! KEDUA kromosom 21 ditarik ke satu kutub yang sama, sedangkan kutub lainnya tidak menerima kromosom 21 sama sekali.'
+                    : 'NORMAL PADA MEIOSIS I: Kromosom homolog berpisah secara normal ke masing-masing kutub.'
+            },
+            {
+                name: 'Tahap 3: Anafase II (Segregasi Kromatid Saudara)',
+                desc: meiosisMode === 'normal' || meiosisMode === 'nondis1'
+                    ? 'Kromatid saudara di masing-masing sel sekunder memisah secara simetris menuju kutub sel.'
+                    : '⚠️ NONDISJUNCTION MEIOSIS II: Pada salah satu sel anak sekunder, kromatid saudara kromosom 21 GAGAL BERPISAH dan terdorong ke satu kutub!'
+            },
+            {
+                name: 'Tahap 4: Pembentukan 4 Gamet Haploid Akhir',
+                desc: meiosisMode === 'normal'
+                    ? 'Terbentuk 4 gamet seimbang: seluruhnya memiliki n = 23 kromosom (1 salinan kromosom 21).'
+                    : meiosisMode === 'nondis1'
+                    ? 'Terbentuk 4 gamet abnormal: 2 gamet disomik n+1 (24 kromosom) dan 2 gamet nolsomik n-1 (22 kromosom).'
+                    : 'Terbentuk 4 gamet campuran: 1 gamet n+1 (24), 1 gamet n-1 (22), dan 2 gamet normal n (23).'
+            },
+            {
+                name: 'Tahap 5: Pembuahan (Fertilisasi) dengan Sperma Normal (n=23)',
+                desc: 'Simulasi konsepsi ketika gamet ovum bertemu sperma normal pembawa 23 kromosom (termasuk 1 salinan kr. 21 normal).'
+            }
+        ];
+
+        const cur = stageDescriptions[meiosisStage];
+
+        let visualHTML = '';
+
+        if (meiosisStage === 0) {
+            visualHTML = `
+                <div class="flex flex-col items-center justify-center p-6">
+                    <div class="w-48 h-48 rounded-full border-2 border-indigo-500/40 bg-slate-900/80 flex items-center justify-center relative shadow-inner">
+                        <div class="absolute w-2 h-2 rounded-full bg-cyan-400 top-2 left-24" title="Sentrosom Kutub Utara"></div>
+                        <div class="absolute w-2 h-2 rounded-full bg-cyan-400 bottom-2 left-24" title="Sentrosom Kutub Selatan"></div>
+                        <div class="w-full border-t border-dashed border-slate-700 absolute"></div>
+                        <!-- Bivalent homologous chromosome 21 -->
+                        <div class="flex items-center gap-2 z-10">
+                            <div class="flex flex-col items-center">
+                                <span class="text-[9px] font-mono text-indigo-400 mb-1">Maternal 21</span>
+                                <div class="w-4 h-12 bg-indigo-500 rounded border border-indigo-300 shadow-md"></div>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <span class="text-[9px] font-mono text-purple-400 mb-1">Paternal 21</span>
+                                <div class="w-4 h-12 bg-purple-500 rounded border border-purple-300 shadow-md"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-[11px] font-mono text-slate-400 mt-3 text-center">Sel Induk Oosit/Spermatosit (2n=46) • Pasangan Homolog Kromosom 21 Berjejer</div>
+                </div>
+            `;
+        } else if (meiosisStage === 1) {
+            const isErr = meiosisMode === 'nondis1';
+            visualHTML = `
+                <div class="flex flex-col items-center justify-center p-6">
+                    <div class="w-64 h-48 rounded-[2.5rem] border-2 ${isErr ? 'border-red-500/60 bg-red-950/20' : 'border-indigo-500/40 bg-slate-900/80'} flex items-center justify-around relative p-4">
+                        <div class="flex flex-col items-center">
+                            <span class="text-[9px] font-mono ${isErr ? 'text-red-400 font-bold' : 'text-slate-400'}">Kutub A</span>
+                            <div class="flex gap-1 mt-2">
+                                <div class="w-3.5 h-10 bg-indigo-500 rounded border border-indigo-300"></div>
+                                ${isErr ? '<div class="w-3.5 h-10 bg-purple-500 rounded border border-purple-300 animate-pulse"></div>' : ''}
+                            </div>
+                            ${isErr ? '<span class="text-[9px] font-mono text-red-400 mt-1 font-bold">2 Kromosom!</span>' : ''}
+                        </div>
+                        <div class="h-full border-r border-dashed border-slate-700"></div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-[9px] font-mono ${isErr ? 'text-red-400 font-bold' : 'text-slate-400'}">Kutub B</span>
+                            <div class="flex gap-1 mt-2">
+                                ${isErr ? '<div class="w-8 h-10 rounded border border-dashed border-red-500/40 flex items-center justify-center text-xs text-red-500">∅</div>' : '<div class="w-3.5 h-10 bg-purple-500 rounded border border-purple-300"></div>'}
+                            </div>
+                            ${isErr ? '<span class="text-[9px] font-mono text-amber-400 mt-1">Kosong (0)</span>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else if (meiosisStage === 2) {
+            const isErr2 = meiosisMode === 'nondis2';
+            visualHTML = `
+                <div class="flex flex-col items-center justify-center p-4">
+                    <div class="grid grid-cols-2 gap-4 w-full max-w-lg">
+                        <div class="rounded-2xl border ${isErr2 ? 'border-amber-500/60 bg-amber-950/20' : 'border-white/10 bg-slate-900/60'} p-3 flex flex-col items-center">
+                            <span class="text-[9px] font-mono text-slate-400">Sel Sekunder 1</span>
+                            <div class="flex justify-around w-full mt-2">
+                                ${isErr2 ? `
+                                    <div class="flex flex-col items-center"><div class="flex gap-0.5"><div class="w-2.5 h-7 bg-indigo-500 rounded"></div><div class="w-2.5 h-7 bg-indigo-500 rounded"></div></div><span class="text-[8px] text-red-400 font-bold mt-1">Gagal Pisah!</span></div>
+                                    <div class="w-6 h-7 border border-dashed border-amber-500/40 rounded flex items-center justify-center text-[10px] text-amber-500">∅</div>
+                                ` : `
+                                    <div class="w-2.5 h-7 bg-indigo-500 rounded"></div>
+                                    <div class="w-2.5 h-7 bg-indigo-500 rounded"></div>
+                                `}
+                            </div>
+                        </div>
+                        <div class="rounded-2xl border border-white/10 bg-slate-900/60 p-3 flex flex-col items-center">
+                            <span class="text-[9px] font-mono text-slate-400">Sel Sekunder 2</span>
+                            <div class="flex justify-around w-full mt-2">
+                                ${meiosisMode === 'nondis1' ? `
+                                    <div class="text-xs text-slate-600">∅</div>
+                                    <div class="text-xs text-slate-600">∅</div>
+                                ` : `
+                                    <div class="w-2.5 h-7 bg-purple-500 rounded"></div>
+                                    <div class="w-2.5 h-7 bg-purple-500 rounded"></div>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else if (meiosisStage === 3) {
+            let gametes = [];
+            if (meiosisMode === 'normal') {
+                gametes = [
+                    { type: 'n', chr: 23, count21: 1, color: 'emerald', label: 'Normal' },
+                    { type: 'n', chr: 23, count21: 1, color: 'emerald', label: 'Normal' },
+                    { type: 'n', chr: 23, count21: 1, color: 'emerald', label: 'Normal' },
+                    { type: 'n', chr: 23, count21: 1, color: 'emerald', label: 'Normal' }
+                ];
+            } else if (meiosisMode === 'nondis1') {
+                gametes = [
+                    { type: 'n+1', chr: 24, count21: 2, color: 'red', label: 'Disomik #21' },
+                    { type: 'n+1', chr: 24, count21: 2, color: 'red', label: 'Disomik #21' },
+                    { type: 'n-1', chr: 22, count21: 0, color: 'amber', label: 'Nolsomik #21' },
+                    { type: 'n-1', chr: 22, count21: 0, color: 'amber', label: 'Nolsomik #21' }
+                ];
+            } else {
+                gametes = [
+                    { type: 'n+1', chr: 24, count21: 2, color: 'red', label: 'Disomik #21' },
+                    { type: 'n-1', chr: 22, count21: 0, color: 'amber', label: 'Nolsomik #21' },
+                    { type: 'n', chr: 23, count21: 1, color: 'emerald', label: 'Normal' },
+                    { type: 'n', chr: 23, count21: 1, color: 'emerald', label: 'Normal' }
+                ];
+            }
+
+            visualHTML = `
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 p-2">
+                    ${gametes.map((g, idx) => `
+                        <div class="bg-slate-900/90 border border-${g.color}-500/30 rounded-xl p-3 text-center shadow-lg">
+                            <span class="text-[9px] font-mono text-slate-400">Gamet #${idx + 1}</span>
+                            <div class="text-xl font-display font-bold text-${g.color}-400 my-1">${g.type}</div>
+                            <div class="text-[11px] font-mono text-white">${g.chr} Kromosom</div>
+                            <div class="flex justify-center gap-1 my-2">
+                                ${Array(g.count21).fill(0).map(() => `<div class="w-2.5 h-6 bg-${g.color}-400 rounded-sm"></div>`).join('')}
+                                ${g.count21 === 0 ? '<div class="text-xs text-slate-600 font-mono">∅</div>' : ''}
+                            </div>
+                            <span class="text-[9px] font-bold text-${g.color}-300 bg-${g.color}-500/10 px-2 py-0.5 rounded">${g.label}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } else if (meiosisStage === 4) {
+            visualHTML = `
+                <div class="space-y-4 p-2">
+                    <div class="text-center text-xs text-slate-300 font-mono">PILIH SALAH SATU GAMET HASIL PEMBELAHAN UNTUK DIBUAHI SPERMA NORMAL (n=23):</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-center">
+                            <span class="text-[10px] font-mono text-red-400">Ovum n+1 (24 Kromosom)</span>
+                            <div class="text-xs text-slate-400 my-1">+ Sperma Normal n (23)</div>
+                            <div class="text-2xl font-display font-bold text-red-400 mt-2">2n + 1 = 47</div>
+                            <div class="text-xs text-white font-bold mt-1">SINDROM DOWN (TRISOMI 21)</div>
+                            <p class="text-[10px] text-slate-300 mt-2">Anak viabel dengan 3 kromosom 21 di seluruh sel tubuh.</p>
+                        </div>
+                        <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 text-center">
+                            <span class="text-[10px] font-mono text-amber-400">Ovum n-1 (22 Kromosom)</span>
+                            <div class="text-xs text-slate-400 my-1">+ Sperma Normal n (23)</div>
+                            <div class="text-2xl font-display font-bold text-amber-400 mt-2">2n - 1 = 45</div>
+                            <div class="text-xs text-white font-bold mt-1">MONOSOMI 21 (LETAL)</div>
+                            <p class="text-[10px] text-slate-300 mt-2">Monosomi autosom tidak viabel (terjadi keguguran spontan dini).</p>
+                        </div>
+                        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 text-center">
+                            <span class="text-[10px] font-mono text-emerald-400">Ovum Normal n (23 Kromosom)</span>
+                            <div class="text-xs text-slate-400 my-1">+ Sperma Normal n (23)</div>
+                            <div class="text-2xl font-display font-bold text-emerald-400 mt-2">2n = 46</div>
+                            <div class="text-xs text-white font-bold mt-1">KARIOTIPE NORMAL (EUPLOID)</div>
+                            <p class="text-[10px] text-slate-300 mt-2">Anak berkembang dengan 23 pasang kromosom seimbang.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        box.innerHTML = `
+            <div class="border-b border-white/10 pb-3 mb-4">
+                <div class="flex items-center justify-between">
+                    <h4 class="text-sm font-display font-bold text-indigo-400 tracking-wide">${cur.name}</h4>
+                    <span class="text-[10px] font-mono text-slate-500">Tahap ${meiosisStage + 1} / 5</span>
+                </div>
+                <p class="text-xs text-slate-300 mt-1 leading-relaxed">${cur.desc}</p>
+            </div>
+            ${visualHTML}
+        `;
+    }
+
+    // ============================================================
+    // STEP 3: KARYOTYPE & GENE INSPECTOR
+    // ============================================================
+    function renderKaryotype(c) {
+        c.innerHTML = S('KARIOTIPE & PEMINDAI GEN', 'VISUALISASI 47 KROMOSOM DAN LOKUS GEN KRITIS 21q22', `
+            <div class="glass-panel p-5 mb-5">
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    Kariotipe sitogenetika disusun berdasarkan konvensi internasional <strong class="text-indigo-400">ISCN 2020</strong>. 
+                    Klik pasangan kromosom mana saja di grid kariotipe untuk membedah data sitogenetika dan lokus genetiknya:
+                </p>
+            </div>
+
+            <!-- Sex Selector -->
+            <div class="flex flex-wrap justify-center gap-3 mb-4">
+                <button onclick="setKaryotypeSex('XX')" id="karyo-btn-XX" class="step-btn ${karyoSex === 'XX' ? 'active' : ''} text-xs">
+                    ♀ PEREMPUAN: 47,XX,+21
+                </button>
+                <button onclick="setKaryotypeSex('XY')" id="karyo-btn-XY" class="step-btn ${karyoSex === 'XY' ? 'active' : ''} text-xs">
+                    ♂ LAKI-LAKI: 47,XY,+21
+                </button>
+            </div>
+
+            <!-- Karyotype Grid -->
+            <div class="glass-panel p-5 mb-5" id="karyotype-grid-container">
+                <!-- Rendered dynamically -->
+            </div>
+
+            <!-- Active Chromosome Deep Dive Inspector -->
+            <div class="glass-panel p-5" id="karyotype-detail-inspector">
+                <!-- Injected dynamically -->
+            </div>
+
+            ${nav(2, 'MEIOSIS', 4, 'FENOTIPE')}`
+        );
+        renderKaryotypeGrid();
+        renderChromosomeInspector();
+    }
+
+    function setKaryotypeSex(s) {
+        karyoSex = s;
+        renderKaryotype(document.getElementById('main-content'));
+    }
+
+    function selectChromosome(id) {
+        selectedKaryoChr = id;
+        renderKaryotypeGrid();
+        renderChromosomeInspector();
+    }
+
+    function renderKaryotypeGrid() {
+        const cont = document.getElementById('karyotype-grid-container');
+        if (!cont) return;
+
+        const sizes = CHROMOSOME_DATA.map(c => c.sizeMb);
+        const maxH = 50;
+        const maxSize = Math.max(...sizes);
+
+        function chrSVG(h, color = '#818cf8', glow = false) {
+            const topH = Math.max(Math.round(h * 0.45), 6);
+            const botH = Math.max(Math.round(h * 0.55), 7);
+            return `<div class="flex flex-col items-center gap-0 ${glow ? 'animate-pulse' : ''}">
+                <div style="width:7px;height:${topH}px;background:${color};border-radius:3px;${glow ? 'box-shadow:0 0 10px ' + color : ''}"></div>
+                <div style="width:9px;height:3px;background:rgba(255,255,255,0.3);border-radius:1px;"></div>
+                <div style="width:7px;height:${botH}px;background:${color};border-radius:3px;${glow ? 'box-shadow:0 0 10px ' + color : ''}"></div>
+            </div>`;
+        }
+
+        let html = `
+            <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
+                <span class="font-mono text-xs text-slate-400">PETA SITOGENETIKA METAMORFOSE G-BANDING</span>
+                <span class="font-mono text-amber-300 font-bold text-sm bg-amber-500/10 px-3 py-1 rounded border border-amber-500/20">
+                    KARIOTIPE: 47,${karyoSex},+21
+                </span>
+            </div>
+            <div class="flex flex-wrap justify-center gap-x-2.5 gap-y-3.5">
+        `;
+
+        for (let i = 0; i < 22; i++) {
+            const chrNum = i + 1;
+            const h = Math.round((sizes[i] / maxSize) * maxH);
+            const isTrisomy = (chrNum === 21);
+            const isSelected = (selectedKaryoChr === chrNum);
+            const color = isTrisomy ? '#f87171' : (isSelected ? '#a5b4fc' : '#818cf8');
+
+            html += `
+                <div class="karyotype-pair ${isTrisomy ? 'trisomy' : ''} ${isSelected ? 'selected' : ''}" 
+                     onclick="selectChromosome(${chrNum})" 
+                     title="Klik untuk menganalisis Kromosom ${chrNum}">
+                    ${chrSVG(h, color, isTrisomy)}
+                    ${chrSVG(h, color, isTrisomy)}
+                    ${isTrisomy ? chrSVG(h, '#ef4444', true) : ''}
+                    <div class="karyotype-label ${isTrisomy ? 'text-red-400 font-bold' : ''}">#${chrNum}</div>
+                </div>
+            `;
+        }
+
+        // Gonosomes
+        const xH = Math.round((155 / maxSize) * maxH);
+        const yH = Math.round((57 / maxSize) * maxH);
+        const isSexSelected = (selectedKaryoChr === 23);
+
+        html += `
+            <div class="karyotype-pair ${isSexSelected ? 'selected' : ''}" onclick="selectChromosome(23)" title="Kromosom Seks ${karyoSex}">
+                ${chrSVG(xH, '#f472b6')}
+                ${karyoSex === 'XX' ? chrSVG(xH, '#f472b6') : chrSVG(yH, '#38bdf8')}
+                <div class="karyotype-label text-pink-300 font-bold">${karyoSex}</div>
+            </div>
+        `;
+
+        html += '</div>';
+
+        // Legend
+        html += `
+            <div class="flex flex-wrap justify-center gap-4 mt-5 pt-3 border-t border-white/5">
+                <div class="flex items-center gap-2"><div class="w-3 h-5 bg-indigo-400/70 rounded-sm"></div><span class="text-[10px] text-slate-400">Autosom Normal Disomi (2x)</span></div>
+                <div class="flex items-center gap-2"><div class="w-3 h-5 bg-red-400/90 rounded-sm animate-pulse"></div><span class="text-[10px] text-red-400 font-bold">Kromosom 21 Ekstra (Trisomi 3x)</span></div>
+                <div class="flex items-center gap-2"><div class="w-3 h-5 bg-pink-400/70 rounded-sm"></div><span class="text-[10px] text-slate-400">Kromosom Seks (${karyoSex})</span></div>
+            </div>
+        `;
+
+        cont.innerHTML = html;
+    }
+
+    function renderChromosomeInspector() {
+        const insp = document.getElementById('karyotype-detail-inspector');
+        if (!insp) return;
+
+        if (selectedKaryoChr === 21) {
+            insp.innerHTML = `
+                <div class="border-b border-red-500/20 pb-3 mb-4 flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">🚨</span>
+                            <h3 class="text-base font-display font-bold text-red-400 tracking-wider">KROMOSOM 21 — ANALISIS LOKUS TRISOMI</h3>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-0.5">Autosom Akrosentrik terkecil (~47 Mb) • Status: <strong class="text-red-400">ANEUPLOIDI TRISOMI (3 SALINAN)</strong></p>
+                    </div>
+                    <span class="info-badge bg-red-500/15 text-red-300 border border-red-500/30">150% GENE DOSAGE</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                    <div class="bg-slate-900/60 border border-white/5 rounded-xl p-4">
+                        <h4 class="text-xs font-mono font-bold text-amber-300 mb-2">🧬 MORFOLOGI SITOGENETIK KR. 21</h4>
+                        <ul class="text-xs text-slate-300 space-y-1.5 ml-4" style="list-style: disc;">
+                            <li><strong>Tipe Sentromer:</strong> Akrosentrik (Grup G).</li>
+                            <li><strong>Lengan Pendek (p):</strong> Sangat kecil (satelit), membawa gen RNA ribosom (rDNA) yang redundan.</li>
+                            <li><strong>Lengan Panjang (q):</strong> Membawa seluruh ~234 gen fungsional pengkode protein.</li>
+                            <li><strong>Down Syndrome Critical Region (DSCR):</strong> Lokus 21q22.1 - 21q22.3 bertanggung jawab atas fenotipe utama.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-900/60 border border-white/5 rounded-xl p-4">
+                        <h4 class="text-xs font-mono font-bold text-cyan-300 mb-2">⚡ DAMPAK 3 SALINAN TERHADAP SEL</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Trisomi 21 tidak mengubah struktur sekuens gen individual, melainkan memicu <strong class="text-white">overekspresi kuantitatif</strong> sebesar ~1.5x lipat. 
+                            Ini menyebabkan kegagalan koordinasi kompleks multimerik protein dan disfungsi jalur transduksi sinyal seluler.
+                        </p>
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-display font-bold text-indigo-300 tracking-wider mb-3">🔬 GEN-GEN KRITIS DI REGIO 21q22 & KORELASI PATOLOGIS:</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    ${CHR21_CRITICAL_GENES.map(g => `
+                        <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3.5 hover:border-indigo-500/40 transition-colors">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-mono text-sm font-bold text-red-400">${g.symbol}</span>
+                                <span class="font-mono text-[10px] text-indigo-300 bg-indigo-500/10 px-2 py-0.5 rounded">${g.locus}</span>
+                            </div>
+                            <div class="text-[11px] font-bold text-white mb-1.5">${g.name}</div>
+                            <p class="text-[10px] text-slate-400 leading-relaxed">${g.role}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } else if (selectedKaryoChr === 23) {
+            insp.innerHTML = `
+                <div class="border-b border-pink-500/20 pb-3 mb-4">
+                    <h3 class="text-base font-display font-bold text-pink-400 tracking-wider">KROMOSOM SEKS (${karyoSex})</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Penentu jenis kelamin individu Sindrom Down • Status: <strong class="text-emerald-400">DISOMI NORMAL</strong></p>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Sindrom Down dapat terjadi pada laki-laki (<strong class="text-sky-300 font-mono">47,XY,+21</strong>) maupun perempuan (<strong class="text-pink-300 font-mono">47,XX,+21</strong>) 
+                    dengan rasio kejadian yang hampir setara (rasio seks saat lahir ~1.15 : 1 laki-laki terhadap perempuan).
+                </p>
+            `;
+        } else {
+            const data = CHROMOSOME_DATA[selectedKaryoChr - 1];
+            insp.innerHTML = `
+                <div class="border-b border-white/10 pb-3 mb-4">
+                    <h3 class="text-base font-display font-bold text-indigo-400 tracking-wider">KROMOSOM ${data.id} (AUTOSOM NORMAL)</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Status: <strong class="text-emerald-400">DISOMI NORMAL (2 SALINAN)</strong></p>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                    <div class="bg-white/[0.03] p-3 rounded-lg"><div class="text-[10px] text-slate-400">Ukuran DNA</div><div class="text-sm font-mono font-bold text-white">${data.sizeMb} Mb</div></div>
+                    <div class="bg-white/[0.03] p-3 rounded-lg"><div class="text-[10px] text-slate-400">Morfologi Sentromer</div><div class="text-xs font-mono font-bold text-white">${data.type}</div></div>
+                    <div class="bg-white/[0.03] p-3 rounded-lg"><div class="text-[10px] text-slate-400">Jumlah Gen Pengkode</div><div class="text-sm font-mono font-bold text-white">${data.genes}</div></div>
+                    <div class="bg-white/[0.03] p-3 rounded-lg"><div class="text-[10px] text-slate-400">Status Salinan</div><div class="text-xs font-mono font-bold text-emerald-400">Normal (2n)</div></div>
+                </div>
+            `;
+        }
+    }
+
+    // ============================================================
+    // STEP 4: PHENOTYPE
+    // ============================================================
+    function renderPhenotype(c) {
+        c.innerHTML = S('FENOTIPE & KLINIS', 'SPEKTRUM MANIFESTASI MORFOLOGIS DAN MEDIS', `
+            <div class="glass-panel p-5 mb-5">
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    Overekspresi gen-gen pada kromosom 21 mempengaruhi perkembangan embrio di berbagai sistem jaringan. 
+                    Berikut adalah ciri fenotipik karakteristik dan spektrum klinis yang lazim ditemukan:
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5">
+                ${[
+                    ['👁️', 'Morfologi Mata', 'Fisura palpebra miring ke atas (upslanting), lipatan kulit epikantus di sudut medial mata, dan bintik Brushfield (bintik putih-keabuan pada iris).', 'indigo'],
+                    ['👃', 'Fitur Kraniofasial', 'Jembatan hidung mendatar (flat nasal bridge), profil wajah datar, kepala brachycephaly (belakang datar), serta lidah yang cenderung menonjol (macroglossia relatif).', 'purple'],
+                    ['🤲', 'Struktur Tangan & Kaki', 'Lipatan palmar tunggal melintang horizontal (simian crease), jari kelingking pendek dan melengkung ke dalam (clinodactyly), serta celah lebar antara jari kaki I dan II (sandal gap).', 'cyan'],
+                    ['💪', 'Sistem Otot & Sendi', 'Hipotonia (penurunan tonus otot saat bayi lahir) yang menyebabkan keterlambatan perkembangan motorik kasar, serta sendi yang hipermobil (ligamen sangat lentur).', 'teal'],
+                    ['💔', 'Cacat Jantung Bawaan', '~40-50% bayi lahir dengan kelainan jantung bawaan, paling sering defek septum atrioventrikular (AVSD) atau defek septum ventrikel (VSD). Memerlukan deteksi dini ekokardiografi.', 'rose'],
+                    ['🧠', 'Perkembangan Kognitif', 'Disabilitas intelektual derajat ringan hingga sedang (IQ rerata 50–70). Kemampuan sosial dan adaptasi emosional umumnya sangat responsif terhadap intervensi dini.', 'amber'],
+                    ['📏', 'Pola Pertumbuhan', 'Perawakan relatif pendek (short stature) akibat laju osifikasi lempeng epifisis tulang yang melambat, leher pendek dengan lipatan kulit berlebih pada tengkuk.', 'blue'],
+                    ['👂', 'Pendengaran & THT', 'Saluran telinga sempit (stenotik), rentan mengalami otitis media efusi berulang yang menyebabkan gangguan pendengaran konduktif (~60-80% individu).', 'emerald'],
+                    ['🦴', 'Ketidakstabilan Atlantoaksial', 'Kelemahan ligamen antara vertebra C1 (atlas) dan C2 (aksis) pada ~15% individu. Perlu kewaspadaan sebelum melakukan olahraga kontak fisik berat.', 'indigo']
+                ].map(([icon, title, desc, color]) => `
+                    <div class="pheno-feature">
+                        <div class="flex items-center gap-2.5 mb-2">
+                            <span class="text-2xl">${icon}</span>
+                            <h4 class="text-sm font-bold text-${color}-400">${title}</h4>
+                        </div>
+                        <p class="text-[11px] text-slate-300 leading-relaxed">${desc}</p>
+                    </div>
+                `).join('')}
+            </div>
+
+            <div class="glass-panel p-5 mb-5">
+                <h3 class="text-sm font-display font-bold text-amber-400 tracking-wider mb-3">⚕️ KONDISI MEDIS PENYERTA & MANAJEMEN SEPANJANG HAYAT</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    ${[
+                        ['Disfungsi Tiroid', 'Hipotiroidisme (kongenital maupun autoimun) dialami oleh ~15-20% penderita, menuntut pemeriksaan skrining rutin TSH berkala.'],
+                        ['Sistem Saluran Cerna', 'Peningkatan risiko atresia duodenum (obstruksi usus halus) dan penyakit Hirschsprung yang memerlukan koreksi bedah neonatus.'],
+                        ['Neuropatologi Alzheimer', 'Akibat triplikasi gen APP, hampir seluruh individu >40 tahun mengembangkan deposit plak beta-amiloid di otak.'],
+                        ['Kecenderungan Hematologi', 'Risiko lebih tinggi terhadap transient abnormal myelopoiesis (TAM) neonatal dan leukemia anak (~10-20x populasi umum).']
+                    ].map(([title, note]) => `
+                        <div class="bg-white/[0.03] border border-white/5 rounded-xl p-3.5">
+                            <div class="text-xs text-white font-bold mb-1">${title}</div>
+                            <div class="text-[11px] text-slate-300 leading-relaxed">${note}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <div class="glass-panel p-5">
+                <h3 class="text-sm font-display font-bold text-emerald-400 tracking-wider mb-2">🌟 PARADIGMA KUALITAS HIDUP MODERN</h3>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Kemajuan intervensi medis pediatrik, terapi wicara, fisioterapi, dan pendidikan inklusif telah melipatgandakan usia harapan hidup penderita Sindrom Down: 
+                    dari hanya <strong class="text-white">~25 tahun pada 1983</strong> menjadi lebih dari <strong class="text-emerald-400 font-bold">>60 tahun di era modern</strong>.
+                </p>
+            </div>
+
+            ${nav(3, 'KARIOTIPE', 5, 'RISIKO')}`
+        );
+    }
+
+    // ============================================================
+    // STEP 5: MATERNAL AGE RISK & 1000-BIRTH VISUALIZER
+    // ============================================================
+    function renderRisk(c) {
+        const maxRisk = Math.max(...MATERNAL_AGE_RISK.map(r => r.risk));
+        c.innerHTML = S('RISIKO USIA IBU', 'ANALISIS EPIDEMIOLOGI & VISUALISATOR PROBABILITAS 1.000 KELAHIRAN', `
+            <div class="glass-panel p-5 mb-5">
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    Korelasi antara <strong class="text-amber-400">usia ibu saat hamil</strong> dengan insidensi Sindrom Down adalah salah satu fenomena genetika manusia paling terbukti. 
+                    Penyebab dasarnya berakar pada biologi oogenesis mamalia: oosit wanita telah terbentuk sejak dalam kandungan dan terhenti pada fase <strong class="text-white">Dictyate (Profase I)</strong> selama berpuluh-puluh tahun.
+                </p>
+            </div>
+
+            <!-- Risk Chart -->
+            <div class="glass-panel p-5 mb-5">
+                <h3 class="text-sm font-display font-bold text-amber-400 tracking-wider mb-4 flex items-center gap-2">
+                    <span>📊</span> KURVA RISIKO TRISOMI 21 BERDASARKAN USIA IBU
+                </h3>
+                <div class="risk-bar-container mb-9">
+                    ${MATERNAL_AGE_RISK.map((r) => {
+                        const heightPct = (r.risk / maxRisk) * 100;
+                        const hue = Math.max(120 - (heightPct * 1.3), 0);
+                        const color = `hsl(${hue}, 80%, 55%)`;
+                        return `<div class="risk-bar" style="height:${Math.max(heightPct, 6)}%;background:linear-gradient(to top, ${color}33, ${color}ee);" onclick="setSliderAge(${r.age})">
+                            <span class="risk-bar-value">${r.label}</span>
+                            <span class="risk-bar-label">${r.age} thn</span>
+                        </div>`;
+                    }).join('')}
+                </div>
+                <div class="text-[10px] font-mono text-slate-500 text-center mt-3">USIA IBU (TAHUN) → Klik bar untuk menguji nilai pada kalkulator</div>
+            </div>
+
+            <!-- Interactive Risk Calculator & 1000 Birth Visualizer -->
+            <div class="glass-panel p-5 mb-5">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 border-b border-white/10 pb-3">
+                    <div>
+                        <h3 class="text-sm font-display font-bold text-cyan-400 tracking-wider">🧮 SIMULATOR POPULASI & MATRIX 1.000 KELAHIRAN</h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Geser penggeser usia ibu untuk mensimulasikan probabilitas secara visual:</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-slate-400 font-mono">Usia Ibu:</span>
+                        <span id="age-value-display" class="text-xl font-display font-bold text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded border border-indigo-500/30">30</span>
+                        <span class="text-xs text-slate-500 font-mono">Tahun</span>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <input type="range" id="age-risk-slider" min="20" max="45" value="30" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500" oninput="onSliderChange()">
+                    <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+                        <span>20 thn (1:1.500)</span>
+                        <span>35 thn (1:350)</span>
+                        <span>40 thn (1:100)</span>
+                        <span>45 thn (1:30)</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+                    <div id="risk-metric-box" class="bg-indigo-500/10 border border-indigo-500/25 rounded-xl p-4 flex flex-col justify-center text-center">
+                        <!-- Filled by JS -->
+                    </div>
+                    <div class="md:col-span-2 bg-slate-900/70 border border-white/5 rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-mono text-slate-300">Representasi Visual: 1.000 Kelahiran Bayi</span>
+                            <div class="flex items-center gap-3 text-[10px] font-mono">
+                                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-slate-600"></span> Disomi Normal</span>
+                                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-red-500"></span> Trisomi 21</span>
+                            </div>
+                        </div>
+                        <div class="dots-grid p-2 bg-black/40 rounded-lg border border-white/5" id="dots-grid-box">
+                            <!-- 1000 dots rendered dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Molecular Cause of Maternal Age Effect -->
+            <div class="glass-panel p-5">
+                <h3 class="text-sm font-display font-bold text-purple-400 tracking-wider mb-3">🧬 MEKANISME MOLEKULER: DEGRADASI KOMPLEKS KOHESIN</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-white/[0.03] border border-white/5 rounded-xl p-3.5">
+                        <div class="text-xs font-bold text-amber-300 mb-1">Deteriorasi Kompleks Kohesin (REC8 & SMC1B)</div>
+                        <p class="text-[11px] text-slate-300 leading-relaxed">
+                            Cincin protein kohesin memegang kromatid saudara bersama-sama sejak masa prenatal. Selama dekade penantian oosit di ovarium, protein kohesin perlahan terdegradasi tanpa adanya sintesis pengganti baru, memicu pemisahan kromatid dini yang kacau saat meiosis dilanjutkan.
+                        </p>
+                    </div>
+                    <div class="bg-white/[0.03] border border-white/5 rounded-xl p-3.5">
+                        <div class="text-xs font-bold text-cyan-300 mb-1">Skrining Prenatal Modern (NIPT & Amniosentesis)</div>
+                        <p class="text-[11px] text-slate-300 leading-relaxed">
+                            Kini skrining trisomi dapat dilakukan sejak usia kehamilan 10 minggu melalui <strong class="text-white">NIPT (Non-Invasive Prenatal Testing)</strong> dengan menganalisis serpihan *cell-free fetal DNA* di darah perifer ibu, dengan akurasi sensitivitas >99%.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            ${nav(4, 'FENOTIPE', 6, 'RINGKASAN')}`
+        );
+        updateRiskDisplay(30);
+    }
+
+    function setSliderAge(a) {
+        const slider = document.getElementById('age-risk-slider');
+        if (slider) {
+            slider.value = a;
+            onSliderChange();
+        }
+    }
+
+    function onSliderChange() {
+        const slider = document.getElementById('age-risk-slider');
+        if (slider) updateRiskDisplay(parseInt(slider.value));
+    }
+
+    function updateRiskDisplay(age) {
+        const disp = document.getElementById('age-value-display');
+        const metric = document.getElementById('risk-metric-box');
+        const grid = document.getElementById('dots-grid-box');
+        if (!disp || !metric || !grid) return;
+
+        disp.textContent = age;
+
+        // Interpolate risk
+        const data = MATERNAL_AGE_RISK;
+        let risk, label, rate;
+        if (age <= data[0].age) {
+            risk = data[0].risk; label = data[0].label; rate = data[0].ratePerThousand;
+        } else if (age >= data[data.length - 1].age) {
+            risk = data[data.length - 1].risk; label = data[data.length - 1].label; rate = data[data.length - 1].ratePerThousand;
+        } else {
+            for (let i = 0; i < data.length - 1; i++) {
+                if (age >= data[i].age && age <= data[i + 1].age) {
+                    const t = (age - data[i].age) / (data[i + 1].age - data[i].age);
+                    risk = data[i].risk + t * (data[i + 1].risk - data[i].risk);
+                    rate = data[i].ratePerThousand + t * (data[i + 1].ratePerThousand - data[i].ratePerThousand);
+                    const denom = Math.round(1 / risk);
+                    label = `~1:${denom}`;
+                    break;
+                }
+            }
+        }
+
+        const pct = (risk * 100).toFixed(2);
+        const affectedDots = Math.max(Math.round(rate), (age >= 35 ? 3 : 1));
+
+        const levelColor = age < 30 ? 'emerald' : (age < 35 ? 'amber' : (age < 40 ? 'orange' : 'red'));
+        const levelText = age < 30 ? '🟢 Risiko Dasar / Rendah' : (age < 35 ? '🟡 Risiko Moderat' : (age < 40 ? '🟠 Risiko Meningkat' : '🔴 Risiko Tinggi'));
+
+        metric.innerHTML = `
+            <div class="text-2xl font-display font-bold text-${levelColor}-400">${label}</div>
+            <div class="text-xs font-mono text-slate-300 mt-1">Probabilitas: ~${pct}%</div>
+            <div class="text-[11px] font-mono text-slate-400 mt-1">~${rate.toFixed(1)} kasus per 1.000 kelahiran</div>
+            <div class="text-[11px] font-bold text-${levelColor}-300 mt-3 bg-${levelColor}-500/10 py-1 px-2 rounded">${levelText}</div>
+        `;
+
+        // Render 1000 dots (or 500 scaled for DOM efficiency)
+        let dotsHTML = '';
+        const totalVisualDots = 500;
+        const visualAffected = Math.max(Math.round((affectedDots / 1000) * totalVisualDots), (age >= 35 ? 1 : 0));
+
+        for (let i = 0; i < totalVisualDots; i++) {
+            const isAff = (i < visualAffected);
+            dotsHTML += `<div class="dot-birth ${isAff ? 'affected' : ''}"></div>`;
+        }
+        grid.innerHTML = dotsHTML;
+    }
+
+    // ============================================================
+    // STEP 6: SUMMARY & COMPARISON
+    // ============================================================
+    function renderSummary(c) {
+        c.innerHTML = S('RINGKASAN & INTEGRASI', 'RANGKUMAN KONSEPTUAL DAN KOMPARASI DENGAN MUTASI GEN (SCA)', `
+            <div class="glass-panel p-5 mb-5 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-slate-900 border-indigo-500/30">
+                <h3 class="text-sm font-display font-bold text-white tracking-wider mb-4 flex items-center gap-2">
+                    <span>📌</span> INTISARI PEMBELAJARAN SINDROM DOWN
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-300">
+                    <div class="space-y-2.5">
+                        <div class="flex gap-2.5"><span class="text-indigo-400 font-bold shrink-0">1.</span> Sindrom Down adalah <strong class="text-white">mutasi kromosom (aneuploidi)</strong>, bukan perubahan 1 huruf DNA seperti mutasi titik.</div>
+                        <div class="flex gap-2.5"><span class="text-indigo-400 font-bold shrink-0">2.</span> Kariotipe penderita memiliki <strong class="text-amber-300 font-mono">47 kromosom</strong> alih-alih 46: <span class="font-mono text-amber-300 font-semibold">47,XX,+21</span> atau <span class="font-mono text-amber-300 font-semibold">47,XY,+21</span>.</div>
+                        <div class="flex gap-2.5"><span class="text-indigo-400 font-bold shrink-0">3.</span> Disebabkan oleh <strong class="text-white">nondisjunction</strong> (gagal berpisah) selama pembentukan ovum ibu (~90%) atau sperma ayah (~10%).</div>
+                        <div class="flex gap-2.5"><span class="text-indigo-400 font-bold shrink-0">4.</span> Terdiri atas 3 varian sitogenetik: <strong class="text-white">Trisomi Penuh</strong> (~95%), <strong class="text-white">Translokasi Robertsonian</strong> (~3-4%), dan <strong class="text-white">Mosaik</strong> (~1-2%).</div>
+                    </div>
+                    <div class="space-y-2.5">
+                        <div class="flex gap-2.5"><span class="text-indigo-400 font-bold shrink-0">5.</span> Hanya tipe <strong class="text-purple-300">Translokasi Robertsonian</strong> yang dapat diturunkan secara familial dari orang tua karier seimbang.</div>
+                        <div class="flex gap-2.5"><span class="text-indigo-400 font-bold shrink-0">6.</span> Kromosom 21 adalah <strong class="text-white">autosom terkecil</strong> (~47 Mb), menjadikan trisominya kompatibel dengan kelangsungan hidup manusia.</div>
+                        <div class="flex gap-2.5"><span class="text-indigo-400 font-bold shrink-0">7.</span> Risiko berkorelasi eksponensial dengan <strong class="text-white">usia ibu</strong> akibat degradasi kompleks kohesin oosit dictyate.</div>
+                        <div class="flex gap-2.5"><span class="text-indigo-400 font-bold shrink-0">8.</span> Overekspresi lokus gen kritis <span class="font-mono text-white">21q22</span> (<strong class="text-indigo-300">DYRK1A, APP, SOD1, RCAN1</strong>) memicu fenotipe kraniofasial, jantung, dan kognitif.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cascade Flow Animation -->
+            <div class="glass-panel p-5 mb-5">
+                <h3 class="text-sm font-display font-bold text-amber-400 tracking-wider mb-4 flex items-center gap-2">
+                    <span>⚡</span> KASKADE KRONOLOGIS PATOGENESIS SINDROM DOWN
+                </h3>
+                <div class="space-y-2.5" id="summary-cascade-container"></div>
+            </div>
+
+            <!-- Deep Comparison: Point Mutation (SCA) vs Chromosome Mutation (Down Syndrome) -->
+            <div class="glass-panel p-5 mb-5">
+                <h3 class="text-sm font-display font-bold text-cyan-400 tracking-wider mb-3">📊 KOMPARASI MENDALAM: MUTASI TITIK (SCA) vs MUTASI KROMOSOM (SINDROM DOWN)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="text-left py-2.5 text-[10px] font-mono text-slate-400">DIMENSI GENETIKA</th>
+                                <th class="text-center py-2.5 text-[10px] font-mono text-red-400">ANEMIA SEL SABIT (SCA / HBB)</th>
+                                <th class="text-center py-2.5 text-[10px] font-mono text-indigo-400">SINDROM DOWN (TRISOMI 21)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${[
+                                ['Tingkat Kerusakan Mutasi', 'Molekuler Gen (DNA Tunggal)', 'Makro Kromosomal (Aneuploidi)'],
+                                ['Perubahan Molekuler', 'Substitusi Transversi Basa Tunggal A → T', 'Duplikasi Seluruh Kromosom 21 (+47 Mb)'],
+                                ['Lokus Genetik', 'Gen HBB di Kromosom 11p15.4', 'Kromosom 21 lengkap (Lengan 21q22)'],
+                                ['Jumlah Kromosom Akhir', 'Normal 46 (Disomi 2n)', 'Abnormal 47 (Trisomi 2n + 1)'],
+                                ['Pola Pewarisan Klasik', 'Mendelian Autosomal Resesif', 'Non-Mendelian Sporadis (kecuali Translokasi)'],
+                                ['Mekanisme Molekuler Patogenesis', 'Substitusi asam amino Glu → Val di rantai β-globin', 'Peningkatan kuantitas (gene dosage) ~150% pada >200 gen'],
+                                ['Manifestasi Utama', 'Vaso-oklusi kapiler, hemolisis, krisis nyeri', 'Cacat jantung AVSD, hipotonia, disabilitas kognitif'],
+                                ['Metode Deteksi Diagnostik', 'Sekuensing DNA / Elektroforesis Hemoglobin', 'Analisis Kariotipe Sitogenetika / FISH / NIPT']
+                            ].map(([dim, sca, ds]) => `
+                                <tr class="border-b border-white/5 hover:bg-white/[0.02]">
+                                    <td class="py-2.5 text-slate-400 font-mono">${dim}</td>
+                                    <td class="py-2.5 text-center text-slate-200">${sca}</td>
+                                    <td class="py-2.5 text-center text-indigo-300 font-semibold">${ds}</td>
+                                </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- References -->
+            <div class="glass-panel p-5">
+                <h3 class="text-sm font-display font-bold text-slate-400 tracking-wider mb-3">📚 REFERENSI LITERATUR ILMIAH</h3>
+                <div class="space-y-1.5 text-[11px] text-slate-400">
+                    <div>• <strong>Lejeune, J., Gautier, M., & Turpin, R. (1959).</strong> Étude des chromosomes somatiques de neuf enfants mongoliens. <em>Comptes Rendus de l’Académie des Sciences</em>, 248, 1721–1722.</div>
+                    <div>• <strong>Antonarakis, S. E., et al. (2020).</strong> Down syndrome. <em>Nature Reviews Disease Primers</em>, 6(1), 9.</div>
+                    <div>• <strong>Hook, E. B. (1981).</strong> Rates of chromosome abnormalities at different maternal ages. <em>Obstetrics & Gynecology</em>, 58(3), 282–285.</div>
+                    <div>• <strong>ISCN (2020).</strong> <em>An International System for Human Cytogenomic Nomenclature</em>. S. Karger Publishers.</div>
+                    <div>• <strong>National Down Syndrome Society (NDSS).</strong> Clinical Genetics and Epidemiology of Trisomy 21 Guidelines.</div>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mt-8 pt-4 border-t border-white/5">
+                <button onclick="goToStep(5)" class="step-btn px-5">← RISIKO</button>
+                <button onclick="goToStep(0)" class="step-btn active px-5">🔄 KEMBALI KE OVERVIEW</button>
+            </div>
+        `);
+        renderCascadeAnimation();
+    }
+
+    function renderCascadeAnimation() {
+        const cascadeSteps = [
+            { icon: '🥚', title: '1. Oogenesis Terhenti di Profase I', desc: 'Oosit tersimpan selama dekade di ovarium; kompleks kohesin pelindung kromatid perlahan terdegradasi.', color: 'indigo' },
+            { icon: '⚠️', title: '2. Nondisjunction Meiosis I / II', desc: 'Kromosom 21 homolog atau kromatid saudara gagal memisah ke kutub berlawanan saat meiosis dilanjutkan.', color: 'red' },
+            { icon: '🔬', title: '3. Terbentuk Gamet Disomik (n+1 = 24)', desc: 'Ovum membawa 2 salinan kromosom 21 alih-alih 1 salinan haploid normal.', color: 'amber' },
+            { icon: '🧬', title: '4. Fertilisasi Menghasilkan Zigot 47 Kromosom', desc: 'Penyatuan dengan sperma normal (23) menghasilkan embrio dengan kariotipe 47,XX,+21 atau 47,XY,+21.', color: 'purple' },
+            { icon: '📈', title: '5. Overekspresi Genetik Regio 21q22 (Dosis 150%)', desc: 'Gen DYRK1A, APP, SOD1, dan RCAN1 memproduksi kelebihan protein yang mengganggu homeostasis seluler.', color: 'cyan' },
+            { icon: '👶', title: '6. Manifestasi Fenotipik Sindrom Down', desc: 'Muncul spektrum klinis: disabilitas kognitif, kelainan jantung bawaan (AVSD), hipotonia, dan ciri kraniofasial khas.', color: 'rose' }
+        ];
+
+        const cont = document.getElementById('summary-cascade-container');
+        if (!cont) return;
+
+        cascadeSteps.forEach((s, i) => {
+            setTimeout(() => {
+                const el = document.createElement('div');
+                el.className = `flex items-start gap-3 p-3 rounded-xl bg-${s.color}-500/10 border border-${s.color}-500/20 shadow-md`;
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(10px)';
+                el.innerHTML = `
+                    <span class="text-2xl shrink-0 mt-0.5">${s.icon}</span>
+                    <div>
+                        <div class="text-xs font-bold text-white">${s.title}</div>
+                        <div class="text-[11px] text-slate-300 mt-0.5 leading-relaxed">${s.desc}</div>
+                    </div>
+                `;
+                cont.appendChild(el);
+
+                requestAnimationFrame(() => {
+                    el.style.transition = 'all 0.4s ease-out';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                });
+            }, i * 220);
+        });
+    }
+
+    // ============================================================
+    // INITIALIZATION
+    // ============================================================
+    window.addEventListener('DOMContentLoaded', () => {
+        renderTutorial();
+        renderStep();
+    });
+    </script>
+</body>
+</html>
