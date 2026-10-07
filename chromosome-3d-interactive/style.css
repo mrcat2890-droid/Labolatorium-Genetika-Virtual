@@ -845,22 +845,27 @@ h1 {
 }
 
 #annotations-overlay.hidden {
-    opacity: 0;
+    opacity: 0 !important;
     pointer-events: none !important;
 }
 
 .annotation-callout {
     position: absolute;
+    top: 0;
+    left: 0;
     color: #e0f2fe;
     font-size: 0.82rem;
     display: flex;
     align-items: center;
     gap: 8px;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
-    transition: transform 0.1s linear, opacity 0.3s;
+    opacity: 0;
+    transition: opacity 0.3s ease;
     white-space: nowrap;
     max-width: calc(100vw - 20px);
     box-sizing: border-box;
+    transform: translate(var(--x, 0px), calc(var(--y, 0px) - 50%));
+    will-change: transform;
 }
 
 .bracket-bracket {
@@ -870,6 +875,7 @@ h1 {
     border-top: 2px solid rgba(232, 121, 249, 0.85);
     border-bottom: 2px solid rgba(232, 121, 249, 0.85);
     position: relative;
+    flex-shrink: 0;
 }
 .bracket-bracket::after {
     content: '';
@@ -887,6 +893,7 @@ h1 {
     height: 1px;
     background: rgba(232, 121, 249, 0.85);
     position: relative;
+    flex-shrink: 0;
 }
 .callout-pointer::before {
     content: '';
@@ -903,6 +910,30 @@ h1 {
 .callout-text {
     font-weight: 500;
     line-height: 1.25;
+}
+.callout-text b {
+    color: #e879f9;
+}
+
+/* Callout Modifier untuk Posisi Sisi Kiri */
+.callout-left {
+    flex-direction: row-reverse;
+    transform: translate(calc(var(--x, 0px) - 100%), calc(var(--y, 0px) - 50%));
+}
+.callout-left .callout-pointer::before {
+    left: auto;
+    right: 0;
+}
+.callout-left .bracket-bracket {
+    border-left: none;
+    border-right: 2px solid rgba(232, 121, 249, 0.85);
+}
+.callout-left .bracket-bracket::after {
+    left: auto;
+    right: -2px;
+}
+.callout-left .callout-text {
+    text-align: right;
 }
 
 /* Petunjuk Navigasi Desktop */
@@ -1396,9 +1427,15 @@ h1 {
         box-sizing: border-box !important;
         white-space: nowrap;
     }
+    .callout-left {
+        transform-origin: right center;
+    }
     .bracket-bracket {
         height: 44px;
         width: 10px;
+    }
+    .callout-pointer {
+        width: 20px;
     }
 }
 

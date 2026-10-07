@@ -6,6 +6,17 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🏷️ Perbaikan Bug Posisi Label Anatomi 3D Kromosom (chromosome-3d-interactive)
+- **Koreksi Penempatan Posisi Label Anatomi 3D (Eliminasi Bug Pojok Kiri Atas):**
+  - Mengatasi masalah di mana seluruh label anatomi 3D (*Lengan Pendek p, Sentromer, Kinetokor Trilaminar, Lengan Panjang q, Telomer T-Loop, Satelit NOR*) menumpuk di pojok kiri atas layar dan tidak mengikuti pergerakan model 3D.
+  - Menambahkan kembali aturan CSS `top: 0; left: 0; transform: translate(var(--x, 0px), calc(var(--y, 0px) - 50%));` serta `will-change: transform` pada kelas `.annotation-callout` di `style.css` agar variabel posisi CSS `--x` dan `--y` yang dihasilkan proyeksi Three.js diterapkan secara langsung dan mulus pada 60 FPS.
+  - Mengimplementasikan kembali modifier `.callout-left` (`flex-direction: row-reverse; transform: translate(calc(var(--x, 0px) - 100%), calc(var(--y, 0px) - 50%));`) beserta orientasi pointer titik dan kurung siku (*bracket*), memastikan penunjuk anatomi yang berada di sisi kiri kromosom menempel akurat pada struktur target tanpa tumpang tindih.
+  - Memperbarui fungsi kalkulasi `toScreenPosition` pada `script.js` agar *viewport clamping* memperhitungkan arah `isLeft` secara adaptif sehingga label tidak pernah terpotong di tepi kiri maupun kanan layar saat kromosom berotasi atau di-zoom.
+- **Berkas yang Diperbarui:**
+  - `chromosome-3d-interactive/style.css`
+  - `chromosome-3d-interactive/script.js`
+  - `CHANGELOG.md`
+
 ### 🧬 Upgrade Ultra-Realistis 3D Anatomi Kromosom Metafase (chromosome-3d-interactive)
 - **Arsitektur Lup Kromatin SEM Ultra-Realistis Berdasarkan Literatur Ilmiah:**
   - Mengimplementasikan *bump & normal mapping* prosedural berbasis kanvas mikro yang merekonstruksi tekstur permukaan kromatin nyata (*Earnshaw & Laemmli 1983; Maeshima et al. 2016*). Menampilkan jutaan butiran nodul lup kromatin radial 30–100 nm dan lipatan kromonema helikal, menggantikan tabung poligon plastik polos.

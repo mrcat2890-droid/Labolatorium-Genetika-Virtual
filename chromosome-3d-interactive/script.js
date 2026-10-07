@@ -1585,12 +1585,18 @@ function toScreenPosition(vector3D, domElement) {
 
     const elWidth = domElement.offsetWidth || 135;
     const elHeight = domElement.offsetHeight || 44;
-    const padX = 8;
+    const padX = 10;
     const padTop = 64;
     const padBottom = 72;
 
-    const clampedX = Math.max(padX, Math.min(window.innerWidth - elWidth - padX, rawX));
-    const clampedY = Math.max(padTop, Math.min(window.innerHeight - elHeight - padBottom, rawY));
+    const isLeft = domElement.classList.contains('callout-left');
+    let clampedX;
+    if (isLeft) {
+        clampedX = Math.max(padX + elWidth, Math.min(window.innerWidth - padX, rawX));
+    } else {
+        clampedX = Math.max(padX, Math.min(window.innerWidth - elWidth - padX, rawX));
+    }
+    const clampedY = Math.max(padTop + elHeight * 0.5, Math.min(window.innerHeight - padBottom - elHeight * 0.5, rawY));
 
     domElement.style.opacity = '1';
     domElement.style.setProperty('--x', `${clampedX}px`);
