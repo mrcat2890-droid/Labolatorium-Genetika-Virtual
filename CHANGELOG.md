@@ -6,6 +6,43 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🧬 Upgrade Ultra-Realistis DNA 3D Bio-Core (dna-3d-interactive)
+- **1. Transisi Konformasi Alotropik Alami (B-DNA, A-DNA, Z-DNA Heliks Kidal):**
+  - Mengimplementasikan 3 bentuk konformasi DNA kristalografi sinar-X (*Dickerson et al. 1982 Science; Saenger 1984 Principles of Nucleic Acid Structure; Rich & Zhang 2003 Nature Reviews Genetics*):
+    - **B-DNA (Fisiologis):** Heliks kanan standar akuatik seluler (10.5 pb/putaran, diameter 2.0 nm, rise 0.34 nm, pitch 3.4 nm, pasangan basa tegak lurus sumbu).
+    - **A-DNA (Terdehidrasi & Hibrida DNA-RNA):** Heliks kanan kompak (11.0 pb/putaran, diameter lebar 2.3 nm dengan silinder berongga aksial, rise 0.26 nm, pasangan basa miring 19°).
+    - **Z-DNA (Heliks Kidal Zigzag):** Heliks berputar ke arah kiri (*left-handed double helix*) pada sekuens alternasi purin-pirimidin d(CG)ₙ (12.0 pb/putaran, diameter ramping 1.8 nm, rise 0.37 nm, pitch 4.5 nm, tulang punggung dinukleotida zigzag).
+  - Dilengkapi tab konformasi kristalografi dan sinkronisasi metrik dimensional secara real-time.
+- **2. Standar Visualisasi Riset & Peta Potensial Elektrostatik Coulomb (Coulombic Surface):**
+  - Menambahkan mode representasi ke-4: **Coulombic Surface Map** setara perangkat lunak riset biofisika (PyMOL, UCSF ChimeraX) berbasis persamaan Poisson-Boltzmann:
+    - Merah pekat untuk muatan formal $-1e$ anionik gugus fosfat tulang punggung ($PO_4^{3-}$).
+    - Putih keabuan netral untuk inti cincin aromatik hidrofobik pasangan basa.
+    - Biru muda untuk donor proton parsial positif pada gugus amino ($NH_2$).
+  - Menambahkan bar spektrum legenda potensial muatan listrik elektrostatik.
+- **3. Simulasi Fenomena Molekuler Riil: Epigenetika, Lesi Radiasi UV & Interkalasi Obat:**
+  - **Metilasi Epigenetik (5-Methylcytosine / 5-mC):** Pemodelan penambahan gugus metil kovalen ($-CH_3$: atom karbon ungu metalik + 3 hidrogen) pada posisi C5 Sitosina (*Bird, 2002*), menjorok langsung ke Lekukan Mayor (*Major Groove*) mendemonstrasikan penghambatan transkripsi (*gene silencing*).
+  - **Dimer Timin Siklobutana CPD (Radiasi UV):** Lesi fotokimiawi kovalen antara dua timin bersebelahan (*Friedberg et al., 2006*), memicu distorsi tekukan (*structural kink bend*) ~28° pada sumbu heliks ganda penyebab utama melanoma.
+  - **Interkalasi Obat Kanker (Kemoterapi):** Molekul planar trisiklik karsinogen/kemoterapi (Etidium Bromida / Doxorubicin) menyisip di antara tumpukan basa (*Lerman, 1961*), memicu perenggangan jarak vertikal rise $2.35\times$ dan despiralisasi (*unwinding*) lokal -26°.
+- **4. Lapisan Solvasi Sitoplasma & Ion Lawan Pelindung ($Mg^{2+} / Na^+$ & $H_2O$):**
+  - Penerapan teori kondensasi ion lawan Gerald Manning (1978) dan kristalografi hidrasi Drew & Dickerson (1981):
+    - Lapisan kation magnesium divalen ($Mg^{2+}$, pendar toska) pelindung muatan fosfat luar.
+    - Pita molekul air hidrasi teratur (*spine of hydration*) di sepanjang lekukan minor untuk stabilitas termodinamika heliks.
+    - Dilengkapi sakelar toggle interaktif `btn-toggle-ions`.
+- **5. Sintesis Sekuens Nukleotida Dinamis & Bioinformatika Real-Time:**
+  - Input editor sekuens interaktif dengan validasi komplementer Chargaff ($A \leftrightarrow T$, $G \leftrightarrow C$).
+  - Preset sekuens cepat: *Watson-Crick*, *CpG Island (GC-Rich)*, *TATA Box (AT-Rich)*, dan *poly(dG-dC) Z-DNA*.
+  - Live bioinformatic badge: Penghitungan otomatis panjang pasang basa, rasio %GC, suhu leleh termal ($T_m$), dan total ikatan hidrogen secara instan.
+- **6. Tutorial Interaktif Edukatif 5 Langkah Komprehensif:**
+  - Mengembangkan modal panduan dari 3 menjadi 5 slide komprehensif (*Arsitektur Watson-Crick*, *Bentuk Alotropik B/A/Z-DNA*, *Komplementer Chargaff & Tₘ*, *Fenomena Epigenetika & Lesi UV*, *Visualisasi Riset & Solvasi Ion*).
+- **7. Inspektor Molekuler Diperkaya:**
+  - Penambahan data rumus kimia, berat molekul, dan signifikansi genetika untuk 5-mC, Dimer Timin, Agen Interkalasi, Ion $Mg^{2+}$, dan Air Hidrasi.
+- **Berkas yang Diperbarui:**
+  - `dna-3d-interactive/index.html`
+  - `dna-3d-interactive/style.css`
+  - `dna-3d-interactive/script.js`
+  - `CHANGELOG.md`
+
+
 ### 🏷️ Perbaikan Bug Posisi Label Anatomi 3D Kromosom (chromosome-3d-interactive)
 - **Koreksi Penempatan Posisi Label Anatomi 3D (Eliminasi Bug Pojok Kiri Atas):**
   - Mengatasi masalah di mana seluruh label anatomi 3D (*Lengan Pendek p, Sentromer, Kinetokor Trilaminar, Lengan Panjang q, Telomer T-Loop, Satelit NOR*) menumpuk di pojok kiri atas layar dan tidak mengikuti pergerakan model 3D.

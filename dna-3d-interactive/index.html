@@ -75,12 +75,41 @@
 
         <div class="panel-header-flex">
             <div class="panel-section-title">
-                <span class="icon">🧬</span> MODE REPRESENTASI B-DNA
+                <span class="icon">🧬</span> PUSAT KONTROL MOLEKULER
             </div>
             <button id="btn-close-controls" class="btn-icon-close" title="Tutup Menu">&times;</button>
         </div>
 
-        <p class="section-hint">Pilih standar visualisasi kristalografi ilmiah:</p>
+        <!-- 1. KONFORMASI ALOTROPIK KRISTALOGRAFI -->
+        <div class="panel-section-title">
+            <span class="icon">🌀</span> BENTUK KONFORMASI ALOTROPIK
+        </div>
+        <p class="section-hint">Standar kristalografi sinar-X (Dickerson &amp; Saenger):</p>
+        <div class="conformation-tabs">
+            <button class="conf-tab-btn active" data-conf="B" id="conf-btn-B" title="B-DNA: Bentuk fisiologis alami seluler">
+                <span class="conf-badge">B-DNA</span>
+                <span class="conf-title">Fisiologis Standar</span>
+                <span class="conf-sub">Kanan • 10.5 pb • ⌀2.0 nm</span>
+            </button>
+            <button class="conf-tab-btn" data-conf="A" id="conf-btn-A" title="A-DNA: Terdehidrasi &amp; hibrida DNA-RNA">
+                <span class="conf-badge">A-DNA</span>
+                <span class="conf-title">Kompak Miring</span>
+                <span class="conf-sub">Kanan • 11.0 pb • Miring 19°</span>
+            </button>
+            <button class="conf-tab-btn" data-conf="Z" id="conf-btn-Z" title="Z-DNA: Heliks kidal bergantian purin-pirimidin">
+                <span class="conf-badge">Z-DNA</span>
+                <span class="conf-title">Heliks Kidal</span>
+                <span class="conf-sub">Kidal • 12.0 pb • Zigzag</span>
+            </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 2. MODE REPRESENTASI MOLEKULER -->
+        <div class="panel-section-title">
+            <span class="icon">🔬</span> STANDAR REPRESENTASI ILMIAH
+        </div>
+        <p class="section-hint">Pilih visualisasi setara RCSB PDB &amp; PyMOL:</p>
         <div class="mode-selector-grid">
             <button class="mode-btn active" data-mode="bio">
                 <span class="mode-icon">🧪</span>
@@ -103,18 +132,90 @@
                     <span class="mode-sub">Kerangka Ikatan Kimia Kovalen 3D</span>
                 </div>
             </button>
+            <button class="mode-btn" data-mode="electrostatic">
+                <span class="mode-icon">⚡</span>
+                <div class="mode-info">
+                    <span class="mode-name">Coulombic Surface Map</span>
+                    <span class="mode-sub">Peta Potensial Elektrostatik (- Fosfat vs 0 Basa)</span>
+                </div>
+            </button>
         </div>
 
         <div class="divider"></div>
 
-        <!-- Dinamika Termal & Skala Metrik Biofisika -->
+        <!-- 3. FENOMENA & MODIFIKASI GENETIK -->
         <div class="panel-section-title">
-            <span class="icon">🌡️</span> BIOFISIKA &amp; METRIK
+            <span class="icon">✨</span> FENOMENA &amp; LESI MOLEKULER
         </div>
-        <p class="section-hint">Parameter dinamis molekul dalam larutan sel:</p>
+        <p class="section-hint">Simulasi modifikasi epigenetik &amp; kerusakan UV:</p>
+        <div class="condition-selector-grid">
+            <button class="condition-btn active" data-condition="normal">
+                <span class="cond-icon">🌿</span>
+                <div class="cond-info">
+                    <span class="cond-title">Normal (Heliks Utuh)</span>
+                    <span class="cond-sub">Pasangan Chargaff stabil tanpa lesi</span>
+                </div>
+            </button>
+            <button class="condition-btn" data-condition="methylation">
+                <span class="cond-icon">🧬</span>
+                <div class="cond-info">
+                    <span class="cond-title">Metilasi DNA (5-mC)</span>
+                    <span class="cond-sub">Epigenetik: Gugus -CH₃ di Major Groove</span>
+                </div>
+            </button>
+            <button class="condition-btn" data-condition="thymine_dimer">
+                <span class="cond-icon">☀️</span>
+                <div class="cond-info">
+                    <span class="cond-title">Dimer Timin (Radiasi UV)</span>
+                    <span class="cond-sub">Cincin Siklobutana CPD &amp; Kink 30°</span>
+                </div>
+            </button>
+            <button class="condition-btn" data-condition="intercalation">
+                <span class="cond-icon">💊</span>
+                <div class="cond-info">
+                    <span class="cond-title">Interkalasi Obat Kanker</span>
+                    <span class="cond-sub">Penyisipan planar &amp; Unwinding heliks</span>
+                </div>
+            </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 4. SINTESIS SEKUENS NUKLEOTIDA DINAMIS -->
+        <div class="panel-section-title">
+            <span class="icon">⌨️</span> SINTESIS SEKUENS NUKLEOTIDA
+        </div>
+        <p class="section-hint">Rancang rantai basa sendiri (Chargaff komplementer):</p>
+        <div class="seq-input-group">
+            <input type="text" id="dna-seq-input" class="seq-input" value="ATGCGTACCTACGATC" maxlength="24" placeholder="Ketik A, T, G, C..." spellcheck="false" autocomplete="off">
+            <button id="btn-apply-seq" class="seq-apply-btn" title="Rakit Ulang Heliks 3D">Sintesis</button>
+        </div>
+        <div class="seq-preset-chips">
+            <button class="seq-chip active" data-seq="ATGCGTACCTACGATC">Watson-Crick</button>
+            <button class="seq-chip" data-seq="CGCGCGGCCGCGCGCG">CpG Island (GC)</button>
+            <button class="seq-chip" data-seq="TATAAATATAAATATA">TATA Box (AT)</button>
+            <button class="seq-chip" data-seq="CGCGCGCGCGCGCGCG">poly(dG-dC) Z</button>
+        </div>
+        <div class="seq-stats-badge" id="seq-stats-badge">
+            <div class="seq-stat-item"><span class="stat-lbl">Panjang:</span> <b id="stat-len">16 pb</b></div>
+            <div class="seq-stat-item"><span class="stat-lbl">GC:</span> <b id="stat-gc">50.0%</b></div>
+            <div class="seq-stat-item"><span class="stat-lbl">Tₘ:</span> <b id="stat-tm">48.0°C</b></div>
+            <div class="seq-stat-item"><span class="stat-lbl">Ikatan H:</span> <b id="stat-hb">40</b></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 5. Dinamika Termal, Solvasi & Skala Metrik Biofisika -->
+        <div class="panel-section-title">
+            <span class="icon">🌡️</span> BIOFISIKA &amp; LINGKUNGAN SEL
+        </div>
+        <p class="section-hint">Parameter dinamis molekul dalam sitoplasma:</p>
         <div class="toggle-group">
             <button id="btn-toggle-thermal" class="ctrl-btn active">
                 <span id="thermal-status-icon">🌊</span> Dinamika Termal (37°C): <b id="thermal-status-text">AKTIF</b>
+            </button>
+            <button id="btn-toggle-ions" class="ctrl-btn">
+                <span id="ions-status-icon">💧</span> Solvasi &amp; Ion Lawan (Mg²⁺): <b id="ions-status-text">SEMBUNYI</b>
             </button>
             <button id="btn-toggle-metrics" class="ctrl-btn">
                 <span id="metric-status-icon">📐</span> Skala Metrik (nm / Å): <b id="metric-status-text">SEMBUNYI</b>
@@ -200,6 +301,10 @@
                 <div class="legend-item"><span class="color-dot dot-c"></span> <b>C</b> Sitosin (Pirimidin: 1 Cincin)</div>
                 <div class="legend-item"><span class="color-dot dot-backbone"></span> <b>P-S</b> Gula Deoksiribosa-Fosfat</div>
                 <div class="legend-item"><span class="color-dot dot-hbond"></span> <b>···</b> Ikatan Hidrogen (A=T, G≡C)</div>
+                <div class="legend-item"><span class="color-dot dot-methyl"></span> <b>-CH₃</b> Metilasi Epigenetik (5-mC)</div>
+                <div class="legend-item"><span class="color-dot dot-dimer"></span> <b>CPD</b> Dimer Timin Fotoproduk UV</div>
+                <div class="legend-item"><span class="color-dot dot-intercalator"></span> <b>Drug</b> Interkalasi Kemoterapi</div>
+                <div class="legend-item"><span class="color-dot dot-ion"></span> <b>Mg²⁺</b> Ion Lawan &amp; Air Solvasi</div>
             </div>
             <div class="legend-polarity-row">
                 <div class="polarity-chip"><b>5'</b> Fosfat Bebas</div>
@@ -213,6 +318,11 @@
                 <span class="cpk-item"><i style="background:#dc2626;"></i>O</span>
                 <span class="cpk-item"><i style="background:#d97706;"></i>P</span>
                 <span class="cpk-item"><i style="background:#e2e8f0;"></i>H</span>
+            </div>
+            <div class="legend-electro-row hidden" id="legend-electro-row">
+                <span class="electro-label">Potensial Coulomb:</span>
+                <span class="electro-bar"></span>
+                <span class="electro-tags"><span>-1e (Fosfat)</span><span>0 (Netral)</span><span>+1e (Amino)</span></span>
             </div>
         </div>
     </aside>
@@ -381,7 +491,7 @@
                 <div class="tutorial-slide active" data-slide="1">
                     <div class="tut-icon-banner">🧬</div>
                     <h3 class="tut-slide-title">1. Arsitektur Heliks Ganda B-DNA Asli</h3>
-                    <p class="tut-slide-lead">Struktur materi genetik utama makhluk hidup dirumuskan oleh James Watson dan Francis Crick (1953) berdasarkan data kristalografi sinar-X Foto 51 karya Rosalind Franklin &amp; Raymond Gosling.</p>
+                    <p class="tut-slide-lead">Struktur materi genetik utama dirumuskan oleh James Watson dan Francis Crick (1953) berdasarkan data kristalografi sinar-X Foto 51 karya Rosalind Franklin &amp; Raymond Gosling.</p>
                     <div class="tut-grid">
                         <div class="tut-box">
                             <span class="tut-box-icon">📐</span>
@@ -398,53 +508,96 @@
 
                 <!-- Slide 2 -->
                 <div class="tutorial-slide hidden" data-slide="2">
-                    <div class="tut-icon-banner">🧪</div>
-                    <h3 class="tut-slide-title">2. Basa Nitrogen &amp; Polaritas Antiparalel</h3>
-                    <p class="tut-slide-lead">Kestabilan dan kerapian diameter DNA dijaga oleh penggabungan konstan antara basa purin (berukuran besar) dan basa pirimidin (berukuran lebih kecil).</p>
+                    <div class="tut-icon-banner">🌀</div>
+                    <h3 class="tut-slide-title">2. Tiga Bentuk Alotropik: B-DNA, A-DNA &amp; Z-DNA</h3>
+                    <p class="tut-slide-lead">Kristalografi membuktikan DNA dapat bertransisi konformasi bergantung pada tingkat hidrasi dan sekuens basa (Dickerson et al., 1982; Saenger, 1984).</p>
                     <div class="tut-grid">
                         <div class="tut-box">
-                            <span class="tut-box-icon">💎</span>
-                            <b>Purin vs Pirimidin:</b>
-                            <p><b>Purin (A &amp; G)</b> memiliki 2 cincin terpadu (cincin 6 + 5), sedangkan <b>Pirimidin (T &amp; C)</b> memiliki 1 cincin heksagonal tunggal.</p>
+                            <span class="tut-box-icon">💧</span>
+                            <b>B-DNA (Fisiologis):</b>
+                            <p>Bentuk alami dalam larutan berair sel. Heliks kanan, 10.5 pb/putaran, pasangan basa tegak lurus sumbu.</p>
                         </div>
                         <div class="tut-box">
-                            <span class="tut-box-icon">🔗</span>
-                            <b>Ikatan Hidrogen &amp; Chargaff:</b>
-                            <p><b>Adenin = Timin</b> dihubungkan 2 ikatan H, sedangkan <b>Guanin ≡ Sitosin</b> dihubungkan 3 ikatan H yang lebih kokoh secara termodinamika.</p>
+                            <span class="tut-box-icon">🏜️</span>
+                            <b>A-DNA (Terdehidrasi / RNA-DNA):</b>
+                            <p>Bentuk lebih pendek dan lebar (⌀2.3 nm, 11 pb/putaran) dengan pasangan basa <b>miring 19°</b> dan rongga aksial tengah.</p>
                         </div>
                         <div class="tut-box tut-box-wide">
-                            <span class="tut-box-icon">⇄</span>
-                            <b>Polaritas Antiparalel 5' → 3':</b>
-                            <p>Kedua untai berjalan dengan orientasi berlawanan. Ujung <b>5'</b> memiliki gugus fosfat bebas, sedangkan ujung <b>3'</b> memiliki gugus hidroksil (-OH) bebas.</p>
+                            <span class="tut-box-icon">⚡</span>
+                            <b>Z-DNA (Heliks Kidal Zigzag):</b>
+                            <p>Terbentuk pada pengulangan purin-pirimidin (d(CG)ₙ). Berputar <b>ke arah kiri (*left-handed*)</b>, diameter ramping 1.8 nm, 12 pb/putaran, dengan tulang punggung zigzag!</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Slide 3 -->
                 <div class="tutorial-slide hidden" data-slide="3">
-                    <div class="tut-icon-banner">🔬</div>
-                    <h3 class="tut-slide-title">3. Tiga Mode Tampilan &amp; Fitur Interaktif</h3>
-                    <p class="tut-slide-lead">Simulasi ini menyediakan 3 representasi ilmiah yang lazim digunakan dalam perangkat lunak riset biofisika (ChimeraX, PyMOL, dan RCSB PDB).</p>
+                    <div class="tut-icon-banner">🧪</div>
+                    <h3 class="tut-slide-title">3. Basa Nitrogen, Komplementer Chargaff &amp; Tₘ</h3>
+                    <p class="tut-slide-lead">Kestabilan dan kerapian diameter DNA dijaga oleh penggabungan purin (A, G) dan pirimidin (T, C) sesuai Hukum Chargaff.</p>
                     <div class="tut-grid">
                         <div class="tut-box">
-                            <span class="tut-box-icon">✨</span>
-                            <b>Mode Bio-Illustrative:</b>
-                            <p>Lempeng cincin aromatik ber-shading kristal cair PBR, pita deoksiribosa-fosfat kontinu, dan cap huruf kimia.</p>
+                            <span class="tut-box-icon">💎</span>
+                            <b>Purin (A, G) vs Pirimidin (T, C):</b>
+                            <p><b>Adenin &amp; Guanin</b> memiliki 2 cincin terpadu (cincin 6 + 5), sedangkan <b>Timin &amp; Sitosin</b> memiliki 1 cincin heksagonal tunggal.</p>
                         </div>
                         <div class="tut-box">
-                            <span class="tut-box-icon">🔮</span>
-                            <b>CPK Space-Filling:</b>
-                            <p>Permukaan atom Van der Waals riil tanpa lubang di inti heliks, memperlihatkan alur alaminya.</p>
+                            <span class="tut-box-icon">🔗</span>
+                            <b>2 Ikatan (A=T) vs 3 Ikatan (G≡C):</b>
+                            <p>Pasangan G≡C memiliki 3 ikatan hidrogen, memberikan kekuatan termodinamika lebih tinggi dan menaikkan titik leleh ($T_m$).</p>
+                        </div>
+                        <div class="tut-box tut-box-wide">
+                            <span class="tut-box-icon">⌨️</span>
+                            <b>Sintesis Sekuens Kustom:</b>
+                            <p>Gunakan bar input untuk mengetik urutan basa sendiri atau memilih preset (Watson-Crick, CpG Island, TATA Box) untuk melihat metriknya secara langsung.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 4 -->
+                <div class="tutorial-slide hidden" data-slide="4">
+                    <div class="tut-icon-banner">✨</div>
+                    <h3 class="tut-slide-title">4. Fenomena Molekuler: Epigenetika, UV &amp; Obat</h3>
+                    <p class="tut-slide-lead">Simulasi ini memungkinkan pengamatan modifikasi kimiawi riil yang memengaruhi ekspresi gen dan kesehatan selular:</p>
+                    <div class="tut-grid">
+                        <div class="tut-box">
+                            <span class="tut-box-icon">🧬</span>
+                            <b>Metilasi DNA (5-mC):</b>
+                            <p>Penambahan gugus metil (<b>-CH₃</b>) pada C5 Sitosin menonjol di lekukan mayor, membungkam ekspresi gen (*epigenetic silencing*).</p>
                         </div>
                         <div class="tut-box">
-                            <span class="tut-box-icon">⚛️</span>
-                            <b>Ball &amp; Stick:</b>
-                            <p>Membedah kerangka atomik ikatan kovalen cincin pentosa dan gugus fosfat.</p>
+                            <span class="tut-box-icon">☀️</span>
+                            <b>Dimer Timin (Radiasi UV):</b>
+                            <p>Foton ultraviolet membentuk cincin siklobutana kovalen antara dua timin, memicu <b>tekukan/kink ~30°</b> penyebab kanker kulit.</p>
                         </div>
+                        <div class="tut-box tut-box-wide">
+                            <span class="tut-box-icon">💊</span>
+                            <b>Interkalasi Obat Kanker (Kemoterapi):</b>
+                            <p>Molekul planar menyisip di antara tumpukan basa (*pi-pi stacking*), merenggangkan heliks hingga 2x lipat dan melumpuhkan replikasi sel kanker.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 5 -->
+                <div class="tutorial-slide hidden" data-slide="5">
+                    <div class="tut-icon-banner">🔬</div>
+                    <h3 class="tut-slide-title">5. Visualisasi Riset, Potensial Coulomb &amp; Solvasi</h3>
+                    <p class="tut-slide-lead">Standar visualisasi perangkat lunak kristalografi dan dinamika molekuler riset (PyMOL, ChimeraX, GROMACS):</p>
+                    <div class="tut-grid">
                         <div class="tut-box">
                             <span class="tut-box-icon">⚡</span>
-                            <b>Pemisahan &amp; Termal:</b>
-                            <p>Gunakan tombol <b>Unzip</b> (membelah heliks), <b>Uraikan</b> (membedah komponen), dan <b>Dinamika Termal</b> untuk osilasi mikroskopis.</p>
+                            <b>Peta Potensial Coulomb:</b>
+                            <p>Warna merah pekat pada tulang punggung fosfat (muatan negatif kuat $-1e$), dan netral di inti basa hidrofobik.</p>
+                        </div>
+                        <div class="tut-box">
+                            <span class="tut-box-icon">💧</span>
+                            <b>Solvasi &amp; Ion Lawan (Mg²⁺):</b>
+                            <p>Kation magnesium pelindung mengelilingi gugus fosfat dan pita air (*spine of hydration*) di lekukan minor menjaga heliks agar tidak kolaps.</p>
+                        </div>
+                        <div class="tut-box tut-box-wide">
+                            <span class="tut-box-icon">🎮</span>
+                            <b>Kontrol Interaktif:</b>
+                            <p>Ketuk komponen apa pun untuk menginspeksi rumus kimia dan fungsinya. Gunakan <b>Unzip</b> untuk membelah untai dan <b>Dinamika Termal (37°C)</b> untuk vibrasi Brownian.</p>
                         </div>
                     </div>
                 </div>
@@ -455,6 +608,8 @@
                     <span class="dot active" data-index="1"></span>
                     <span class="dot" data-index="2"></span>
                     <span class="dot" data-index="3"></span>
+                    <span class="dot" data-index="4"></span>
+                    <span class="dot" data-index="5"></span>
                 </div>
                 <div class="tutorial-nav-btns">
                     <button id="tutorial-btn-prev" class="tut-nav-btn secondary" disabled>Sebelumnya</button>

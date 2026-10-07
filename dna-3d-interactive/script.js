@@ -139,6 +139,66 @@ const DNA_DATA = {
         colorNum: 0xd97706,
         desc: "Pusat gugus fosfat tetrahedral PO₄³⁻ yang menghubungkan posisi C3' deoksiribosa sebelumnya ke posisi C5' deoksiribosa berikutnya.",
         func: "Menyediakan muatan anionik untuk interaksi elektrostatis dengan protein histon dalam pemadatan kromatin."
+    },
+    methylation: {
+        name: "5-Metilsitosina (5-mC) Epigenetik",
+        class: "Modifikasi Kovalen Epigenetik Sitosina",
+        formula: "C₅H₇N₃O (Gugus -CH₃ Tambahan)",
+        weight: "125.13 g/mol",
+        partner: "Kovalen pada Posisi C5 Cincin Sitosina",
+        bonds: "Ikatan Kovalen C-C ke Lekukan Mayor",
+        colorHex: "#c084fc",
+        colorNum: 0xc084fc,
+        desc: "Modifikasi epigenetik utama di mana enzim DNA metiltransferase (DNMT) mentransfer gugus metil (-CH₃) ke karbon ke-5 sitosina. Gugus hidrofobik ini menjorok langsung ke Lekukan Mayor (Major Groove) DNA.",
+        func: "Membungkam ekspresi gen (gene silencing) dengan memblokir pengikatan faktor transkripsi dan menarik protein pengubah kromatin. Kunci dalam diferensiasi sel dan epigenetika kanker."
+    },
+    thymine_dimer: {
+        name: "Dimer Timin (Siklobutana CPD)",
+        class: "Lesi Mutagenik Fotoproduk Radiasi UV",
+        formula: "[C₅H₆N₂O₂]₂ (Cincin Siklobutana)",
+        weight: "252.22 g/mol",
+        partner: "Ikatan Kovalen Antara 2 Timin Bertetangga",
+        bonds: "2 Ikatan Kovalen Siklobutana C5-C5 & C6-C6",
+        colorHex: "#fb923c",
+        colorNum: 0xfb923c,
+        desc: "Fotolesi kovalen antara dua residu pirimidina timin bersebelahan pada untai yang sama akibat radiasi ultraviolet matahari (UVB). Cincin siklobutana kaku mengunci kedua basa secara kovalen.",
+        func: "Mendistorsi sumbu heliks ganda hingga melengkung ~30° (kink bend), menghalangi replikasi oleh DNA polimerase, dan merupakan penyebab utama mutasi karsinogenesis melanoma kulit."
+    },
+    intercalator: {
+        name: "Agen Interkalasi (Etidium / Doxorubicin)",
+        class: "Molekul Trisiklik Planar Antikanker",
+        formula: "C₂₁H₂₀ClN₃ / Kromofor Aromatik Polisiklik",
+        weight: "394.31 g/mol",
+        partner: "Menyisip di Antara Pasangan Basa (Pi-Pi Stacking)",
+        bonds: "Interaksi Hidrofobik Van der Waals & Pi-Pi",
+        colorHex: "#f43f5e",
+        colorNum: 0xf43f5e,
+        desc: "Molekul aromatik pipih polisiklik yang mampu menyisip tegak lurus di antara tumpukan pasangan basa bersebelahan. Digunakan luas dalam deteksi DNA fluoresens serta obat kemoterapi kanker.",
+        func: "Memperlebar jarak heliks (rise meningkat hingga 2x lipat) dan mendespiralisasi putaran heliks (-26° unwinding), memblokir enzim topoisomerase dan replikasi sel kanker."
+    },
+    ion_mg: {
+        name: "Ion Magnesium Pelindung (Mg²⁺)",
+        class: "Kation Divalen Penstabil Heliks (Manning Condensation)",
+        formula: "Mg²⁺ (Lapisan Solvasi Sitoplasma)",
+        weight: "24.305 u",
+        partner: "Oksigen Anionik Gugus Fosfat (PO₄³⁻)",
+        bonds: "Gaya Tarik Elektrostatik Ionik Kation-Anion",
+        colorHex: "#2dd4bf",
+        colorNum: 0x2dd4bf,
+        desc: "Ion divalen terhidrasi yang mengelilingi permukaan luar tulang punggung DNA untuk menyaring muatan negatif fosfat (teori kondensasi ion lawan Gerald Manning).",
+        func: "Menetralkan gaya tolak-menolak elektrostatik antar untai sehingga heliks ganda tidak tercerai-berai, serta kofaktor esensial enzim polimerase dan restriksi nuklease."
+    },
+    water_hydration: {
+        name: "Pita Air Lekukan Minor (Spine of Hydration)",
+        class: "Lapisan Solvasi Molekuler Teratur",
+        formula: "H₂O (Kristalografi Sinar-X PDB 1BNA)",
+        weight: "18.015 g/mol",
+        partner: "Atom O2 Timin & N3 Adenin di Lekukan Minor",
+        bonds: "Jejaring Jembatan Hidrogen Terkoordinasi",
+        colorHex: "#67e8f9",
+        colorNum: 0x67e8f9,
+        desc: "Jejaring molekul air yang tersusun sangat rapi di sepanjang dasar lekukan minor B-DNA (Drew & Dickerson, 1981), menghubungkan atom akseptor H antarpasangan basa.",
+        func: "Memberikan kontribusi entropi dan entalpi penting untuk mengunci konformasi B-DNA dalam larutan seluler dan mengatur afinitas pengikatan obat atau protein pengatur ekspresi gen."
     }
 };
 
@@ -497,47 +557,165 @@ const ballStickSmallSphere = new THREE.SphereGeometry(0.16, 10, 10);
 const ballStickBondCyl = new THREE.CylinderGeometry(0.045, 0.045, 1.0, 8);
 
 // -----------------------------------------------------------------------------
-// 8. ARSITEKTUR STRUKTUR 3D DNA B-FORM (WATSON-CRICK // PDB 1BNA)
+// 8. ARSITEKTUR BIOFISIKA & KONFORMASI ALOTROPIK DNA (PDB ID: 1BNA / SAENGER 1984)
 // -----------------------------------------------------------------------------
 const dnaGroup = new THREE.Group();
 dnaGroup.rotation.z = 0.30;
 dnaGroup.rotation.x = 0.15;
 scene.add(dnaGroup);
 
-const NUM_PAIRS = 28;
-const HELIX_RADIUS = 4.6;
-const HEIGHT_STEP = 1.35;
-const ANGLE_STEP = 0.355;        // ~10.5 pasang basa per turn
-const MAJOR_MINOR_OFFSET = 2.40;  // Asimetris alur mayor & minor
+// Grup ion pelindung & lapisan solvasi
+const ionGroup = new THREE.Group();
+dnaGroup.add(ionGroup);
 
-let currentRenderMode = 'bio';   // 'bio', 'cpk', 'ballstick'
+// Konfigurasi Parameter Kristalografi Sinar-X Ilmiah (Dickerson et al., 1982; Saenger, 1984)
+const CONFORMATIONS = {
+    B: {
+        name: "B-DNA (Fisiologis)",
+        radius: 4.6,           // ~2.0 nm diameter (20 Å)
+        heightStep: 1.35,      // ~0.34 nm rise per bp (3.4 Å)
+        angleStep: 0.355,      // ~10.5 pb per turn (+34.3° / bp, heliks kanan)
+        majorMinorOffset: 2.40,// Asimetris: Major groove ~2.2 nm, Minor groove ~1.2 nm
+        tilt: 0.0,             // Tegak lurus terhadap sumbu
+        propeller: 0.12,
+        zigzag: false,
+        metrics: {
+            dia: "2.0 nm (20 Å)",
+            rise: "0.34 nm (3.4 Å)",
+            pitch: "3.4 nm (10.5 pb)"
+        }
+    },
+    A: {
+        name: "A-DNA (Terdehidrasi)",
+        radius: 5.3,           // ~2.3 nm diameter (23 Å, silinder berongga aksial)
+        heightStep: 1.02,      // ~0.26 nm rise per bp (padat/terkompresi)
+        angleStep: 0.327,      // ~11.0 pb per turn (+32.7° / bp, heliks kanan)
+        majorMinorOffset: 1.85,// Major groove sangat dalam & sempit; Minor groove dangkal
+        tilt: 0.33,            // Kemiringan basa kuat ~19° terhadap sumbu!
+        propeller: 0.18,
+        zigzag: false,
+        metrics: {
+            dia: "2.3 nm (23 Å)",
+            rise: "0.26 nm (2.6 Å)",
+            pitch: "2.8 nm (11.0 pb)"
+        }
+    },
+    Z: {
+        name: "Z-DNA (Heliks Kidal)",
+        radius: 4.1,           // ~1.8 nm diameter (18 Å, ramping dan memanjang)
+        heightStep: 1.50,      // ~0.37 nm rise per bp (3.7 Å)
+        angleStep: -0.30,      // Sudut NEGATIF = HELIKS KIDAL (*Left-handed*)!
+        majorMinorOffset: 3.10,// Alur tunggal dalam, tulang punggung dinukleotida zigzag
+        tilt: -0.12,           // Kemiringan terbalik ~ -7°
+        propeller: 0.08,
+        zigzag: true,          // Pengulangan bergantian purin-pirimidin syn/anti
+        metrics: {
+            dia: "1.8 nm (18 Å)",
+            rise: "0.37 nm (3.7 Å)",
+            pitch: "4.5 nm (12.0 pb)"
+        }
+    }
+};
+
+// Material Khusus Potensial Elektrostatik Coulomb (Poisson-Boltzmann Continuum)
+const electroMaterials = {
+    backbone: new THREE.MeshPhysicalMaterial({
+        color: 0xef4444, // Merah = -1 muatan formal anionik gugus fosfat PO4(3-)
+        roughness: 0.28,
+        metalness: 0.05,
+        clearcoat: 0.5,
+        emissive: 0x590505,
+        emissiveIntensity: 0.35,
+        envMap: envMap,
+        envMapIntensity: 0.3
+    }),
+    baseNeutral: new THREE.MeshPhysicalMaterial({
+        color: 0xcbd5e1, // Putih keabuan = inti aromatik hidrofobik netral
+        roughness: 0.35,
+        metalness: 0.05,
+        clearcoat: 0.3,
+        emissive: 0x1e293b,
+        emissiveIntensity: 0.15
+    }),
+    basePositive: new THREE.MeshPhysicalMaterial({
+        color: 0x38bdf8, // Biru muda = donor proton parsial positif (gugus amino)
+        roughness: 0.3,
+        metalness: 0.05,
+        clearcoat: 0.35,
+        emissive: 0x0c4a6e,
+        emissiveIntensity: 0.25
+    })
+};
+
+// Material Khusus Fenomena Biologi Molekuler & Solvasi
+const conditionMaterials = {
+    methylCarbon: new THREE.MeshPhysicalMaterial({
+        color: 0xc084fc,
+        roughness: 0.25,
+        metalness: 0.15,
+        clearcoat: 0.6,
+        emissive: 0x581c87,
+        emissiveIntensity: 0.45
+    }),
+    dimerBridge: new THREE.MeshPhysicalMaterial({
+        color: 0xfb923c,
+        roughness: 0.2,
+        metalness: 0.3,
+        clearcoat: 0.8,
+        emissive: 0x9a3412,
+        emissiveIntensity: 0.6
+    }),
+    intercalatorPlate: new THREE.MeshPhysicalMaterial({
+        color: 0xf43f5e,
+        roughness: 0.15,
+        metalness: 0.4,
+        clearcoat: 0.9,
+        emissive: 0x9f1239,
+        emissiveIntensity: 0.7
+    }),
+    ionMg: new THREE.MeshPhysicalMaterial({
+        color: 0x2dd4bf,
+        roughness: 0.1,
+        metalness: 0.8,
+        clearcoat: 0.9,
+        emissive: 0x115e59,
+        emissiveIntensity: 0.8
+    }),
+    waterO: new THREE.MeshPhysicalMaterial({
+        color: 0x67e8f9,
+        transparent: true,
+        opacity: 0.8,
+        roughness: 0.1,
+        transmission: 0.6
+    })
+};
+
+// State Global Sistem
+let currentConformation = 'B';
+let currentCondition = 'normal';
+let currentSequenceString = 'ATGCGTACCTACGATC';
+let currentRenderMode = 'bio';   // 'bio', 'cpk', 'ballstick', 'electrostatic'
 let thermalDynamicsEnabled = true;
 let metricScaleVisible = false;
+let counterIonsVisible = false;
 
-const allInteractiveMeshes = [];
-const strand1Meshes = [];
-const strand2Meshes = [];
-const baseMeshes = { A: [], T: [], G: [], C: [], backbone: [], hbond: [] };
+let allInteractiveMeshes = [];
+let strand1Meshes = [];
+let strand2Meshes = [];
+let baseMeshes = { A: [], T: [], G: [], C: [], backbone: [], hbond: [], methylation: [], thymine_dimer: [], intercalator: [], ion_mg: [], water_hydration: [] };
 
-// Array untuk kontrol visibilitas per-mode
-const bioObjects = [];
-const cpkObjects = [];
-const ballStickObjects = [];
+let bioObjects = [];
+let cpkObjects = [];
+let ballStickObjects = [];
+let electroObjects = [];
 
-const splinePointsStrand1 = [];
-const splinePointsStrand2 = [];
-const pairDynamicContainers = [];
-const pairBaseY = [];
+let splinePointsStrand1 = [];
+let splinePointsStrand2 = [];
+let pairDynamicContainers = [];
+let pairBaseY = [];
 
-const sequence = [
-    { b1: 'A', b2: 'T' }, { b1: 'G', b2: 'C' },
-    { b1: 'T', b2: 'A' }, { b1: 'C', b2: 'G' },
-    { b1: 'A', b2: 'T' }, { b1: 'G', b2: 'C' },
-    { b1: 'C', b2: 'G' }, { b1: 'T', b2: 'A' },
-    { b1: 'A', b2: 'T' }, { b1: 'G', b2: 'C' },
-    { b1: 'C', b2: 'G' }, { b1: 'T', b2: 'A' },
-    { b1: 'A', b2: 'T' }, { b1: 'G', b2: 'C' }
-];
+let ribbon1 = null;
+let ribbon2 = null;
 
 const annotationTargets = {
     majorGroove: new THREE.Vector3(),
@@ -559,384 +737,677 @@ const annotationTargets = {
 
 const BADGE_RADIUS = 0.48;
 const BADGE_HEIGHT = 0.22;
-
-for (let i = 0; i < NUM_PAIRS; i++) {
-    const y = (i - NUM_PAIRS / 2) * HEIGHT_STEP;
-    pairBaseY.push(y);
-    const theta1 = i * ANGLE_STEP;
-    const theta2 = theta1 + MAJOR_MINOR_OFFSET;
-
-    const x1 = Math.cos(theta1) * HELIX_RADIUS;
-    const z1 = Math.sin(theta1) * HELIX_RADIUS;
-    const pos1 = new THREE.Vector3(x1, y, z1);
-    splinePointsStrand1.push(pos1);
-
-    const x2 = Math.cos(theta2) * HELIX_RADIUS;
-    const z2 = Math.sin(theta2) * HELIX_RADIUS;
-    const pos2 = new THREE.Vector3(x2, y, z2);
-    splinePointsStrand2.push(pos2);
-
-    const center = new THREE.Vector3().addVectors(pos1, pos2).multiplyScalar(0.5);
-
-    const pair = sequence[i % sequence.length];
-    const b1Type = pair.b1;
-    const b2Type = pair.b2;
-    const isCG = (b1Type === 'C' || b1Type === 'G');
-    const isPurine1 = (b1Type === 'A' || b1Type === 'G');
-    const isPurine2 = (b2Type === 'A' || b2Type === 'G');
-
-    // 1. Kontainer dinamis pasangan pada tinggi Y presisi
-    const pairContainer = new THREE.Group();
-    pairContainer.position.set(0, y, 0);
-    dnaGroup.add(pairContainer);
-    pairDynamicContainers.push(pairContainer);
-
-    // Titik lokal relatif terhadap kontainer Y
-    const p1Local = new THREE.Vector3(x1, 0, z1);
-    const p2Local = new THREE.Vector3(x2, 0, z2);
-    const centerLocal = new THREE.Vector3().addVectors(p1Local, p2Local).multiplyScalar(0.5);
-    const dir1 = new THREE.Vector3().subVectors(centerLocal, p1Local).normalize();
-    const dir2 = new THREE.Vector3().subVectors(centerLocal, p2Local).normalize();
-
-    // Sub-grup pemisahan untai (untuk animasi unzip & explode di semua mode)
-    const s1Container = new THREE.Group();
-    const s2Container = new THREE.Group();
-    const bondContainer = new THREE.Group();
-
-    pairContainer.add(s1Container);
-    pairContainer.add(s2Container);
-    pairContainer.add(bondContainer);
-
-    // =========================================================================
-    // A. MODE 1: BIO-ILLUSTRATIVE REALISTIC (WATSON-CRICK ENHANCED)
-    // =========================================================================
-    const bioBase1 = new THREE.Group();
-    const bioBase2 = new THREE.Group();
-    const bioBond = new THREE.Group();
-
-    s1Container.add(bioBase1);
-    s2Container.add(bioBase2);
-    bondContainer.add(bioBond);
-
-    bioObjects.push(bioBase1, bioBase2, bioBond);
-
-    // --- BASA 1 ---
-    const plateGeo1 = isPurine1 ? purineGeo : pyrimidineGeo;
-    const plate1 = new THREE.Mesh(plateGeo1, materials[b1Type]);
-    const plateDist1 = isPurine1 ? 2.3 : 1.9;
-    plate1.position.set(0, 0, plateDist1);
-    plate1.rotation.x = Math.PI / 2;
-    plate1.rotation.z = 0.10; // Propeller twist
-    bioBase1.add(plate1);
-
-    const rod1Geo = new THREE.CylinderGeometry(0.14, 0.14, 1.2, 12);
-    const rod1 = new THREE.Mesh(rod1Geo, materials[b1Type]);
-    rod1.position.set(0, 0, 0.6);
-    rod1.rotation.x = Math.PI / 2;
-    bioBase1.add(rod1);
-
-    const badgeMat1 = new THREE.MeshPhysicalMaterial({
-        map: letterTextures[b1Type],
-        roughness: 0.28,
-        metalness: 0.05,
-        clearcoat: 0.4,
-        emissive: 0x111111,
-        envMap: envMap,
-        envMapIntensity: 0.1
-    });
-    const badge1 = new THREE.Mesh(new THREE.CylinderGeometry(BADGE_RADIUS, BADGE_RADIUS, BADGE_HEIGHT, 24), badgeMat1);
-    badge1.position.set(0, 0.16, plateDist1);
-    badge1.rotation.x = -Math.PI / 2;
-    bioBase1.add(badge1);
-
-    const sugar1 = new THREE.Mesh(pentoseGeo, materials.sugarNode);
-    sugar1.position.set(0, 0, 0);
-    sugar1.rotation.y = theta1;
-    bioBase1.add(sugar1);
-
-    const phos1 = new THREE.Mesh(phosphateGeo, materials.phosphateNode);
-    phos1.position.set(0, 0.42, -0.25);
-    bioBase1.add(phos1);
-
-    bioBase1.position.copy(p1Local);
-    bioBase1.lookAt(centerLocal);
-
-    bioBase1.traverse((child) => {
-        if (child.isMesh) {
-            child.userData = {
-                type: b1Type, strand: 1, parentGroup: s1Container,
-                initialPos: s1Container.position.clone(), pairIndex: i
-            };
-            allInteractiveMeshes.push(child);
-        }
-    });
-    baseMeshes[b1Type].push(s1Container);
-
-    // --- BASA 2 ---
-    const plateGeo2 = isPurine2 ? purineGeo : pyrimidineGeo;
-    const plate2 = new THREE.Mesh(plateGeo2, materials[b2Type]);
-    const plateDist2 = isPurine2 ? 2.3 : 1.9;
-    plate2.position.set(0, 0, plateDist2);
-    plate2.rotation.x = Math.PI / 2;
-    plate2.rotation.z = -0.10; // Propeller twist
-    bioBase2.add(plate2);
-
-    const rod2Geo = new THREE.CylinderGeometry(0.14, 0.14, 1.2, 12);
-    const rod2 = new THREE.Mesh(rod2Geo, materials[b2Type]);
-    rod2.position.set(0, 0, 0.6);
-    rod2.rotation.x = Math.PI / 2;
-    bioBase2.add(rod2);
-
-    const badgeMat2 = new THREE.MeshPhysicalMaterial({
-        map: letterTextures[b2Type],
-        roughness: 0.28,
-        metalness: 0.05,
-        clearcoat: 0.4,
-        emissive: 0x111111,
-        envMap: envMap,
-        envMapIntensity: 0.1
-    });
-    const badge2 = new THREE.Mesh(new THREE.CylinderGeometry(BADGE_RADIUS, BADGE_RADIUS, BADGE_HEIGHT, 24), badgeMat2);
-    badge2.position.set(0, 0.16, plateDist2);
-    badge2.rotation.x = -Math.PI / 2;
-    bioBase2.add(badge2);
-
-    const sugar2 = new THREE.Mesh(pentoseGeo, materials.sugarNode);
-    sugar2.position.set(0, 0, 0);
-    sugar2.rotation.y = theta2;
-    bioBase2.add(sugar2);
-
-    const phos2 = new THREE.Mesh(phosphateGeo, materials.phosphateNode);
-    phos2.position.set(0, 0.42, -0.25);
-    bioBase2.add(phos2);
-
-    bioBase2.position.copy(p2Local);
-    bioBase2.lookAt(centerLocal);
-
-    bioBase2.traverse((child) => {
-        if (child.isMesh) {
-            child.userData = {
-                type: b2Type, strand: 2, parentGroup: s2Container,
-                initialPos: s2Container.position.clone(), pairIndex: i
-            };
-            allInteractiveMeshes.push(child);
-        }
-    });
-    baseMeshes[b2Type].push(s2Container);
-
-    // --- IKATAN HIDROGEN BIO-ILLUSTRATIVE ---
-    const bondLinesCount = isCG ? 3 : 2;
-    const bondLineSpacing = isCG ? [-0.22, 0, 0.22] : [-0.16, 0.16];
-
-    const tip1 = new THREE.Vector3().addVectors(p1Local, dir1.clone().multiplyScalar(isPurine1 ? 3.35 : 2.75));
-    const tip2 = new THREE.Vector3().addVectors(p2Local, dir2.clone().multiplyScalar(isPurine2 ? 3.35 : 2.75));
-    const gapVector = new THREE.Vector3().subVectors(tip2, tip1);
-    const perpendicular = new THREE.Vector3(0, 1, 0).cross(gapVector).normalize();
-
-    const dotsPerLine = 4;
-    const dotGeo = new THREE.SphereGeometry(0.08, 10, 10);
-
-    for (let line = 0; line < bondLinesCount; line++) {
-        const lineOffset = perpendicular.clone().multiplyScalar(bondLineSpacing[line]);
-        for (let d = 0; d < dotsPerLine; d++) {
-            const fraction = (d + 0.5) / dotsPerLine;
-            const dotPos = new THREE.Vector3()
-                .addVectors(tip1, gapVector.clone().multiplyScalar(fraction))
-                .add(lineOffset);
-            const dotMesh = new THREE.Mesh(dotGeo, materials.hbondDot);
-            dotMesh.position.copy(dotPos);
-            bioBond.add(dotMesh);
-        }
-    }
-
-    bioBond.traverse((child) => {
-        if (child.isMesh) {
-            child.userData = {
-                type: 'hbond', parentGroup: bondContainer,
-                initialPos: bondContainer.position.clone(), pairIndex: i
-            };
-            allInteractiveMeshes.push(child);
-        }
-    });
-    baseMeshes.hbond.push(bondContainer);
-
-    // =========================================================================
-    // B. MODE 2 & 3: ATOMIK CPK (SPACE-FILLING) & BALL-AND-STICK
-    // =========================================================================
-    function createAtomCluster(strand, isPurine, originPos, lookCenter, targetSContainer) {
-        const cpkSub = new THREE.Group();
-        const bsSub = new THREE.Group();
-
-        const atoms = [
-            // Gugus Fosfat
-            { el: 'P', pos: new THREE.Vector3(0, 0.4, -0.3) },
-            { el: 'O', pos: new THREE.Vector3(0.4, 0.6, -0.2) },
-            { el: 'O', pos: new THREE.Vector3(-0.4, 0.6, -0.2) },
-            { el: 'O', pos: new THREE.Vector3(0, 0.1, -0.6) },
-            // Gula Deoksiribosa
-            { el: 'C', pos: new THREE.Vector3(0, 0, 0) },
-            { el: 'C', pos: new THREE.Vector3(0.4, -0.2, 0.3) },
-            { el: 'C', pos: new THREE.Vector3(0.2, -0.4, 0.7) },
-            { el: 'C', pos: new THREE.Vector3(-0.3, -0.3, 0.7) },
-            { el: 'O', pos: new THREE.Vector3(-0.35, 0, 0.3) }
-        ];
-
-        if (isPurine) {
-            const pOffsets = [
-                { el: 'N', x: -0.3, z: 1.2 }, { el: 'C', x: 0.3, z: 1.2 },
-                { el: 'N', x: 0.6, z: 1.7 }, { el: 'C', x: 0.4, z: 2.2 },
-                { el: 'C', x: -0.2, z: 2.3 }, { el: 'C', x: -0.6, z: 1.8 },
-                { el: 'N', x: -0.7, z: 2.6 }, { el: 'C', x: -0.4, z: 3.1 },
-                { el: 'N', x: 0.1, z: 3.0 }
-            ];
-            pOffsets.forEach(p => atoms.push({ el: p.el, pos: new THREE.Vector3(p.x, (Math.random() - 0.5) * 0.06, p.z) }));
-        } else {
-            const pyrOffsets = [
-                { el: 'N', x: -0.3, z: 1.2 }, { el: 'C', x: 0.3, z: 1.2 },
-                { el: 'N', x: 0.5, z: 1.7 }, { el: 'C', x: 0.2, z: 2.2 },
-                { el: 'C', x: -0.3, z: 2.2 }, { el: 'C', x: -0.6, z: 1.7 }
-            ];
-            pyrOffsets.forEach(p => atoms.push({ el: p.el, pos: new THREE.Vector3(p.x, (Math.random() - 0.5) * 0.06, p.z) }));
-        }
-
-        atoms.forEach(a => {
-            const cpkMesh = new THREE.Mesh(cpkAtomGeos[a.el], materials.cpk[a.el]);
-            cpkMesh.position.copy(a.pos);
-            cpkMesh.userData = { type: a.el === 'P' ? 'P_atom' : a.el === 'N' ? 'N_atom' : a.el === 'O' ? 'O_atom' : 'C_atom', strand: strand, parentGroup: targetSContainer };
-            cpkSub.add(cpkMesh);
-            allInteractiveMeshes.push(cpkMesh);
-
-            const bsMesh = new THREE.Mesh(ballStickSmallSphere, materials.cpk[a.el]);
-            bsMesh.position.copy(a.pos);
-            bsMesh.userData = { type: a.el === 'P' ? 'P_atom' : a.el === 'N' ? 'N_atom' : a.el === 'O' ? 'O_atom' : 'C_atom', strand: strand, parentGroup: targetSContainer };
-            bsSub.add(bsMesh);
-            allInteractiveMeshes.push(bsMesh);
-        });
-
-        // Silinder ikatan Ball & Stick
-        for (let b = 0; b < atoms.length - 1; b++) {
-            const pA = atoms[b].pos;
-            const pB = atoms[b + 1].pos;
-            const dist = pA.distanceTo(pB);
-            if (dist < 0.9) {
-                const bondMesh = new THREE.Mesh(ballStickBondCyl, materials.cpk.bond);
-                bondMesh.position.copy(new THREE.Vector3().addVectors(pA, pB).multiplyScalar(0.5));
-                bondMesh.scale.set(1, dist, 1);
-                bondMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3().subVectors(pB, pA).normalize());
-                bsSub.add(bondMesh);
-            }
-        }
-
-        cpkSub.position.copy(originPos);
-        cpkSub.lookAt(lookCenter);
-        bsSub.position.copy(originPos);
-        bsSub.lookAt(lookCenter);
-
-        targetSContainer.add(cpkSub);
-        targetSContainer.add(bsSub);
-
-        cpkSub.visible = false;
-        bsSub.visible = false;
-
-        cpkObjects.push(cpkSub);
-        ballStickObjects.push(bsSub);
-    }
-
-    createAtomCluster(1, isPurine1, p1Local, centerLocal, s1Container);
-    createAtomCluster(2, isPurine2, p2Local, centerLocal, s2Container);
-
-    // Jembatan H untuk CPK dan Ball & Stick
-    const cpkHBridge = new THREE.Group();
-    const bsHBridge = new THREE.Group();
-    bondContainer.add(cpkHBridge);
-    bondContainer.add(bsHBridge);
-
-    cpkHBridge.visible = false;
-    bsHBridge.visible = false;
-    cpkObjects.push(cpkHBridge);
-    ballStickObjects.push(bsHBridge);
-
-    for (let line = 0; line < bondLinesCount; line++) {
-        const lineOffset = perpendicular.clone().multiplyScalar(bondLineSpacing[line]);
-        for (let d = 0; d < dotsPerLine; d++) {
-            const fraction = (d + 0.5) / dotsPerLine;
-            const dotPos = new THREE.Vector3()
-                .addVectors(tip1, gapVector.clone().multiplyScalar(fraction))
-                .add(lineOffset);
-            
-            const cpkH = new THREE.Mesh(cpkAtomGeos.H, materials.cpk.H);
-            cpkH.position.copy(dotPos);
-            cpkH.userData = { type: 'hbond', parentGroup: bondContainer };
-            cpkHBridge.add(cpkH);
-            allInteractiveMeshes.push(cpkH);
-
-            const bsH = new THREE.Mesh(ballStickSmallSphere, materials.cpk.H);
-            bsH.position.copy(dotPos);
-            bsH.userData = { type: 'hbond', parentGroup: bondContainer };
-            bsHBridge.add(bsH);
-            allInteractiveMeshes.push(bsH);
-        }
-    }
-
-    strand1Meshes.push(s1Container);
-    strand2Meshes.push(s2Container);
-
-    // Titik target anotasi ilmiah
-    if (i === 13) {
-        annotationTargets.cgPair.copy(center);
-        annotationTargets.backbone.copy(pos2);
-        annotationTargets.metricDiameter1.copy(pos1);
-        annotationTargets.metricDiameter2.copy(pos2);
-    }
-    if (i === 14) {
-        annotationTargets.atPair.copy(center);
-        annotationTargets.metricRise1.copy(pos1);
-    }
-    if (i === 15) {
-        annotationTargets.metricRise2.copy(pos1);
-    }
-    if (i === 8) {
-        annotationTargets.majorGroove.copy(center);
-        annotationTargets.metricPitch1.copy(pos1);
-    }
-    if (i === 18) {
-        annotationTargets.minorGroove.copy(center);
-        annotationTargets.metricPitch2.copy(pos1);
-    }
-    if (i === 0) {
-        annotationTargets.strand1Top.copy(pos1);
-        annotationTargets.strand2Top.copy(pos2);
-    }
-    if (i === NUM_PAIRS - 1) {
-        annotationTargets.strand1Bottom.copy(pos1);
-        annotationTargets.strand2Bottom.copy(pos2);
-    }
-}
-
-// -----------------------------------------------------------------------------
-// 9. PITA TULANG PUNGGUNG KONTINU (PITA GULA-FOSFAT)
-// -----------------------------------------------------------------------------
-const BACKBONE_TUBE_RADIUS = 0.76;
+const BACKBONE_TUBE_RADIUS = 0.74;
 const TUBE_SEGMENTS = 220;
 const TUBE_RADIAL_SEGMENTS = 20;
 
-const curve1 = new THREE.CatmullRomCurve3(splinePointsStrand1);
-const tube1Geo = new THREE.TubeGeometry(curve1, TUBE_SEGMENTS, BACKBONE_TUBE_RADIUS, TUBE_RADIAL_SEGMENTS, false);
-const ribbon1 = new THREE.Mesh(tube1Geo, materials.backbone);
-ribbon1.userData = { type: 'backbone', strand: 1, initialPos: new THREE.Vector3(0, 0, 0) };
-dnaGroup.add(ribbon1);
-allInteractiveMeshes.push(ribbon1);
-strand1Meshes.push(ribbon1);
-baseMeshes.backbone.push(ribbon1);
+// Geometri Geometris Spesial
+const methylGroupShape = new THREE.SphereGeometry(0.32, 12, 12);
+const methylHydrogenShape = new THREE.SphereGeometry(0.15, 8, 8);
+const dimerCylinderGeo = new THREE.CylinderGeometry(0.08, 0.08, 1.35, 10);
 
-const curve2 = new THREE.CatmullRomCurve3(splinePointsStrand2);
-const tube2Geo = new THREE.TubeGeometry(curve2, TUBE_SEGMENTS, BACKBONE_TUBE_RADIUS, TUBE_RADIAL_SEGMENTS, false);
-const ribbon2 = new THREE.Mesh(tube2Geo, materials.backbone);
-ribbon2.userData = { type: 'backbone', strand: 2, initialPos: new THREE.Vector3(0, 0, 0) };
-dnaGroup.add(ribbon2);
-allInteractiveMeshes.push(ribbon2);
-strand2Meshes.push(ribbon2);
-baseMeshes.backbone.push(ribbon2);
+// Bentuk planar polisiklik untuk molekul interkalator (Etidium / Doxorubicin)
+function createIntercalatorShape() {
+    const s = new THREE.Shape();
+    s.moveTo(-2.2, -0.6);
+    s.lineTo(-2.0, 0.6);
+    s.lineTo(-0.8, 0.9);
+    s.lineTo(0.8, 0.9);
+    s.lineTo(2.0, 0.6);
+    s.lineTo(2.2, -0.6);
+    s.lineTo(0.8, -0.9);
+    s.lineTo(-0.8, -0.9);
+    s.closePath();
+    return s;
+}
+const intercalatorGeo = new THREE.ExtrudeGeometry(createIntercalatorShape(), { depth: 0.14, bevelEnabled: true, bevelThickness: 0.03, bevelSize: 0.02, bevelSegments: 2 });
+intercalatorGeo.center();
+
+// Pembersihan Memori Geometri Three.js
+function disposeHierarchy(obj) {
+    while (obj.children.length > 0) {
+        const child = obj.children[0];
+        obj.remove(child);
+        disposeHierarchy(child);
+        if (child.geometry) child.geometry.dispose();
+    }
+}
+
+// Analisis Bioinformatika Sekuens
+function analyzeSequence(seqStr) {
+    const clean = seqStr.toUpperCase().replace(/[^ATGC]/g, '') || 'ATGCGTACCTACGATC';
+    const len = clean.length;
+    let gcCount = 0;
+    for (let c of clean) {
+        if (c === 'G' || c === 'C') gcCount++;
+    }
+    const atCount = len - gcCount;
+    const gcPercent = ((gcCount / len) * 100).toFixed(1);
+    const tm = len < 14 ? (atCount * 2 + gcCount * 4) : (64.9 + 41 * (gcCount - 16.4) / len);
+    const hBonds = atCount * 2 + gcCount * 3;
+
+    const elLen = document.getElementById('stat-len');
+    const elGc = document.getElementById('stat-gc');
+    const elTm = document.getElementById('stat-tm');
+    const elHb = document.getElementById('stat-hb');
+
+    if (elLen) elLen.textContent = `${len} pb`;
+    if (elGc) elGc.textContent = `${gcPercent}%`;
+    if (elTm) elTm.textContent = `${tm.toFixed(1)}°C`;
+    if (elHb) elHb.textContent = `${hBonds}`;
+
+    return clean;
+}
+
+// -----------------------------------------------------------------------------
+// FUNGSI UTAMA REKONSTRUKSI HELIKS 3D DNA
+// -----------------------------------------------------------------------------
+function rebuildDNAStructure() {
+    // 1. Bersihkan scene DNA & ion sebelumnya
+    disposeHierarchy(dnaGroup);
+    ionGroup.clear();
+    dnaGroup.add(ionGroup);
+
+    allInteractiveMeshes = [];
+    strand1Meshes = [];
+    strand2Meshes = [];
+    baseMeshes = { A: [], T: [], G: [], C: [], backbone: [], hbond: [], methylation: [], thymine_dimer: [], intercalator: [], ion_mg: [], water_hydration: [] };
+    bioObjects = [];
+    cpkObjects = [];
+    ballStickObjects = [];
+    electroObjects = [];
+    splinePointsStrand1 = [];
+    splinePointsStrand2 = [];
+    pairDynamicContainers = [];
+    pairBaseY = [];
+
+    // 2. Baca sekuens dan parameter konformasi
+    const cleanSeq = analyzeSequence(currentSequenceString);
+    const conf = CONFORMATIONS[currentConformation] || CONFORMATIONS.B;
+    
+    // Perbanyak pasangan untuk heliks penuh (~22 - 28 pb)
+    const complementMap = { A: 'T', T: 'A', G: 'C', C: 'G' };
+    const rawPairs = [];
+    for (let char of cleanSeq) {
+        rawPairs.push({ b1: char, b2: complementMap[char] || 'A' });
+    }
+
+    const targetPairsCount = Math.max(22, Math.min(30, rawPairs.length * Math.ceil(24 / rawPairs.length)));
+    const activePairs = [];
+    for (let i = 0; i < targetPairsCount; i++) {
+        activePairs.push(rawPairs[i % rawPairs.length]);
+    }
+
+    const NUM_PAIRS = activePairs.length;
+    const midIdx = Math.floor(NUM_PAIRS / 2);
+
+    // Titik jangkar untuk pembengkokan struktural (Dimer Timin)
+    let accumulatedY = - (NUM_PAIRS / 2) * conf.heightStep;
+    let accumulatedAngle = 0;
+
+    for (let i = 0; i < NUM_PAIRS; i++) {
+        let currentPair = activePairs[i];
+
+        // Efek lesi Dimer Timin (memaksa T-T pada pasangan tengah)
+        let isDimerSite = false;
+        if (currentCondition === 'thymine_dimer' && (i === midIdx || i === midIdx - 1)) {
+            currentPair = { b1: 'T', b2: 'A' };
+            isDimerSite = true;
+        }
+
+        const b1Type = currentPair.b1;
+        const b2Type = currentPair.b2;
+        const isCG = (b1Type === 'C' || b1Type === 'G');
+        const isPurine1 = (b1Type === 'A' || b1Type === 'G');
+        const isPurine2 = (b2Type === 'A' || b2Type === 'G');
+
+        // Ketinggian Y & penyesuaian khusus kondisi interkalasi
+        let stepY = conf.heightStep;
+        let stepAngle = conf.angleStep;
+        let localRadius = conf.radius;
+
+        if (conf.zigzag) {
+            // Modulasi radius & Y khas Z-DNA dinukleotida
+            localRadius += (i % 2 === 0) ? 0.35 : -0.35;
+            stepY *= (i % 2 === 0) ? 1.08 : 0.92;
+        }
+
+        if (currentCondition === 'intercalation' && i === midIdx) {
+            stepY *= 2.35; // Perenggangan vertikal ganda di celah obat
+            stepAngle -= 0.45; // Despiralisasi lokal -26°
+        }
+
+        accumulatedY += stepY;
+        accumulatedAngle += stepAngle;
+
+        pairBaseY.push(accumulatedY);
+
+        const theta1 = accumulatedAngle;
+        const theta2 = theta1 + conf.majorMinorOffset;
+
+        // Koordinat x, z tulang punggung untai 1 & untai 2
+        let x1 = Math.cos(theta1) * localRadius;
+        let z1 = Math.sin(theta1) * localRadius;
+        let x2 = Math.cos(theta2) * localRadius;
+        let z2 = Math.sin(theta2) * localRadius;
+
+        // Distorsi Kink Dimer Timin (~28° kemiringan heliks lokal)
+        let kinkYOffset = 0;
+        if (currentCondition === 'thymine_dimer' && i >= midIdx) {
+            const bendFactor = (i - midIdx + 1) * 0.18;
+            x1 += bendFactor * 2.2;
+            x2 += bendFactor * 2.2;
+            kinkYOffset = bendFactor * 0.4;
+        }
+
+        const pos1 = new THREE.Vector3(x1, accumulatedY + kinkYOffset, z1);
+        const pos2 = new THREE.Vector3(x2, accumulatedY + kinkYOffset, z2);
+
+        splinePointsStrand1.push(pos1);
+        splinePointsStrand2.push(pos2);
+
+        const center = new THREE.Vector3().addVectors(pos1, pos2).multiplyScalar(0.5);
+
+        // Kontainer dinamis pasangan
+        const pairContainer = new THREE.Group();
+        pairContainer.position.set(0, accumulatedY + kinkYOffset, 0);
+        dnaGroup.add(pairContainer);
+        pairDynamicContainers.push(pairContainer);
+
+        const p1Local = new THREE.Vector3(x1, 0, z1);
+        const p2Local = new THREE.Vector3(x2, 0, z2);
+        const centerLocal = new THREE.Vector3().addVectors(p1Local, p2Local).multiplyScalar(0.5);
+        const dir1 = new THREE.Vector3().subVectors(centerLocal, p1Local).normalize();
+        const dir2 = new THREE.Vector3().subVectors(centerLocal, p2Local).normalize();
+
+        const s1Container = new THREE.Group();
+        const s2Container = new THREE.Group();
+        const bondContainer = new THREE.Group();
+
+        pairContainer.add(s1Container);
+        pairContainer.add(s2Container);
+        pairContainer.add(bondContainer);
+
+        // =====================================================================
+        // A. MODE BIO-ILLUSTRATIVE
+        // =====================================================================
+        const bioBase1 = new THREE.Group();
+        const bioBase2 = new THREE.Group();
+        const bioBond = new THREE.Group();
+
+        s1Container.add(bioBase1);
+        s2Container.add(bioBase2);
+        bondContainer.add(bioBond);
+
+        bioObjects.push(bioBase1, bioBase2, bioBond);
+
+        // Lempeng Basa 1
+        const plateGeo1 = isPurine1 ? purineGeo : pyrimidineGeo;
+        const plate1 = new THREE.Mesh(plateGeo1, materials[b1Type]);
+        const plateDist1 = isPurine1 ? 2.3 : 1.9;
+        plate1.position.set(0, 0, plateDist1);
+        plate1.rotation.x = Math.PI / 2 + conf.tilt;
+        plate1.rotation.z = conf.propeller;
+        bioBase1.add(plate1);
+
+        const rod1Geo = new THREE.CylinderGeometry(0.14, 0.14, 1.2, 12);
+        const rod1 = new THREE.Mesh(rod1Geo, materials[b1Type]);
+        rod1.position.set(0, 0, 0.6);
+        rod1.rotation.x = Math.PI / 2;
+        bioBase1.add(rod1);
+
+        const badgeMat1 = new THREE.MeshPhysicalMaterial({
+            map: letterTextures[b1Type],
+            roughness: 0.28,
+            metalness: 0.05,
+            clearcoat: 0.4,
+            emissive: 0x111111,
+            envMap: envMap,
+            envMapIntensity: 0.1
+        });
+        const badge1 = new THREE.Mesh(new THREE.CylinderGeometry(BADGE_RADIUS, BADGE_RADIUS, BADGE_HEIGHT, 24), badgeMat1);
+        badge1.position.set(0, 0.16, plateDist1);
+        badge1.rotation.x = -Math.PI / 2;
+        bioBase1.add(badge1);
+
+        const sugar1 = new THREE.Mesh(pentoseGeo, materials.sugarNode);
+        sugar1.position.set(0, 0, 0);
+        sugar1.rotation.y = theta1;
+        bioBase1.add(sugar1);
+
+        const phos1 = new THREE.Mesh(phosphateGeo, materials.phosphateNode);
+        phos1.position.set(0, 0.42, -0.25);
+        bioBase1.add(phos1);
+
+        bioBase1.position.copy(p1Local);
+        bioBase1.lookAt(centerLocal);
+
+        bioBase1.traverse((child) => {
+            if (child.isMesh) {
+                child.userData = {
+                    type: b1Type, strand: 1, parentGroup: s1Container,
+                    initialPos: s1Container.position.clone(), pairIndex: i
+                };
+                allInteractiveMeshes.push(child);
+            }
+        });
+        baseMeshes[b1Type].push(s1Container);
+
+        // Lempeng Basa 2
+        const plateGeo2 = isPurine2 ? purineGeo : pyrimidineGeo;
+        const plate2 = new THREE.Mesh(plateGeo2, materials[b2Type]);
+        const plateDist2 = isPurine2 ? 2.3 : 1.9;
+        plate2.position.set(0, 0, plateDist2);
+        plate2.rotation.x = Math.PI / 2 - conf.tilt;
+        plate2.rotation.z = -conf.propeller;
+        bioBase2.add(plate2);
+
+        const rod2Geo = new THREE.CylinderGeometry(0.14, 0.14, 1.2, 12);
+        const rod2 = new THREE.Mesh(rod2Geo, materials[b2Type]);
+        rod2.position.set(0, 0, 0.6);
+        rod2.rotation.x = Math.PI / 2;
+        bioBase2.add(rod2);
+
+        const badgeMat2 = new THREE.MeshPhysicalMaterial({
+            map: letterTextures[b2Type],
+            roughness: 0.28,
+            metalness: 0.05,
+            clearcoat: 0.4,
+            emissive: 0x111111,
+            envMap: envMap,
+            envMapIntensity: 0.1
+        });
+        const badge2 = new THREE.Mesh(new THREE.CylinderGeometry(BADGE_RADIUS, BADGE_RADIUS, BADGE_HEIGHT, 24), badgeMat2);
+        badge2.position.set(0, 0.16, plateDist2);
+        badge2.rotation.x = -Math.PI / 2;
+        bioBase2.add(badge2);
+
+        const sugar2 = new THREE.Mesh(pentoseGeo, materials.sugarNode);
+        sugar2.position.set(0, 0, 0);
+        sugar2.rotation.y = theta2;
+        bioBase2.add(sugar2);
+
+        const phos2 = new THREE.Mesh(phosphateGeo, materials.phosphateNode);
+        phos2.position.set(0, 0.42, -0.25);
+        bioBase2.add(phos2);
+
+        bioBase2.position.copy(p2Local);
+        bioBase2.lookAt(centerLocal);
+
+        bioBase2.traverse((child) => {
+            if (child.isMesh) {
+                child.userData = {
+                    type: b2Type, strand: 2, parentGroup: s2Container,
+                    initialPos: s2Container.position.clone(), pairIndex: i
+                };
+                allInteractiveMeshes.push(child);
+            }
+        });
+        baseMeshes[b2Type].push(s2Container);
+
+        // Ikatan Hidrogen
+        const bondLinesCount = isCG ? 3 : 2;
+        const bondLineSpacing = isCG ? [-0.22, 0, 0.22] : [-0.16, 0.16];
+        const tip1 = new THREE.Vector3().addVectors(p1Local, dir1.clone().multiplyScalar(isPurine1 ? 3.35 : 2.75));
+        const tip2 = new THREE.Vector3().addVectors(p2Local, dir2.clone().multiplyScalar(isPurine2 ? 3.35 : 2.75));
+        const gapVector = new THREE.Vector3().subVectors(tip2, tip1);
+        const perpendicular = new THREE.Vector3(0, 1, 0).cross(gapVector).normalize();
+        const dotsPerLine = 4;
+        const dotGeo = new THREE.SphereGeometry(0.08, 10, 10);
+
+        for (let line = 0; line < bondLinesCount; line++) {
+            const lineOffset = perpendicular.clone().multiplyScalar(bondLineSpacing[line]);
+            for (let d = 0; d < dotsPerLine; d++) {
+                const fraction = (d + 0.5) / dotsPerLine;
+                const dotPos = new THREE.Vector3().addVectors(tip1, gapVector.clone().multiplyScalar(fraction)).add(lineOffset);
+                const dotMesh = new THREE.Mesh(dotGeo, materials.hbondDot);
+                dotMesh.position.copy(dotPos);
+                bioBond.add(dotMesh);
+            }
+        }
+
+        bioBond.traverse((child) => {
+            if (child.isMesh) {
+                child.userData = {
+                    type: 'hbond', parentGroup: bondContainer,
+                    initialPos: bondContainer.position.clone(), pairIndex: i
+                };
+                allInteractiveMeshes.push(child);
+            }
+        });
+        baseMeshes.hbond.push(bondContainer);
+
+        // =====================================================================
+        // B. MODIFIKASI FENOMENA GENETIK KHUSUS (METILASI, DIMER UV, OBAT)
+        // =====================================================================
+        // 1. Metilasi Epigenetik (5-mC) pada Sitosin
+        if (currentCondition === 'methylation') {
+            const addMethylGroup = (parentBioBase, isPurine) => {
+                if (isPurine) return;
+                const mGroup = new THREE.Group();
+                const mC = new THREE.Mesh(methylGroupShape, conditionMaterials.methylCarbon);
+                mGroup.add(mC);
+                // 3 atom hidrogen tetrahedral
+                const hOffsets = [
+                    new THREE.Vector3(0.25, 0.25, 0.2),
+                    new THREE.Vector3(-0.25, 0.25, 0.2),
+                    new THREE.Vector3(0, -0.3, 0.25)
+                ];
+                hOffsets.forEach(pos => {
+                    const mH = new THREE.Mesh(methylHydrogenShape, materials.cpk.H);
+                    mH.position.copy(pos);
+                    mGroup.add(mH);
+                });
+                mGroup.position.set(0, 0.45, 2.3);
+                mGroup.traverse(child => {
+                    if (child.isMesh) {
+                        child.userData = { type: 'methylation', parentGroup: parentBioBase };
+                        allInteractiveMeshes.push(child);
+                    }
+                });
+                parentBioBase.add(mGroup);
+                baseMeshes.methylation.push(mGroup);
+            };
+
+            if (b1Type === 'C') addMethylGroup(bioBase1, isPurine1);
+            if (b2Type === 'C') addMethylGroup(bioBase2, isPurine2);
+        }
+
+        // 2. Dimer Timin (UV CPD) pada pasangan tengah bertetangga
+        if (currentCondition === 'thymine_dimer' && i === midIdx) {
+            const dimerGroup = new THREE.Group();
+            const bridgeMesh1 = new THREE.Mesh(dimerCylinderGeo, conditionMaterials.dimerBridge);
+            bridgeMesh1.position.set(0, -conf.heightStep * 0.5, 2.0);
+            bridgeMesh1.rotation.x = Math.PI / 2;
+            dimerGroup.add(bridgeMesh1);
+
+            const bridgeMesh2 = new THREE.Mesh(dimerCylinderGeo, conditionMaterials.dimerBridge);
+            bridgeMesh2.position.set(0.35, -conf.heightStep * 0.5, 2.4);
+            bridgeMesh2.rotation.x = Math.PI / 2;
+            dimerGroup.add(bridgeMesh2);
+
+            dimerGroup.traverse(child => {
+                if (child.isMesh) {
+                    child.userData = { type: 'thymine_dimer', parentGroup: bioBase1 };
+                    allInteractiveMeshes.push(child);
+                }
+            });
+            bioBase1.add(dimerGroup);
+            baseMeshes.thymine_dimer.push(dimerGroup);
+        }
+
+        // 3. Interkalasi Obat Kanker (Penyisipan planar di tengah)
+        if (currentCondition === 'intercalation' && i === midIdx) {
+            const drugMesh = new THREE.Mesh(intercalatorGeo, conditionMaterials.intercalatorPlate);
+            drugMesh.position.set(0, -stepY * 0.5, 0);
+            drugMesh.rotation.x = Math.PI / 2;
+            drugMesh.rotation.z = theta1;
+            drugMesh.userData = { type: 'intercalator', parentGroup: pairContainer };
+            pairContainer.add(drugMesh);
+            allInteractiveMeshes.push(drugMesh);
+            baseMeshes.intercalator.push(drugMesh);
+        }
+
+        // =====================================================================
+        // C. MODE 2 & 3: ATOMIK CPK & BALL-AND-STICK
+        // =====================================================================
+        function createAtomCluster(strand, isPurine, originPos, lookCenter, targetSContainer) {
+            const cpkSub = new THREE.Group();
+            const bsSub = new THREE.Group();
+
+            const atoms = [
+                { el: 'P', pos: new THREE.Vector3(0, 0.4, -0.3) },
+                { el: 'O', pos: new THREE.Vector3(0.4, 0.6, -0.2) },
+                { el: 'O', pos: new THREE.Vector3(-0.4, 0.6, -0.2) },
+                { el: 'O', pos: new THREE.Vector3(0, 0.1, -0.6) },
+                { el: 'C', pos: new THREE.Vector3(0, 0, 0) },
+                { el: 'C', pos: new THREE.Vector3(0.4, -0.2, 0.3) },
+                { el: 'C', pos: new THREE.Vector3(0.2, -0.4, 0.7) },
+                { el: 'C', pos: new THREE.Vector3(-0.3, -0.3, 0.7) },
+                { el: 'O', pos: new THREE.Vector3(-0.35, 0, 0.3) }
+            ];
+
+            if (isPurine) {
+                const pOffsets = [
+                    { el: 'N', x: -0.3, z: 1.2 }, { el: 'C', x: 0.3, z: 1.2 },
+                    { el: 'N', x: 0.6, z: 1.7 }, { el: 'C', x: 0.4, z: 2.2 },
+                    { el: 'C', x: -0.2, z: 2.3 }, { el: 'C', x: -0.6, z: 1.8 },
+                    { el: 'N', x: -0.7, z: 2.6 }, { el: 'C', x: -0.4, z: 3.1 },
+                    { el: 'N', x: 0.1, z: 3.0 }
+                ];
+                pOffsets.forEach(p => atoms.push({ el: p.el, pos: new THREE.Vector3(p.x, (Math.random() - 0.5) * 0.06, p.z) }));
+            } else {
+                const pyrOffsets = [
+                    { el: 'N', x: -0.3, z: 1.2 }, { el: 'C', x: 0.3, z: 1.2 },
+                    { el: 'N', x: 0.5, z: 1.7 }, { el: 'C', x: 0.2, z: 2.2 },
+                    { el: 'C', x: -0.3, z: 2.2 }, { el: 'C', x: -0.6, z: 1.7 }
+                ];
+                pyrOffsets.forEach(p => atoms.push({ el: p.el, pos: new THREE.Vector3(p.x, (Math.random() - 0.5) * 0.06, p.z) }));
+            }
+
+            atoms.forEach(a => {
+                const cpkMesh = new THREE.Mesh(cpkAtomGeos[a.el], materials.cpk[a.el]);
+                cpkMesh.position.copy(a.pos);
+                cpkMesh.userData = { type: a.el === 'P' ? 'P_atom' : a.el === 'N' ? 'N_atom' : a.el === 'O' ? 'O_atom' : 'C_atom', strand: strand, parentGroup: targetSContainer };
+                cpkSub.add(cpkMesh);
+                allInteractiveMeshes.push(cpkMesh);
+
+                const bsMesh = new THREE.Mesh(ballStickSmallSphere, materials.cpk[a.el]);
+                bsMesh.position.copy(a.pos);
+                bsMesh.userData = { type: a.el === 'P' ? 'P_atom' : a.el === 'N' ? 'N_atom' : a.el === 'O' ? 'O_atom' : 'C_atom', strand: strand, parentGroup: targetSContainer };
+                bsSub.add(bsMesh);
+                allInteractiveMeshes.push(bsMesh);
+            });
+
+            for (let b = 0; b < atoms.length - 1; b++) {
+                const pA = atoms[b].pos;
+                const pB = atoms[b + 1].pos;
+                const dist = pA.distanceTo(pB);
+                if (dist < 0.9) {
+                    const bondMesh = new THREE.Mesh(ballStickBondCyl, materials.cpk.bond);
+                    bondMesh.position.copy(new THREE.Vector3().addVectors(pA, pB).multiplyScalar(0.5));
+                    bondMesh.scale.set(1, dist, 1);
+                    bondMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3().subVectors(pB, pA).normalize());
+                    bsSub.add(bondMesh);
+                }
+            }
+
+            cpkSub.position.copy(originPos);
+            cpkSub.lookAt(lookCenter);
+            bsSub.position.copy(originPos);
+            bsSub.lookAt(lookCenter);
+
+            targetSContainer.add(cpkSub);
+            targetSContainer.add(bsSub);
+
+            cpkSub.visible = false;
+            bsSub.visible = false;
+
+            cpkObjects.push(cpkSub);
+            ballStickObjects.push(bsSub);
+        }
+
+        createAtomCluster(1, isPurine1, p1Local, centerLocal, s1Container);
+        createAtomCluster(2, isPurine2, p2Local, centerLocal, s2Container);
+
+        // Jembatan H untuk CPK & Ball & Stick
+        const cpkHBridge = new THREE.Group();
+        const bsHBridge = new THREE.Group();
+        bondContainer.add(cpkHBridge);
+        bondContainer.add(bsHBridge);
+
+        cpkHBridge.visible = false;
+        bsHBridge.visible = false;
+        cpkObjects.push(cpkHBridge);
+        ballStickObjects.push(bsHBridge);
+
+        for (let line = 0; line < bondLinesCount; line++) {
+            const lineOffset = perpendicular.clone().multiplyScalar(bondLineSpacing[line]);
+            for (let d = 0; d < dotsPerLine; d++) {
+                const fraction = (d + 0.5) / dotsPerLine;
+                const dotPos = new THREE.Vector3().addVectors(tip1, gapVector.clone().multiplyScalar(fraction)).add(lineOffset);
+                const cpkH = new THREE.Mesh(cpkAtomGeos.H, materials.cpk.H);
+                cpkH.position.copy(dotPos);
+                cpkH.userData = { type: 'hbond', parentGroup: bondContainer };
+                cpkHBridge.add(cpkH);
+                allInteractiveMeshes.push(cpkH);
+
+                const bsH = new THREE.Mesh(ballStickSmallSphere, materials.cpk.H);
+                bsH.position.copy(dotPos);
+                bsH.userData = { type: 'hbond', parentGroup: bondContainer };
+                bsHBridge.add(bsH);
+                allInteractiveMeshes.push(bsH);
+            }
+        }
+
+        // =====================================================================
+        // D. MODE 4: COULOMBIC ELECTROSTATIC SURFACE MAP
+        // =====================================================================
+        const electroBase1 = new THREE.Group();
+        const electroBase2 = new THREE.Group();
+        s1Container.add(electroBase1);
+        s2Container.add(electroBase2);
+        electroObjects.push(electroBase1, electroBase2);
+
+        const ePlate1 = new THREE.Mesh(plateGeo1, electroMaterials.baseNeutral);
+        ePlate1.position.set(0, 0, plateDist1);
+        ePlate1.rotation.x = Math.PI / 2 + conf.tilt;
+        electroBase1.add(ePlate1);
+
+        const ePhos1 = new THREE.Mesh(phosphateGeo, electroMaterials.backbone);
+        ePhos1.position.set(0, 0.42, -0.25);
+        electroBase1.add(ePhos1);
+
+        electroBase1.position.copy(p1Local);
+        electroBase1.lookAt(centerLocal);
+
+        const ePlate2 = new THREE.Mesh(plateGeo2, electroMaterials.baseNeutral);
+        ePlate2.position.set(0, 0, plateDist2);
+        ePlate2.rotation.x = Math.PI / 2 - conf.tilt;
+        electroBase2.add(ePlate2);
+
+        const ePhos2 = new THREE.Mesh(phosphateGeo, electroMaterials.backbone);
+        ePhos2.position.set(0, 0.42, -0.25);
+        electroBase2.add(ePhos2);
+
+        electroBase2.position.copy(p2Local);
+        electroBase2.lookAt(centerLocal);
+
+        electroBase1.visible = false;
+        electroBase2.visible = false;
+
+        strand1Meshes.push(s1Container);
+        strand2Meshes.push(s2Container);
+
+        // Target Anotasi Ilmiah
+        if (i === Math.floor(NUM_PAIRS / 2)) {
+            annotationTargets.cgPair.copy(center);
+            annotationTargets.backbone.copy(pos2);
+            annotationTargets.metricDiameter1.copy(pos1);
+            annotationTargets.metricDiameter2.copy(pos2);
+        }
+        if (i === Math.floor(NUM_PAIRS / 2) + 1) {
+            annotationTargets.atPair.copy(center);
+            annotationTargets.metricRise1.copy(pos1);
+        }
+        if (i === Math.floor(NUM_PAIRS / 2) + 2) {
+            annotationTargets.metricRise2.copy(pos1);
+        }
+        if (i === Math.max(0, Math.floor(NUM_PAIRS / 3))) {
+            annotationTargets.majorGroove.copy(center);
+            annotationTargets.metricPitch1.copy(pos1);
+        }
+        if (i === Math.min(NUM_PAIRS - 1, Math.floor(NUM_PAIRS * 0.7))) {
+            annotationTargets.minorGroove.copy(center);
+            annotationTargets.metricPitch2.copy(pos1);
+        }
+        if (i === 0) {
+            annotationTargets.strand1Top.copy(pos1);
+            annotationTargets.strand2Top.copy(pos2);
+        }
+        if (i === NUM_PAIRS - 1) {
+            annotationTargets.strand1Bottom.copy(pos1);
+            annotationTargets.strand2Bottom.copy(pos2);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // 3. PITA TULANG PUNGGUNG KONTINU (PITA GULA-FOSFAT)
+    // -------------------------------------------------------------------------
+    const curve1 = new THREE.CatmullRomCurve3(splinePointsStrand1);
+    const tube1Geo = new THREE.TubeGeometry(curve1, TUBE_SEGMENTS, BACKBONE_TUBE_RADIUS, TUBE_RADIAL_SEGMENTS, false);
+    ribbon1 = new THREE.Mesh(tube1Geo, materials.backbone);
+    ribbon1.userData = { type: 'backbone', strand: 1, initialPos: new THREE.Vector3(0, 0, 0) };
+    dnaGroup.add(ribbon1);
+    allInteractiveMeshes.push(ribbon1);
+    strand1Meshes.push(ribbon1);
+    baseMeshes.backbone.push(ribbon1);
+
+    const curve2 = new THREE.CatmullRomCurve3(splinePointsStrand2);
+    const tube2Geo = new THREE.TubeGeometry(curve2, TUBE_SEGMENTS, BACKBONE_TUBE_RADIUS, TUBE_RADIAL_SEGMENTS, false);
+    ribbon2 = new THREE.Mesh(tube2Geo, materials.backbone);
+    ribbon2.userData = { type: 'backbone', strand: 2, initialPos: new THREE.Vector3(0, 0, 0) };
+    dnaGroup.add(ribbon2);
+    allInteractiveMeshes.push(ribbon2);
+    strand2Meshes.push(ribbon2);
+    baseMeshes.backbone.push(ribbon2);
+
+    // -------------------------------------------------------------------------
+    // 4. GENERATOR ION LAWAN (Mg²⁺) & LAPISAN AIR HIDRASI (SPINE OF HYDRATION)
+    // -------------------------------------------------------------------------
+    for (let i = 0; i < NUM_PAIRS; i += 2) {
+        const p1 = splinePointsStrand1[i];
+        const p2 = splinePointsStrand2[i];
+
+        // Ion Mg²⁺ di sekitar tulang punggung fosfat
+        const mg1 = new THREE.Mesh(new THREE.SphereGeometry(0.32, 12, 12), conditionMaterials.ionMg);
+        mg1.position.copy(p1).multiplyScalar(1.22);
+        mg1.userData = { type: 'ion_mg', parentGroup: ionGroup };
+        ionGroup.add(mg1);
+        allInteractiveMeshes.push(mg1);
+        baseMeshes.ion_mg.push(mg1);
+
+        const mg2 = new THREE.Mesh(new THREE.SphereGeometry(0.32, 12, 12), conditionMaterials.ionMg);
+        mg2.position.copy(p2).multiplyScalar(1.22);
+        mg2.userData = { type: 'ion_mg', parentGroup: ionGroup };
+        ionGroup.add(mg2);
+        allInteractiveMeshes.push(mg2);
+        baseMeshes.ion_mg.push(mg2);
+
+        // Molekul air terkoordinasi (Spine of Hydration) di lekukan minor
+        const waterMol = new THREE.Group();
+        const wO = new THREE.Mesh(new THREE.SphereGeometry(0.20, 10, 10), conditionMaterials.waterO);
+        const wH1 = new THREE.Mesh(methylHydrogenShape, materials.cpk.H);
+        const wH2 = new THREE.Mesh(methylHydrogenShape, materials.cpk.H);
+        wH1.position.set(0.14, 0.12, 0);
+        wH2.position.set(-0.14, 0.12, 0);
+        waterMol.add(wO, wH1, wH2);
+
+        const minorMid = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.38);
+        waterMol.position.copy(minorMid);
+        waterMol.userData = { type: 'water_hydration', parentGroup: ionGroup };
+        ionGroup.add(waterMol);
+        wO.userData = { type: 'water_hydration', parentGroup: ionGroup };
+        allInteractiveMeshes.push(wO);
+        baseMeshes.water_hydration.push(waterMol);
+    }
+
+    ionGroup.visible = counterIonsVisible;
+
+    // Perbarui teks skala metrik dinamis
+    const elDia = document.querySelector('#callout-metric-diameter .metric-badge b');
+    const elRise = document.querySelector('#callout-metric-rise .metric-badge b');
+    const elPitch = document.querySelector('#callout-metric-pitch .metric-badge b');
+    if (elDia) elDia.textContent = conf.metrics.dia;
+    if (elRise) elRise.textContent = conf.metrics.rise;
+    if (elPitch) elPitch.textContent = conf.metrics.pitch;
+
+    // Sinkronkan mode visualisasi saat ini
+    setRenderMode(currentRenderMode);
+}
+
+// Inisialisasi Heliks Awal
+rebuildDNAStructure();
 
 // -----------------------------------------------------------------------------
 // 10. ANIMASI NATIVE LERP VECTOR ENGINE
@@ -977,13 +1448,29 @@ function setRenderMode(mode) {
     const isBio = (mode === 'bio');
     const isCpk = (mode === 'cpk');
     const isBs = (mode === 'ballstick');
+    const isElectro = (mode === 'electrostatic');
 
     bioObjects.forEach(obj => obj.visible = isBio);
     cpkObjects.forEach(obj => obj.visible = isCpk);
     ballStickObjects.forEach(obj => obj.visible = isBs);
+    electroObjects.forEach(obj => obj.visible = isElectro);
 
-    ribbon1.visible = isBio;
-    ribbon2.visible = isBio;
+    if (ribbon1 && ribbon2) {
+        ribbon1.visible = (isBio || isElectro);
+        ribbon2.visible = (isBio || isElectro);
+        if (isElectro) {
+            ribbon1.material = electroMaterials.backbone;
+            ribbon2.material = electroMaterials.backbone;
+        } else {
+            ribbon1.material = materials.backbone;
+            ribbon2.material = materials.backbone;
+        }
+    }
+
+    const legendElectroRow = document.getElementById('legend-electro-row');
+    const legendCpkRow = document.getElementById('legend-cpk-row');
+    if (legendElectroRow) legendElectroRow.classList.toggle('hidden', !isElectro);
+    if (legendCpkRow) legendCpkRow.classList.toggle('hidden', isElectro);
 
     modeBtns.forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
@@ -1118,6 +1605,81 @@ btnToggleMetrics.addEventListener('click', (e) => {
     btnToggleMetrics.classList.toggle('active', metricScaleVisible);
     metricStatusText.textContent = metricScaleVisible ? 'TAMPIL' : 'SEMBUNYI';
     document.querySelectorAll('.callout-metric').forEach(el => el.classList.toggle('hidden', !metricScaleVisible));
+});
+
+// Toggle Solvasi & Ion Lawan (Mg²⁺ & H₂O)
+const btnToggleIons = document.getElementById('btn-toggle-ions');
+const ionsStatusText = document.getElementById('ions-status-text');
+if (btnToggleIons) {
+    btnToggleIons.addEventListener('click', (e) => {
+        e.stopPropagation();
+        counterIonsVisible = !counterIonsVisible;
+        btnToggleIons.classList.toggle('active', counterIonsVisible);
+        if (ionsStatusText) ionsStatusText.textContent = counterIonsVisible ? 'AKTIF' : 'SEMBUNYI';
+        if (ionGroup) ionGroup.visible = counterIonsVisible;
+    });
+}
+
+// Switcher Bentuk Konformasi Alotropik (B-DNA, A-DNA, Z-DNA)
+const confTabBtns = document.querySelectorAll('.conf-tab-btn');
+confTabBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const targetConf = btn.getAttribute('data-conf');
+        if (targetConf === currentConformation) return;
+        currentConformation = targetConf;
+        confTabBtns.forEach(b => b.classList.toggle('active', b.getAttribute('data-conf') === targetConf));
+        rebuildDNAStructure();
+    });
+});
+
+// Switcher Fenomena & Lesi Genetika (Normal, Metilasi, Dimer Timin, Interkalasi)
+const conditionBtns = document.querySelectorAll('.condition-btn');
+conditionBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const targetCondition = btn.getAttribute('data-condition');
+        if (targetCondition === currentCondition) return;
+        currentCondition = targetCondition;
+        conditionBtns.forEach(b => b.classList.toggle('active', b.getAttribute('data-condition') === targetCondition));
+        rebuildDNAStructure();
+    });
+});
+
+// Sintesis Sekuens Nukleotida Dinamis & Preset Bioinformatika
+const dnaSeqInput = document.getElementById('dna-seq-input');
+const btnApplySeq = document.getElementById('btn-apply-seq');
+const seqChips = document.querySelectorAll('.seq-chip');
+
+function applySequence(newSeq) {
+    const clean = analyzeSequence(newSeq);
+    currentSequenceString = clean;
+    if (dnaSeqInput) dnaSeqInput.value = clean;
+    seqChips.forEach(chip => {
+        chip.classList.toggle('active', chip.getAttribute('data-seq') === clean);
+    });
+    rebuildDNAStructure();
+}
+
+if (btnApplySeq && dnaSeqInput) {
+    btnApplySeq.addEventListener('click', (e) => {
+        e.stopPropagation();
+        applySequence(dnaSeqInput.value);
+    });
+    dnaSeqInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            applySequence(dnaSeqInput.value);
+        }
+    });
+}
+
+seqChips.forEach(chip => {
+    chip.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const s = chip.getAttribute('data-seq');
+        applySequence(s);
+    });
 });
 
 // -----------------------------------------------------------------------------
@@ -1405,7 +1967,7 @@ function showTutorialSlide(index) {
         dot.classList.toggle('active', dIdx === index);
     });
     tutBtnPrev.disabled = (index === 1);
-    tutBtnNext.textContent = (index === 3) ? 'Mulai Eksplorasi 🚀' : 'Lanjut →';
+    tutBtnNext.textContent = (index === 5) ? 'Mulai Eksplorasi 🚀' : 'Lanjut →';
 }
 
 function openTutorial() {
@@ -1420,7 +1982,7 @@ if (btnOpenTutorial) btnOpenTutorial.addEventListener('click', (e) => { e.stopPr
 if (btnCloseTutorial) btnCloseTutorial.addEventListener('click', (e) => { e.stopPropagation(); closeTutorial(); });
 if (tutBtnPrev) tutBtnPrev.addEventListener('click', () => { if (currentTutorialSlide > 1) showTutorialSlide(currentTutorialSlide - 1); });
 if (tutBtnNext) tutBtnNext.addEventListener('click', () => {
-    if (currentTutorialSlide < 3) showTutorialSlide(currentTutorialSlide + 1);
+    if (currentTutorialSlide < 5) showTutorialSlide(currentTutorialSlide + 1);
     else closeTutorial();
 });
 tutDots.forEach(dot => {
@@ -1517,7 +2079,8 @@ function renderLoop(now) {
     if (thermalDynamicsEnabled && currentMode === 'assembled') {
         thermalPhase += 0.04;
         const amp = 0.045;
-        for (let i = 0; i < NUM_PAIRS; i++) {
+        const containerCount = pairDynamicContainers.length;
+        for (let i = 0; i < containerCount; i++) {
             const container = pairDynamicContainers[i];
             if (container) {
                 const waveY = Math.sin(thermalPhase + i * 0.55) * amp;
