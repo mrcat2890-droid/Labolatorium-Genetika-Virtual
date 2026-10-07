@@ -6,6 +6,22 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🛠️ Perbaikan Bug Model DNA 3D Menghilang (dna-3d-interactive)
+- **Pemulihan Rendering Model DNA 3D & Eliminasi Crash Eksekusi JavaScript:**
+  - **Akar Masalah 1 (*Temporal Dead Zone ReferenceError*):** Pemanggilan fungsi `rebuildDNAStructure()` yang dilakukan secara prematur sebelum deklarasi `modeBtns`, `currentActiveFilter`, dan fungsi `filterComponent()` memicu eksepsi kritis `Uncaught ReferenceError: Cannot access 'modeBtns' before initialization`. Kesalahan ini menghentikan eksekusi skrip seketika sehingga siklus `requestAnimationFrame(renderLoop)` tidak pernah berjalan dan kanvas WebGL menjadi kosong/hitam.
+  - **Akar Masalah 2 (*GPU Vertex Buffer Disposal pada Geometri Bersama*):** Fungsi pembersihan sebelumnya (`disposeHierarchy`) secara agresif memanggil `child.geometry.dispose()` pada seluruh objek turunan `dnaGroup`. Hal ini menghancurkan buffer GPU dari geometri statis bersama (*shared geometries*) seperti `purineGeo`, `pyrimidineGeo`, `pentoseGeo`, `phosphateGeo`, dan `cpkAtomGeos`, menyebabkan objek tidak dapat digambar kembali saat rekonstruksi heliks dilakukan.
+  - **Akar Masalah 3 (*Kerapuhan OrbitControls CDN*):** Inisialisasi langsung `new THREE.OrbitControls` rentan mengalami `TypeError` jika CDN eksternal terlambat memuat objek kontrol ke lingkup `THREE`.
+  - **Perbaikan yang Diterapkan:**
+    - Memindahkan pemanggilan `rebuildDNAStructure()` ke akhir berkas `script.js`, memastikan seluruh elemen DOM, variabel status global, dan *event listener* telah siap 100% sebelum render pertama dilakukan.
+    - Mengganti `disposeHierarchy` dengan fungsi pembersihan aman `clearDNAStructure()` yang hanya membuang geometri dinamis (`TubeGeometry` pita pita gula-fosfat) dan membersihkan kontainer (`dnaGroup.clear()`) tanpa mendegradasi geometri statis bersama.
+    - Mengoptimalkan alokasi memori dengan membagikan geometri statis (`rodGeo`, `badgeGeo`, `hbondDotGeo`, `mgIonGeo`, `waterOGeo`, `badgeMaterials`) guna mencegah pemborosan alokasi berulang pada memori grafis (VRAM).
+    - Menerapkan inisialisasi defensif untuk `OrbitControls` dengan penyedia objek cadangan (*fallback object*) dan *progressive fallback script* pada `index.html`.
+  - **Hasil Pengujian:** Verifikasi headless browser menunjukkan 0 eksepsi runtime, 3.227 *mesh* DNA ter-render sempurna dengan 90 objek biologis, rotasi orbital 360° aktif, serta transisi mulus saat berpindah konformasi (A/B/Z-DNA), mode CPK/Coulomb, dan fitur unzipping.
+- **Berkas yang Diperbarui:**
+  - `dna-3d-interactive/index.html`
+  - `dna-3d-interactive/script.js`
+  - `CHANGELOG.md`
+
 ### 🧬 Upgrade Ultra-Realistis DNA 3D Bio-Core (dna-3d-interactive)
 - **1. Transisi Konformasi Alotropik Alami (B-DNA, A-DNA, Z-DNA Heliks Kidal):**
   - Mengimplementasikan 3 bentuk konformasi DNA kristalografi sinar-X (*Dickerson et al. 1982 Science; Saenger 1984 Principles of Nucleic Acid Structure; Rich & Zhang 2003 Nature Reviews Genetics*):

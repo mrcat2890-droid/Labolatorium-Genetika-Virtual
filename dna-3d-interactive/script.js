@@ -219,19 +219,32 @@ renderer.toneMappingExposure = 1.08;
 renderer.outputEncoding = THREE.sRGBEncoding;
 container.appendChild(renderer.domElement);
 
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.06;
-controls.rotateSpeed = 0.8;
-controls.zoomSpeed = 1.0;
-controls.panSpeed = 0.8;
-controls.minDistance = 14;
-controls.maxDistance = 150;
-controls.target.set(0, 0, 0);
-controls.touches = {
-    ONE: THREE.TOUCH.ROTATE,
-    TWO: THREE.TOUCH.DOLLY_PAN
-};
+const OrbitControlsClass = (typeof THREE !== 'undefined' && THREE.OrbitControls) || window.OrbitControls;
+let controls;
+if (typeof OrbitControlsClass === 'function') {
+    controls = new OrbitControlsClass(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.rotateSpeed = 0.8;
+    controls.zoomSpeed = 1.0;
+    controls.panSpeed = 0.8;
+    controls.minDistance = 14;
+    controls.maxDistance = 150;
+    controls.target.set(0, 0, 0);
+    if (THREE.TOUCH) {
+        controls.touches = {
+            ONE: THREE.TOUCH.ROTATE,
+            TWO: THREE.TOUCH.DOLLY_PAN
+        };
+    }
+} else {
+    controls = {
+        update: function() {},
+        target: new THREE.Vector3(0, 0, 0),
+        reset: function() {}
+    };
+    console.warn('THREE.OrbitControls not found, using fallback controls object.');
+}
 
 function adjustCameraForDevice() {
     const aspect = window.innerWidth / window.innerHeight;
@@ -695,6 +708,10 @@ let currentConformation = 'B';
 let currentCondition = 'normal';
 let currentSequenceString = 'ATGCGTACCTACGATC';
 let currentRenderMode = 'bio';   // 'bio', 'cpk', 'ballstick', 'electrostatic'
+let currentMode = 'assembled';    // 'assembled', 'unzipped', 'exploded'
+let currentActiveFilter = 'all';
+let autoRotateActive = true;
+let labelsVisible = true;
 let thermalDynamicsEnabled = true;
 let metricScaleVisible = false;
 let counterIonsVisible = false;
@@ -741,10 +758,15 @@ const BACKBONE_TUBE_RADIUS = 0.74;
 const TUBE_SEGMENTS = 220;
 const TUBE_RADIAL_SEGMENTS = 20;
 
-// Geometri Geometris Spesial
+// Geometri Geometris Spesial (Static Shared Geometries)
 const methylGroupShape = new THREE.SphereGeometry(0.32, 12, 12);
 const methylHydrogenShape = new THREE.SphereGeometry(0.15, 8, 8);
 const dimerCylinderGeo = new THREE.CylinderGeometry(0.08, 0.08, 1.35, 10);
+const mgIonGeo = new THREE.SphereGeometry(0.32, 12, 12);
+const waterOGeo = new THREE.SphereGeometry(0.20, 10, 10);
+const rodGeo = new THREE.CylinderGeometry(0.14, 0.14, 1.2, 12);
+const badgeGeo = new THREE.CylinderGeometry(BADGE_RADIUS, BADGE_RADIUS, BADGE_HEIGHT, 24);
+const hbondDotGeo = new THREE.SphereGeometry(0.08, 10, 10);
 
 // Bentuk planar polisiklik untuk molekul interkalator (Etidium / Doxorubicin)
 function createIntercalatorShape() {
@@ -763,14 +785,27 @@ function createIntercalatorShape() {
 const intercalatorGeo = new THREE.ExtrudeGeometry(createIntercalatorShape(), { depth: 0.14, bevelEnabled: true, bevelThickness: 0.03, bevelSize: 0.02, bevelSegments: 2 });
 intercalatorGeo.center();
 
-// Pembersihan Memori Geometri Three.js
-function disposeHierarchy(obj) {
-    while (obj.children.length > 0) {
-        const child = obj.children[0];
-        obj.remove(child);
-        disposeHierarchy(child);
-        if (child.geometry) child.geometry.dispose();
+// Material Huruf Basa Komplementer (Shared)
+const badgeMaterials = {
+    A: new THREE.MeshPhysicalMaterial({ map: letterTextures.A, roughness: 0.28, metalness: 0.05, clearcoat: 0.4, emissive: 0x111111, envMap: envMap, envMapIntensity: 0.1 }),
+    T: new THREE.MeshPhysicalMaterial({ map: letterTextures.T, roughness: 0.28, metalness: 0.05, clearcoat: 0.4, emissive: 0x111111, envMap: envMap, envMapIntensity: 0.1 }),
+    G: new THREE.MeshPhysicalMaterial({ map: letterTextures.G, roughness: 0.28, metalness: 0.05, clearcoat: 0.4, emissive: 0x111111, envMap: envMap, envMapIntensity: 0.1 }),
+    C: new THREE.MeshPhysicalMaterial({ map: letterTextures.C, roughness: 0.28, metalness: 0.05, clearcoat: 0.4, emissive: 0x111111, envMap: envMap, envMapIntensity: 0.1 })
+};
+
+// Pembersihan Memori Geometri Three.js (Hanya buang geometri dinamis seperti TubeGeometry)
+function clearDNAStructure() {
+    if (ribbon1) {
+        if (ribbon1.geometry) ribbon1.geometry.dispose();
+        ribbon1 = null;
     }
+    if (ribbon2) {
+        if (ribbon2.geometry) ribbon2.geometry.dispose();
+        ribbon2 = null;
+    }
+    dnaGroup.clear();
+    ionGroup.clear();
+    dnaGroup.add(ionGroup);
 }
 
 // Analisis Bioinformatika Sekuens
@@ -803,10 +838,8 @@ function analyzeSequence(seqStr) {
 // FUNGSI UTAMA REKONSTRUKSI HELIKS 3D DNA
 // -----------------------------------------------------------------------------
 function rebuildDNAStructure() {
-    // 1. Bersihkan scene DNA & ion sebelumnya
-    disposeHierarchy(dnaGroup);
-    ionGroup.clear();
-    dnaGroup.add(ionGroup);
+    // 1. Bersihkan scene DNA & ion sebelumnya secara aman
+    clearDNAStructure();
 
     allInteractiveMeshes = [];
     strand1Meshes = [];
@@ -950,22 +983,12 @@ function rebuildDNAStructure() {
         plate1.rotation.z = conf.propeller;
         bioBase1.add(plate1);
 
-        const rod1Geo = new THREE.CylinderGeometry(0.14, 0.14, 1.2, 12);
-        const rod1 = new THREE.Mesh(rod1Geo, materials[b1Type]);
+        const rod1 = new THREE.Mesh(rodGeo, materials[b1Type]);
         rod1.position.set(0, 0, 0.6);
         rod1.rotation.x = Math.PI / 2;
         bioBase1.add(rod1);
 
-        const badgeMat1 = new THREE.MeshPhysicalMaterial({
-            map: letterTextures[b1Type],
-            roughness: 0.28,
-            metalness: 0.05,
-            clearcoat: 0.4,
-            emissive: 0x111111,
-            envMap: envMap,
-            envMapIntensity: 0.1
-        });
-        const badge1 = new THREE.Mesh(new THREE.CylinderGeometry(BADGE_RADIUS, BADGE_RADIUS, BADGE_HEIGHT, 24), badgeMat1);
+        const badge1 = new THREE.Mesh(badgeGeo, badgeMaterials[b1Type]);
         badge1.position.set(0, 0.16, plateDist1);
         badge1.rotation.x = -Math.PI / 2;
         bioBase1.add(badge1);
@@ -1002,22 +1025,12 @@ function rebuildDNAStructure() {
         plate2.rotation.z = -conf.propeller;
         bioBase2.add(plate2);
 
-        const rod2Geo = new THREE.CylinderGeometry(0.14, 0.14, 1.2, 12);
-        const rod2 = new THREE.Mesh(rod2Geo, materials[b2Type]);
+        const rod2 = new THREE.Mesh(rodGeo, materials[b2Type]);
         rod2.position.set(0, 0, 0.6);
         rod2.rotation.x = Math.PI / 2;
         bioBase2.add(rod2);
 
-        const badgeMat2 = new THREE.MeshPhysicalMaterial({
-            map: letterTextures[b2Type],
-            roughness: 0.28,
-            metalness: 0.05,
-            clearcoat: 0.4,
-            emissive: 0x111111,
-            envMap: envMap,
-            envMapIntensity: 0.1
-        });
-        const badge2 = new THREE.Mesh(new THREE.CylinderGeometry(BADGE_RADIUS, BADGE_RADIUS, BADGE_HEIGHT, 24), badgeMat2);
+        const badge2 = new THREE.Mesh(badgeGeo, badgeMaterials[b2Type]);
         badge2.position.set(0, 0.16, plateDist2);
         badge2.rotation.x = -Math.PI / 2;
         bioBase2.add(badge2);
@@ -1053,14 +1066,12 @@ function rebuildDNAStructure() {
         const gapVector = new THREE.Vector3().subVectors(tip2, tip1);
         const perpendicular = new THREE.Vector3(0, 1, 0).cross(gapVector).normalize();
         const dotsPerLine = 4;
-        const dotGeo = new THREE.SphereGeometry(0.08, 10, 10);
-
         for (let line = 0; line < bondLinesCount; line++) {
             const lineOffset = perpendicular.clone().multiplyScalar(bondLineSpacing[line]);
             for (let d = 0; d < dotsPerLine; d++) {
                 const fraction = (d + 0.5) / dotsPerLine;
                 const dotPos = new THREE.Vector3().addVectors(tip1, gapVector.clone().multiplyScalar(fraction)).add(lineOffset);
-                const dotMesh = new THREE.Mesh(dotGeo, materials.hbondDot);
+                const dotMesh = new THREE.Mesh(hbondDotGeo, materials.hbondDot);
                 dotMesh.position.copy(dotPos);
                 bioBond.add(dotMesh);
             }
@@ -1360,14 +1371,14 @@ function rebuildDNAStructure() {
         const p2 = splinePointsStrand2[i];
 
         // Ion Mg²⁺ di sekitar tulang punggung fosfat
-        const mg1 = new THREE.Mesh(new THREE.SphereGeometry(0.32, 12, 12), conditionMaterials.ionMg);
+        const mg1 = new THREE.Mesh(mgIonGeo, conditionMaterials.ionMg);
         mg1.position.copy(p1).multiplyScalar(1.22);
         mg1.userData = { type: 'ion_mg', parentGroup: ionGroup };
         ionGroup.add(mg1);
         allInteractiveMeshes.push(mg1);
         baseMeshes.ion_mg.push(mg1);
 
-        const mg2 = new THREE.Mesh(new THREE.SphereGeometry(0.32, 12, 12), conditionMaterials.ionMg);
+        const mg2 = new THREE.Mesh(mgIonGeo, conditionMaterials.ionMg);
         mg2.position.copy(p2).multiplyScalar(1.22);
         mg2.userData = { type: 'ion_mg', parentGroup: ionGroup };
         ionGroup.add(mg2);
@@ -1376,7 +1387,7 @@ function rebuildDNAStructure() {
 
         // Molekul air terkoordinasi (Spine of Hydration) di lekukan minor
         const waterMol = new THREE.Group();
-        const wO = new THREE.Mesh(new THREE.SphereGeometry(0.20, 10, 10), conditionMaterials.waterO);
+        const wO = new THREE.Mesh(waterOGeo, conditionMaterials.waterO);
         const wH1 = new THREE.Mesh(methylHydrogenShape, materials.cpk.H);
         const wH2 = new THREE.Mesh(methylHydrogenShape, materials.cpk.H);
         wH1.position.set(0.14, 0.12, 0);
@@ -1405,9 +1416,6 @@ function rebuildDNAStructure() {
     // Sinkronkan mode visualisasi saat ini
     setRenderMode(currentRenderMode);
 }
-
-// Inisialisasi Heliks Awal
-rebuildDNAStructure();
 
 // -----------------------------------------------------------------------------
 // 10. ANIMASI NATIVE LERP VECTOR ENGINE
@@ -1472,11 +1480,15 @@ function setRenderMode(mode) {
     if (legendElectroRow) legendElectroRow.classList.toggle('hidden', !isElectro);
     if (legendCpkRow) legendCpkRow.classList.toggle('hidden', isElectro);
 
-    modeBtns.forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
-    });
+    if (typeof modeBtns !== 'undefined' && modeBtns && modeBtns.forEach) {
+        modeBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
+        });
+    }
 
-    filterComponent(currentActiveFilter);
+    if (typeof filterComponent === 'function') {
+        filterComponent(currentActiveFilter);
+    }
 }
 
 modeBtns.forEach(btn => {
@@ -1489,10 +1501,10 @@ modeBtns.forEach(btn => {
 // -----------------------------------------------------------------------------
 // 12. KONTROL PEMISAHAN (UNZIP, EXPLODE, RESET)
 // -----------------------------------------------------------------------------
-let currentMode = 'assembled';
-let autoRotateActive = true;
-let labelsVisible = true;
-let currentActiveFilter = 'all';
+currentMode = 'assembled';
+autoRotateActive = true;
+labelsVisible = true;
+currentActiveFilter = 'all';
 
 const btnUnzip = document.getElementById('btn-unzip');
 const btnExplode = document.getElementById('btn-explode');
@@ -1743,10 +1755,12 @@ btnToggleLabels.addEventListener('click', (e) => {
 const filterChips = document.querySelectorAll('.filter-chips .chip');
 
 function filterComponent(filterType) {
-    currentActiveFilter = filterType;
+    currentActiveFilter = filterType || 'all';
+    if (!Array.isArray(allInteractiveMeshes)) return;
     allInteractiveMeshes.forEach(mesh => {
+        if (!mesh || !mesh.userData) return;
         const type = mesh.userData.type;
-        const show = (filterType === 'all' || type === filterType || (filterType === 'backbone' && (type === 'backbone' || type === 'P_atom')));
+        const show = (currentActiveFilter === 'all' || type === currentActiveFilter || (currentActiveFilter === 'backbone' && (type === 'backbone' || type === 'P_atom')));
         if (mesh.material && mesh.material.transparent !== undefined) {
             mesh.material.transparent = !show;
             mesh.material.opacity = show ? 1.0 : 0.12;
@@ -2099,9 +2113,15 @@ function renderLoop(now) {
     particles.rotation.x += 0.0002;
     bokehGroup.rotation.y += 0.0002;
 
-    controls.update();
+    if (controls && typeof controls.update === 'function') {
+        controls.update();
+    }
     renderer.render(scene, camera);
     update3DAnnotations();
 }
 
+// Inisialisasi Rekonstruksi Heliks Awal setelah seluruh DOM dan fungsi terpasang
+rebuildDNAStructure();
+
+// Jalankan Main Render Loop
 requestAnimationFrame(renderLoop);
