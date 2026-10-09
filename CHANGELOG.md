@@ -6,19 +6,15 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
-### 🎨 Penambahan Banner Logo GEN-OS & ASCII Art Bio-Interface (README.md)
-- **Implementasi Banner Vektor SVG GEN-OS (`gen-os-banner.svg`):**
-  - Merancang banner visual interaktif berbasis SVG resolusi tinggi dengan tema khas *Deep Cytogenetics Obsidian & Cyber Biolab Interface* (`#030712`, `#00f3ff` Cyber Cyan, `#00ff41` Bio Green, dan `#a855f7` Chromatin Violet).
-  - Mengintegrasikan logo ASCII art tipografi tebal `GEN - OS` dengan gradien warna linear menyala dan filter pendaran neon (*glow filter* `feGaussianBlur`).
-  - Menampilkan visualisasi untai heliks ganda DNA (*double helix*) simetris di sisi kiri dan kanan dengan pasangan basa nitrogen nyata ($A=T$, $G \equiv C$, $C=G$, $T=A$).
-  - Melengkapi header instrumen laboratorium dengan lencana telemetri interaktif (*System Live pulse, 60 FPS Canvas, ISCN 2020 Compliant, Zero Latency*), bingkai sudut cyber, serta partisi scanlines CRT mikro.
-- **Integrasi Terminal ASCII Art Blok Monospace Presisi:**
-  - Menambahkan blok kode ASCII Art terminal monospaced berpresisi matematis (panjang 90 kolom konsisten di setiap baris) di dalam dokumen `README.md`.
-  - Memastikan banner dan tipografi ASCII art dapat dirender sempurna baik pada antarmuka web grafis GitHub maupun pembaca teks konsol/CLI lokal.
-- **Sinkronisasi Direktori Modul:**
-  - Memperbarui panduan eksekusi lokal dari 14 modul menjadi 15 modul aktif sejalan dengan direktori sistem GEN-OS v8.2.
-- **Berkas yang Ditambahkan / Diperbarui:**
-  - `gen-os-banner.svg` (BARU)
+### 🎨 Desain Minimalis Banner Logo GEN-OS & Penyederhanaan README (README.md)
+- **Penyederhanaan Banner Vektor SVG GEN-OS (`gen-os-banner.svg`):**
+  - Mengeliminasi seluruh ornamen yang terlalu ramai (bingkai luar, sudut cyber, untai DNA samping, tombol indikator atas, dan telemetri bawah) agar tata letak banner fokus, elegan, dan bersih.
+  - Menghilangkan efek blur dan pendaran neon (*glow removal*) serta menyederhanakan palet ke **1 warna tunggal aksen khas GEN-OS (`#00f3ff` Cyber Cyan)** pada tipografi tebal ASCII art `GEN - OS` dan 4 badge kategori.
+  - Mempertahankan hierarki visual 3 elemen utama: Logo ASCII, sub-judul (*subtitle* putih tebal), dan barisan 4 lencana (*Mendelian, Molecular, Cytogenetics, Biotech*) dengan penataan koordinat simetris presisi.
+- **Penyederhanaan Tata Letak README.md:**
+  - Menghapus blok kode teks ASCII terminal yang berulang di bawah badge sehingga tampilan antarmuka repositori langsung terfokus pada banner SVG dan ringkasan modul.
+- **Berkas yang Diperbarui:**
+  - `gen-os-banner.svg`
   - `README.md`
   - `CHANGELOG.md`
 
