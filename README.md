@@ -1,6 +1,10 @@
-# Laboratorium Genetika Virtual (GEN-OS)
-
 <div align="center">
+
+<a href="#laboratorium-genetika-virtual-gen-os">
+  <img src="./gen-os-banner.svg" alt="GEN-OS // Genetics Operating System - Virtual Biological Interface Banner" width="100%">
+</a>
+
+# Laboratorium Genetika Virtual (GEN-OS)
 
 ![GEN-OS Biological Interface](https://img.shields.io/badge/GEN--OS-v8.2_Biological_Interface-00f3ff?style=for-the-badge&logo=dna&logoColor=black)
 ![Active Modules](https://img.shields.io/badge/Active_Modules-15_Simulations-00ff41?style=for-the-badge)
@@ -13,6 +17,25 @@
 </p>
 
 </div>
+
+```text
+  ╔══════════════════════════════════════════════════════════════════════════════════════╗
+  ║  >> GEN-OS // BIOLOGICAL OPERATING SYSTEM • VIRTUAL LAB INTERFACE v8.2   [ONLINE] *  ║
+  ╠══════════════════════════════════════════════════════════════════════════════════════╣
+  ║                                                                                      ║
+  ║     A === T      ██████╗ ███████╗███╗   ██╗       ██████╗ ███████╗     G === C       ║
+  ║    /   •   \    ██╔════╝ ██╔════╝████╗  ██║      ██╔═══██╗██╔════╝    /   •   \      ║
+  ║   |  G ≡ C  |   ██║  ███╗█████╗  ██╔██╗ ██║ ───  ██║   ██║███████╗   |  T ≡ A  |     ║
+  ║    \   •   /    ██║   ██║██╔══╝  ██║╚██╗██║      ██║   ██║╚════██║    \   •   /      ║
+  ║     C === G     ╚██████╔╝███████╗██║ ╚████║      ╚██████╔╝███████║     A === T       ║
+  ║      )(          ╚═════╝ ╚══════╝╚═╝  ╚═══╝       ╚═════╝ ╚══════╝      )(           ║
+  ║     T === A        [ GENETICS ]   [ MOLECULAR ]   [ CYTOGENETICS ]     C === G       ║
+  ║                                                                                      ║
+  ╠══════════════════════════════════════════════════════════════════════════════════════╣
+  ║  SYS_ID: TADRIS-BIO-2026 // 15 SIMULATION MODULES // 60 FPS CANVAS // ZERO-LATENCY   ║
+  ╚══════════════════════════════════════════════════════════════════════════════════════╝
+```
+
 
 ---
 
@@ -294,7 +317,7 @@ Simulasi ini dapat langsung disematkan (*embedded*) ke dalam halaman flipbook me
    ```
 2. **Buka Direktori Proyek:** Masuk ke folder proyek hasil unduhan.
 3. **Buka Dashboard Utama:** Klik dua kali berkas `index.html` menggunakan peramban web modern (Google Chrome, Microsoft Edge, Mozilla Firefox, atau Safari).
-4. **Pilih Modul:** Klik tombol `INITIALIZE` pada kartu simulasi yang diinginkan dari direktori 14 modul.
+4. **Pilih Modul:** Klik tombol `INITIALIZE` pada kartu simulasi yang diinginkan dari direktori 15 modul.
 
 ---
 

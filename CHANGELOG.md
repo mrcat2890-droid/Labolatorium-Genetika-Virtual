@@ -6,6 +6,22 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
 
 ## [Unreleased]
 
+### 🎨 Penambahan Banner Logo GEN-OS & ASCII Art Bio-Interface (README.md)
+- **Implementasi Banner Vektor SVG GEN-OS (`gen-os-banner.svg`):**
+  - Merancang banner visual interaktif berbasis SVG resolusi tinggi dengan tema khas *Deep Cytogenetics Obsidian & Cyber Biolab Interface* (`#030712`, `#00f3ff` Cyber Cyan, `#00ff41` Bio Green, dan `#a855f7` Chromatin Violet).
+  - Mengintegrasikan logo ASCII art tipografi tebal `GEN - OS` dengan gradien warna linear menyala dan filter pendaran neon (*glow filter* `feGaussianBlur`).
+  - Menampilkan visualisasi untai heliks ganda DNA (*double helix*) simetris di sisi kiri dan kanan dengan pasangan basa nitrogen nyata ($A=T$, $G \equiv C$, $C=G$, $T=A$).
+  - Melengkapi header instrumen laboratorium dengan lencana telemetri interaktif (*System Live pulse, 60 FPS Canvas, ISCN 2020 Compliant, Zero Latency*), bingkai sudut cyber, serta partisi scanlines CRT mikro.
+- **Integrasi Terminal ASCII Art Blok Monospace Presisi:**
+  - Menambahkan blok kode ASCII Art terminal monospaced berpresisi matematis (panjang 90 kolom konsisten di setiap baris) di dalam dokumen `README.md`.
+  - Memastikan banner dan tipografi ASCII art dapat dirender sempurna baik pada antarmuka web grafis GitHub maupun pembaca teks konsol/CLI lokal.
+- **Sinkronisasi Direktori Modul:**
+  - Memperbarui panduan eksekusi lokal dari 14 modul menjadi 15 modul aktif sejalan dengan direktori sistem GEN-OS v8.2.
+- **Berkas yang Ditambahkan / Diperbarui:**
+  - `gen-os-banner.svg` (BARU)
+  - `README.md`
+  - `CHANGELOG.md`
+
 ### 🛠️ Perbaikan Bug Model DNA 3D Menghilang (dna-3d-interactive)
 - **Pemulihan Rendering Model DNA 3D & Eliminasi Crash Eksekusi JavaScript:**
   - **Akar Masalah 1 (*Temporal Dead Zone ReferenceError*):** Pemanggilan fungsi `rebuildDNAStructure()` yang dilakukan secara prematur sebelum deklarasi `modeBtns`, `currentActiveFilter`, dan fungsi `filterComponent()` memicu eksepsi kritis `Uncaught ReferenceError: Cannot access 'modeBtns' before initialization`. Kesalahan ini menghentikan eksekusi skrip seketika sehingga siklus `requestAnimationFrame(renderLoop)` tidak pernah berjalan dan kanvas WebGL menjadi kosong/hitam.
@@ -69,7 +85,6 @@ Semua perubahan, perbaikan, dan revisi penting pada **Laboratorium Genetika Virt
   - `chromosome-3d-interactive/style.css`
   - `chromosome-3d-interactive/script.js`
   - `CHANGELOG.md`
-
 ### 🧬 Upgrade Ultra-Realistis 3D Anatomi Kromosom Metafase (chromosome-3d-interactive)
 - **Arsitektur Lup Kromatin SEM Ultra-Realistis Berdasarkan Literatur Ilmiah:**
   - Mengimplementasikan *bump & normal mapping* prosedural berbasis kanvas mikro yang merekonstruksi tekstur permukaan kromatin nyata (*Earnshaw & Laemmli 1983; Maeshima et al. 2016*). Menampilkan jutaan butiran nodul lup kromatin radial 30–100 nm dan lipatan kromonema helikal, menggantikan tabung poligon plastik polos.
